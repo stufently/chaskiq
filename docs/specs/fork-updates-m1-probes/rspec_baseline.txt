@@ -1,0 +1,124 @@
+# examples=420 failures=122 pending=29 errors_outside=0
+# baseline: main 46dfdd11 + globalize ~>7.1 + roadie-rails ~>3.4 (minimal lock), chaskiq-test:m1, no appstore plugins
+./spec/controllers/api/v1/hooks/calendly_spec.rb :: Api::V1::Hooks::ProviderController hooks receive hook
+./spec/controllers/api/v1/hooks/calendly_spec.rb :: Api::V1::Hooks::ProviderController hooks receive invitee
+./spec/controllers/api/v1/hooks/calendly_spec.rb :: Api::V1::Hooks::ProviderController hooks will trigger crm registration
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks create message with error
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation audio
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation sticker
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation video
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation audio
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation video
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent on message_bird
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks receive activation hook
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent on messenger
+./spec/controllers/api/v1/hooks/openai_spec.rb :: Api::V1::Hooks::ProviderController hooks single hook receive message
+./spec/controllers/api/v1/hooks/openai_spec.rb :: Api::V1::Hooks::ProviderController triggers triggers on conversation first user message
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks delete profile
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks model visitor converted
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks model visitor converted
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks model visitor converted
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks receive contact
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks receive contact
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks update profile
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks will trigger crm registration
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks with external_profile will destroy profile
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks with external_profile will update profile
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks create conversation will call slack app
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message double wrong emojis
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message giphy
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message multiline
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message with emojis
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message with link
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook send message as an app user
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook send message as an app user with error
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with photo
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with video/gif
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent from slack
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks send message
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks single hook receive message
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks single hook send message as an app user
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks single hook send message as an app user with error
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController triggers triggers on conversation first user message
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation audio
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation image
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation sticker
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation video
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks outbound phone resolve
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with STOP
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/twilio_phone_spec.rb :: Api::V1::Hooks::ProviderController hooks receive inbound conversation data
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks process message #send_message, create message from conversation
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks process message #send_message, create message from conversation
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent on twilio
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks thread slicing second message will be kept in same conversation when in time
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks thread slicing second message will create a new conversation if current convo is closed
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks thread slicing second message will create a new conversation when time is up
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive challenge
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with photo
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with video/gif
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent on twitter
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks send message
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks send message
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation audio
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation video
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent on vonage
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks actions receive new_contact
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks actions receive new_conversation
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks auth validates nok
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks auth validates ok
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks perform_list contact poll list
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks perform_list conversation poll list
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks subscribe hook
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks triggers conversation notifies conversations.assigned
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks triggers conversation notifies conversations.closed
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks triggers conversation notifies conversations.started
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks triggers users does not notifies when no hook available
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks triggers users notifies users.created
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks unsubscribe hook
+./spec/controllers/api/v1/hooks/zoom_spec.rb :: Api::V1::Hooks::ProviderController hooks meeting ended
+./spec/controllers/api/v1/hooks/zoom_spec.rb :: Api::V1::Hooks::ProviderController hooks meeting started
+./spec/controllers/api/v1/hooks/zoom_spec.rb :: Api::V1::Hooks::ProviderController hooks receive hook
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController privileged add package return app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController privileged add package with errors return app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController privileged update package created in app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController privileged update package delete in app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController unprivileged add package return app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController unprivileged update package created in app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController unprivileged update package delete in app
+./spec/controllers/graphql/conversations_spec.rb :: GraphqlController with package create_conversation with initiator
+./spec/models/app_package_integration_spec.rb :: AppPackageIntegration create with validations
+./spec/models/app_package_integration_spec.rb :: AppPackageIntegration handle registrations
+./spec/models/app_package_integration_spec.rb :: AppPackageIntegration handle registrations with validation on app package
+./spec/models/app_user_spec.rb :: AppUser full contact enrichment run run
