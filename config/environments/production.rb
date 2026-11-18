@@ -114,7 +114,9 @@ Rails.application.configure do
       user_name: ENV['SMTP_USERNAME'], # Your SMTP user here.
       password: ENV['SMTP_PASSWORD'], # Your SMTP password here.
       authentication: :login,
-      enable_starttls_auto: true
+      enable_starttls_auto: true,
+      port: ENV.fetch('SMTP_PORT', 25).to_i,
+      domain: ENV.fetch('SMTP_DOMAIN', 'localhost.localdomain')
     }
   else
     zone = ENV['AWS_S3_REGION']
