@@ -1,0 +1,8 @@
+* text=auto eol=lf
+*.sh text eol=lf
+bin/* text eol=lf
+
+# CRLF fixtures — must not be renormalized
+*.eml -text
+spec/fixtures/requests/idn.txt -text
+app/javascript/packages/messenger/src/client_messenger/icons/chat.svg -text

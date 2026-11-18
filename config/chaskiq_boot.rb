@@ -3,8 +3,12 @@ module ChaskiqBoot
   def self.plugin_autoloader
     begin
       if Chaskiq::Config.get("DISABLE_AUTOLOAD_APPSTORE") != "true"
-        puts "🌱🌱🌱 LOADING CHASKIQ PLUGINS 🌱🌱🌱"
-        Plugin.save_all_plugins 
+        if ActiveRecord::Base.connection.table_exists?("plugins")
+          puts "🌱🌱🌱 LOADING CHASKIQ PLUGINS 🌱🌱🌱"
+          Plugin.save_all_plugins
+        else
+          puts "❗ PLUGINS TABLE DOES NOT EXIST YET — SKIPPING ❗"
+        end
       else
         puts "❗ CHASKIQ PLUGINS LOADING IS DISABLED ❗"
       end

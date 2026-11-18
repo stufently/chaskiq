@@ -15,18 +15,16 @@ import { Auth0Provider } from '@auth0/auth0-react';
 function App() {
   const host: string = document
     .querySelector("meta[name='chaskiq-host']")
-    .getAttribute('content');
+    ?.getAttribute('content') || window.location.origin;
   const chaskiqHost: string = new URL(host).hostname;
 
-  //@ts-ignore
-  const auth0Domain = document.querySelector(
+  const auth0Domain: string | null = document.querySelector<HTMLMetaElement>(
     'meta[name="auth0-domain"]'
-  )?.content;
+  )?.content || null;
 
-  //@ts-ignore
-  const auth0ClientId = document.querySelector(
+  const auth0ClientId: string | null = document.querySelector<HTMLMetaElement>(
     'meta[name="auth0-client-id"]'
-  )?.content;
+  )?.content || null;
 
   return (
     <Provider store={store}>

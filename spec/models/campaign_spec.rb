@@ -107,11 +107,12 @@ RSpec.describe Campaign, type: :model do
 
   context "template compilation" do
     it "will render subscriber attributes" do
+      named = app.add_user(email: "dee.okeefe@example.com", properties: { name: "Dee O'Keefe" })
       campaign.html_content = html_content
       campaign.save
       expect(campaign.html_content).to be == html_content
       allow_any_instance_of(Campaign).to receive(:premailer).and_return("{{name}}")
-      expect(campaign.mustache_template_for(subscriber)).to include(subscriber.name)
+      expect(campaign.mustache_template_for(named)).to include("Dee O&#39;Keefe")
     end
   end
 

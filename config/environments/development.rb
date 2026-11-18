@@ -35,7 +35,7 @@ Rails.application.configure do
   config.action_mailer.preview_paths << "#{Rails.root}/spec/mailers/previews"
 
   host = ENV.fetch('HOST') { 'http://localhost:3000' }
-  ws   = ENV.fetch('WS') { 'ws://locahost:3000/cable' }
+  ws   = ENV.fetch('WS') { 'ws://localhost:3000/cable' }
 
   Rails.application.routes.default_url_options = { host: host }
   config.action_controller.default_url_options = { host: host }
@@ -117,11 +117,10 @@ Rails.application.configure do
       ENV['AWS_SECRET_ACCESS_KEY']
     )
 
-    Aws::Rails.add_action_mailer_delivery_method(
-      :ses,
+    config.action_mailer.ses_settings = {
       credentials: creds,
       region: zone
-    )
+    }
 
     config.action_mailer.delivery_method = :ses
   end
