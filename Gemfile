@@ -101,6 +101,7 @@ gem "roadie-rails", "~> 3.4"
 gem "urlcrypt"
 
 gem "aws-sdk-rails", ">= 3.9.1"
+gem "aws-actionmailer-ses", "~> 1.2"
 gem "aws-sdk-s3", "~> 1.208", ">= 1.208.0"
 
 gem "mini_magick", "~> 4.8"

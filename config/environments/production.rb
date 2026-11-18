@@ -126,11 +126,10 @@ Rails.application.configure do
       ENV['AWS_SECRET_ACCESS_KEY']
     )
 
-    Aws::Rails.add_action_mailer_delivery_method(
-      :ses,
+    config.action_mailer.ses_settings = {
       credentials: creds,
       region: zone
-    )
+    }
 
     config.action_mailer.delivery_method = :ses
   end
