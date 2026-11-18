@@ -57,4 +57,21 @@ RSpec.describe "Rack::Attack login throttling", type: :request do
       expect(status).not_to eq(429)
     end
   end
+  { "null" => "10.0.1.1", "[]" => "10.0.1.2" }.each do |body, ip|
+    it "counts JSON body #{body} toward the login limit without returning 500" do
+      statuses = []
+      expect do
+        20.times do
+          post "/oauth/token.json", params: body,
+                                   env: { "REMOTE_ADDR" => ip, "CONTENT_TYPE" => "application/json" }
+          statuses << response.status
+        end
+      end.not_to raise_error
+      expect(statuses).not_to include(500, 429)
+
+      post "/oauth/token.json", params: body,
+                               env: { "REMOTE_ADDR" => ip, "CONTENT_TYPE" => "application/json" }
+      expect(response.status).to eq(429)
+    end
+  end
 end

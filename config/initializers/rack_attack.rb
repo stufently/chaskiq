@@ -13,7 +13,7 @@ Rack::Attack.throttle("logins/ip", limit: 20, period: 1.hour) do |req|
         body = req.body.read
         req.body.rewind
         parsed = JSON.parse(body)
-        grant_type = parsed["grant_type"]
+        grant_type = parsed["grant_type"] if parsed.is_a?(Hash)
       rescue JSON::ParserError
         nil
       end
