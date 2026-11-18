@@ -1,0 +1,432 @@
+# Every example of the suite at BASE 28a28676 (file :: full description, multiset, 431 lines).
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields app access messenger
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields app access messenger
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields app access messenger
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields conversations
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields get agents
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields get agents
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields secure on agents
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields secure on authorizedOauthApplications
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields secure on oauthApplications
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController other domain registered user will return 422
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController registered user auth encrypted will create registered user
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController registered user visit with geo code
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController registered user visit without geo code
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController sessionless will create Lead
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController unregistered convert will return Lead
+./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController unregistered sessionless will return Lead
+./spec/controllers/api/v1/hooks/calendly_spec.rb :: Api::V1::Hooks::ProviderController hooks receive hook
+./spec/controllers/api/v1/hooks/calendly_spec.rb :: Api::V1::Hooks::ProviderController hooks receive invitee
+./spec/controllers/api/v1/hooks/calendly_spec.rb :: Api::V1::Hooks::ProviderController hooks will trigger crm registration
+./spec/controllers/api/v1/hooks/csat_spec.rb :: Api::V1::Hooks::ProviderController trigger on close single hook receive message
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks create message with error
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation audio
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation sticker
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation video
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/dialog_360_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation audio
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation video
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/message_bird_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent on message_bird
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks receive activation hook
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/messenger_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent on messenger
+./spec/controllers/api/v1/hooks/openai_spec.rb :: Api::V1::Hooks::ProviderController hooks single hook receive message
+./spec/controllers/api/v1/hooks/openai_spec.rb :: Api::V1::Hooks::ProviderController triggers triggers on conversation first user message
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks delete profile
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks model visitor converted
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks model visitor converted
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks model visitor converted
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks receive contact
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks receive contact
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks update profile
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks will trigger crm registration
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks with external_profile will destroy profile
+./spec/controllers/api/v1/hooks/pipedrive_spec.rb :: Api::V1::Hooks::ProviderController hooks with external_profile will update profile
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks create conversation will call slack app
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message double wrong emojis
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message giphy
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message multiline
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message with emojis
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook receive message with link
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook send message as an app user
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks global hook send message as an app user with error
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with photo
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with video/gif
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent from slack
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks send message
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks single hook receive message
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks single hook send message as an app user
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController hooks single hook send message as an app user with error
+./spec/controllers/api/v1/hooks/slack_spec.rb :: Api::V1::Hooks::ProviderController triggers triggers on conversation first user message
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation audio
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation image
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation sticker
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation video
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks outbound phone resolve
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with STOP
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/twilio_phone_spec.rb :: Api::V1::Hooks::ProviderController hooks receive inbound conversation data
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks process message #send_message, create message from conversation
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks process message #send_message, create message from conversation
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent on twilio
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks thread slicing second message will be kept in same conversation when in time
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks thread slicing second message will create a new conversation if current convo is closed
+./spec/controllers/api/v1/hooks/twilio_spec.rb :: Api::V1::Hooks::ProviderController hooks thread slicing second message will create a new conversation when time is up
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive challenge
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with photo
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with video/gif
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent on twitter
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks send message
+./spec/controllers/api/v1/hooks/twitter_spec.rb :: Api::V1::Hooks::ProviderController hooks send message
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation audio
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation media
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation video
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/vonage_spec.rb :: Api::V1::Hooks::ProviderController hooks reply from agent on vonage
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks actions receive new_contact
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks actions receive new_conversation
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks auth validates nok
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks auth validates ok
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks perform_list contact poll list
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks perform_list conversation poll list
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks subscribe hook
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks triggers conversation notifies conversations.assigned
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks triggers conversation notifies conversations.closed
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks triggers conversation notifies conversations.started
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks triggers users does not notifies when no hook available
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks triggers users notifies users.created
+./spec/controllers/api/v1/hooks/zapier_spec.rb :: Api::V1::Hooks::ProviderController hooks unsubscribe hook
+./spec/controllers/api/v1/hooks/zoom_spec.rb :: Api::V1::Hooks::ProviderController hooks meeting ended
+./spec/controllers/api/v1/hooks/zoom_spec.rb :: Api::V1::Hooks::ProviderController hooks meeting started
+./spec/controllers/api/v1/hooks/zoom_spec.rb :: Api::V1::Hooks::ProviderController hooks receive hook
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on campaign will set a bounce
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on campaign will set a click
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on campaign will set a complaint
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on campaign will set a deliver
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on campaign will set a open
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on campaign will set a reject
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on conversation complaint
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on conversation conversation email receipt message
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on conversation conversation email receipt message file as attachment
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on conversation conversation email receipt message inline attachment
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on conversation on inbound AGENT address message
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on conversation on inbound APP address message
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on conversation on inbound APP address message with rules
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on conversation on inbound APP address message with rules
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on conversation will set a open
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS events on conversation will set a open
+./spec/controllers/api/v1/hooks_controller_spec.rb :: Api::V1::HooksController SNS reply on campaign message
+./spec/controllers/api/v1/subscriptions/paddle_hooks_controller_spec.rb :: Api::V1::Subscriptions::PaddleHooksController cancel subscription
+./spec/controllers/api/v1/subscriptions/paddle_hooks_controller_spec.rb :: Api::V1::Subscriptions::PaddleHooksController create subscription
+./spec/controllers/api/v1/subscriptions/paddle_hooks_controller_spec.rb :: Api::V1::Subscriptions::PaddleHooksController update subscription
+./spec/controllers/client_tester_controller_spec.rb :: ClientTesterController text route
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController privileged add package return app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController privileged add package unprivileged
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController privileged add package with errors return app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController privileged queries app_packages will return list of app packages
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController privileged update package created in app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController privileged update package delete in app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController unprivileged add package return app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController unprivileged queries app_packages will return list of app packages
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController unprivileged update package created in app
+./spec/controllers/graphql/app_package_integration_spec.rb :: GraphqlController unprivileged update package delete in app
+./spec/controllers/graphql/app_spec.rb :: GraphqlController app queries agents
+./spec/controllers/graphql/app_spec.rb :: GraphqlController app queries campaign
+./spec/controllers/graphql/app_spec.rb :: GraphqlController app queries campaigns
+./spec/controllers/graphql/app_spec.rb :: GraphqlController app queries mutations on app create app
+./spec/controllers/graphql/app_spec.rb :: GraphqlController app queries mutations on app create app unprivileged
+./spec/controllers/graphql/app_spec.rb :: GraphqlController app queries mutations on app destroy app
+./spec/controllers/graphql/app_spec.rb :: GraphqlController app queries mutations on app destroy app unprivileged
+./spec/controllers/graphql/app_spec.rb :: GraphqlController app queries mutations on app update app
+./spec/controllers/graphql/app_spec.rb :: GraphqlController app queries segments
+./spec/controllers/graphql/app_spec.rb :: GraphqlController app return app
+./spec/controllers/graphql/app_spec.rb :: GraphqlController apps list apps for logged user
+./spec/controllers/graphql/app_spec.rb :: GraphqlController invite agent return app
+./spec/controllers/graphql/app_spec.rb :: GraphqlController invite agent return app unprivileged
+./spec/controllers/graphql/app_user_spec.rb :: GraphqlController app_user delete & update external profile delete
+./spec/controllers/graphql/app_user_spec.rb :: GraphqlController app_user delete & update external profile update
+./spec/controllers/graphql/app_user_spec.rb :: GraphqlController app_user delete & update external profile update
+./spec/controllers/graphql/app_user_spec.rb :: GraphqlController app_user external profile
+./spec/controllers/graphql/app_user_spec.rb :: GraphqlController app_user return current user
+./spec/controllers/graphql/article_spec.rb :: GraphqlController collections add article to collection
+./spec/controllers/graphql/article_spec.rb :: GraphqlController collections create
+./spec/controllers/graphql/article_spec.rb :: GraphqlController collections delete
+./spec/controllers/graphql/article_spec.rb :: GraphqlController collections edit
+./spec/controllers/graphql/article_spec.rb :: GraphqlController create create new article
+./spec/controllers/graphql/article_spec.rb :: GraphqlController delete create & delete article
+./spec/controllers/graphql/article_spec.rb :: GraphqlController find find articles empty collection
+./spec/controllers/graphql/article_spec.rb :: GraphqlController find find articles present collection
+./spec/controllers/graphql/article_spec.rb :: GraphqlController sections create section
+./spec/controllers/graphql/article_spec.rb :: GraphqlController sections delete section
+./spec/controllers/graphql/article_spec.rb :: GraphqlController sections edit section
+./spec/controllers/graphql/article_spec.rb :: GraphqlController update create & update article
+./spec/controllers/graphql/conversations_spec.rb :: GraphqlController with conversation agent add message
+./spec/controllers/graphql/conversations_spec.rb :: GraphqlController with conversation conversations
+./spec/controllers/graphql/conversations_spec.rb :: GraphqlController with conversation create_conversation
+./spec/controllers/graphql/conversations_spec.rb :: GraphqlController with conversation create_conversation subject
+./spec/controllers/graphql/conversations_spec.rb :: GraphqlController with conversation get unexisting conversation
+./spec/controllers/graphql/conversations_spec.rb :: GraphqlController with package create_conversation with initiator
+./spec/controllers/graphql/outgoing_webhooks_spec.rb :: GraphqlController privileged event types
+./spec/controllers/graphql/outgoing_webhooks_spec.rb :: GraphqlController privileged mutations create webhook
+./spec/controllers/graphql/outgoing_webhooks_spec.rb :: GraphqlController privileged mutations delete webhook
+./spec/controllers/graphql/outgoing_webhooks_spec.rb :: GraphqlController privileged mutations update webhook
+./spec/controllers/graphql/outgoing_webhooks_spec.rb :: GraphqlController unprivileged mutations create webhook
+./spec/controllers/graphql/outgoing_webhooks_spec.rb :: GraphqlController unprivileged mutations delete webhook
+./spec/controllers/graphql/outgoing_webhooks_spec.rb :: GraphqlController unprivileged mutations update webhook
+./spec/controllers/graphql/segments_spec.rb :: GraphqlController segments create segment
+./spec/controllers/graphql/segments_spec.rb :: GraphqlController segments delete segment
+./spec/controllers/graphql/segments_spec.rb :: GraphqlController segments predicates search
+./spec/controllers/graphql/segments_spec.rb :: GraphqlController segments predicates search invalid
+./spec/controllers/graphql/segments_spec.rb :: GraphqlController segments save segment
+./spec/controllers/graphql/user_session_spec.rb :: GraphqlController current_user return current user
+./spec/generator/chaskiq_plugins_generator_spec.rb :: ChaskiqPlugins add some scenarios (or delete) /app/spec/generator/chaskiq_plugins_generator_spec.rb
+./spec/importers/list_spec.rb :: ListImporter imports all data from the spreadsheet into the model
+./spec/jobs/email_chat_notifier_job_spec.rb :: EmailChatNotifierJob add some examples to (or delete) /app/spec/jobs/email_chat_notifier_job_spec.rb
+./spec/jobs/list_importer_job_spec.rb :: ListImporterJob add some examples to (or delete) /app/spec/jobs/list_importer_job_spec.rb
+./spec/jobs/mail_importer_job_spec.rb :: MailImporterJob add some examples to (or delete) /app/spec/jobs/mail_importer_job_spec.rb
+./spec/jobs/offline_checker_job_spec.rb :: OfflineCheckerJob add some examples to (or delete) /app/spec/jobs/offline_checker_job_spec.rb
+./spec/jobs/ses_sender_job_spec.rb :: SesSenderJob add some examples to (or delete) /app/spec/jobs/ses_sender_job_spec.rb
+./spec/jobs/sns_receiver_job_spec.rb :: SnsReceiverJob add some examples to (or delete) /app/spec/jobs/sns_receiver_job_spec.rb
+./spec/lib/chaskiq_boot_spec.rb :: ChaskiqBoot calls Plugin.save_all_plugins when the plugins table exists
+./spec/lib/chaskiq_boot_spec.rb :: ChaskiqBoot does not call Plugin.save_all_plugins when the plugins table does not exist
+./spec/mailers/campaign_spec.rb :: CampaignMailer pass subscriber attributes to template
+./spec/mailers/campaign_spec.rb :: CampaignMailer should deliver with open.gif
+./spec/mailers/chat_notifier_spec.rb :: ChatNotifierMailer add some examples to (or delete) /app/spec/mailers/chat_notifier_spec.rb
+./spec/models/agent_notifications_spec.rb :: Agent Devise notifications accepts a password without special characters
+./spec/models/agent_notifications_spec.rb :: Agent Devise notifications delivers password_change to the agent and email_changed to the old address
+./spec/models/agent_notifications_spec.rb :: Agent Devise notifications enqueues password_change and email_changed instead of sending synchronously
+./spec/models/agent_spec.rb :: Agent inbound email mailbox
+./spec/models/agent_spec.rb :: Agent inbound email mailbox
+./spec/models/agent_team_spec.rb :: AgentTeam add some examples to (or delete) /app/spec/models/agent_team_spec.rb
+./spec/models/app_package_integration_spec.rb :: AppPackageIntegration create with validations
+./spec/models/app_package_integration_spec.rb :: AppPackageIntegration external packages add package
+./spec/models/app_package_integration_spec.rb :: AppPackageIntegration external packages external app package
+./spec/models/app_package_integration_spec.rb :: AppPackageIntegration external packages persisted external process_event
+./spec/models/app_package_integration_spec.rb :: AppPackageIntegration external packages persisted external trigger
+./spec/models/app_package_integration_spec.rb :: AppPackageIntegration handle registrations
+./spec/models/app_package_integration_spec.rb :: AppPackageIntegration handle registrations with validation on app package
+./spec/models/app_package_spec.rb :: AppPackage create
+./spec/models/app_package_spec.rb :: AppPackage external is external
+./spec/models/app_spec.rb :: App add anonymous user add visitor
+./spec/models/app_spec.rb :: App add anonymous user create with session
+./spec/models/app_spec.rb :: App agents, availability biz time, in time
+./spec/models/app_spec.rb :: App agents, availability biz time, out time
+./spec/models/app_spec.rb :: App agents, availability biz time, out time
+./spec/models/app_spec.rb :: App agents, availability in the next hours
+./spec/models/app_spec.rb :: App agents, availability initializes business hours
+./spec/models/app_spec.rb :: App agents, availability next week
+./spec/models/app_spec.rb :: App agents, availability same week
+./spec/models/app_spec.rb :: App agents, availability tomorrow
+./spec/models/app_spec.rb :: App agents, availability will create agent
+./spec/models/app_spec.rb :: App agents, availability wrong config
+./spec/models/app_spec.rb :: App assignment rules assign rule
+./spec/models/app_spec.rb :: App crean an agent bot
+./spec/models/app_spec.rb :: App create an agent
+./spec/models/app_spec.rb :: App create an user
+./spec/models/app_spec.rb :: App create app
+./spec/models/app_spec.rb :: App create_conversation
+./spec/models/app_spec.rb :: App create_conversation assignee override
+./spec/models/app_spec.rb :: App existing user add existing user will keep count but update properties
+./spec/models/app_spec.rb :: App existing user add other user will increase count of app_users
+./spec/models/app_spec.rb :: App existing user add visit on existing user
+./spec/models/app_spec.rb :: App existing user add visit on new user
+./spec/models/app_spec.rb :: App existing user other app will update attrs for user on app2 only
+./spec/models/app_spec.rb :: App inbound email app has address
+./spec/models/app_spec.rb :: App inbound email decode agent email address
+./spec/models/app_spec.rb :: App inbound email decode any email address
+./spec/models/app_spec.rb :: App inbound email decode app email address
+./spec/models/app_spec.rb :: App inbound settings segments no return for user
+./spec/models/app_spec.rb :: App inbound settings segments no return for visitors
+./spec/models/app_spec.rb :: App inbound settings segments return for user user
+./spec/models/app_spec.rb :: App inbound settings segments return for visitor 
+./spec/models/app_user_spec.rb :: AppUser full contact enrichment not send on setting false
+./spec/models/app_user_spec.rb :: AppUser full contact enrichment run run
+./spec/models/app_user_spec.rb :: AppUser full contact enrichment send to enrichment
+./spec/models/app_user_spec.rb :: AppUser has events on created
+./spec/models/app_user_spec.rb :: AppUser merge users add user to be one
+./spec/models/app_user_spec.rb :: AppUser merge users add user to be one
+./spec/models/app_user_spec.rb :: AppUser merge users merge merge from visitor
+./spec/models/app_user_spec.rb :: AppUser merge users merge merge_contact from lead to app user 
+./spec/models/app_user_spec.rb :: AppUser merge users merge merge_contact from user to app lead 
+./spec/models/app_user_spec.rb :: AppUser update properties does not update properties on non existing custom field
+./spec/models/app_user_spec.rb :: AppUser update properties updates properties on built in field
+./spec/models/app_user_spec.rb :: AppUser update properties updates properties on custom field
+./spec/models/app_user_spec.rb :: AppUser verify lead (convert to AppUser) verify will clone lead to app user greather procedence but session_id will be deployed
+./spec/models/app_user_spec.rb :: AppUser verify lead (convert to AppUser) verify will clone lead to app user lead attrs have greather procedence 
+./spec/models/app_user_spec.rb :: AppUser verify lead (convert to AppUser) verify will clone lead to app user verify will copy lead conversations to app user
+./spec/models/app_user_spec.rb :: AppUser verify lead (convert to AppUser) verify will clone lead to app user will dispatch session event
+./spec/models/app_user_spec.rb :: AppUser verify lead (convert to AppUser) verify will convert lead to app user
+./spec/models/app_user_spec.rb :: AppUser visitor become lead when start conversation
+./spec/models/article_collection_spec.rb :: ArticleCollection add some examples to (or delete) /app/spec/models/article_collection_spec.rb
+./spec/models/article_content_spec.rb :: ArticleContent add some examples to (or delete) /app/spec/models/article_content_spec.rb
+./spec/models/article_setting_spec.rb :: ArticleSetting add some examples to (or delete) /app/spec/models/article_setting_spec.rb
+./spec/models/article_spec.rb :: Article agent articles agent article creation
+./spec/models/article_spec.rb :: Article agent articles agent article creation publish
+./spec/models/article_spec.rb :: Article agent articles agent article creation with content
+./spec/models/article_spec.rb :: Article agent articles empty articles
+./spec/models/assignment_rule_spec.rb :: AssignmentRule add some examples to (or delete) /app/spec/models/assignment_rule_spec.rb
+./spec/models/audit_spec.rb :: Audit test audit on agent, nil app
+./spec/models/audit_spec.rb :: Audit test audit on conversation
+./spec/models/auth_identity_spec.rb :: AuthIdentity add some examples to (or delete) /app/spec/models/auth_identity_spec.rb
+./spec/models/bot_task_spec.rb :: BotTask for new conversations bots for app new conversations
+./spec/models/bot_task_spec.rb :: BotTask for new conversations collection check
+./spec/models/bot_task_spec.rb :: BotTask for new conversations enabled inside office will not return for inside office
+./spec/models/bot_task_spec.rb :: BotTask for new conversations enabled inside office will return anyway for inside office on nil availability
+./spec/models/bot_task_spec.rb :: BotTask for new conversations enabled inside office will return for inside office
+./spec/models/bot_task_spec.rb :: BotTask for new conversations enabled outside office will not return for inside office
+./spec/models/bot_task_spec.rb :: BotTask for new conversations enabled outside office will return for nil
+./spec/models/bot_task_spec.rb :: BotTask for new conversations enabled outside office will return for outside office
+./spec/models/campaign_spec.rb :: Campaign clone campaign rename
+./spec/models/campaign_spec.rb :: Campaign clone campaign should clone record
+./spec/models/campaign_spec.rb :: Campaign creation will create a pending campaign by default
+./spec/models/campaign_spec.rb :: Campaign email address campaign address finds compaigns
+./spec/models/campaign_spec.rb :: Campaign email address campaign address, a hacky one
+./spec/models/campaign_spec.rb :: Campaign send newsletter will prepare mail to
+./spec/models/campaign_spec.rb :: Campaign send newsletter will prepare mail to can send inline
+./spec/models/campaign_spec.rb :: Campaign send newsletter will send newsletter for dispatch
+./spec/models/campaign_spec.rb :: Campaign send newsletter will send newsletter jobs for each subscriber
+./spec/models/campaign_spec.rb :: Campaign send newsletter will send newsletter jobs for each subscriber
+./spec/models/campaign_spec.rb :: Campaign template compilation will render subscriber attributes
+./spec/models/collection_section_spec.rb :: CollectionSection add some examples to (or delete) /app/spec/models/collection_section_spec.rb
+./spec/models/conversation_channel_spec.rb :: ConversationChannel add some examples to (or delete) /app/spec/models/conversation_channel_spec.rb
+./spec/models/conversation_part_block_spec.rb :: ConversationPartBlock add some examples to (or delete) /app/spec/models/conversation_part_block_spec.rb
+./spec/models/conversation_part_channel_source_spec.rb :: ConversationPartChannelSource add some examples to (or delete) /app/spec/models/conversation_part_channel_source_spec.rb
+./spec/models/conversation_part_content_spec.rb :: ConversationPartContent add some examples to (or delete) /app/spec/models/conversation_part_content_spec.rb
+./spec/models/conversation_part_event_spec.rb :: ConversationPartEvent add some examples to (or delete) /app/spec/models/conversation_part_event_spec.rb
+./spec/models/conversation_part_spec.rb :: ConversationPart conversation a save does touch conversations
+./spec/models/conversation_part_spec.rb :: ConversationPart conversation add message from agent
+./spec/models/conversation_part_spec.rb :: ConversationPart conversation add message from app user
+./spec/models/conversation_part_spec.rb :: ConversationPart conversation agent metrics outgoing
+./spec/models/conversation_part_spec.rb :: ConversationPart conversation app user metrics incoming
+./spec/models/conversation_part_spec.rb :: ConversationPart conversation assign user
+./spec/models/conversation_part_spec.rb :: ConversationPart conversation read does not touch conversations
+./spec/models/conversation_part_spec.rb :: ConversationPart conversation will be closed
+./spec/models/conversation_part_spec.rb :: ConversationPart conversation will be opened
+./spec/models/conversation_part_spec.rb :: ConversationPart conversation will increase count
+./spec/models/conversation_source_spec.rb :: ConversationSource add some examples to (or delete) /app/spec/models/conversation_source_spec.rb
+./spec/models/conversation_spec.rb :: Conversation add message add block message
+./spec/models/conversation_spec.rb :: Conversation add message add block message, disabled emails
+./spec/models/conversation_spec.rb :: Conversation add message add block message, disabled emails account flagged
+./spec/models/conversation_spec.rb :: Conversation add message add message
+./spec/models/conversation_spec.rb :: Conversation add private message add message
+./spec/models/conversation_spec.rb :: Conversation adds counters zero for user
+./spec/models/conversation_spec.rb :: Conversation assign event does not trigger counter
+./spec/models/conversation_spec.rb :: Conversation assignment rule from new conversation initiated by app user content eq rule
+./spec/models/conversation_spec.rb :: Conversation assignment rule from new conversation initiated by app user content eq rule match any
+./spec/models/conversation_spec.rb :: Conversation assignment rule from new conversation initiated by app user content eq rule match any
+./spec/models/conversation_spec.rb :: Conversation assignment rule from new conversation initiated by app user content eq rule match any
+./spec/models/conversation_spec.rb :: Conversation assignment rule from new conversation initiated by app user content not eq rule
+./spec/models/conversation_spec.rb :: Conversation assignment rule from new conversation initiated by app user will assign agent 2 with empty conditions
+./spec/models/conversation_spec.rb :: Conversation close conversation register event on close & reopen
+./spec/models/conversation_spec.rb :: Conversation create_conversation from agent
+./spec/models/conversation_spec.rb :: Conversation create_conversation from app user
+./spec/models/event_spec.rb :: Event add some examples to (or delete) /app/spec/models/event_spec.rb
+./spec/models/external_profile_spec.rb :: ExternalProfile add some examples to (or delete) /app/spec/models/external_profile_spec.rb
+./spec/models/metric_spec.rb :: Metric add some examples to (or delete) /app/spec/models/metric_spec.rb
+./spec/models/outgoing_webhook_spec.rb :: OutgoingWebhook will not webhook
+./spec/models/outgoing_webhook_spec.rb :: OutgoingWebhook will send webhook
+./spec/models/plugin_spec.rb :: Plugin.save_plugin_files_to_folder loads the plugin class after saving the file
+./spec/models/preview_card_spec.rb :: PreviewCard add some examples to (or delete) /app/spec/models/preview_card_spec.rb
+./spec/models/quick_reply_spec.rb :: QuickReply add some examples to (or delete) /app/spec/models/quick_reply_spec.rb
+./spec/models/role_spec.rb :: Role access module
+./spec/models/role_spec.rb :: Role role
+./spec/models/segment_spec.rb :: Segment creation add 2 predicates
+./spec/models/segment_spec.rb :: Segment creation add predicate
+./spec/models/segment_spec.rb :: Segment creation queries from predicates AND with user tag multiple with exclude
+./spec/models/segment_spec.rb :: Segment creation queries from predicates OR with user tag multiple and by name 
+./spec/models/segment_spec.rb :: Segment creation queries from predicates app type in
+./spec/models/segment_spec.rb :: Segment creation queries from predicates with date predicate gteq
+./spec/models/segment_spec.rb :: Segment creation queries from predicates with date predicate lteq
+./spec/models/segment_spec.rb :: Segment creation queries from predicates with jsonb
+./spec/models/segment_spec.rb :: Segment creation queries from predicates with multiple predicates concat and
+./spec/models/segment_spec.rb :: Segment creation queries from predicates with multiple predicates concat or
+./spec/models/segment_spec.rb :: Segment creation queries from predicates with user attribute
+./spec/models/segment_spec.rb :: Segment creation queries from predicates with user attribute
+./spec/models/segment_spec.rb :: Segment creation queries from predicates with user tag
+./spec/models/segment_spec.rb :: Segment creation queries from predicates with user tag contains ends
+./spec/models/segment_spec.rb :: Segment creation queries from predicates with user tag multiple
+./spec/models/team_spec.rb :: Team create team
+./spec/models/team_spec.rb :: Team remove agent team
+./spec/models/tour_spec.rb :: Tour add some examples to (or delete) /app/spec/models/tour_spec.rb
+./spec/models/user_auto_message_spec.rb :: UserAutoMessage creation will create a pending campaign by default
+./spec/models/user_auto_message_spec.rb :: UserAutoMessage trigger message detection detect by predicates
+./spec/models/user_auto_message_spec.rb :: UserAutoMessage trigger message detection display message will create metric
+./spec/models/user_auto_message_spec.rb :: UserAutoMessage trigger message detection get collection will return any
+./spec/models/user_auto_message_spec.rb :: UserAutoMessage trigger message detection get collection will return any
+./spec/models/user_auto_message_spec.rb :: UserAutoMessage trigger message detection get collection will return any on no hidden constraints
+./spec/models/user_auto_message_spec.rb :: UserAutoMessage trigger message detection template compilation
+./spec/models/visit_spec.rb :: Visit add some examples to (or delete) /app/spec/models/visit_spec.rb
+./spec/requests/rack_attack_spec.rb :: Rack::Attack login throttling allows up to 20 password-grant requests per hour from one IP
+./spec/requests/rack_attack_spec.rb :: Rack::Attack login throttling does not count refresh_token grants
+./spec/requests/rack_attack_spec.rb :: Rack::Attack login throttling does not throttle a different IP
+./spec/requests/rack_attack_spec.rb :: Rack::Attack login throttling does not throttle other POST endpoints
+./spec/requests/rack_attack_spec.rb :: Rack::Attack login throttling returns 429 on the 21st password-grant request from the same IP
+./spec/requests/rack_attack_spec.rb :: Rack::Attack login throttling throttles form posts to /oauth/token the same way
+./spec/services/action_trigger_factory_spec.rb :: ActionTriggerFactory path
+./spec/services/config_spec.rb :: Chaskiq::Config host will be present
+./spec/services/config_spec.rb :: Chaskiq::Config will be read from credentials
+./spec/services/config_spec.rb :: Chaskiq::Config will be read from env
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render converter basic styles
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render converter images
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render converter it converts
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render converter links
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render converter lists
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render converter test styles
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render converter video embed
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render image image
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render link marks
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render link marks
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render renders embed
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render renders embed
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render renders file
+./spec/services/dante_renderer_spec.rb :: Dante::Renderer#render renders the ProseMirror JSON data to HTML
+./spec/services/fetch_link_service_spec.rb :: FetchLinkCardService live request twitter user
+./spec/services/origin_validator_spec.rb :: OriginValidator not validates on multiple
+./spec/services/origin_validator_spec.rb :: OriginValidator not validates on multiple with different port
+./spec/services/origin_validator_spec.rb :: OriginValidator not validates on single
+./spec/services/origin_validator_spec.rb :: OriginValidator not validates on single with different port
+./spec/services/origin_validator_spec.rb :: OriginValidator validates multiple
+./spec/services/origin_validator_spec.rb :: OriginValidator validates multiple with port
+./spec/services/origin_validator_spec.rb :: OriginValidator validates multiple, whitespaces
+./spec/services/origin_validator_spec.rb :: OriginValidator validates on empty app
+./spec/services/origin_validator_spec.rb :: OriginValidator validates on nil app
+./spec/services/origin_validator_spec.rb :: OriginValidator validates same origin
+./spec/services/origin_validator_spec.rb :: OriginValidator validates same origin with port
+./spec/services/schema_validations_spec.rb :: PluginSchemaValidator button validator
+./spec/services/schema_validations_spec.rb :: PluginSchemaValidator checkbox
+./spec/services/schema_validations_spec.rb :: PluginSchemaValidator data table
+./spec/services/schema_validations_spec.rb :: PluginSchemaValidator divider
+./spec/services/schema_validations_spec.rb :: PluginSchemaValidator dropwdown
+./spec/services/schema_validations_spec.rb :: PluginSchemaValidator image
+./spec/services/schema_validations_spec.rb :: PluginSchemaValidator input
+./spec/services/schema_validations_spec.rb :: PluginSchemaValidator single select
+./spec/services/schema_validations_spec.rb :: PluginSchemaValidator spacer
+./spec/services/schema_validations_spec.rb :: PluginSchemaValidator text validator
+./spec/services/schema_validations_spec.rb :: PluginSchemaValidator textarea
