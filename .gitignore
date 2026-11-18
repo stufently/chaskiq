@@ -37,6 +37,41 @@ app/services/message_apis/**/*
 
 
 
+
+# Track bundled upstream integrations.
+!app/services/message_apis/slack/
+!app/services/message_apis/slack/**
+!app/services/message_apis/twilio/
+!app/services/message_apis/twilio/**
+!app/services/message_apis/twilio_phone/
+!app/services/message_apis/twilio_phone/**
+!app/services/message_apis/pipedrive/
+!app/services/message_apis/pipedrive/**
+!app/services/message_apis/twitter/
+!app/services/message_apis/twitter/**
+!app/services/message_apis/telegram/
+!app/services/message_apis/telegram/**
+!app/services/message_apis/dialog360/
+!app/services/message_apis/dialog360/**
+!app/services/message_apis/vonage/
+!app/services/message_apis/vonage/**
+!app/services/message_apis/message_bird/
+!app/services/message_apis/message_bird/**
+!app/services/message_apis/messenger/
+!app/services/message_apis/messenger/**
+!app/services/message_apis/telnyx_sms/
+!app/services/message_apis/telnyx_sms/**
+!app/services/message_apis/zoom/
+!app/services/message_apis/zoom/**
+!app/services/message_apis/calendly/
+!app/services/message_apis/calendly/**
+!app/services/message_apis/open_ai/
+!app/services/message_apis/open_ai/**
+!app/services/message_apis/full_contact/
+!app/services/message_apis/full_contact/**
+!app/services/message_apis/zapier/
+!app/services/message_apis/zapier/**
+
 app/services/message_apis/.git
 
 /cypress
