@@ -2,6 +2,47 @@
 
 module MessageApis::Vonage
   class Api < MessageApis::BasePackage
+
+    def self.definition_info
+      {
+        name: "Vonage",
+        tag_list: ["conversations.added"],
+        description: "Interfaces Vonage Whatsapp",
+        icon: "https://logo.clearbit.com/vonage.com",
+        state: Rails.env.production? ? "disabled" : "enabled",
+        definitions: [
+          {
+            name: "user_id",
+            label: "Phone",
+            type: "string",
+            required: true,
+            hint: "The Vonage Whatsapp number (format: 14155231223)",
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+          {
+            name: "api_key",
+            label: "Your Vonage API key",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+          {
+            name: "api_secret",
+            label: "Your Vonage API secret",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+          {
+            name: "sandbox",
+            label: "is sandbox",
+            type: "checkbox",
+            grid: { xs: "w-full", sm: "w-full" }
+          }
+        ]
+      }
+    end
+
     include MessageApis::Helpers
     PROVIDER = "vonage"
 
@@ -30,7 +71,7 @@ module MessageApis::Vonage
         "Accept" => "application/json"
       }
 
-      @conn.request(:basic_auth, @api_key, @api_token)
+      @conn.request(:authorization, :basic, @api_key, @api_token)
 
       self
     end

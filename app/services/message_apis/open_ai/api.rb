@@ -2,6 +2,36 @@
 
 module MessageApis::OpenAi
   class Api < MessageApis::BasePackage
+
+    def self.definition_info
+      {
+        name: "OpenAi",
+        tag_list: ["email_changed", "conversation.user.first.comment"],
+        description: "Open AI GPT-3 tasks",
+        icon: "https://logo.clearbit.com/openai.com",
+        state: "enabled",
+        capability_list: %w[conversations bots],
+        definitions: [
+          {
+            name: "api_secret",
+            label: "Auth Token",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+          {
+            name: "main_prompt",
+            label: "Main prompt",
+            type: "textarea",
+            hint: "You can change this later, on demand",
+            placeholder: "You are the Chaskiq chatbot, you are friendly and playful.",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          }
+        ]
+      }
+    end
+
     include MessageApis::Helpers
 
     BASE_URL = "https://api.openai.com"

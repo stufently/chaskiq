@@ -2,6 +2,50 @@
 
 module MessageApis::Twilio
   class Api < MessageApis::BasePackage
+
+    def self.definition_info
+      {
+        name: "Twilio",
+        tag_list: ["conversations.added"],
+        capability_list: %w[conversations_initiator],
+        description: "Interfaces twillio",
+        icon: "https://logo.clearbit.com/twillio.com",
+        state: "enabled",
+        definitions: [
+          {
+            name: "user_id",
+            label: "Phone",
+            type: "string",
+            required: true,
+            hint: "The Twillio Whatsapp number (format: +14155231223)",
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+          {
+            name: "api_key",
+            label: "Account SID",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+          {
+            name: "api_secret",
+            label: "Auth Token",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+          {
+            name: "new_conversations_after",
+            label: "Count messages as new conversations",
+            hint: "After a conversation is closed new messages will create a new conversation if there are received after this time period",
+            type: "number",
+            required: false,
+            grid: { xs: "w-full", sm: "w-full" }
+          }
+        ]
+      }
+    end
+
     include MessageApis::Helpers
 
     # https://developers.pipedrive.com/docs/api/v1/
@@ -22,7 +66,7 @@ module MessageApis::Twilio
         }
       )
 
-      @conn.request(:basic_auth, @api_key, @api_token)
+      @conn.request(:authorization, :basic, @api_key, @api_token)
 
       self
     end
@@ -110,9 +154,7 @@ module MessageApis::Twilio
       # only accepts messages
       return if message["serialized_content"].blank?
 
-      blocks = JSON.parse(
-        message["serialized_content"]
-      )["blocks"]
+      blocks = MessageApis::BlockManager.get_blocks(message["serialized_content"])
 
       profile_id = conversation.main_participant
                                &.external_profiles
@@ -158,12 +200,10 @@ module MessageApis::Twilio
 
     def process_message_params(blocks, profile_id)
       # TODO: support more blocks
-      image_block = blocks.find { |o| o["type"] == "image" }
-      file_block = blocks.find { |o| o["type"] == "file" }
+      image_block = blocks.find { |o| o["type"] == "ImageBlock" }
+      file_block = blocks.find { |o| o["type"] == "FileBlock" }
 
-      plain_message = blocks.map do |o|
-        o["text"]
-      end.join("\r\n")
+      plain_message = MessageApis::BlockManager.plain_text(blocks)
 
       message_params = {
         From: "whatsapp:#{@phone}",
@@ -173,13 +213,13 @@ module MessageApis::Twilio
 
       if image_block
         message_params.merge!({
-                                MediaUrl: Chaskiq::Config.get("HOST") + image_block["data"]["url"]
+                                MediaUrl: Chaskiq::Config.get("HOST") + MessageApis::BlockManager.block_data(image_block)["url"]
                               })
       end
 
       if file_block
         message_params.merge!({
-                                MediaUrl: Chaskiq::Config.get("HOST") + file_block["data"]["url"]
+                                MediaUrl: Chaskiq::Config.get("HOST") + MessageApis::BlockManager.block_data(file_block)["url"]
                               })
       end
 
@@ -318,10 +358,7 @@ module MessageApis::Twilio
         media_blocks << media_block(num, data)
       end
 
-      {
-        blocks: media_blocks,
-        entityMap: {}
-      }.to_json
+      main_doc(media_blocks.compact).to_json
     end
 
     def media_block(num, data)

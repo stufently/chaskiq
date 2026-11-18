@@ -4,6 +4,87 @@ require "oauth2"
 
 module MessageApis::Slack
   class Api
+
+    def self.definition_info
+      {
+        name: "Slack",
+        tag_list: [
+          "email_changed",
+          "conversation.user.first.comment",
+          "conversations.assigned",
+          "conversations.prioritized",
+          "conversations.started",
+          "conversations.added",
+          "conversations.closed",
+          "conversations.reopened"
+        ],
+        state: "enabled",
+        description: "Slack channel integration",
+        icon: "https://logo.clearbit.com/slack.com",
+        credentials: if ENV["SLACK_CLIENT_ID"] && ENV["SLACK_CLIENT_SECRET"]
+                       {
+                         api_key: ENV["SLACK_CLIENT_ID"],
+                         api_secret: ENV["SLACK_CLIENT_SECRET"]
+                       }
+                     else
+                       {}
+                     end,
+        definitions: if !ENV["SLACK_CLIENT_ID"] && !ENV["SLACK_CLIENT_SECRET"]
+                       [
+                         {
+                           name: "api_key",
+                           label: "App ID",
+                           type: "string",
+                           required: true,
+                           grid: { xs: "w-full", sm: "w-full" }
+                         },
+                         {
+                           name: "api_secret",
+                           label: "Client Secret",
+                           type: "string",
+                           required: true,
+                           grid: { xs: "w-full", sm: "w-full" }
+                         },
+                         {
+                           name: "slack_channel_name",
+                           label: "Slack channel for Identified Contacts.",
+                           hint: "This will be your primary channel.",
+                           type: "string",
+                           required: true,
+                           grid: { xs: "w-full", sm: "w-full" }
+                         },
+                         {
+                           name: "slack_channel_name_leads",
+                           label: "Slack channel for Leads and Visitors.",
+                           hint: "If you leave this blank you will be using the primary channel for Leads.",
+                           type: "string",
+                           required: false,
+                           grid: { xs: "w-full", sm: "w-full" }
+                         }
+                       ]
+                     else
+                       [
+                         {
+                           name: "slack_channel_name",
+                           label: "Slack channel for Identified Contacts.",
+                           hint: "This will be your primary channel.",
+                           type: "string",
+                           required: true,
+                           grid: { xs: "w-full", sm: "w-full" }
+                         },
+                         {
+                           name: "slack_channel_name_leads",
+                           label: "Slack channel for Leads and Visitors.",
+                           hint: "If you leave this blank you will be using the primary channel for Leads.",
+                           type: "string",
+                           required: false,
+                           grid: { xs: "w-full", sm: "w-full" }
+                         }
+                       ]
+                     end
+      }
+    end
+
     include MessageApis::Helpers
 
     BASE_URL = "https://slack.com"
@@ -708,7 +789,7 @@ module MessageApis::Slack
 
     def oauth_authorize(app, package)
       oauth_client.auth_code.authorize_url(
-        user_scope: "chat:write,channels:history,channels:write,groups:write,channels:read,groups:read,mpim:read,im:read",
+        user_scope: "channels:history,channels:write,channels:read",
         scope: "files:read,channels:history,channels:join,chat:write,channels:read,channels:manage,chat:write.customize,users:read,users:read.email",
         redirect_uri: package.oauth_url
       )

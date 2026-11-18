@@ -2,6 +2,25 @@
 
 module MessageApis::Pipedrive
   class Api < MessageApis::BasePackage
+
+    def self.definition_info
+      {
+        name: "Pipedrive",
+        tag_list: ["leads.convert", "email_changed"],
+        description: "Pipedrive CRM integration, will insert contacts",
+        icon: "https://logo.clearbit.com/pipedrive.com",
+        state: "enabled",
+        definitions: [
+          {
+            name: "api_secret",
+            type: "string",
+            grid: { xs: "w-full", sm: "w-full" },
+            required: true
+          }
+        ]
+      }
+    end
+
     # https://developers.pipedrive.com/docs/api/v1/
     BASE_URL = "https://api.pipedrive.com/v1"
 

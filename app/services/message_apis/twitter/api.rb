@@ -35,6 +35,45 @@ require "base64"
 
 module MessageApis::Twitter
   class Api < MessageApis::BasePackage
+
+    def self.definition_info
+      {
+        name: "Twitter",
+        tag_list: ["channel"],
+        state: "enabled",
+        description: "Twitter acount activity integration",
+        icon: "https://logo.clearbit.com/twitter.com",
+        definitions: [
+          {
+            name: "api_secret",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+          {
+            name: "api_key",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+
+          {
+            name: "access_token",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+
+          {
+            name: "access_token_secret",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          }
+        ]
+      }
+    end
+
     BASE_URL = "https://api.twitter.com"
     PROVIDER = "twitter"
     HEADERS = { "content-type" => "application/json" }.freeze # Suggested set? Any?
@@ -187,24 +226,20 @@ module MessageApis::Twitter
         conversation.main_participant.properties["twitter_id"]
       )
 
-      blocks = JSON.parse(
-        message["serialized_content"]
-      )["blocks"]
+      blocks = MessageApis::BlockManager.get_blocks(message["serialized_content"])
 
-      plain_message = blocks.map do |o|
-        o["text"]
-      end.join("\r\n")
+      plain_message = MessageApis::BlockManager.plain_text(blocks)
 
       message_data = {}
       message_data["text"] = plain_message
       event["event"]["message_create"]["message_data"] = message_data
 
-      image_block = blocks.find { |o| o["type"] == "image" }
+      image_block = blocks.find { |o| o["type"] == "ImageBlock" }
 
       if image_block.present?
 
-        url = image_block["data"]["url"]
-        url = "#{Chaskiq::Config.get('HOST')}#{url}" unless image_block["data"]["url"].include?("http")
+        url = MessageApis::BlockManager.block_data(image_block)["url"]
+        url = "#{Chaskiq::Config.get('HOST')}#{url}" unless url.include?("http")
 
         if (uploaded_data = upload_media(url)) && uploaded_data.present?
           attachment = {}
@@ -285,10 +320,7 @@ module MessageApis::Twitter
 
       text_blocks = lines.map { |o| serialized_block(o) }
 
-      {
-        blocks: [a, *text_blocks].compact,
-        entityMap: {}
-      }.to_json
+      main_doc([a, *text_blocks].compact).to_json
     end
 
     def media_block(data)

@@ -2,6 +2,31 @@
 
 module MessageApis::Messenger
   class Api < MessageApis::BasePackage
+
+    def self.definition_info
+      {
+        name: "Messenger",
+        tag_list: ["conversations.added"],
+        description: "Interfaces Facebook Messenger",
+        icon: "https://logo.clearbit.com/messenger.com",
+        state: "enabled",
+        definitions: [
+          {
+            name: "access_token",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+          {
+            name: "verify_token",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          }
+        ]
+      }
+    end
+
     BASE_URL = "https://graph.facebook.com/v2.6"
     PROVIDER = "messenger"
     include MessageApis::Helpers
@@ -78,13 +103,9 @@ module MessageApis::Messenger
                                         .find_by(provider: PROVIDER)
                                         .provider_channel_id
 
-      blocks = JSON.parse(
-        message["serialized_content"]
-      )["blocks"]
+      blocks = MessageApis::BlockManager.get_blocks(message["serialized_content"])
 
-      plain_message = blocks.map do |o|
-        o["text"]
-      end.join("\r\n")
+      plain_message = MessageApis::BlockManager.plain_text(blocks)
 
       request_body = {
         recipient: {
@@ -211,10 +232,7 @@ module MessageApis::Messenger
         media_blocks << media_block(attachment)
       end
 
-      {
-        blocks: media_blocks,
-        entityMap: {}
-      }.to_json
+      main_doc(media_blocks.compact).to_json
     end
 
     def media_block(attachment)

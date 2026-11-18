@@ -5,6 +5,42 @@ require "erb"
 
 module MessageApis::Calendly
   class Api < MessageApis::BasePackage
+
+    def self.definition_info
+      {
+        name: "Calendly",
+        tag_list: ["editor"],
+        capability_list: %w[conversations home],
+        description: "Calendly meetings on conversations",
+        icon: "https://logo.clearbit.com/calendly.com",
+        state: "enabled",
+        definitions: [
+          {
+            name: "api_secret",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          }
+        ],
+        editor_definitions: {
+          requires: [
+            { type: "input", name: "src",
+              placeholder: "put clendly url",
+              hint: "is the calendy url" }
+          ],
+          schema: [
+            {
+              name: "calendly",
+              type: "button",
+              label: "book a metting",
+              element: "button",
+              placeholder: "click button to open calendar"
+            }
+          ]
+        }
+      }
+    end
+
     # https://developer.calendly.com/docs
     BASE_URL = "https://calendly.com/api/v1/"
 

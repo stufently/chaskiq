@@ -4,6 +4,41 @@ require "rack/mime"
 
 module MessageApis::Dialog360
   class Api < MessageApis::BasePackage
+
+    def self.definition_info
+      {
+        name: "Dialog360",
+        tag_list: ["conversations.added"],
+        description: "Interfaces 360 Dialog Whatsapp",
+        icon: "https://logo.clearbit.com/360 Dialog.com",
+        state: "enabled",
+        capability_list: %w[conversations bots conversations_initiator],
+        definitions: [
+          {
+            name: "user_id",
+            label: "Phone",
+            type: "string",
+            required: true,
+            hint: "The 360 Dialog Whatsapp number (format: 14155231223)",
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+          {
+            name: "api_key",
+            label: "Your 360Dialog API key",
+            type: "string",
+            required: true,
+            grid: { xs: "w-full", sm: "w-full" }
+          },
+          {
+            name: "sandbox",
+            label: "is sandbox",
+            type: "checkbox",
+            grid: { xs: "w-full", sm: "w-full" }
+          }
+        ]
+      }
+    end
+
     include MessageApis::Helpers
 
     PROVIDER = "dialog_360"
@@ -121,19 +156,15 @@ module MessageApis::Dialog360
 
       return nil if message["serialized_content"].blank?
 
-      blocks = JSON.parse(
-        message["serialized_content"]
-      )["blocks"]
+      blocks = MessageApis::BlockManager.get_blocks(message["serialized_content"])
 
       # TODO: support more blocks
-      image_block = blocks.find { |o| o["type"] == "image" }
-      video_block = blocks.find { |o| o["type"] == "recorded-video" }
-      audio_block = blocks.find { |o| o["type"] == "recorded-audio" }
-      file_block = blocks.find { |o| o["type"] == "file" }
+      image_block = blocks.find { |o| o["type"] == "ImageBlock" }
+      video_block = blocks.find { |o| o["type"] == "VideoBlock" }
+      audio_block = blocks.find { |o| o["type"] == "AudioRecorderBlock" }
+      file_block = blocks.find { |o| o["type"] == "FileBlock" }
       is_plain = !image_block || !video_block || !file_block
-      plain_message = blocks.map do |o|
-        o["text"]
-      end.join("\r\n")
+      plain_message = MessageApis::BlockManager.plain_text(blocks)
 
       profile_id = get_profile_for_participant(conversation.main_participant)
 
@@ -152,7 +183,7 @@ module MessageApis::Dialog360
         message_params.merge!({
                                 type: "image",
                                 image: {
-                                  link: endpoint + image_block["data"]["url"],
+                                  link: endpoint + MessageApis::BlockManager.block_data(image_block)["url"],
                                   caption: plain_message
                                 }
                               })
@@ -160,7 +191,7 @@ module MessageApis::Dialog360
         message_params.merge!({
                                 type: "video",
                                 video: {
-                                  link: endpoint + video_block["data"]["url"],
+                                  link: endpoint + MessageApis::BlockManager.block_data(video_block)["url"],
                                   caption: plain_message
                                 }
                               })
@@ -169,7 +200,7 @@ module MessageApis::Dialog360
         message_params.merge!({
                                 type: "audio",
                                 audio: {
-                                  link: endpoint + audio_block["data"]["url"]
+                                  link: endpoint + MessageApis::BlockManager.block_data(audio_block)["url"]
                                 }
                               })
 
@@ -177,7 +208,7 @@ module MessageApis::Dialog360
         message_params.merge!({
                                 type: "document",
                                 document: {
-                                  link: endpoint + file_block["data"]["url"],
+                                  link: endpoint + MessageApis::BlockManager.block_data(file_block)["url"],
                                   caption: plain_message
                                 }
                               })
