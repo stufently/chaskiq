@@ -58,6 +58,7 @@ module MessageApis::TelnyxSms
 
       @conn.headers = {
         "Content-Type" => "application/json",
+        "Authorization" => "Bearer #{@api_key}",
         "Accept" => "application/json"
       }
 
@@ -74,10 +75,6 @@ module MessageApis::TelnyxSms
       end.join(",")
 
       object.settings[:phones] = formatted_phones
-    end
-
-    def authorize!
-      @conn.authorization :Bearer, @api_key
     end
 
     def register_webhook(app_package, integration); end
@@ -102,15 +99,24 @@ module MessageApis::TelnyxSms
       return if part.private_note?
 
       message = part.message.as_json
-      return nil if message["serialized_content"].blank?
+      content = message["serialized_content"]
+      if content.blank?
+        text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
+        return if text.blank?
 
-      blocks = JSON.parse(
-        message["serialized_content"]
-      )["blocks"]
+        content = MessageApis::BlockManager.serialized_text(text)
+      end
 
-      plain_message = blocks.map do |o|
-        o["text"]
-      end.join("\r\n")
+      begin
+        blocks = MessageApis::BlockManager.get_blocks(content)
+        return unless blocks.is_a?(Array) && blocks.present?
+
+        plain_message = MessageApis::BlockManager.plain_text(blocks)
+      rescue JSON::ParserError, TypeError, NoMethodError
+        return
+      end
+
+      return if plain_message.blank?
 
       channel = conversation.conversation_channels.find_by(provider: PROVIDER)
 
@@ -187,9 +193,6 @@ module MessageApis::TelnyxSms
     end
 
     def send_sms_message(channel_id, message)
-      # puts "channel #{channel_id}"
-      authorize!
-
       phone = resolve_outbound_phone(channel_id)
 
       data = {

@@ -87,64 +87,48 @@ module MessageApis::Telegram
       return if part.private_note?
 
       message = part.message.as_json
-      # TODO: implement event format
+      content = message["serialized_content"]
+      if content.blank?
+        text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
+        return if text.blank?
 
-      return nil if message["serialized_content"].blank?
+        content = MessageApis::BlockManager.serialized_text(text)
+      end
 
-      blocks = JSON.parse(
-        message["serialized_content"]
-      )["blocks"]
+      begin
+        blocks = MessageApis::BlockManager.get_blocks(content)
+        return unless blocks.is_a?(Array) && blocks.present?
 
-      image_block = blocks.find { |o| o["type"] == "image" }
-      video_block = blocks.find { |o| o["type"] == "recorded-video" }
-      file_block = blocks.find { |o| o["type"] == "file" }
-      is_plain = !image_block || !video_block || !file_block
-      plain_message = blocks.map do |o|
-        o["text"]
-      end.join("\r\n")
+        plain_message = MessageApis::BlockManager.plain_text(blocks)
+      rescue JSON::ParserError, TypeError, NoMethodError
+        return
+      end
 
       channel_id = conversation
                    .conversation_channels
                    .find_by(provider: "telegram")
-                   .provider_channel_id
+                   &.provider_channel_id
 
       # TODO: maybe handle an error here ?
       return if channel_id.blank?
 
-      message_params = {
-        chat_id: channel_id
-      }
+      media = blocks.find { |block| %w[ImageBlock VideoBlock FileBlock AudioRecorderBlock].include?(block["type"]) }
+      if media
+        url = MessageApis::BlockManager.block_data(media)&.fetch("url", nil)
+        return if url.blank?
 
-      # TODO: support audio / video / gif
-      if image_block
-        file_url = "#{Chaskiq::Config.get('HOST')}#{image_block['data']['url']}"
-        upload_telegram(
-          channel_id,
-          { photo: file_url },
-          method: "sendPhoto"
-        )
-      elsif video_block
-        file_url = "#{Chaskiq::Config.get('HOST')}#{video_block['data']['url']}"
-        upload_telegram(
-          channel_id,
-          { video: file_url },
-          method: "sendVideo"
-        )
-      elsif file_block
-        file_url = "#{Chaskiq::Config.get('HOST')}#{file_block['data']['url']}"
-        upload_telegram(
-          channel_id,
-          { document: file_url },
-          method: "sendDocument"
-        )
-      elsif is_plain
-        message_params.merge!({
-                                text: plain_message
-                              })
-        @conn.post(
-          "#{@url}/sendMessage",
-          message_params.to_json
-        )
+        url = URI.join(Chaskiq::Config.get("HOST"), url).to_s unless url.match?(%r{\Ahttps?://}i)
+      end
+
+      case media&.fetch("type")
+      when "ImageBlock" then upload_telegram(channel_id, { photo: url, caption: plain_message }, method: "sendPhoto")
+      when "VideoBlock" then upload_telegram(channel_id, { video: url, caption: plain_message }, method: "sendVideo")
+      when "FileBlock" then upload_telegram(channel_id, { document: url, caption: plain_message }, method: "sendDocument")
+      when "AudioRecorderBlock" then upload_telegram(channel_id, { audio: url, caption: plain_message }, method: "sendAudio")
+      else
+        return if plain_message.blank?
+
+        @conn.post("#{@url}/sendMessage", { chat_id: channel_id, text: plain_message }.to_json)
       end
     end
 

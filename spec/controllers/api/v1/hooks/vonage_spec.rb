@@ -307,4 +307,56 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect(blocks.size).to be == 4
     end
   end
+
+  describe "Vonage outgoing messages" do
+    include WebMock::API
+
+    around do |example|
+      WebMock.enable!
+      example.run
+    ensure
+      WebMock.reset!
+      WebMock.disable!
+    end
+
+    let(:api) { MessageApis::Vonage::Api.new(config: { "sandbox" => true, "user_id" => owner_phone }) }
+    let(:endpoint) { "https://messages-sandbox.nexmo.com/v0.1/messages" }
+    let(:recipient) { app.add_user(email: "recipient@example.com") }
+    let(:thread) { app.conversations.create!(main_participant: recipient) }
+
+    before do
+      recipient.external_profiles.create!(provider: "vonage", profile_id: user_phone)
+    end
+
+    def deliver(content)
+      part = thread.messages.build(authorable: agent_role.agent, messageable: ConversationPartContent.new(content))
+      api.send_message(thread, part)
+    end
+
+    def expect_delivery(text)
+      stub = stub_request(:post, endpoint).with do |request|
+        JSON.parse(request.body).dig("message", "content", "text") == text
+      end
+      stub.to_return(status: 200, body: "{}")
+    end
+
+    it "sends the outgoing Dante paragraph to the provider" do
+      stub = expect_delivery("foobar")
+      doc = { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: "foobar" }] }] }
+      deliver(serialized_content: doc.to_json)
+      assert_requested(stub)
+    end
+
+    it "sends HTML-only content as plain text" do
+      stub = expect_delivery("Hello & goodbye")
+      deliver(html_content: "<p><b>Hello</b> &amp; goodbye</p>")
+      assert_requested(stub)
+    end
+
+    it "makes no request for an empty outgoing message" do
+      stub = stub_request(:post, endpoint).to_return(status: 200, body: "{}")
+      deliver(serialized_content: "", html_content: "")
+      assert_not_requested(stub)
+    end
+  end
 end

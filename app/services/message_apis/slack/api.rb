@@ -914,6 +914,8 @@ module MessageApis::Slack
         user = conversation.main_participant
       end
 
+      return if blocks.empty?
+
       provider_channel_id = conversation.conversation_channels
                                         .find_by(provider: "slack")&.provider_channel_id
 
@@ -944,10 +946,20 @@ module MessageApis::Slack
     end
 
     def blocks_transform(part)
-      JSON.parse(
-        part.messageable.serialized_content
-      )["blocks"].map { |o| process_block(o) }.compact
-    rescue StandardError
+      return [] unless part.messageable.respond_to?(:serialized_content)
+
+      content = part.messageable.serialized_content
+      if content.blank?
+        text = Loofah.fragment(part.messageable.html_content.to_s).to_text(encode_special_chars: false).strip
+        return [] if text.blank?
+
+        content = MessageApis::BlockManager.serialized_text(text)
+      end
+      blocks = MessageApis::BlockManager.get_blocks(content)
+      return [] unless blocks.is_a?(Array)
+
+      blocks.filter_map { |block| process_block(block) }
+    rescue JSON::ParserError, NoMethodError, TypeError
       []
     end
 
@@ -972,63 +984,23 @@ module MessageApis::Slack
     end
 
     def process_block(block)
-      res = case block["type"]
-            when "unstyled"
-              return nil if block["text"].blank?
+      case block["type"]
+      when "DividerBlock"
+        { type: "divider" }
+      when "ImageBlock", "FileBlock", "VideoBlock", "AudioRecorderBlock"
+        url = MessageApis::BlockManager.block_data(block)&.fetch("url", nil)
+        return if url.blank?
 
-              {
-                type: "section",
-                text: {
-                  type: "mrkdwn",
-                  text: block["text"]
-                }
-                # block_id: block['key']
-              }
-            when "divider"
-              {
-                type: "divider"
-              }
-            when "image"
-              image_url = block["data"]["url"]
-              image_url = "#{Chaskiq::Config.get('HOST')}#{block['data']['url']}" unless block["data"]["url"].include?("://")
-              {
-                type: "image",
-                title: {
-                  type: "plain_text",
-                  text: "image1",
-                  emoji: true
-                },
-                image_url: image_url,
-                alt_text: "image1"
-              }
-            when "file"
-              {
-                type: "section",
-                text: {
-                  type: "mrkdwn",
-                  text: "*File sent*: <#{Chaskiq::Config.get('HOST')}#{block['data']['url']}|go to file>"
-                }
-                # block_id: block['key']
-              }
-            when "header-one", "header-two", "header-three", "header-four"
-              {
-                type: "section",
-                text: {
-                  type: "mrkdwn",
-                  text: "*#{block['text']}*"
-                }
-                # block_id: block['key']
-              }
-            else
-              {
-                type: "section",
-                text: {
-                  type: "mrkdwn",
-                  text: block["text"]
-                }
-                # block_id: block['key']
-              }
-            end
+        url = URI.join(Chaskiq::Config.get("HOST"), url).to_s unless url.match?(%r{\Ahttps?://}i)
+        if block["type"] == "ImageBlock"
+          { type: "image", image_url: url, alt_text: "Image" }
+        else
+          { type: "section", text: { type: "mrkdwn", text: "<#{url}|View attachment>" } }
+        end
+      else
+        text = MessageApis::BlockManager.plain_text([block])
+        { type: "section", text: { type: "mrkdwn", text: text } } if text.present?
+      end
     end
 
     def post_data(url, data)

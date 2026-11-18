@@ -613,4 +613,81 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect(app.conversations.count).to be == 1
     end
   end
+
+  describe "Slack outgoing messages" do
+    include WebMock::API
+
+    around do |example|
+      WebMock.enable!
+      example.run
+    ensure
+      WebMock.reset!
+      WebMock.disable!
+    end
+
+    let(:api) { MessageApis::Slack::Api.new(config: { "access_token" => "test-token", "channel_id" => "channel" }) }
+    let(:endpoint) { "https://slack.com/api/chat.postMessage" }
+    let(:recipient) { app.add_user(email: "recipient@example.com") }
+    let(:thread) { app.conversations.create!(main_participant: recipient) }
+
+    before do
+      thread.conversation_channels.create!(provider: "slack", provider_channel_id: "123")
+    end
+
+    def deliver(content)
+      part = thread.messages.build(authorable: agent_role.agent, messageable: ConversationPartContent.new(content))
+      api.notify_message(conversation: thread, part: part, channel: "channel")
+    end
+
+    def expect_delivery(text)
+      stub = stub_request(:post, endpoint).with do |request|
+        JSON.parse(request.body).fetch("blocks") == [{ "type" => "section", "text" => { "type" => "mrkdwn", "text" => text } }]
+      end
+      stub.to_return(status: 200, body: "{}")
+    end
+
+    it "sends the outgoing Dante paragraph to the provider" do
+      stub = expect_delivery("foobar")
+      doc = { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: "foobar" }] }] }
+      deliver(serialized_content: doc.to_json)
+      assert_requested(stub)
+    end
+
+    it "sends HTML-only content as plain text" do
+      stub = expect_delivery("Hello & goodbye")
+      deliver(html_content: "<p><b>Hello</b> &amp; goodbye</p>")
+      assert_requested(stub)
+    end
+
+    it "makes no request for an empty outgoing message" do
+      stub = stub_request(:post, endpoint).to_return(status: 200, body: "{}")
+      deliver(serialized_content: "", html_content: "")
+      assert_not_requested(stub)
+    end
+
+    it "sends headings, dividers and relative images in document order" do
+      allow(Chaskiq::Config).to receive(:get).and_call_original
+      allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://chat.example.com")
+      nodes = [
+        { type: "heading", content: [{ type: "text", text: "Heading" }] },
+        { type: "paragraph" }, { type: "DividerBlock" },
+        { type: "ImageBlock", attrs: { url: "/uploads/photo.jpg" } }
+      ]
+      stub = stub_request(:post, endpoint).with do |request|
+        blocks = JSON.parse(request.body).fetch("blocks")
+        blocks.map { |block| block["type"] } == %w[section divider image] &&
+          blocks.first.fetch("text") == { "type" => "mrkdwn", "text" => "Heading" } &&
+          blocks.last.fetch("image_url") == "https://chat.example.com/uploads/photo.jpg"
+      end
+      stub.to_return(status: 200, body: "{}")
+
+      deliver(serialized_content: { type: "doc", content: nodes }.to_json)
+      assert_requested(stub)
+    end
+
+    it "requests the channel permissions in user_scope" do
+      url = api.oauth_authorize(app, double(oauth_url: "https://example.com/callback"))
+      expect(Rack::Utils.parse_query(URI(url).query).fetch("user_scope")).to eq("channels:history,channels:write,channels:read")
+    end
+  end
 end

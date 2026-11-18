@@ -189,4 +189,56 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect(klass.resolve_outbound_phone("+16xxxxx")[:from]).to start_with("+1")
     end
   end
+
+  describe "TelnyxSms outgoing messages" do
+    include WebMock::API
+
+    around do |example|
+      WebMock.enable!
+      example.run
+    ensure
+      WebMock.reset!
+      WebMock.disable!
+    end
+
+    let(:api) { MessageApis::TelnyxSms::Api.new(config: { api_key: "test-key", package: double(settings: { "phones" => "" }) }) }
+    let(:endpoint) { "https://api.telnyx.com/v2/messages" }
+    let(:recipient) { app.add_user(email: "recipient@example.com") }
+    let(:thread) { app.conversations.create!(main_participant: recipient) }
+
+    before do
+      thread.conversation_channels.create!(provider: "TelnyxSms", provider_channel_id: "123")
+    end
+
+    def deliver(content)
+      part = thread.messages.build(authorable: agent_role.agent, messageable: ConversationPartContent.new(content))
+      api.send_message(thread, part)
+    end
+
+    def expect_delivery(text)
+      stub = stub_request(:post, endpoint).with(headers: { "Authorization" => "Bearer test-key" }) do |request|
+        JSON.parse(request.body)["text"] == text
+      end
+      stub.to_return(status: 200, body: "{}")
+    end
+
+    it "sends the outgoing Dante paragraph to the provider" do
+      stub = expect_delivery("foobar")
+      doc = { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: "foobar" }] }] }
+      2.times { deliver(serialized_content: doc.to_json) }
+      assert_requested(stub, times: 2)
+    end
+
+    it "sends HTML-only content as plain text" do
+      stub = expect_delivery("Hello & goodbye")
+      deliver(html_content: "<p><b>Hello</b> &amp; goodbye</p>")
+      assert_requested(stub)
+    end
+
+    it "makes no request for an empty outgoing message" do
+      stub = stub_request(:post, endpoint).to_return(status: 200, body: "{}")
+      deliver(serialized_content: "", html_content: "")
+      assert_not_requested(stub)
+    end
+  end
 end

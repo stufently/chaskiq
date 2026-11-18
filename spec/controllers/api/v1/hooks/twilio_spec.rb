@@ -367,4 +367,44 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       end
     end
   end
+
+  describe "Twilio outgoing messages" do
+    include WebMock::API
+
+    around do |example|
+      WebMock.enable!
+      example.run
+    ensure
+      WebMock.reset!
+      WebMock.disable!
+    end
+
+    let(:api) { MessageApis::Twilio::Api.new(config: { "api_key" => "test-sid", "api_secret" => "test-token", "user_id" => owner_phone }) }
+    let(:endpoint) { "https://api.twilio.com/2010-04-01/Accounts/test-sid/Messages.json" }
+    let(:recipient) { app.add_user(email: "recipient@example.com") }
+    let(:thread) { app.conversations.create!(main_participant: recipient) }
+
+    before do
+      recipient.external_profiles.create!(provider: "twilio", profile_id: user_phone)
+    end
+
+    def deliver(content)
+      part = thread.messages.build(authorable: agent_role.agent, messageable: ConversationPartContent.new(content))
+      api.send_message(thread, part)
+    end
+
+    def expect_delivery(text)
+      stub = stub_request(:post, endpoint).with(headers: { "Authorization" => "Basic #{Base64.strict_encode64('test-sid:test-token')}" }) do |request|
+        Rack::Utils.parse_query(request.body)["Body"] == text
+      end
+      stub.to_return(status: 200, body: "{}")
+    end
+
+    it "sends the outgoing Dante paragraph to the provider" do
+      stub = expect_delivery("foobar")
+      doc = { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: "foobar" }] }] }
+      deliver(serialized_content: doc.to_json)
+      assert_requested(stub)
+    end
+  end
 end

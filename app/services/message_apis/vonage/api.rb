@@ -101,13 +101,22 @@ module MessageApis::Vonage
       return if part.private_note?
 
       message = part.message.as_json
-      blocks = JSON.parse(
-        message["serialized_content"]
-      )["blocks"]
+      content = message["serialized_content"]
+      if content.blank?
+        text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
+        return if text.blank?
 
-      plain_message = blocks.map do |o|
-        o["text"]
-      end.join("\r\n")
+        content = MessageApis::BlockManager.serialized_text(text)
+      end
+
+      begin
+        blocks = MessageApis::BlockManager.get_blocks(content)
+        return unless blocks.is_a?(Array) && blocks.present?
+
+        plain_message = MessageApis::BlockManager.plain_text(blocks)
+      rescue JSON::ParserError, TypeError, NoMethodError
+        return
+      end
 
       profile_id = conversation.main_participant
                                &.external_profiles
@@ -123,58 +132,37 @@ module MessageApis::Vonage
         profile_id: profile_id
       )
 
-      s = @conn.post(
+      return if message_params.blank?
+
+      @conn.post(
         @url,
         message_params.to_json
       )
     end
 
     def build_message_params(blocks:, plain_message:, profile_id:)
-      # TODO: support more blocks
-      image_block = blocks.find { |o| o["type"] == "image" }
-      video_block = blocks.find { |o| o["type"] == "recorded-video" }
-      file_block = blocks.find { |o| o["type"] == "file" }
+      media = blocks.find { |block| %w[ImageBlock VideoBlock FileBlock AudioRecorderBlock].include?(block["type"]) }
+      if media
+        url = MessageApis::BlockManager.block_data(media)&.fetch("url", nil)
+        return if url.blank?
 
-      message_params = {
+        url = URI.join(Chaskiq::Config.get("HOST"), url).to_s unless url.match?(%r{\Ahttps?://}i)
+      end
+
+      type = { "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file",
+               "AudioRecorderBlock" => "audio" }[media&.fetch("type")]
+      content = if type
+                  { type: type, type => { url: url, caption: plain_message } }
+                elsif plain_message.present?
+                  { type: "text", text: plain_message }
+                else
+                  return
+                end
+
+      {
         from: { type: "whatsapp", number: @phone },
         to: { type: "whatsapp", number: profile_id },
-        message: {
-          content: { type: "text", text: plain_message }
-        }
-      }
-
-      if image_block
-        message_params.merge!(
-          vonage_block(block_type: "image", plain_message: plain_message, block: image_block)
-        )
-      end
-
-      if video_block
-        message_params.merge!(
-          vonage_block(block_type: "video", plain_message: plain_message, block: video_block)
-        )
-      end
-
-      if file_block
-        message_params.merge!(
-          vonage_block(block_type: "file", plain_message: plain_message, block: file_block)
-        )
-      end
-
-      message_params
-    end
-
-    def vonage_block(block_type:, plain_message:, block:)
-      {
-        message: {
-          content: {
-            type: block_type,
-            "#{block_type}": {
-              url: Chaskiq::Config.get("HOST") + block["data"]["url"],
-              caption: plain_message
-            }
-          }
-        }
+        message: { content: content }
       }
     end
 

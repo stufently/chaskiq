@@ -117,19 +117,22 @@ module MessageApis::MessageBird
       return if part.private_note?
 
       message = part.message.as_json
+      content = message["serialized_content"]
+      if content.blank?
+        text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
+        return if text.blank?
 
-      blocks = JSON.parse(
-        message["serialized_content"]
-      )["blocks"]
+        content = MessageApis::BlockManager.serialized_text(text)
+      end
 
-      # TODO: support more blocks
-      image_block = blocks.find { |o| o["type"] == "image" }
-      video_block = blocks.find { |o| o["type"] == "recorded-video" }
-      file_block = blocks.find { |o| o["type"] == "file" }
-      is_plain = !image_block || !video_block || !file_block
-      plain_message = blocks.map do |o|
-        o["text"]
-      end.join("\r\n")
+      begin
+        blocks = MessageApis::BlockManager.get_blocks(content)
+        return unless blocks.is_a?(Array) && blocks.present?
+
+        plain_message = MessageApis::BlockManager.plain_text(blocks)
+      rescue JSON::ParserError, TypeError, NoMethodError
+        return
+      end
 
       profile_id = conversation.main_participant
                                &.external_profiles
@@ -139,58 +142,30 @@ module MessageApis::MessageBird
       # TODO: maybe handle an error here ?
       return if profile_id.blank?
 
+      media = blocks.find { |block| %w[ImageBlock VideoBlock FileBlock AudioRecorderBlock].include?(block["type"]) }
+      if media
+        url = MessageApis::BlockManager.block_data(media)&.fetch("url", nil)
+        return if url.blank?
+
+        url = URI.join(Chaskiq::Config.get("HOST"), url).to_s unless url.match?(%r{\Ahttps?://}i)
+      end
+
       message_params = {
         from: @phone,
         to: profile_id.gsub("+", "")
       }
 
-      if is_plain
-        message_params.merge!({
-                                type: "text",
-                                content: { text: plain_message }
-                              })
+      type = { "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file",
+               "AudioRecorderBlock" => "audio" }[media&.fetch("type")]
+      if type
+        message_params.merge!(type: type, content: { type => { url: url, caption: plain_message } })
+      else
+        return if plain_message.blank?
+
+        message_params.merge!(type: "text", content: { text: plain_message })
       end
 
-      if image_block
-        message_params.merge!({
-                                type: "image",
-                                image: {
-                                  link: Chaskiq::Config.get("HOST") + image_block["data"]["url"],
-                                  caption: plain_message
-                                }
-                              })
-      end
-
-      if video_block
-        message_params.merge!({
-                                type: "video",
-                                video: {
-                                  url: Chaskiq::Config.get("HOST") + video_block["data"]["url"],
-                                  caption: plain_message
-                                }
-                              })
-      end
-
-      if file_block
-        message_params.merge!({
-                                type: "document",
-                                file: {
-                                  url: Chaskiq::Config.get("HOST") + file_block["data"]["url"],
-                                  caption: plain_message
-                                }
-                              })
-      end
-
-      Rails.logger.info "MESSAGE PARAMS:#{message_params}"
-      Rails.logger.info @url
-      Rails.logger.info @api_key
-      Rails.logger.info "============="
-      s = @conn.post(
-        "#{@url}/send",
-        message_params.to_json
-      )
-      Rails.logger.info "RESPNSE #{s.body}"
-      s
+      @conn.post("#{@url}send", message_params.to_json)
     end
 
     # not used fro now
