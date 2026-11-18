@@ -1,25 +1,29 @@
 # frozen_string_literal: true
 
-# Throttle login attempts (password grant) per IP.
-# The frontend posts JSON to /oauth/token.json (password grant) and /oauth/token
-# (refresh_token grant). Form posts to the same paths are also covered.
-# refresh_token requests are excluded so token refresh is never throttled.
-Rack::Attack.throttle("logins/ip", limit: 20, period: 1.hour) do |req|
-  if req.post? && (req.path == "/oauth/token" || req.path == "/oauth/token.json")
-    # Read grant_type from form params or JSON body
-    grant_type = req.params["grant_type"]
-    if grant_type.nil? && req.media_type == "application/json"
-      begin
-        body = req.body.read
-        req.body.rewind
-        parsed = JSON.parse(body)
-        grant_type = parsed["grant_type"] if parsed.is_a?(Hash)
-      rescue JSON::ParserError
-        nil
-      end
-    end
-    req.ip unless grant_type == "refresh_token"
+if Rails.env.production? || Rails.env.staging?
+  redis_url = Chaskiq::Config.get("REDIS_URL")
+  if redis_url.present?
+    Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: redis_url)
+  else
+    Rails.logger.warn("Rack::Attack uses Rails.cache because REDIS_URL is empty")
   end
+end
+
+Rack::Attack.throttle("logins/ip", limit: 20, period: 1.hour) do |req|
+  next unless req.post? && %r{\A/+oauth/+token(?:\.[^/.?]+)?/*\z}.match?(req.path)
+
+  grant_type = begin
+    begin
+      body_params = req.media_type == "application/json" ? JSON.parse(req.body.read) : req.POST
+    ensure
+      req.body&.rewind
+    end
+    req.GET.fetch("grant_type") { body_params["grant_type"] if body_params.is_a?(Hash) }
+  rescue StandardError
+    # Invalid parameters must still consume an attempt.
+    nil
+  end
+  req.ip unless grant_type == "refresh_token"
 end
 
 ActiveSupport::Notifications.subscribe("rack.attack") do |_name, _start, _finish, _request_id, payload|

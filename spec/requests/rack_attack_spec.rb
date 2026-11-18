@@ -74,4 +74,42 @@ RSpec.describe "Rack::Attack login throttling", type: :request do
       expect(response.status).to eq(429)
     end
   end
+
+  include ActiveSupport::Testing::TimeHelpers
+
+  %w[xml html].each do |format|
+    it "counts requests with the #{format} route format" do
+      path = "/oauth/token.#{format}"
+      20.times { expect(post_token(path, "10.0.2.1")).not_to eq(429) }
+      expect(post_token(path, "10.0.2.1")).to eq(429)
+    end
+  end
+
+  [false, true].each do |json|
+    it "uses the query grant type with a #{json ? 'JSON' : 'form'} body" do
+      request_token = lambda do
+        post_token("/oauth/token?grant_type=password", "10.0.2.2", grant_type: "refresh_token", json: json)
+      end
+      20.times { expect(request_token.call).not_to eq(429) }
+      expect(request_token.call).to eq(429)
+    end
+  end
+
+  it "counts malformed JSON even when Rails rejects the body" do
+    request_token = lambda do
+      post "/oauth/token", params: "{bad", env: { "CONTENT_TYPE" => "application/json", "REMOTE_ADDR" => "10.0.2.3" }
+      response.status
+    rescue ActionDispatch::Http::Parameters::ParseError
+      :invalid_parameters
+    end
+    expect(Array.new(20) { request_token.call }).not_to include(429, 500)
+    expect(request_token.call).to eq(429)
+  end
+
+  it "keeps the limit for one hour" do
+    start = Time.zone.at((Time.now.to_i / 3600 + 1) * 3600 + 1)
+    travel_to(start) { 20.times { expect(post_token("/oauth/token", "10.0.2.4")).not_to eq(429) } }
+    travel_to(start + 3590) { expect(post_token("/oauth/token", "10.0.2.4")).to eq(429) }
+    travel_to(start + 3610) { expect(post_token("/oauth/token", "10.0.2.4")).not_to eq(429) }
+  end
 end
