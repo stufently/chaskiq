@@ -7,7 +7,8 @@
   idle push connection after ~6-8 min and git then exits SILENTLY, push lost).
   Changed `Dockerfile*` or `.docker-files/` — run the image build BEFORE
   pushing: `bin/ci-local --docker`, then `CI_LOCAL_ARGS=--docker git push` (the
-  hook reuses the recorded result). Without keepalives a hook run over 300 s
+  hook reuses the recorded result; `CI_LOCAL_ARGS` accepts only `--docker`, and a
+  result is recorded only for a tree with no untracked files). Without keepalives a hook run over 300 s
   aborts the push even when green: push again. Always check the push output.
 - `gh` resolves to upstream chaskiq/chaskiq by default — always pass
   `-R stufently/chaskiq`.

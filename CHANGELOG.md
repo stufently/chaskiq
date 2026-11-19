@@ -14,9 +14,16 @@ Changed
 Fixed
 - A push could be lost after a long pre-push hook: git connects over SSH before
   the hook, GitHub drops the idle connection after 6-8 min, and git exits 141
-  (SIGPIPE) with no message. `bin/ci-local` records passed jobs per clean
-  commit and the hook reuses them; without SSH keepalives (README:
-  `core.sshCommand`) a hook run over 300 s aborts the push loudly.
+  (SIGPIPE) with no message. `bin/ci-local` records passed jobs (key: commit,
+  `bin/ci-local` hash, test image content; only for a tree with no untracked or
+  non-cache ignored files) and the hook reuses them; without SSH keepalives
+  (every <= 60 s, README: `core.sshCommand`) a hook run over 300 s aborts the
+  push loudly.
+- The pre-push hook accepts only `--docker` in `CI_LOCAL_ARGS` (rubocop and
+  rspec always run) and has `bin/ci-local --commit` verify the pushed commit
+  before and after the run.
+- `bin/ci-local` RuboCop: per-run target lists (parallel runs), and tracked
+  files with non-ASCII names are no longer skipped as untracked.
 
 ## 2026-11-19 — fork-updates-m8
 

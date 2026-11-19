@@ -131,8 +131,12 @@ silently does not happen. Turn on SSH keepalives for the clone once, next to the
 git config core.sshCommand "ssh -o ServerAliveInterval=30"
 ```
 
-`bin/ci-local` also records the jobs that passed for a clean commit in `tmp/ci-local/passed`, and the hook
-does not re-run them for that commit. Without keepalives, a hook run of `bin/ci-local` longer than
+`bin/ci-local` also records the jobs that passed in `tmp/ci-local/passed`, keyed by the commit, the hash of
+`bin/ci-local` and the test image content, and the hook does not re-run them. It records only for a
+completely clean tree: no tracked changes, no untracked files, and ignored files only in generated/cache
+paths (`log/`, `tmp/`, `node_modules/`, `vendor/bundle/` ...), since a local `.env*` or `.rspec-local` could
+change the run. The hook passes the pushed commit to `bin/ci-local --commit <sha>`, which checks it before
+and after the run, and `CI_LOCAL_ARGS` may only be `--docker` (rubocop and rspec always run). Without keepalives, a hook run of `bin/ci-local` longer than
 `CHASKIQ_PUSH_IDLE_LIMIT` seconds (default 300) aborts the push even though CI passed; run the same
 `git push` again and it goes through at once.
 
