@@ -6,17 +6,17 @@ module MessageApis::Zapier
       type_value = ctx.dig(:values, :type)
       block_type = ctx.dig(:values, :block_type)
 
-      if type_value === "content"
-        {
-          # ctx: ctx,
-          values: { block_type: block_type },
-          definitions: [
-            {
-              type: "content"
-            }
-          ]
-        }
-      end
+      return unless type_value === "content"
+
+      {
+        # ctx: ctx,
+        values: { block_type: block_type },
+        definitions: [
+          {
+            type: "content"
+          }
+        ]
+      }
     end
 
     def self.content_hook(kind:, ctx:)

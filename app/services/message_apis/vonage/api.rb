@@ -271,33 +271,32 @@ module MessageApis::Vonage
 
     def add_participant(vonage_user)
       app = @package.app
-      if vonage_user
+      return unless vonage_user
 
-        data = {
-          properties: {
-            name: vonage_user
-          }
+      data = {
+        properties: {
+          name: vonage_user
         }
+      }
 
-        external_profile = app.external_profiles.find_by(
+      external_profile = app.external_profiles.find_by(
+        provider: PROVIDER,
+        profile_id: vonage_user
+      )
+
+      participant = external_profile&.app_user
+
+      ## todo: check user for this & previous conversation
+      ## via twitter with the twitter user id
+      if participant.blank?
+        participant = app.add_anonymous_user(data)
+        participant.external_profiles.create(
           provider: PROVIDER,
           profile_id: vonage_user
         )
-
-        participant = external_profile&.app_user
-
-        ## todo: check user for this & previous conversation
-        ## via twitter with the twitter user id
-        if participant.blank?
-          participant = app.add_anonymous_user(data)
-          participant.external_profiles.create(
-            provider: PROVIDER,
-            profile_id: vonage_user
-          )
-        end
-
-        participant
       end
+
+      participant
     end
   end
 end

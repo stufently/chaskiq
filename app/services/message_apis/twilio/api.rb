@@ -375,32 +375,31 @@ module MessageApis::Twilio
 
     def add_participant(twilio_user)
       app = @package.app
-      if twilio_user
+      return unless twilio_user
 
-        data = {
-          properties: {
-            name: twilio_user,
-            twilio_id: twilio_user
-          }
+      data = {
+        properties: {
+          name: twilio_user,
+          twilio_id: twilio_user
         }
+      }
 
-        external_profile = app.external_profiles.find_by(
+      external_profile = app.external_profiles.find_by(
+        provider: PROVIDER,
+        profile_id: twilio_user
+      )
+
+      participant = external_profile&.app_user
+
+      if participant.blank?
+        participant = app.add_anonymous_user(data)
+        participant.external_profiles.create(
           provider: PROVIDER,
           profile_id: twilio_user
         )
-
-        participant = external_profile&.app_user
-
-        if participant.blank?
-          participant = app.add_anonymous_user(data)
-          participant.external_profiles.create(
-            provider: PROVIDER,
-            profile_id: twilio_user
-          )
-        end
-
-        participant
       end
+
+      participant
     end
   end
 end

@@ -41,16 +41,16 @@ module MessageApis::OpenAi
 
       end
 
-      if ctx["field"]["id"] == "prompt-no"
-        {
-          results: {
-            start: "no"
-          },
-          definitions: [
-            { type: "text", text: "you cancelled the conversation", style: "header" }
-          ]
-        }
-      end
+      return unless ctx["field"]["id"] == "prompt-no"
+
+      {
+        results: {
+          start: "no"
+        },
+        definitions: [
+          { type: "text", text: "you cancelled the conversation", style: "header" }
+        ]
+      }
     end
 
     # Configure flow webhook URL (optional)

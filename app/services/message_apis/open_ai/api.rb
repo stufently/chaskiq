@@ -87,16 +87,16 @@ module MessageApis::OpenAi
     end
 
     def locked_for_channel?(conversation, part)
-      if part.authorable.is_a?(Agent) && !part.authorable.bot?
-        conversation.conversation_channels.find_by({
-                                                     provider: "open_ai",
-                                                     provider_channel_id: conversation.id
-                                                   }).destroy
+      return unless part.authorable.is_a?(Agent) && !part.authorable.bot?
 
-        # assign and return , bot conversation over
-        # conversation.assign_user(part.authorable)
-        true
-      end
+      conversation.conversation_channels.find_by({
+                                                   provider: "open_ai",
+                                                   provider_channel_id: conversation.id
+                                                 }).destroy
+
+      # assign and return , bot conversation over
+      # conversation.assign_user(part.authorable)
+      true
     end
 
     def notify_message(conversation:, part:, channel:)
@@ -108,47 +108,46 @@ module MessageApis::OpenAi
 
       Rails.logger.info "NOTIFY MESSAGE OPEN AI #{part.id}"
 
-      unless part.authorable.is_a?(Agent)
+      return if part.authorable.is_a?(Agent)
 
-        previous = previous_messages(conversation, part)
+      previous = previous_messages(conversation, part)
 
-        parsed_content = part&.message&.parsed_content
-        human_input = parsed_content["blocks"]
-        human_input = human_input&.map do |o|
-          o["text"]
-        end&.join(" ")
+      parsed_content = part&.message&.parsed_content
+      human_input = parsed_content["blocks"]
+      human_input = human_input&.map do |o|
+        o["text"]
+      end&.join(" ")
 
-        messages = previous << { role: "user", content: human_input }
+      messages = previous << { role: "user", content: human_input }
 
-        Rails.cache.write("/conversation/#{conversation.key}/openai", messages)
+      Rails.cache.write("/conversation/#{conversation.key}/openai", messages)
 
-        Rails.logger.info "PROMPT: #{messages}"
+      Rails.logger.info "PROMPT: #{messages}"
 
-        gpt_result = get_gpt_response(gpt_channel.data["prompt"], messages, part.authorable.id.to_s)
+      gpt_result = get_gpt_response(gpt_channel.data["prompt"], messages, part.authorable.id.to_s)
 
-        Rails.logger.info(gpt_result)
-        text = begin
-          gpt_result["choices"].first["message"]["content"]
-        rescue StandardError
-          nil
-        end
-
-        return if text.nil?
-
-        blocks = {
-          blocks: [
-            serialized_block(text)
-          ].flatten.compact
-        }.to_json
-
-        add_message(
-          conversation: conversation,
-          from: conversation.app.agents.bots.first,
-          text: text,
-          blocks: blocks,
-          message_id: gpt_result[:id]
-        )
+      Rails.logger.info(gpt_result)
+      text = begin
+        gpt_result["choices"].first["message"]["content"]
+      rescue StandardError
+        nil
       end
+
+      return if text.nil?
+
+      blocks = {
+        blocks: [
+          serialized_block(text)
+        ].flatten.compact
+      }.to_json
+
+      add_message(
+        conversation: conversation,
+        from: conversation.app.agents.bots.first,
+        text: text,
+        blocks: blocks,
+        message_id: gpt_result[:id]
+      )
     end
 
     def previous_messages(conversation, part)

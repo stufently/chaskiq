@@ -678,29 +678,29 @@ module MessageApis::Slack
     def handle_incoming_action(data)
       data = JSON.parse(data["payload"])
 
-      if data["type"] == "block_actions"
-        action = data["actions"]&.first
-        return if action.blank?
+      return unless data["type"] == "block_actions"
 
-        slack_ts = data["message"]["ts"]
-        conversation = find_conversation_by_slack_ts(slack_ts)
+      action = data["actions"]&.first
+      return if action.blank?
 
-        case action["value"]
-        when "open"
-          conversation.reopen! unless conversation.opened?
-        when "close"
-          conversation.close! unless conversation.closed?
-        when "prioritize", "unprioritize"
-          conversation.toggle_priority
-        else
-          case action["type"]
-          when "external_select"
-            handle_external_select_action(action, conversation)
-          end
+      slack_ts = data["message"]["ts"]
+      conversation = find_conversation_by_slack_ts(slack_ts)
+
+      case action["value"]
+      when "open"
+        conversation.reopen! unless conversation.opened?
+      when "close"
+        conversation.close! unless conversation.closed?
+      when "prioritize", "unprioritize"
+        conversation.toggle_priority
+      else
+        case action["type"]
+        when "external_select"
+          handle_external_select_action(action, conversation)
         end
-        # this is not neccessary since the events will end executing a trigger ending delivering to slack
-        # update_thread_head(conversation.reload, slack_ts)
       end
+      # this is not neccessary since the events will end executing a trigger ending delivering to slack
+      # update_thread_head(conversation.reload, slack_ts)
     end
 
     def handle_external_select_action(action, conversation)

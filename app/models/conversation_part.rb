@@ -95,12 +95,12 @@ class ConversationPart < ApplicationRecord
     return if read_at.present?
 
     self.read_at = Time.zone.now
-    if save
-      val = conversation.main_participant.new_messages.value
-      conversation.main_participant.new_messages.decrement unless val < 1
-      # TODO: decrement agent
-      notify_to_channels({ disable_api_notification: true })
-    end
+    return unless save
+
+    val = conversation.main_participant.new_messages.value
+    conversation.main_participant.new_messages.decrement unless val < 1
+    # TODO: decrement agent
+    notify_to_channels({ disable_api_notification: true })
   end
 
   def notify_to_channels(opts = {})
@@ -170,11 +170,11 @@ class ConversationPart < ApplicationRecord
 
   def enqueue_email_notification
     # not send email it it's from user auto message campaign
-    unless from_bot?
-      EmailChatNotifierJob
-        .set(wait_until: 20.seconds.from_now)
-        .perform_later(id)
-    end
+    return if from_bot?
+
+    EmailChatNotifierJob
+      .set(wait_until: 20.seconds.from_now)
+      .perform_later(id)
   end
 
   def send_constraints?
@@ -224,10 +224,10 @@ class ConversationPart < ApplicationRecord
   end
 
   def handle_conversation_touches
-    if authorable.is_a?(Agent) && !is_event_message? && !from_bot?
-      conversation.main_participant.new_messages.increment
-      conversation.update_first_time_reply
-    end
+    return unless authorable.is_a?(Agent) && !is_event_message? && !from_bot?
+
+    conversation.main_participant.new_messages.increment
+    conversation.update_first_time_reply
   end
 
   def increment_message_stats

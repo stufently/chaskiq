@@ -119,11 +119,11 @@ module MessageApis::Twitter
 
     def create_hook_from_params(params, package)
       crc_token = params["crc_token"]
-      unless crc_token.nil?
-        response = {}
-        response["response_token"] = "sha256=#{generate_crc_response(package.api_secret, crc_token)}"
-        response
-      end
+      return if crc_token.nil?
+
+      response = {}
+      response["response_token"] = "sha256=#{generate_crc_response(package.api_secret, crc_token)}"
+      response
     end
 
     def enqueue_process_event(params, package)
@@ -155,61 +155,61 @@ module MessageApis::Twitter
 
       app = package.app
 
-      if params.keys.include?("direct_message_events")
-        params["direct_message_events"].each do |message|
-          sender_id = message["message_create"]["sender_id"]
-          target_id = message["message_create"]["target"]["recipient_id"]
-          message_id = message["id"]
-          sender = params["users"][sender_id]
-          recipient = params["users"][target_id]
+      return unless params.keys.include?("direct_message_events")
 
-          # determine the id of the user (channel)
-          cond = sender_id == params["for_user_id"]
-          channel_id = cond ? target_id : sender_id
-          twitter_user = cond ? recipient : sender
-          agent_sender = cond
+      params["direct_message_events"].each do |message|
+        sender_id = message["message_create"]["sender_id"]
+        target_id = message["message_create"]["target"]["recipient_id"]
+        message_id = message["id"]
+        sender = params["users"][sender_id]
+        recipient = params["users"][target_id]
 
-          conversation = find_conversation_by_channel(channel_id)
+        # determine the id of the user (channel)
+        cond = sender_id == params["for_user_id"]
+        channel_id = cond ? target_id : sender_id
+        twitter_user = cond ? recipient : sender
+        agent_sender = cond
 
-          next if conversation && conversation.conversation_part_channel_sources
-                                              .find_by(message_source_id: message_id).present?
+        conversation = find_conversation_by_channel(channel_id)
 
-          message_data = message["message_create"]["message_data"]
-          text = message_data["text"]
+        next if conversation && conversation.conversation_part_channel_sources
+                                            .find_by(message_source_id: message_id).present?
 
-          serialized_content = serialize_content(
-            message_data
-          )
+        message_data = message["message_create"]["message_data"]
+        text = message_data["text"]
 
-          participant = add_participant(twitter_user)
+        serialized_content = serialize_content(
+          message_data
+        )
 
-          # conversation.conversation_channels.create({
-          #  provider: 'twitter',
-          #  provider_channel_id: channel_id
-          # }) if conversation.present?
+        participant = add_participant(twitter_user)
 
-          if conversation.blank?
-            conversation = app.conversations.create(
-              main_participant: participant,
-              conversation_channels_attributes: [
-                provider: PROVIDER,
-                provider_channel_id: channel_id
-              ]
-            )
-          end
+        # conversation.conversation_channels.create({
+        #  provider: 'twitter',
+        #  provider_channel_id: channel_id
+        # }) if conversation.present?
 
-          # TODO: serialize message
-          conversation.add_message(
-            from: agent_sender ? @package.app.agents.first : participant, # agent_required ? Agent.first : participant,
-            message: {
-              html_content: text,
-              serialized_content: serialized_content
-            },
-            provider: PROVIDER,
-            message_source_id: message_id,
-            check_assignment_rules: true
+        if conversation.blank?
+          conversation = app.conversations.create(
+            main_participant: participant,
+            conversation_channels_attributes: [
+              provider: PROVIDER,
+              provider_channel_id: channel_id
+            ]
           )
         end
+
+        # TODO: serialize message
+        conversation.add_message(
+          from: agent_sender ? @package.app.agents.first : participant, # agent_required ? Agent.first : participant,
+          message: {
+            html_content: text,
+            serialized_content: serialized_content
+          },
+          provider: PROVIDER,
+          message_source_id: message_id,
+          check_assignment_rules: true
+        )
       end
     end
 
@@ -254,32 +254,32 @@ module MessageApis::Twitter
 
     def add_participant(twitter_user)
       app = @package.app
-      if twitter_user
-        data = {
-          properties: {
-            name: twitter_user["name"]
-          }
-        }
+      return unless twitter_user
 
-        external_profile = app.external_profiles.find_by(
+      data = {
+        properties: {
+          name: twitter_user["name"]
+        }
+      }
+
+      external_profile = app.external_profiles.find_by(
+        provider: PROVIDER,
+        profile_id: twitter_user["id"]
+      )
+
+      participant = external_profile&.app_user
+
+      ## todo: check user for this & previous conversation
+      ## via twitter with the twitter user id
+      if participant.blank?
+        participant = app.add_anonymous_user(data)
+        participant.external_profiles.create(
           provider: PROVIDER,
           profile_id: twitter_user["id"]
         )
-
-        participant = external_profile&.app_user
-
-        ## todo: check user for this & previous conversation
-        ## via twitter with the twitter user id
-        if participant.blank?
-          participant = app.add_anonymous_user(data)
-          participant.external_profiles.create(
-            provider: PROVIDER,
-            profile_id: twitter_user["id"]
-          )
-        end
-
-        participant
       end
+
+      participant
     end
 
     def generate_crc_response(consumer_secret, crc_token)

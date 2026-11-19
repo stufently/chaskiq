@@ -177,34 +177,33 @@ module MessageApis
     def add_participant(user_data, provider)
       app = @package.app
 
-      if user_data
+      return unless user_data
 
-        profile_data = {
-          name: "#{user_data['first_name']} #{user_data['last_name']}"
-        }
+      profile_data = {
+        name: "#{user_data['first_name']} #{user_data['last_name']}"
+      }
 
-        data = {
-          properties: profile_data
-        }
+      data = {
+        properties: profile_data
+      }
 
-        external_profile = app.external_profiles.find_by(
+      external_profile = app.external_profiles.find_by(
+        provider: provider,
+        profile_id: user_data["id"]
+      )
+
+      participant = external_profile&.app_user
+
+      ## todo: check user for this & previous conversation
+      if participant.blank?
+        participant = app.add_anonymous_user(data)
+        participant.external_profiles.create(
           provider: provider,
           profile_id: user_data["id"]
         )
-
-        participant = external_profile&.app_user
-
-        ## todo: check user for this & previous conversation
-        if participant.blank?
-          participant = app.add_anonymous_user(data)
-          participant.external_profiles.create(
-            provider: provider,
-            profile_id: user_data["id"]
-          )
-        end
-
-        participant
       end
+
+      participant
     end
 
     # useed in controller hooks

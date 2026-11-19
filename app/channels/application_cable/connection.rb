@@ -38,14 +38,14 @@ module ApplicationCable
     def get_session_data
       params = request.query_parameters
 
-      if app.present?
-        OriginValidator.new(
-          app: app.domain_url,
-          host: env["HTTP_ORIGIN"]
-        ).is_valid?
+      return unless app.present?
 
-        find_user(get_user_data)
-      end
+      OriginValidator.new(
+        app: app.domain_url,
+        host: env["HTTP_ORIGIN"]
+      ).is_valid?
+
+      find_user(get_user_data)
     end
 
     rescue_from StandardError, with: :report_error

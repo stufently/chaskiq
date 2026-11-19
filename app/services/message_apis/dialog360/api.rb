@@ -475,42 +475,41 @@ module MessageApis::Dialog360
       app = @package.app
       profile = contacts.find { |o| o["wa_id"] == dialog_user }
 
-      if dialog_user
+      return unless dialog_user
 
-        profile_data = {
-          name: dialog_user
-        }
+      profile_data = {
+        name: dialog_user
+      }
 
-        if profile
-          profile_data.merge!({
-                                name: profile.dig("profile", "name")
-                              })
-        end
+      if profile
+        profile_data.merge!({
+                              name: profile.dig("profile", "name")
+                            })
+      end
 
-        data = {
-          properties: profile_data
-        }
+      data = {
+        properties: profile_data
+      }
 
-        external_profile = app.external_profiles.find_by(
+      external_profile = app.external_profiles.find_by(
+        provider: PROVIDER,
+        profile_id: dialog_user
+      )
+
+      participant = external_profile&.app_user
+
+      ## todo: check user for this & previous conversation
+      ## via twitter with the twitter user id
+      if participant.blank?
+        participant = app.add_anonymous_user(data)
+        participant.external_profiles.create(
           provider: PROVIDER,
           profile_id: dialog_user
         )
-
-        participant = external_profile&.app_user
-
-        ## todo: check user for this & previous conversation
-        ## via twitter with the twitter user id
-        if participant.blank?
-          participant = app.add_anonymous_user(data)
-          participant.external_profiles.create(
-            provider: PROVIDER,
-            profile_id: dialog_user
-          )
-          participant.update(phone: dialog_user)
-        end
-
-        participant
+        participant.update(phone: dialog_user)
       end
+
+      participant
     end
   end
 end

@@ -96,13 +96,13 @@ class Banner < Message
 
     return if banner.blank? || !banner.available_for_user?(user)
 
-    if banners.any?
-      MessengerEventsChannel.broadcast_to(key, {
-        type: "banners:receive",
-        data: banner.as_json(only: [:id], methods: %i[banner_data serialized_content html_content])
-      }.as_json)
+    return unless banners.any?
 
-      true
-    end
+    MessengerEventsChannel.broadcast_to(key, {
+      type: "banners:receive",
+      data: banner.as_json(only: [:id], methods: %i[banner_data serialized_content html_content])
+    }.as_json)
+
+    true
   end
 end

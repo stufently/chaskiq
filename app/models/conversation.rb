@@ -165,37 +165,37 @@ class Conversation < ApplicationRecord
   end
 
   def add_part_channel(part, opts)
-    if opts[:provider].present? && opts[:message_source_id].present?
-      part.conversation_part_channel_sources.new({
-                                                   provider: opts[:provider],
-                                                   message_source_id: opts[:message_source_id]
-                                                 })
-    end
+    return unless opts[:provider].present? && opts[:message_source_id].present?
+
+    part.conversation_part_channel_sources.new({
+                                                 provider: opts[:provider],
+                                                 message_source_id: opts[:message_source_id]
+                                               })
   end
 
   def assign_user(user)
     return if assignee.present? && assignee.id === user.id
 
     self.assignee = user
-    if save
-      add_message_event(
-        action: "assigned",
-        data: {
-          name: user.name,
-          id: user.id,
-          email: user.email
-        }
-      )
+    return unless save
 
-      add_conversation_assigned
-    end
+    add_message_event(
+      action: "assigned",
+      data: {
+        name: user.name,
+        id: user.id,
+        email: user.email
+      }
+    )
+
+    add_conversation_assigned
   end
 
   def add_default_assigne
-    if @initiator.is_a?(Agent) && assignee.blank?
-      self.assignee = @initiator
-      nil
-    end
+    return unless @initiator.is_a?(Agent) && assignee.blank?
+
+    self.assignee = @initiator
+    nil
   end
 
   def check_conditions

@@ -259,21 +259,20 @@ module MessageApis::Messenger
     def add_participant(messenger_user)
       app = @package.app
 
-      if messenger_user
+      return unless messenger_user
 
-        external_profile = app.external_profiles.find_by(
-          provider: PROVIDER,
-          profile_id: messenger_user
-        )
+      external_profile = app.external_profiles.find_by(
+        provider: PROVIDER,
+        profile_id: messenger_user
+      )
 
-        participant = external_profile&.app_user
+      participant = external_profile&.app_user
 
-        participant, data = handle_participant(participant, messenger_user)
+      participant, data = handle_participant(participant, messenger_user)
 
-        participant = app.add_anonymous_user(data) if participant.blank?
+      participant = app.add_anonymous_user(data) if participant.blank?
 
-        participant
-      end
+      participant
     end
 
     def handle_participant(participant, messenger_user)

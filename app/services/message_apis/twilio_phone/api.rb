@@ -453,10 +453,10 @@ module MessageApis::TwilioPhone
     end
 
     def conference_object(payload)
-      if payload["StatusCallbackEvent"] == "participant-join"
-        conference = client.conferences(payload["ConferenceSid"]).fetch
-        self.class.conference_json_item(conference, @package)
-      end
+      return unless payload["StatusCallbackEvent"] == "participant-join"
+
+      conference = client.conferences(payload["ConferenceSid"]).fetch
+      self.class.conference_json_item(conference, @package)
     end
 
     def self.conversation_url(app, conf)

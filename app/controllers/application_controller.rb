@@ -122,11 +122,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_resource_owner
-    if doorkeeper_token && !doorkeeper_token.expired?
-      agent = Agent.find(doorkeeper_token.resource_owner_id)
-      sign_in(agent, scope: "agent")
-      agent
-    end
+    return unless doorkeeper_token && !doorkeeper_token.expired?
+
+    agent = Agent.find(doorkeeper_token.resource_owner_id)
+    sign_in(agent, scope: "agent")
+    agent
   end
 
   def layout_by_resource

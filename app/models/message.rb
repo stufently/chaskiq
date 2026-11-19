@@ -52,15 +52,15 @@ class Message < ApplicationRecord
   end
 
   def show_notification_for(user)
-    if available_for_user?(user)
-      metrics.create(
-        app_user: user,
-        trackable: self,
-        action: "viewed",
-        message_id: user.id
-      )
-      self
-    end
+    return unless available_for_user?(user)
+
+    metrics.create(
+      app_user: user,
+      trackable: self,
+      action: "viewed",
+      message_id: user.id
+    )
+    self
   end
 
   def self.allowed_types
