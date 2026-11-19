@@ -18,30 +18,116 @@ module MessageApis
     }.freeze
     SIGNATURE_FIELDS = %w[Signature SignatureVersion SigningCertURL].freeze
     DIGESTS = { "1" => "SHA1", "2" => "SHA256" }.freeze
-    CERTIFICATE_HOST = /\Asns\.[a-z0-9-]+\.amazonaws\.com(\.cn)?\z/i
-    CACHE_LIMIT = 32
-    CACHE_LOCK = Mutex.new
-    DOWNLOAD_LOCKS = Array.new(CACHE_LIMIT) { Mutex.new }.freeze
-    @certificates = {}
+    CERTIFICATE_HOST = /\Asns\.[a-z]{2}(-gov|-iso[a-z]?)?-[a-z]+-\d+\.amazonaws\.com(\.cn)?\z/i
+    TOPIC_LOCK = Mutex.new
+
+    # Protects verified certificates and bounds the registry of pending downloads.
+    class CertificateCache
+      CAPACITY = 32
+      LOCK_TIMEOUT = 5
+      Download = Struct.new(:mutex, :users)
+
+      def initialize
+        @certificates = {}
+        @downloads = {}
+        @guard = Mutex.new
+      end
+
+      def clear
+        @guard.synchronize { @certificates.clear }
+      end
+
+      def fetch_verified(url, verify)
+        certificate = fetch(url)
+        return verify.call(certificate) if certificate
+
+        with_download_lock(url) do
+          certificate = fetch(url)
+          return verify.call(certificate) if certificate
+
+          certificate = yield
+          verify.call(certificate)
+          store(url, certificate)
+        end
+      end
+
+      private
+
+      def fetch(url)
+        @guard.synchronize { @certificates[url] }
+      end
+
+      def store(url, certificate)
+        @guard.synchronize do
+          @certificates.shift if @certificates.size >= CAPACITY
+          @certificates[url] = certificate
+        end
+      end
+
+      def with_download_lock(url)
+        download = reserve(url)
+        acquire(download.mutex)
+        begin
+          yield
+        ensure
+          download.mutex.unlock
+        end
+      ensure
+        release(url, download) if download
+      end
+
+      def reserve(url)
+        @guard.synchronize do
+          download = @downloads[url]
+          raise CertificateUnavailable if !download && @downloads.size >= CAPACITY
+
+          download ||= @downloads[url] = Download.new(Mutex.new, 0)
+          download.users += 1
+          download
+        end
+      end
+
+      def release(url, download)
+        @guard.synchronize do
+          download.users -= 1
+          @downloads.delete(url) if download.users.zero?
+        end
+      end
+
+      def acquire(mutex)
+        deadline = monotonic_time + LOCK_TIMEOUT
+        loop do
+          remaining = deadline - monotonic_time
+          raise CertificateUnavailable unless remaining.positive?
+          return if mutex.try_lock
+
+          sleep([0.01, remaining].min)
+        end
+      end
+
+      def monotonic_time
+        Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      end
+    end
+
+    CERTIFICATES = CertificateCache.new
+    private_constant :CertificateCache, :CERTIFICATES
 
     def self.verify!(message)
-      digest, signature = precheck!(message)
-      reject! unless topic_allowed?(message["TopicArn"])
-      url = message["SigningCertURL"]
-      reject! unless certificate_url?(url)
-      certificate = signing_certificate(url)
-      reject! unless certificate_current?(certificate)
+      digest, signature, url = precheck!(message)
+      signing_certificate(url) do |certificate|
+        reject! unless certificate_current?(certificate)
 
-      valid_signature?(certificate.public_key, digest, signature, canonical_string(message)) || reject!
+        valid_signature?(certificate.public_key, digest, signature, canonical_string(message)) || reject!
+      end
+      true
     rescue OpenSSL::OpenSSLError
       reject!
     end
 
     def self.clear_cache!
-      CACHE_LOCK.synchronize do
-        @certificates.clear
-        @warned_about_topics = false
-      end
+      CERTIFICATES.clear
+      TOPIC_LOCK.synchronize { @warned_about_topics = false }
     end
 
     def self.precheck!(message)
@@ -49,7 +135,16 @@ module MessageApis
 
       validate_fields!(message)
       digest = digest_for(message["SignatureVersion"]) || reject!
-      [digest, decode_signature(message["Signature"])]
+      signature = decode_signature(message["Signature"])
+      reject! unless topic_allowed?(message)
+
+      [digest, signature, normalized_certificate_url(message["SigningCertURL"])]
+    end
+
+    def self.normalized_certificate_url(url)
+      reject! unless certificate_url?(url)
+
+      URI.parse(url).normalize.to_s
     end
 
     def self.validate_fields!(message)
@@ -72,11 +167,18 @@ module MessageApis
       reject!
     end
 
-    def self.topic_allowed?(arn)
+    def self.topic_allowed?(message)
+      arn = message["TopicArn"]
       allowed = ENV.fetch("SNS_ALLOWED_TOPIC_ARNS", "").split(",").map(&:strip).reject(&:empty?)
       return allowed.include?(arn) unless allowed.empty?
+      return warn_open_topics unless message["Type"] == "SubscriptionConfirmation"
 
-      CACHE_LOCK.synchronize do
+      Rails.logger.warn("set SNS_ALLOWED_TOPIC_ARNS to confirm #{arn}")
+      false
+    end
+
+    def self.warn_open_topics
+      TOPIC_LOCK.synchronize do
         Rails.logger.warn("SNS_ALLOWED_TOPIC_ARNS is empty. Allowing all topics.") unless @warned_about_topics
         @warned_about_topics = true
       end
@@ -98,19 +200,8 @@ module MessageApis
       fields.filter_map { |field| "#{field}\n#{message[field]}\n" unless message[field].nil? }.join
     end
 
-    def self.signing_certificate(url)
-      # Serialize misses for the same URL without holding the cache lock during I/O.
-      DOWNLOAD_LOCKS[url.hash % CACHE_LIMIT].synchronize do
-        cached = CACHE_LOCK.synchronize { @certificates[url] }
-        cached || cache_certificate(url, download_certificate(url))
-      end
-    end
-
-    def self.cache_certificate(url, certificate)
-      CACHE_LOCK.synchronize do
-        @certificates.shift if @certificates.size >= CACHE_LIMIT
-        @certificates[url] = certificate
-      end
+    def self.signing_certificate(url, &verify)
+      CERTIFICATES.fetch_verified(url, verify) { download_certificate(url) }
     end
 
     def self.download_certificate(url)
@@ -132,6 +223,6 @@ module MessageApis
     def self.reject! = raise(VerificationError, "invalid SNS message signature")
 
     private_class_method :precheck!, :valid_string?, :nonempty_string?, :single_line?,
-                         :cache_certificate, :valid_signature?, :reject!
+                         :warn_open_topics, :normalized_certificate_url, :valid_signature?, :reject!
   end
 end

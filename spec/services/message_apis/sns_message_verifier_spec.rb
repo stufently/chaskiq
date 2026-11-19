@@ -74,6 +74,20 @@ RSpec.describe "MessageApis::SnsMessageVerifier" do
     expect(MessageApis::SafeDownload).not_to have_received(:resolve)
   end
 
+  def matching_old_lock_url(url)
+    (1..).lazy.map { |id| "https://sns.us-east-1.amazonaws.com/other-#{id}.pem" }
+         .find { |candidate| candidate.hash % 32 == url.hash % 32 }
+  end
+
+  def hold_certificate_download(url, started, release)
+    pem = certificate.to_pem
+    stub_request(:get, url).to_return do
+      started << true
+      release.pop
+      { body: pem }
+    end.then.to_return(body: pem)
+  end
+
   it "includes Subject in the Notification signature" do
     serve_certificate
     message = signed(notification.merge("Subject" => "SES event"))
@@ -115,6 +129,20 @@ RSpec.describe "MessageApis::SnsMessageVerifier" do
     urls.each { |url| expect_rejected_without_dns(signed(url: url)) }
   end
 
+  it "accepts SigningCertURL for standard, China, and GovCloud regions" do
+    %w[us-east-1.amazonaws.com cn-north-1.amazonaws.com.cn us-gov-west-1.amazonaws.com].each do |region|
+      url = "https://sns.#{region}/signing.pem"
+      serve_certificate(url: url)
+      expect(verifier.verify!(signed(url: url))).to be(true)
+    end
+  end
+
+  it "rejects a SigningCertURL whose region is an S3 or arbitrary label" do
+    %w[s3 s3-external-1 evil].each do |region|
+      expect_rejected_without_dns(signed(url: "https://sns.#{region}.amazonaws.com/signing.pem"))
+    end
+  end
+
   it "reports a certificate redirect as a temporary failure without following it" do
     target = "https://sns.us-east-2.amazonaws.com/redirected.pem"
     stub_request(:get, cert_url).to_return(status: 302, headers: { "Location" => target })
@@ -150,6 +178,76 @@ RSpec.describe "MessageApis::SnsMessageVerifier" do
 
     2.times { expect(verifier.verify!(signed)).to be(true) }
     assert_requested(request, times: 1)
+  end
+
+  it "uses one cache entry for normalized SigningCertURL host and port" do
+    request = serve_certificate
+    expect(verifier.verify!(signed)).to be(true)
+    expect(verifier.verify!(signed(url: "HTTPS://SNS.US-EAST-1.AMAZONAWS.COM:443/signing.pem"))).to be(true)
+    assert_requested(request, times: 1)
+  end
+
+  it "keeps the working cache entry when an invalid signature would exceed capacity" do
+    request = serve_certificate
+    message = signed
+    expect(verifier.verify!(message)).to be(true)
+    31.times do |id|
+      url = "https://sns.us-east-1.amazonaws.com/valid-#{id}.pem"
+      serve_certificate(url: url)
+      expect(verifier.verify!(signed(url: url))).to be(true)
+    end
+
+    url = "https://sns.us-east-1.amazonaws.com/unverified.pem"
+    serve_certificate(url: url)
+    invalid = signed(url: url).merge("Message" => "Changed")
+    expect { verifier.verify!(invalid) }.to raise_error(verifier::VerificationError)
+    expect(verifier.verify!(message)).to be(true)
+    assert_requested(request, times: 1)
+  end
+
+  it "does not cache a certificate already past its not_after" do
+    expired = certificate.dup
+    expired.not_after = 5.minutes.ago
+    expired.sign(key, "SHA256")
+    stub_request(:get, cert_url).to_return({ body: expired.to_pem }, { body: certificate.to_pem })
+    message = signed
+
+    expect { verifier.verify!(message) }.to raise_error(verifier::VerificationError)
+    expect(verifier.verify!(message)).to be(true)
+  end
+
+  it "bounds the lock wait for the same certificate URL to 5 seconds" do
+    started = Queue.new
+    release = Queue.new
+    allow(Timeout).to receive(:timeout).and_call_original
+    allow(Timeout).to receive(:timeout).with(5).and_yield
+    hold_certificate_download(cert_url, started, release)
+    message = signed
+    download = Thread.new { verifier.verify!(message) }
+
+    Timeout.timeout(2) { started.pop }
+    expect { Timeout.timeout(7) { verifier.verify!(message) } }.to raise_error(verifier::CertificateUnavailable)
+  ensure
+    release << true
+    download&.value
+  end
+
+  it "does not block cached or new certificates for different exact URLs" do
+    started = Queue.new
+    release = Queue.new
+    other_url = matching_old_lock_url(cert_url)
+    serve_certificate(url: other_url)
+    other_message = signed(url: other_url)
+    hold_certificate_download(cert_url, started, release)
+    message = signed
+    download = Thread.new { verifier.verify!(message) }
+
+    Timeout.timeout(2) { started.pop }
+    expect(Timeout.timeout(2) { verifier.verify!(other_message) }).to be(true)
+    expect(Timeout.timeout(2) { verifier.verify!(other_message) }).to be(true)
+  ensure
+    release << true
+    download&.value
   end
 
   it "reports a temporary certificate outage and retries the same URL successfully" do

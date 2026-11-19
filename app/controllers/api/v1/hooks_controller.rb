@@ -17,21 +17,43 @@ class Api::V1::HooksController < ActionController::API
   private
 
   def handle_notification
+    key = "sns:notification:#{@request_body.fetch('MessageId')}"
+    token = SecureRandom.uuid
+    return render(plain: "ok") unless reserve_notification(key, token)
+
+    begin
+      process_notification
+    rescue StandardError
+      release_notification(key, token)
+      raise
+    end
+    render(plain: "ok")
+  end
+
+  def reserve_notification(key, token)
+    Redis::Objects.redis.with { |redis| redis.set(key, token, nx: true, ex: 1.day.to_i) }
+  end
+
+  def release_notification(key, token)
+    Redis::Objects.redis.with do |redis|
+      redis.eval(<<~LUA, keys: [key], argv: [token])
+        if redis.call("GET", KEYS[1]) == ARGV[1] then
+          return redis.call("DEL", KEYS[1])
+        end
+      LUA
+    end
+  end
+
+  def process_notification
     if @request_body["Subject"] == "Amazon SES Email Receipt Notification"
       process_email_notification(@request_body["Message"])
-      render(plain: "ok") and return
-    end
-
-    if @request_body["Message"] == "Successfully validated SNS topic for Amazon SES event publishing."
-      render(plain: "ok") and return
-    else
+    elsif @request_body["Message"] != "Successfully validated SNS topic for Amazon SES event publishing."
       process_event_notification
-      render(plain: "ok") and return
     end
   end
 
   def verify_sns_message
-    @request_body = JSON.parse(request.body.read)
+    @request_body = JSON.parse(request.raw_post.to_s)
     return render(plain: "bad request", status: :bad_request) unless @request_body.is_a?(Hash)
 
     MessageApis::SnsMessageVerifier.verify!(@request_body)
@@ -47,7 +69,7 @@ class Api::V1::HooksController < ActionController::API
     return unless @request_body["Type"] == "SubscriptionConfirmation"
 
     send_subscription_confirmation
-    render(plain: "ok")
+    render(plain: "ok") unless performed?
   end
 
   def is_notification_message?
@@ -117,7 +139,9 @@ class Api::V1::HooksController < ActionController::API
     return unless uri.is_a?(URI::HTTPS) && uri.port == 443 && uri.userinfo.nil?
     return unless uri.host&.match?(/\Asns\.[a-z0-9-]+\.amazonaws\.com(\.cn)?\z/i)
 
-    MessageApis::SafeDownload.fetch(subscribe_url, max_redirects: 0)
+    return if MessageApis::SafeDownload.fetch(subscribe_url, max_redirects: 0)
+
+    render(plain: "SNS subscription confirmation unavailable", status: :service_unavailable)
   rescue URI::Error
     nil
   end

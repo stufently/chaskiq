@@ -29,6 +29,8 @@ RSpec.describe Api::V1::HooksController, type: :controller do
   let(:cert_url) { "https://sns.us-east-1.amazonaws.com/controller-test-#{SecureRandom.hex(8)}.pem" }
   let(:subscribe_url) { "https://sns.us-east-1.amazonaws.com/?Action=ConfirmSubscription&Token=test" }
   let(:event) { { "eventType" => "Open" } }
+  let(:message_id) { SecureRandom.uuid }
+  let(:topic) { "arn:aws:sns:us-east-1:123456789012:events" }
 
   let(:certificate_pem) do
     cert = OpenSSL::X509::Certificate.new
@@ -46,9 +48,9 @@ RSpec.describe Api::V1::HooksController, type: :controller do
     {
       "Type" => "Notification",
       "Message" => event.to_json,
-      "MessageId" => "test-id",
+      "MessageId" => message_id,
       "Timestamp" => "2026-11-19T10:00:00Z",
-      "TopicArn" => "arn:aws:sns:us-east-1:123456789012:events"
+      "TopicArn" => topic
     }
   end
 
@@ -56,12 +58,13 @@ RSpec.describe Api::V1::HooksController, type: :controller do
     notification.merge("Type" => type, "SubscribeURL" => url, "Token" => "test")
   end
 
-  def signed(message)
+  def signed(message, version: "2")
     fields = %w[Message MessageId Timestamp TopicArn Type]
     fields = %w[Message MessageId SubscribeURL Timestamp Token TopicArn Type] if message["Type"] != "Notification"
     input = fields.map { |field| "#{field}\n#{message.fetch(field)}\n" }.join
-    signature = Base64.strict_encode64(key.sign("SHA256", input))
-    message.merge("Signature" => signature, "SignatureVersion" => "2", "SigningCertURL" => cert_url)
+    digest = version == "1" ? "SHA1" : "SHA256"
+    signature = Base64.strict_encode64(key.sign(digest, input))
+    message.merge("Signature" => signature, "SignatureVersion" => version, "SigningCertURL" => cert_url)
   end
 
   def deliver(message, header: nil)
@@ -118,15 +121,75 @@ RSpec.describe Api::V1::HooksController, type: :controller do
   end
 
   it "requests SubscribeURL after verifying a signed SubscriptionConfirmation" do
+    ENV["SNS_ALLOWED_TOPIC_ARNS"] = " #{topic} "
     cert = serve_certificate
     subscribe = stub_request(:get, subscribe_url)
 
-    deliver(signed(confirmation))
+    deliver(signed(confirmation, version: "1"))
 
     expect(response).to have_http_status(:ok)
     assert_requested(cert, times: 1)
     assert_requested(subscribe, times: 1)
     expect(SnsReceiverJob).not_to have_received(:perform_later)
+  end
+
+  it "confirms a signed POST without Content-Type after its input has been read" do
+    ENV["SNS_ALLOWED_TOPIC_ARNS"] = topic
+    serve_certificate
+    subscribe = stub_request(:get, subscribe_url)
+    input = StringIO.new(signed(confirmation).to_json)
+    app = lambda do |env|
+      expect(env).not_to have_key("CONTENT_TYPE")
+      # Model a parameter parser that consumed the input and cached its result.
+      env.fetch("rack.input").read
+      env["rack.request.form_input"] = env.fetch("rack.input")
+      env["rack.request.form_hash"] = {}
+      Rails.application.call(env)
+    end
+
+    result = Rack::MockRequest.new(app).post("/api/v1/hooks", input: input)
+
+    expect(result.status).to eq(200)
+    assert_requested(subscribe, times: 1)
+  end
+
+  it "rejects a signed confirmation with an empty allowlist and logs the required setting" do
+    ENV["SNS_ALLOWED_TOPIC_ARNS"] = " , "
+    allow(Rails.logger).to receive(:warn).and_call_original
+    subscribe = stub_request(:get, subscribe_url)
+
+    deliver(signed(confirmation))
+
+    expect(response).to have_http_status(:forbidden)
+    expect(Rails.logger).to have_received(:warn).with("set SNS_ALLOWED_TOPIC_ARNS to confirm #{topic}").once
+    assert_not_requested(subscribe)
+    expect(MessageApis::SafeDownload).not_to have_received(:resolve)
+  end
+
+  it "does not request a foreign SubscribeURL even for an allowlisted topic" do
+    ENV["SNS_ALLOWED_TOPIC_ARNS"] = topic
+    cert = serve_certificate
+    foreign_url = "https://sns.us-east-1.amazonaws.com.example.test/confirm"
+    subscribe = stub_request(:get, foreign_url)
+
+    deliver(signed(confirmation(url: foreign_url)))
+
+    expect(response).to have_http_status(:ok)
+    assert_requested(cert, times: 1)
+    assert_not_requested(subscribe)
+  end
+
+  it "returns 503 when an allowed SubscribeURL fails and retries the confirmation" do
+    ENV["SNS_ALLOWED_TOPIC_ARNS"] = topic
+    serve_certificate
+    subscribe = stub_request(:get, subscribe_url).to_return({ status: 500 }, { status: 200 })
+    message = signed(confirmation)
+
+    deliver(message)
+    expect(response).to have_http_status(:service_unavailable)
+    deliver(message)
+    expect(response).to have_http_status(:ok)
+    assert_requested(subscribe, times: 2)
   end
 
   it "verifies a signed Notification and enqueues the event" do
@@ -149,6 +212,39 @@ RSpec.describe Api::V1::HooksController, type: :controller do
     assert_requested(cert, times: 1)
     assert_not_requested(subscribe)
     expect(SnsReceiverJob).not_to have_received(:perform_later)
+  end
+
+  it "deduplicates a verified Notification by MessageId for 24 hours" do
+    serve_certificate
+    message = signed(notification)
+    key = "sns:notification:#{message_id}"
+
+    deliver(message)
+    expect(response).to have_http_status(:ok)
+    deliver(message)
+    expect(response).to have_http_status(:ok)
+
+    expect(SnsReceiverJob).to have_received(:perform_later).once
+    ttl = Redis::Objects.redis.with { |redis| redis.ttl(key) }
+    expect(ttl).to be_between(1.day.to_i - 5, 1.day.to_i)
+  end
+
+  it "releases the Notification MessageId when handling fails so a retry can proceed" do
+    serve_certificate
+    message = signed(notification)
+    key = "sns:notification:#{message_id}"
+    allow(SnsReceiverJob).to receive(:perform_later) do
+      expect(Redis::Objects.redis.with { |redis| redis.get(key) }).to be_present
+      raise "queue unavailable"
+    end
+    expect { deliver(message) }.to raise_error(RuntimeError, "queue unavailable")
+    expect(Redis::Objects.redis.with { |redis| redis.get(key) }).to be_nil
+
+    allow(SnsReceiverJob).to receive(:perform_later).and_return(true)
+    deliver(message)
+
+    expect(response).to have_http_status(:ok)
+    expect(SnsReceiverJob).to have_received(:perform_later).twice
   end
 
   it "returns 400 for malformed JSON" do

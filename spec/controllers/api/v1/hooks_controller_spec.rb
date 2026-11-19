@@ -4,6 +4,7 @@ require "rails_helper"
 require "webmock"
 # https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-using-notifications.html
 def send_data(params)
+  params = params.merge("MessageId" => SecureRandom.uuid)
   post :create, body: params.to_json
 end
 
