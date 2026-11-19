@@ -1,0 +1,13 @@
+# Test runner image for chaskiq milestone fork-updates-m14 (Ruby 4.0.10, Debian 13 trixie like
+# the production Dockerfile). System deps only; gems live in a bind-mounted BUNDLE_PATH,
+# node_modules in the clone. ts-node is global: spec/support/graphql_queries.rb shells out to it.
+# The coordinator builds it as chaskiq-test:m14 and retags it chaskiq-test:m1 (old one kept as
+# chaskiq-test:m1-ruby3314), see docs/specs/fork-updates-m14.md section 2.
+FROM ruby:4.0.10-slim-trixie
+RUN apt-get update -qq \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
+    build-essential git pkg-config libpq-dev postgresql-client libyaml-dev zlib1g-dev libffi-dev \
+    libvips42t64 imagemagick curl ca-certificates shared-mime-info jq nodejs npm \
+ && npm install -g ts-node@10.9.2 \
+ && rm -rf /var/lib/apt/lists/* /root/.npm
+ENV LANG=C.UTF-8 BUNDLE_JOBS=16 BUNDLE_RETRY=3 HOME=/tmp
