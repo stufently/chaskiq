@@ -7,7 +7,7 @@ module Middleware
     end
 
     def call(env)
-      [200, { 'Content-Type' => 'text/html' }, [File.read(Rails.root.join('public', 'maintenance.html'))]]
+      [200, { 'content-type' => 'text/html' }, [File.read(Rails.root.join('public', 'maintenance.html'))]]
     end
   end
 end

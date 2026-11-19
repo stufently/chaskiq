@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m13
+
+Changed
+- Upgrade to Rack 3.2.8. The maintenance response uses a lowercase `content-type` header.
+- Preserve Rack 2's proxy header order. Rack uses `X-Forwarded-For` for the client IP, prefers `X-Forwarded-Scheme` over `X-Forwarded-Proto`, and ignores `Forwarded`.
+
+Operators
+- After `git pull`, run `docker compose build`. On first start, Docker fills the new `<project>_bundle_rack3` volume from the rebuilt image.
+- Compose stops mounting `<project>_bundle`. Remove it with `docker volume rm <project>_bundle` if you no longer need it. Rolling back to the previous commit restores the original volume mount.
+
 ## 2026-11-19 — fork-updates-m12
 
 Changed

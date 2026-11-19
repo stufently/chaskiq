@@ -35,7 +35,7 @@ class Api::V1::HooksController < ActionController::API
     amz_sns_topic = request.headers["x-amz-sns-topic-arn"]
     # return unless !amz_sns_topic.nil? &&
     # amz_sns_topic.to_s.downcase == 'arn:aws:sns:us-west-2:867544872691:User_Data_Updates'
-    @request_body = JSON.parse request.body.read
+    @request_body = JSON.parse request.raw_post
     # if this is the first time confirmation of subscription, then confirm it
     if amz_message_type.to_s.downcase == "subscriptionconfirmation" || @request_body["notificationType"] === "AmazonSnsSubscriptionSucceeded"
       send_subscription_confirmation

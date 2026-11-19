@@ -34,6 +34,33 @@ RSpec.describe "Rack::Attack login throttling", type: :request do
     expect(post_token("/oauth/token.json", "10.0.0.2", json: true)).to eq(429)
   end
 
+  it "counts an invalid forwarded address against the remote address limit" do
+    request_token = lambda do |address|
+      post "/oauth/token", params: { grant_type: "password" }, as: :json,
+                           env: { "REMOTE_ADDR" => address, "HTTP_X_FORWARDED_FOR" => "invalid/address" }
+      response.status
+    end
+
+    20.times { expect(request_token.call("10.0.0.8")).not_to eq(429) }
+    expect(request_token.call("10.0.0.8")).to eq(429)
+    expect(request_token.call("10.0.0.9")).not_to eq(429)
+  end
+
+  it "preserves a non-rewindable JSON body for Doorkeeper" do
+    agent = Agent.create!(email: "stream@example.com", password: "test-password")
+    client = Doorkeeper::Application.create!(name: "Stream test", redirect_uri: "", confidential: false)
+    payload = { grant_type: "password", email: agent.email, password: "test-password", client_id: client.uid }.to_json
+    stream = Rack::Lint::Wrapper::InputWrapper.new(StringIO.new(payload))
+
+    result = Rack::MockRequest.new(Rails.application).post(
+      "/oauth/token", input: stream, "CONTENT_TYPE" => "application/json",
+      "CONTENT_LENGTH" => payload.bytesize.to_s, "REMOTE_ADDR" => "10.0.0.10"
+    )
+
+    expect(result.status).to eq(200)
+    expect(JSON.parse(result.body)).to include("access_token" => be_present)
+  end
+
   it "throttles form posts to /oauth/token the same way" do
     20.times { post_token("/oauth/token", "10.0.0.3") }
     expect(post_token("/oauth/token", "10.0.0.3")).to eq(429)

@@ -52,7 +52,7 @@ class Api::GraphqlController < ApiController
         message: e.message,
         data: {}
       }]
-    }, status: :unprocessable_entity
+    }, status: :unprocessable_content
     # GraphQL::ExecutionError.new "Validation failed: #{error_messages}."
   rescue StandardError => e
     # GraphQL::ExecutionError.new e.message
