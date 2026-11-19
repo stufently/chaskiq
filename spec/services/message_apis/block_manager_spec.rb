@@ -10,6 +10,14 @@ RSpec.describe MessageApis::BlockManager do
       expect(described_class.plain_text(blocks)).to eq("hello")
     end
 
+    it "skips non-Hash entries in the legacy blocks wrapper without raising" do
+      node = { "type" => "paragraph", "content" => [{ "type" => "text", "text" => "kept" }] }
+      blocks = nil
+
+      expect { blocks = described_class.get_blocks({ blocks: [nil, "str", node] }.to_json) }.not_to raise_error
+      expect(blocks).to eq([node])
+    end
+
     it "converts Draft.js text and preserves the image URL" do
       url = "/uploads/image.png"
       content = { blocks: [
@@ -70,6 +78,19 @@ RSpec.describe MessageApis::BlockManager do
 
       expect(described_class.absolute_url("/uploads/my file%20(1).png"))
         .to eq("https://chat.example.com/base/uploads/my%20file%20(1).png")
+    end
+
+    it "rejects URLs with a non-HTTP scheme instead of treating them as relative paths" do
+      allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://chat.example.com")
+
+      expect(described_class.absolute_url("javascript:alert(1)")).to be_nil
+      expect(described_class.absolute_url("ftp://example.com/f")).to be_nil
+    end
+
+    it "rejects an HTTP URL without a host" do
+      allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://chat.example.com")
+
+      expect(described_class.absolute_url("http:///x")).to be_nil
     end
 
     it "uses the host from a protocol-relative URL" do

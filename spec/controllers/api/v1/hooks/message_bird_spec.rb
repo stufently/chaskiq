@@ -400,6 +400,17 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       assert_requested(stub)
     end
 
+    it "sends an absolute encoded URL for a relative media path with a space" do
+      allow(Chaskiq::Config).to receive(:get).and_call_original
+      allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://chat.example.com/")
+      stub = stub_request(:post, endpoint).with do |request|
+        JSON.parse(request.body).dig("content", "image", "url") == "https://chat.example.com/uploads/my%20photo.png"
+      end.to_return(status: 200, body: "{}")
+      image = { type: "ImageBlock", attrs: { url: "/uploads/my photo.png" } }
+      deliver(serialized_content: { type: "doc", content: [image] }.to_json)
+      assert_requested(stub)
+    end
+
     it "sends HTML-only content as plain text" do
       stub = expect_delivery("Hello & goodbye")
       deliver(html_content: "<p><b>Hello</b> &amp; goodbye</p>")
