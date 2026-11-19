@@ -1105,6 +1105,42 @@ RSpec.describe Api::V1::HooksController, type: :controller do
         # puts ConversationPart.last.messageable.html_content
         expect(ConversationPart.last.messageable.serialized_content).to be_present
       end
+
+      def stub_email_receipt(text)
+        recipient = URLcrypt.encode("#{conversation.app.id}+#{conversation.id}")
+        mail = Mail.new(from: "agent@example.com", to: "messages+#{recipient}@example.com")
+        mail.text_part = Mail::Part.new(body: text)
+        allow(controller).to receive(:read_mail_file).and_return(mail.encoded)
+      end
+
+      it "serializes an email reply with 1000 nested divs" do
+        nested_html = "<div>" * 1000 + "Nested text" + "</div>" * 1000
+        stub_email_receipt("<p>Reply <strong>before nesting</strong></p>#{nested_html}")
+
+        expect { send_data(message_notification_params) }.to change { conversation.messages.count }.by(1)
+
+        content = conversation.messages.last.messageable.serialized_content
+        expect(content).to be_present
+        expect(JSON.parse(content)).to eq(
+          "type" => "doc", "content" => [{ "type" => "text", "text" => "Reply before nesting" }]
+        )
+      end
+
+      it "stores the original reply as text when serialization returns nil" do
+        stub_email_receipt("First line\nSecond line")
+        allow(controller).to receive(:serialize_content).and_return(nil)
+
+        expect { send_data(message_notification_params) }.to change { conversation.messages.count }.by(1)
+
+        content = conversation.messages.last.messageable.serialized_content
+        expect(content).to be_present
+        expect(JSON.parse(content)).to eq(
+          "type" => "doc", "content" => [
+            { "type" => "text", "text" => "First line" },
+            { "type" => "text", "text" => "Second line" }
+          ]
+        )
+      end
     end
   end
 

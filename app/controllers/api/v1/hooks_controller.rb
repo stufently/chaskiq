@@ -70,7 +70,8 @@ class Api::V1::HooksController < ActionController::API
     return if body.blank?
     return if recipients.empty?
 
-    message = EmailReplyTrimmer.trim(body).gsub("\n", "<br/>")
+    text = EmailReplyTrimmer.trim(body)
+    message = text.gsub("\n", "<br/>")
 
     app, conversation, from = handle_conversation_part(mail, json_message)
 
@@ -89,7 +90,7 @@ class Api::V1::HooksController < ActionController::API
     opts = {
       from: from,
       message: {
-        serialized_content: serialized_content,
+        serialized_content: serialized_content || text_block(text),
         html_content: message
       },
       email_message_id: mail.message_id

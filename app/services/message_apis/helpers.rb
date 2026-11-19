@@ -207,8 +207,13 @@ module MessageApis
 
     # useed in controller hooks
     def serialize_content_from_html(message)
-      message = sanitize(message, tags: %W[p br img a \n])
-      doc = Nokogiri::HTML.parse(message)
+      tags = %W[p br img a \n]
+      sanitized_message = begin
+        sanitize(message, tags: tags)
+      rescue ArgumentError
+        Rails::HTML4::SafeListSanitizer.new.sanitize(message, tags: tags)
+      end
+      doc = Nokogiri::HTML.parse(sanitized_message)
 
       doc.css("br").each do |node|
         node.replace(Nokogiri::XML::Text.new("\n", doc))
