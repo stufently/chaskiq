@@ -21,6 +21,25 @@ class MessageApis::SafeDownload
     end
   end
 
+  class FetchLimits
+    attr_reader :max_bytes, :max_redirects
+
+    def initialize(max_bytes: 15 * 1024 * 1024, max_redirects: 3, deadline: 30)
+      @max_bytes = max_bytes
+      @max_redirects = max_redirects
+      @deadline = deadline
+    end
+
+    def within_deadline(&)
+      return unless @deadline.positive?
+
+      Timeout.timeout(@deadline, &)
+    rescue StandardError
+      nil
+    end
+  end
+  private_constant :FetchLimits
+
   BLOCKED_RANGES = %w[
     0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8
     168.63.129.16/32 169.254.0.0/16 172.16.0.0/12 192.0.0.0/24 192.168.0.0/16
@@ -43,34 +62,39 @@ class MessageApis::SafeDownload
     []
   end
 
-  def self.fetch(url, max_bytes: 15 * 1024 * 1024, max_redirects: 3, deadline: 30)
-    return unless deadline.positive?
-
-    Timeout.timeout(deadline) do
-      follow_redirects(url, max_bytes, max_redirects)
+  def self.fetch(url, headers: {}, allow_own_host: true, url_allowed: nil, **limits)
+    limits = FetchLimits.new(**limits)
+    limits.within_deadline do
+      follow_redirects(url, limits, headers, allow_own_host, url_allowed)
     end
-  rescue StandardError
-    nil
   end
 
-  def self.follow_redirects(url, max_bytes, max_redirects)
+  def self.follow_redirects(url, limits, headers, allow_own_host, url_allowed)
     uri = http_uri(url)
 
-    (max_redirects + 1).times do |hop|
+    (limits.max_redirects + 1).times do |hop|
       return unless uri
+      return if url_allowed && !url_allowed.call(uri)
 
-      addresses = resolve(uri.hostname)
-      return if addresses.empty?
-      return if addresses.any? { |address| blocked_ip?(address) } && !own_origin?(uri)
+      addresses = download_addresses(uri, allow_own_host)
+      return unless addresses
 
-      body, location = download(uri, addresses, max_bytes)
+      body, location = download(uri, addresses, limits.max_bytes, hop.zero? ? headers : {})
       return body unless location
-      return if hop == max_redirects
+      return if hop == limits.max_redirects
 
       uri = http_uri(URI.join(uri.to_s, location).to_s)
     end
 
     nil
+  end
+
+  def self.download_addresses(uri, allow_own_host)
+    addresses = resolve(uri.hostname)
+    return if addresses.empty?
+    return if addresses.any? { |address| blocked_ip?(address) } && !(allow_own_host && own_origin?(uri))
+
+    addresses
   end
 
   def self.http_uri(url)
@@ -85,11 +109,11 @@ class MessageApis::SafeDownload
     own && uri.scheme == own.scheme && uri.hostname.casecmp?(own.hostname) && uri.port == own.port
   end
 
-  def self.download(uri, addresses, max_bytes)
+  def self.download(uri, addresses, max_bytes, headers)
     addresses.each do |address|
       received_response = false
       begin
-        request(uri, address) do |response|
+        request(uri, address, headers) do |response|
           received_response = true
           # Returning here prevents Net::HTTP from draining a rejected or redirect body.
           return read_response(response, max_bytes)
@@ -102,14 +126,15 @@ class MessageApis::SafeDownload
     nil
   end
 
-  def self.request(uri, address, &block)
+  def self.request(uri, address, headers, &block)
     http = Net::HTTP.new(uri.hostname, uri.port, nil)
     http.ipaddr = address
     http.use_ssl = uri.scheme == "https"
     http.open_timeout = 5
     http.read_timeout = 10
     http.max_retries = 0
-    request = Net::HTTP::Get.new(uri.request_uri, "Accept-Encoding" => "identity")
+    request_headers = headers.reject { |name, _| name.to_s.casecmp?("Accept-Encoding") }
+    request = Net::HTTP::Get.new(uri.request_uri, request_headers.merge("Accept-Encoding" => "identity"))
 
     http.request(request, &block)
   end
@@ -133,5 +158,6 @@ class MessageApis::SafeDownload
     [Body.new(body, content_type: response["content-type"]), nil]
   end
 
-  private_class_method :follow_redirects, :http_uri, :own_origin?, :download, :request, :read_response
+  private_class_method :follow_redirects, :download_addresses, :http_uri, :own_origin?,
+                       :download, :request, :read_response
 end
