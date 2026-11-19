@@ -6,6 +6,7 @@ class Api::V1::HooksController < ActionController::API
   include MessageApis::Helpers
   include ActionView::Helpers::SanitizeHelper
 
+  before_action :verify_sns_message
   before_action :check_aws_confirmation
   before_action :handle_notification, if: :is_notification_message?
 
@@ -29,23 +30,28 @@ class Api::V1::HooksController < ActionController::API
     end
   end
 
+  def verify_sns_message
+    @request_body = JSON.parse(request.body.read)
+    return render(plain: "bad request", status: :bad_request) unless @request_body.is_a?(Hash)
+
+    MessageApis::SnsMessageVerifier.verify!(@request_body)
+  rescue JSON::ParserError
+    render(plain: "bad request", status: :bad_request)
+  rescue MessageApis::SnsMessageVerifier::VerificationError
+    render(plain: "invalid SNS message signature", status: :forbidden)
+  rescue MessageApis::SnsMessageVerifier::CertificateUnavailable
+    render(plain: "SNS signing certificate unavailable", status: :service_unavailable)
+  end
+
   def check_aws_confirmation
-    # get amazon message type and topic
-    amz_message_type = request.headers["x-amz-sns-message-type"]
-    amz_sns_topic = request.headers["x-amz-sns-topic-arn"]
-    # return unless !amz_sns_topic.nil? &&
-    # amz_sns_topic.to_s.downcase == 'arn:aws:sns:us-west-2:867544872691:User_Data_Updates'
-    @request_body = JSON.parse request.body.read
-    # if this is the first time confirmation of subscription, then confirm it
-    if amz_message_type.to_s.downcase == "subscriptionconfirmation" || @request_body["notificationType"] === "AmazonSnsSubscriptionSucceeded"
-      send_subscription_confirmation
-      render(plain: "ok") and return
-    end
+    return unless @request_body["Type"] == "SubscriptionConfirmation"
+
+    send_subscription_confirmation
+    render(plain: "ok")
   end
 
   def is_notification_message?
-    amz_message_type = request.headers["x-amz-sns-message-type"]
-    (amz_message_type == "Notification") || (@request_body["Type"] == "Notification")
+    @request_body["Type"] == "Notification"
   end
 
   # TODO: add some tests mdfk!
