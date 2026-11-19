@@ -36,9 +36,15 @@ class MessageApis::BlockManager
     blocks.grep(Hash).select { |block| MEDIA_BLOCK_TYPES.include?(block["type"]) }
   end
 
-  def self.deliver_attachments(attachments, plain_text, send_text:, captionless: [])
+  def self.deliver_attachments(attachments, plain_text, send_text:, captionless: [], **hooks)
+    hooks.assert_valid_keys(:on_success, :on_failure, :already_sent)
+    remaining = hooks.fetch(:already_sent, 0)
+    on_success = hooks[:on_success]
+    on_failure = hooks[:on_failure]
+    failures = []
     first_success = nil
     last_response = nil
+    media_delivered = false
     caption = plain_text.presence
     omit_caption = captionless.respond_to?(:call) ? captionless : ->(type, _url) { captionless.include?(type) }
 
@@ -51,21 +57,45 @@ class MessageApis::BlockManager
 
       type = media["type"]
       media_caption = omit_caption.call(type, url) ? nil : caption
-      last_response = yield(type, url, media_caption)
-      if last_response.success?
+      if remaining.positive?
+        remaining -= 1
+      else
+        last_response = yield(type, url, media_caption)
+        unless last_response.success?
+          failures << last_response
+          next
+        end
+
+        on_success&.call(last_response)
         first_success ||= last_response
-        caption = nil if media_caption
+      end
+      media_delivered = true
+      caption = nil if media_caption
+    end
+
+    text = media_delivered ? caption : plain_text.presence
+    text_response = send_text.call(text) if text && remaining.zero?
+    if text_response.respond_to?(:success?)
+      if text_response.success?
+        on_success&.call(text_response)
+        successful_text = text_response
+      else
+        failures << text_response
       end
     end
 
-    if first_success
-      send_text.call(caption) if caption
-      return first_success
+    result = if media_delivered
+               first_success || successful_text
+             elsif text
+               text_response
+             else
+               last_response
+             end
+    result
+  ensure
+    if on_failure
+      failures.each { |failure| on_failure.call(failure) unless failure.equal?(result) }
     end
-
-    return send_text.call(plain_text) if plain_text.present?
-
-    last_response
   end
 
   def self.absolute_url(url)

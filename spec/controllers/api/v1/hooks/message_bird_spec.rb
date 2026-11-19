@@ -432,6 +432,23 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect(api.get_message_id(JSON.parse(response.body))).to eq("mb-1")
     end
 
+    it "records a partial failure for a rejected image" do
+      stub_request(:post, endpoint).to_return(
+        { status: 201, body: { id: "mb-1" }.to_json },
+        { status: 422, body: { errors: [{ code: 21, description: "Unsupported image" }] }.to_json },
+        { status: 201, body: { id: "mb-3" }.to_json }
+      )
+      images = %w[first second third].map { |name| { type: "ImageBlock", attrs: { url: "https://cdn.example.com/#{name}.png" } } }
+      part = thread.add_message(from: agent_role.agent, message: { serialized_content: { content: images }.to_json })
+
+      api.notify_message(conversation: thread, part: part, channel: user_phone)
+
+      events = thread.messages.where(messageable_type: "ConversationPartEvent").map(&:messageable)
+      failures = events.select { |event| event.action.start_with?("errored:") }
+      expect(failures.map(&:data)).to eq([{ "status" => 422, "code" => 21, "message" => "Unsupported image" }])
+      expect(part.conversation_part_channel_sources.pluck(:message_source_id)).to contain_exactly("mb-1", "mb-3")
+    end
+
     it "keeps the caption after a failed attachment and returns the first success" do
       captions = []
       stub_request(:post, endpoint).to_return do |request|

@@ -386,6 +386,85 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect(api.get_message_id(JSON.parse(response.body))).to eq("uuid-1")
     end
 
+    context "when notifying a saved message" do
+      let(:urls) { %w[first second third fourth].map { |name| "https://cdn.example.com/#{name}.png" } }
+      let(:part) do
+        blocks = [{ type: "text", text: "Caption" }] + urls.map { |url| { type: "ImageBlock", attrs: { url: url } } }
+        thread.add_message(from: agent_role.agent, message: { serialized_content: { content: blocks }.to_json })
+      end
+
+      def notify
+        api.notify_message(conversation: thread, part: part, channel: user_phone)
+      end
+
+      def successful_response(number)
+        { status: 202, body: { message_uuid: "uuid-#{number}" }.to_json }
+      end
+
+      def source_ids
+        part.conversation_part_channel_sources.where(provider: "vonage").order(:id).pluck(:message_source_id)
+      end
+
+      it "records a partial failure for rejected media" do
+        stub_request(:post, endpoint).to_return(
+          successful_response(1), { status: 422, body: { title: "Invalid media" }.to_json },
+          successful_response(3), successful_response(4)
+        )
+
+        notify
+
+        failures = thread.messages.where(messageable_type: "ConversationPartEvent").map(&:messageable)
+                         .select { |event| event.action.start_with?("errored:") }
+        expect(failures.map(&:data)).to eq([{ "status" => 422, "code" => nil, "message" => "Invalid media" }])
+      end
+
+      it "marks a part as read through a later provider id" do
+        stub_request(:post, endpoint).to_return(*(1..4).map { |number| successful_response(number) })
+
+        notify
+        api.process_event({ "status" => "read", "message_uuid" => "uuid-3" }, nil)
+
+        expect(part.reload.read_at).to be_present
+        expect(source_ids).to eq(%w[uuid-1 uuid-2 uuid-3 uuid-4])
+      end
+
+      it "persists each accepted id immediately before the next POST" do
+        observed = []
+        stub_request(:post, endpoint).to_return do
+          observed << source_ids
+          successful_response(observed.size)
+        end
+
+        notify
+
+        expect(observed).to eq([[], ["uuid-1"], %w[uuid-1 uuid-2], %w[uuid-1 uuid-2 uuid-3]])
+      end
+
+      it "can resume the series after the third attachment times out" do
+        sent_images = []
+        stub_request(:post, endpoint).to_return do |request|
+          sent_images << JSON.parse(request.body).dig("message", "content", "image")
+          raise Faraday::TimeoutError if sent_images.size == 3
+
+          successful_response(sent_images.size)
+        end
+
+        expect { notify }.to raise_error(Faraday::TimeoutError)
+        notify
+
+        expect(sent_images.drop(3)).to eq(urls.last(2).map { |url| { "url" => url } })
+        expect(source_ids).to eq(%w[uuid-1 uuid-2 uuid-4 uuid-5])
+      end
+
+      it "makes no requests on retry after all media was sent (base-green)" do
+        stub = stub_request(:post, endpoint).to_return(*(1..4).map { |number| successful_response(number) })
+
+        2.times { notify }
+
+        assert_requested(stub, times: 4)
+      end
+    end
+
     it "keeps the caption after a failed attachment and returns the first success" do
       captions = []
       stub_request(:post, endpoint).to_return do |request|

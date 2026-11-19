@@ -50,6 +50,7 @@ module MessageApis::Twilio
 
     # https://developers.pipedrive.com/docs/api/v1/
     PROVIDER = "twilio"
+    RESUMABLE_DELIVERY = true
 
     attr_accessor :url, :api_token, :api_key, :conn
 
@@ -104,17 +105,8 @@ module MessageApis::Twilio
 
       conversation = conversation_part_channel.conversation_part.conversation
 
-      # crea el mensaje con el channel de una, asi cuando se cree
-      # el notify_message va a bypasear el canal
-      # conversation.add_message()
-      conversation.add_message_event(
-        action: "errored: #{params['SmsStatus']}",
-        provider: PROVIDER,
-        message_source_id: "bypass-internal-#{params['id']}",
-        data: {
-          status: params
-        }
-      )
+      add_error_event(conversation, "bypass-internal-#{params['id']}",
+                      status: nil, code: params["ErrorCode"], text: params["SmsStatus"])
     end
 
     def get_message_id(response_data)
@@ -171,7 +163,8 @@ module MessageApis::Twilio
                    send_text.call(plain_message)
                  else
                    MessageApis::BlockManager.deliver_attachments(
-                     attachments, plain_message, send_text: send_text, captionless: method(:captionless_attachment?)
+                     attachments, plain_message,
+                     send_text: send_text, captionless: method(:captionless_attachment?), **delivery_hooks(conversation, part)
                    ) do |_type, url, caption|
                      params = message_params.merge(MediaUrl: url)
                      params[:Body] = caption if caption
@@ -181,24 +174,7 @@ module MessageApis::Twilio
       return unless response
 
       unless response.success?
-        body = begin
-          JSON.parse(response.body)
-        rescue StandardError
-          ""
-        end
-        msg = begin
-          body["message"]
-        rescue StandardError
-          ""
-        end
-        conversation.add_message_event(
-          action: "errored: #{msg}",
-          provider: PROVIDER,
-          message_source_id: "bypass-internal-#{part.id}",
-          data: {
-            status: body
-          }
-        )
+        report_delivery_failure(conversation, part, response)
         return nil
       end
 

@@ -596,6 +596,22 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect(api.get_message_id(JSON.parse(response.body))).to eq(1)
     end
 
+    it "records a partial failure for a rejected photo" do
+      stub_request(:post, "https://api.telegram.org/bottest-bot/sendPhoto").to_return(
+        { status: 200, body: { result: { message_id: 101 } }.to_json },
+        { status: 400, body: { error_code: 400, description: "Invalid photo" }.to_json },
+        { status: 200, body: { result: { message_id: 103 } }.to_json }
+      )
+      photos = %w[first second third].map { |name| { type: "ImageBlock", attrs: { url: "https://cdn.example.com/#{name}.png" } } }
+      part = thread.add_message(from: agent_role.agent, message: { serialized_content: { content: photos }.to_json })
+
+      api.notify_message(conversation: thread, part: part, channel: "123")
+
+      events = thread.messages.where(messageable_type: "ConversationPartEvent").map(&:messageable)
+      expect(events.map(&:action).grep(/^errored:/)).to eq(["errored: Invalid photo"])
+      expect(part.conversation_part_channel_sources.pluck(:message_source_id)).to contain_exactly("101", "103")
+    end
+
     it "adds the caption only to the first attachment with a usable URL" do
       calls = []
       stub_request(:post, "https://api.telegram.org/bottest-bot/sendPhoto").to_return do |request|

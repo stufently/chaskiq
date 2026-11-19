@@ -37,6 +37,76 @@ RSpec.describe MessageApis::BlockManager do
       expect(sent_texts).to be_empty
       expect(result).to equal(success)
     end
+
+    it "calls on_success for every successful request before the next one" do
+      text_response = double("successful text", success?: true)
+      calls = []
+      send_caption = lambda do |_caption|
+        calls << :text
+        text_response
+      end
+      result = described_class.deliver_attachments(
+        [audio, audio], "voice",
+        send_text: send_caption, captionless: %w[AudioRecorderBlock],
+        on_success: ->(response) { calls << response }
+      ) do
+        calls << :audio
+        success
+      end
+
+      expect(calls).to eq([:audio, success, :audio, success, :text, text_response])
+      expect(result).to equal(success)
+    end
+
+    it "calls on_failure after sending the remaining attachments" do
+      calls = []
+      replies = [success, failure, success]
+      result = described_class.deliver_attachments(
+        [image, file, audio], "files", send_text: send_text, on_failure: ->(response) { calls << response }
+      ) do |type, _url, _caption|
+        calls << type
+        replies.shift
+      end
+
+      expect(calls).to eq(["ImageBlock", "FileBlock", "AudioRecorderBlock", failure])
+      expect(result).to equal(success)
+    end
+
+    it "excludes the returned failure from on_failure" do
+      hidden_failures = []
+      last_failure = double("last failed response", success?: false)
+      replies = [failure, last_failure]
+      result = described_class.deliver_attachments(
+        [image, file], "", send_text: send_text, on_failure: ->(response) { hidden_failures << response }
+      ) { replies.shift }
+
+      expect(hidden_failures).to eq([failure])
+      expect(result).to equal(last_failure)
+    end
+
+    it "consumes the caption when already_sent replays eligible media" do
+      captions = []
+      unusable = image.merge("attrs" => { "url" => "" })
+      result = described_class.deliver_attachments(
+        [unusable, image, file], "files", send_text: send_text, already_sent: 1
+      ) do |type, _url, caption|
+        captions << [type, caption]
+        success
+      end
+
+      expect(captions).to eq([["FileBlock", nil]])
+      expect(sent_texts).to be_empty
+      expect(result).to equal(success)
+    end
+
+    it "counts a separate caption in already_sent" do
+      result = described_class.deliver_attachments(
+        [audio], "voice", send_text: send_text, captionless: %w[AudioRecorderBlock], already_sent: 2
+      ) { raise "already delivered audio" }
+
+      expect(sent_texts).to be_empty
+      expect(result).to be_nil
+    end
   end
 
   describe ".get_blocks" do

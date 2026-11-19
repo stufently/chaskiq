@@ -45,6 +45,7 @@ module MessageApis::Vonage
 
     include MessageApis::Helpers
     PROVIDER = "vonage"
+    RESUMABLE_DELIVERY = true
 
     attr_accessor :url, :api_token, :api_key, :conn
 
@@ -136,7 +137,9 @@ module MessageApis::Vonage
       post_content = ->(data) { @conn.post(@url, addressing.merge(message: { content: data }).to_json) }
       send_text = ->(text) { post_content.call(type: "text", text: text) }
       attachments = MessageApis::BlockManager.media_blocks(blocks)
-      MessageApis::BlockManager.deliver_attachments(attachments, plain_message, send_text: send_text) do |block_type, url, caption|
+      MessageApis::BlockManager.deliver_attachments(
+        attachments, plain_message, send_text: send_text, **delivery_hooks(conversation, part)
+      ) do |block_type, url, caption|
         type = media_types.fetch(block_type)
         data = { url: url }
         data[:caption] = caption if caption

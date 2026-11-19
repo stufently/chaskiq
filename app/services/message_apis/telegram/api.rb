@@ -28,6 +28,7 @@ module MessageApis::Telegram
     include MessageApis::Helpers
 
     PROVIDER = "telegram"
+    RESUMABLE_DELIVERY = true
 
     attr_accessor :url, :api_key, :conn
 
@@ -120,7 +121,9 @@ module MessageApis::Telegram
       }
       send_text = ->(text) { @conn.post("#{@url}/sendMessage", { chat_id: channel_id, text: text }.to_json) }
       attachments = MessageApis::BlockManager.media_blocks(blocks)
-      MessageApis::BlockManager.deliver_attachments(attachments, plain_message, send_text: send_text) do |type, url, caption|
+      MessageApis::BlockManager.deliver_attachments(
+        attachments, plain_message, send_text: send_text, **delivery_hooks(conversation, part)
+      ) do |type, url, caption|
         method, field = media_methods.fetch(type)
         data = { field => url }
         data[:caption] = caption if caption
