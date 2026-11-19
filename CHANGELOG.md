@@ -10,6 +10,9 @@ Fixed
   crash.
 - The oEmbed endpoint and Content Showcase autofill no longer return 500 when a
   page has no preview.
+- Boot no longer crashes when `SECRET_KEY_BASE` yields a NUL byte in the URLcrypt
+  key (~22% of random keys): the deprecated `URLcrypt.key=` is replaced. Keys
+  without NUL keep the same bytes.
 
 Security
 - The remaining server-side URL fetches now go through `SafeDownload`:

@@ -80,7 +80,14 @@ module Chaskiq
       config.middleware.insert_before Rack::Sendfile, Middleware::MaintenanceMode
     end
 
-    URLcrypt.key = [Chaskiq::Config.get('SECRET_KEY_BASE')].pack('H*')
+    # Same bytes as the deprecated `URLcrypt.key = [secret].pack('H*')` (the gem
+    # packs again); a key with a NUL byte crashed ENV[]= at boot, so derive one.
+    urlcrypt_key = [[Chaskiq::Config.get('SECRET_KEY_BASE')].pack('H*')].pack('H*')
+    if urlcrypt_key.include?("\0")
+      urlcrypt_key = (0..).lazy.map { |i| Digest::SHA256.digest("urlcrypt:#{i}:#{Chaskiq::Config.get('SECRET_KEY_BASE')}") }
+                          .find { |key| !key.include?("\0") }
+    end
+    ENV['urlcrypt_key'] = urlcrypt_key
 
     locales = %w[af sq ar eu bg be ca hr cs da nl en eo et fo fi fr gl de el iw hu is ga it ja ko lv lt mk mt no pl pt ro ru gd sr sr sk sl es sv tr uk zh-CN]
     config.available_locales = locales
