@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m11
+
+Added
+- Telnyx MMS. Outgoing images, video (mp4/3gp), text and vCard attachments are
+  sent as `media_urls`, one request per attachment, resumable on retry like the
+  other channels; other files go as links in the text. Incoming MMS media is
+  downloaded (https `*.telnyx.com` only, on every redirect too; ≤5 MB; API key
+  sent only to the first host) and stored as attachments; a failed download or
+  upload leaves an "attachment unavailable" line instead of dropping the
+  message.
+- `message.finalized`: delivered marks the part read; sending/delivery failures
+  add one error event per message.
+
+Known issues
+- Two workers processing the same incoming webhook at once can store the
+  message twice (same as the other channels).
+- A `message.finalized` that arrives before the outgoing message id is stored
+  is ignored.
+
 ## 2026-11-19 — fork-updates-m9
 
 Fixed
