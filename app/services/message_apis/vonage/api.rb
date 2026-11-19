@@ -126,43 +126,22 @@ module MessageApis::Vonage
       # TODO: maybe handle an error here ?
       return if profile_id.blank?
 
-      message_params = build_message_params(
-        blocks: blocks,
-        plain_message: plain_message,
-        profile_id: profile_id
-      )
-
-      return if message_params.blank?
-
-      @conn.post(
-        @url,
-        message_params.to_json
-      )
-    end
-
-    def build_message_params(blocks:, plain_message:, profile_id:)
-      media = blocks.find { |block| %w[ImageBlock VideoBlock FileBlock AudioRecorderBlock].include?(block["type"]) }
-      if media
-        media_url = MessageApis::BlockManager.block_data(media)&.fetch("url", nil)
-        url = MessageApis::BlockManager.absolute_url(media_url)
-        return unless url
-      end
-
-      type = { "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file",
-               "AudioRecorderBlock" => "audio" }[media&.fetch("type")]
-      content = if type
-                  { type: type, type => { url: url, caption: plain_message } }
-                elsif plain_message.present?
-                  { type: "text", text: plain_message }
-                else
-                  return
-                end
-
-      {
-        from: { type: "whatsapp", number: @phone },
-        to: { type: "whatsapp", number: profile_id },
-        message: { content: content }
+      media_types = {
+        "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
       }
+      addressing = {
+        from: { type: "whatsapp", number: @phone },
+        to: { type: "whatsapp", number: profile_id }
+      }
+      post_content = ->(data) { @conn.post(@url, addressing.merge(message: { content: data }).to_json) }
+      send_text = ->(text) { post_content.call(type: "text", text: text) }
+      attachments = MessageApis::BlockManager.media_blocks(blocks)
+      MessageApis::BlockManager.deliver_attachments(attachments, plain_message, send_text: send_text) do |block_type, url, caption|
+        type = media_types.fetch(block_type)
+        data = { url: url }
+        data[:caption] = caption if caption
+        post_content.call(type: type, type => data)
+      end
     end
 
     def process_message(params, package)

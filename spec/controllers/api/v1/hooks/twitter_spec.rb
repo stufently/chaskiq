@@ -2,6 +2,56 @@ require "rails_helper"
 include ActiveJob::TestHelper
 
 RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+
+  describe "Twitter outgoing media" do
+    include WebMock::API
+
+    around do |example|
+      WebMock.enable!
+      example.run
+    ensure
+      WebMock.reset!
+      WebMock.disable!
+    end
+
+    let(:api) do
+      MessageApis::Twitter::Api.new(config: { "api_key" => "k", "api_secret" => "s",
+                                            "access_token" => "t", "access_token_secret" => "ts" })
+    end
+    let(:upload) { "https://upload.twitter.com/1.1/media/upload.json" }
+    let(:png) { "\x89PNG\r\n\x1A\n".b + ("\x00" * 32).b }
+
+    it "makes no HTTP request for a private media URL" do
+      url = "http://192.168.0.2/image.png"
+      allow(MessageApis::SafeDownload).to receive(:resolve).with("192.168.0.2").and_return(["192.168.0.2"])
+      download = stub_request(:get, url).to_return(body: png)
+      twitter = stub_request(:post, upload).to_return(body: { media_id: 7, media_id_string: "7" }.to_json)
+
+      expect(api.upload_media(url)).to be_nil
+      assert_not_requested(download)
+      assert_not_requested(twitter)
+    end
+
+    it "downloads a public image and sends INIT, APPEND and FINALIZE in order" do
+      url = "https://cdn.example.com/image.png"
+      allow(MessageApis::SafeDownload).to receive(:resolve).with("cdn.example.com").and_return(["93.184.216.34"])
+      download = stub_request(:get, url).to_return(body: png)
+      uploads = []
+      stub_request(:post, upload).to_return do |request|
+        uploads << URI.decode_www_form(request.body).to_h
+        { status: 200, body: { media_id: 7, media_id_string: "7" }.to_json }
+      end
+
+      expect(api.upload_media(url)).to include("media_id_string" => "7")
+
+      assert_requested(download, times: 1)
+      expect(uploads.map { |body| body["command"] }).to eq(%w[INIT APPEND FINALIZE])
+      expect(uploads[0]).to include("media_type" => "image/png", "total_bytes" => png.bytesize.to_s)
+      expect(Base64.decode64(uploads[1].fetch("media_data"))).to eq(png)
+      expect(uploads[2]).to include("media_id" => "7")
+    end
+  end
+
   def crc_data(id)
     {
       "crc_token" => "xxx",

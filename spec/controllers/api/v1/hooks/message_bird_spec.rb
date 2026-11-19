@@ -411,6 +411,71 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       assert_requested(stub)
     end
 
+    it "sends attachments in document order and returns the first response" do
+      contents = []
+      stub_request(:post, endpoint).to_return do |request|
+        contents << JSON.parse(request.body).slice("type", "content")
+        { status: 200, body: { messages: [{ id: "mb-#{contents.size}" }] }.to_json }
+      end
+      blocks = [
+        { type: "text", text: "See both files" },
+        { type: "VideoBlock", attrs: { url: "https://cdn.example.com/clip.mp4" } },
+        { type: "FileBlock", attrs: { url: "https://cdn.example.com/guide.pdf" } }
+      ]
+
+      response = deliver(serialized_content: { blocks: blocks }.to_json)
+
+      expect(contents).to eq([
+        { "type" => "video", "content" => { "video" => { "url" => "https://cdn.example.com/clip.mp4", "caption" => "See both files" } } },
+        { "type" => "file", "content" => { "file" => { "url" => "https://cdn.example.com/guide.pdf" } } }
+      ])
+      expect(api.get_message_id(JSON.parse(response.body))).to eq("mb-1")
+    end
+
+    it "keeps the caption after a failed attachment and returns the first success" do
+      captions = []
+      stub_request(:post, endpoint).to_return do |request|
+        captions << JSON.parse(request.body).dig("content", "image", "caption")
+        { status: captions.size == 1 ? 422 : 201, body: { id: "mb-#{captions.size}" }.to_json }
+      end
+      blocks = [{ type: "text", text: "Show these images" }] + %w[first second third].map do |name|
+        { type: "ImageBlock", attrs: { url: "https://cdn.example.com/#{name}.png" } }
+      end
+
+      response = deliver(serialized_content: { type: "doc", content: blocks }.to_json)
+
+      expect(captions).to eq(["Show these images", "Show these images", nil])
+      expect(api.get_message_id(JSON.parse(response.body))).to eq("mb-2")
+    end
+
+    it "returns the last response when every attachment and the fallback text fail" do
+      types = []
+      stub_request(:post, endpoint).to_return do |request|
+        types << JSON.parse(request.body)["type"]
+        { status: 400, body: { error: "rejected-#{types.size}" }.to_json }
+      end
+      blocks = [
+        { type: "text", text: "Keep this text" },
+        { type: "ImageBlock", attrs: { url: "https://cdn.example.com/image.png" } },
+        { type: "FileBlock", attrs: { url: "https://cdn.example.com/guide.pdf" } }
+      ]
+
+      response = deliver(serialized_content: { type: "doc", content: blocks }.to_json)
+
+      expect(types).to eq(%w[image file text])
+      expect(JSON.parse(response.body)).to eq("error" => "rejected-3")
+    end
+
+    it "extracts the top-level id returned by /v1/send" do
+      response_stub = stub_request(:post, endpoint).to_return(status: 201, body: { id: "mb-1" }.to_json)
+      text = { type: "text", text: "Hello" }
+
+      response = deliver(serialized_content: { type: "doc", content: [text] }.to_json)
+
+      assert_requested(response_stub, times: 1)
+      expect(api.get_message_id(JSON.parse(response.body))).to eq("mb-1")
+    end
+
     it "sends HTML-only content as plain text" do
       stub = expect_delivery("Hello & goodbye")
       deliver(html_content: "<p><b>Hello</b> &amp; goodbye</p>")

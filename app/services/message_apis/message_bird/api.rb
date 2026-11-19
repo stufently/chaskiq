@@ -110,7 +110,7 @@ module MessageApis::MessageBird
     end
 
     def get_message_id(response_data)
-      response_data["messages"].first["id"]
+      response_data["id"] || response_data.dig("messages", 0, "id")
     end
 
     def send_message(conversation, part)
@@ -142,29 +142,22 @@ module MessageApis::MessageBird
       # TODO: maybe handle an error here ?
       return if profile_id.blank?
 
-      media = blocks.find { |block| %w[ImageBlock VideoBlock FileBlock AudioRecorderBlock].include?(block["type"]) }
-      if media
-        media_url = MessageApis::BlockManager.block_data(media)&.fetch("url", nil)
-        url = MessageApis::BlockManager.absolute_url(media_url)
-        return unless url
-      end
-
-      message_params = {
+      media_types = {
+        "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
+      }
+      addressing = {
         from: @phone,
         to: profile_id.gsub("+", "")
       }
-
-      type = { "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file",
-               "AudioRecorderBlock" => "audio" }[media&.fetch("type")]
-      if type
-        message_params.merge!(type: type, content: { type => { url: url, caption: plain_message } })
-      else
-        return if plain_message.blank?
-
-        message_params.merge!(type: "text", content: { text: plain_message })
+      post_content = ->(data) { @conn.post("#{@url}send", addressing.merge(data).to_json) }
+      send_text = ->(text) { post_content.call(type: "text", content: { text: text }) }
+      attachments = MessageApis::BlockManager.media_blocks(blocks)
+      MessageApis::BlockManager.deliver_attachments(attachments, plain_message, send_text: send_text) do |block_type, url, caption|
+        type = media_types.fetch(block_type)
+        data = { url: url }
+        data[:caption] = caption if caption
+        post_content.call(type: type, content: { type => data })
       end
-
-      @conn.post("#{@url}send", message_params.to_json)
     end
 
     # not used fro now

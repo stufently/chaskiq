@@ -30,6 +30,37 @@ class MessageApis::BlockManager
     nodes.flat_map { |node| media_captions(node) }.join("\n")
   end
 
+  def self.media_blocks(blocks)
+    return [] unless blocks.is_a?(Array)
+
+    blocks.grep(Hash).select { |block| MEDIA_BLOCK_TYPES.include?(block["type"]) }
+  end
+
+  def self.deliver_attachments(attachments, plain_text, send_text:)
+    first_success = nil
+    last_response = nil
+    caption = plain_text.presence
+
+    attachments.each do |media|
+      attrs = block_data(media)
+      next unless attrs.is_a?(Hash)
+
+      url = absolute_url(attrs["url"])
+      next unless url
+
+      last_response = yield(media["type"], url, caption)
+      if last_response.success?
+        first_success ||= last_response
+        caption = nil
+      end
+    end
+
+    return first_success if first_success
+    return send_text.call(plain_text) if plain_text.present?
+
+    last_response
+  end
+
   def self.absolute_url(url)
     return unless url.is_a?(String) && url.present?
 
