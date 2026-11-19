@@ -51,7 +51,8 @@ Fixed
   injection); Docker Hub and app store secrets only in the steps that use them.
 - `bin/ci-local` fails on a `bundle install` error instead of reading it as
   style offenses; the pre-push hook refuses unless HEAD is the pushed commit
-  and tracked files are clean.
+  and tracked files are clean; deleted refs and tags are skipped. Secret
+  presence checks see only a true/false flag.
 - CI/Rubocop build scout_apm 5.3.5's C extension as C17
   (`BUNDLE_BUILD__SCOUT_APM`): GCC 15 on ubuntu-26.04 defaults to C23.
 - RuboCop excludes `vendor/**/*`: CI installs gems into vendor/bundle and

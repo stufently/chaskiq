@@ -20,15 +20,16 @@ jobs:
       # the job's steps instead of failing (the ghcr.io workflow builds the image).
       - name: Check Docker Hub credentials
         id: creds
+        # only a true/false flag reaches this step; the secret values go to the
+        # login step alone
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          HAS_DOCKER_CREDS: ${{ secrets.DOCKER_USERNAME != '' && secrets.DOCKER_PASSWORD != '' }}
         run: |
-          if [ -n "$DOCKER_USERNAME" ] && [ -n "$DOCKER_PASSWORD" ]; then
+          if [ "$HAS_DOCKER_CREDS" = true ]; then
             echo "present=true" >> "$GITHUB_OUTPUT"
           else
             echo "present=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::DOCKER_USERNAME/DOCKER_PASSWORD not set, skipping Docker Hub build and push"
+            echo "::notice::skipping Docker Hub push: secrets not set"
           fi
 
       - uses: actions/checkout@v7

@@ -69,9 +69,9 @@ jobs:
       - name: Check app store token
         id: appstore
         env:
-          CHASKIQ_APPSTORE_TOKEN: ${{ secrets.CHASKIQ_APPSTORE_TOKEN }}
+          HAS_APPSTORE_TOKEN: ${{ secrets.CHASKIQ_APPSTORE_TOKEN != '' }}
         run: |
-          if [ -n "$CHASKIQ_APPSTORE_TOKEN" ]; then
+          if [ "$HAS_APPSTORE_TOKEN" = true ]; then
             echo "present=true" >> "$GITHUB_OUTPUT"
           else
             echo "present=false" >> "$GITHUB_OUTPUT"
