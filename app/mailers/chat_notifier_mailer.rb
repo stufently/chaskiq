@@ -61,7 +61,7 @@ class ChatNotifierMailer < ApplicationMailer
 
     template = recipient.is_a?(Agent) ? "agent_notify" : "notify"
 
-    return if recipient.is_a?(Agent) && (recipient.bot? && !recipient.enable_deliveries)
+    return if recipient.is_a?(Agent) && recipient.bot? && !recipient.enable_deliveries
 
     from_name_parametrized = from_name.parameterize(separator: " ").capitalize.titleize
 

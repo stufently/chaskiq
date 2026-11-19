@@ -62,9 +62,9 @@ class ApplicationController < ActionController::Base
   end
 
   def paddle_subscriptions?
-    (Chaskiq::Config.get("PADDLE_PUBLIC_KEY").present? &&
+    Chaskiq::Config.get("PADDLE_PUBLIC_KEY").present? &&
       Chaskiq::Config.get("PADDLE_VENDOR_ID").present? &&
-      Chaskiq::Config.get("PADDLE_SECRET_TOKEN").present?)
+      Chaskiq::Config.get("PADDLE_SECRET_TOKEN").present?
   end
 
   def auth0_enabled?

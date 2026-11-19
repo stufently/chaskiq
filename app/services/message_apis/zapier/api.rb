@@ -143,7 +143,7 @@ module MessageApis::Zapier
     end
 
     def send_message(conversation, part)
-      if ((url = @package.settings["new_message"])) && url.present?
+      if (url = @package.settings["new_message"]) && url.present?
         a = post(url, serialized_message(part))
         a if a.success?
       end

@@ -224,7 +224,7 @@ module MessageApis::Dialog360
 
           inputs << {
             type: "text",
-            text: (o["text"]).to_s,
+            text: o["text"].to_s,
             style: "muted"
           }
         end

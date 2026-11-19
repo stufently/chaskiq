@@ -29,7 +29,7 @@ class Plugin < ApplicationRecord
 
       plugin_data.each do |d|
         # Save the plugin file to the folder
-        file_path = plugin_folder_path.join((d["file"]).to_s)
+        file_path = plugin_folder_path.join(d["file"].to_s)
         File.open(file_path, "w") do |file|
           file.write(d["content"])
           Rails.logger.info "✅ [#{plugin_name}] Plugin file '#{d['file']}' saved to folder '#{plugin_folder_path}'."
