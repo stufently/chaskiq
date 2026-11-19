@@ -26,6 +26,8 @@ Fixed
 - `bin/ci-local` RuboCop: per-run target lists (parallel runs), tracked files
   with non-ASCII names are no longer skipped as untracked, and
   `tmp/rubocop.txt` holds the offenses (it held only progress dots).
+- `bin/ci-local` removes its rspec containers, network and temp files on any
+  exit, including Ctrl-C and SIGTERM (a signal used to leave the run going).
 
 ## 2026-11-19 — fork-updates-m8
 

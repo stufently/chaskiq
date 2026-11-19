@@ -101,7 +101,7 @@ EOF
 # vendor/bundle, created here so Docker does not create it as root).
 in_ruby() {
   mkdir -p "$CACHE/bundle-$RUNNER_OS" "$CACHE/yarn" "$ROOT/vendor/bundle"
-  docker run --rm --user "$UIDGID" \
+  docker run --rm --init --label "chaskiq-ci-local=$RUN_ID" --user "$UIDGID" \
     -e HOME=/tmp -e BUNDLE_PATH=/app/vendor/bundle -e BUNDLE_FROZEN=true -e YARN_CACHE_FOLDER=/yarn \
     -e BUNDLE_BUILD__SCOUT_APM="$SCOUT_APM_BUILD_FLAGS" \
     -v "$ROOT:/app" -v "$CACHE/bundle-$RUNNER_OS:/app/vendor/bundle" -v "$CACHE/yarn:/yarn" -w /app \
@@ -118,9 +118,7 @@ run_rubocop() {
   # applied by --list-target-files).
   # Per-run lists (parallel runs must not share them); -z keeps non-ASCII names
   # unquoted, as RuboCop prints them.
-  mkdir -p tmp
-  all=$(mktemp tmp/rubocop-targets.XXXXXX) list=$(mktemp tmp/rubocop-targets.XXXXXX)
-  trap 'rm -f "$all" "$list"' EXIT
+  local all=$RUN_TMP/rubocop-targets.all list=$RUN_TMP/rubocop-targets.txt
   in_ruby "$TEST_IMAGE" bundle exec rubocop --list-target-files > "$all" \
     || { echo "rubocop --list-target-files failed" >&2; return 2; }
   { git ls-files -z | tr '\0' '\n'; grep '^vendor/bundle/' "$all" || :; } \
@@ -141,18 +139,13 @@ run_rubocop() {
 }
 
 run_rspec() {
-  # global, not local: the EXIT trap runs after this function has returned
-  id="chaskiq-ci-local-$$"
-  cleanup() {
-    docker rm -f "$id-pg" "$id-redis" >/dev/null 2>&1 || :
-    docker network rm "$id" >/dev/null 2>&1 || :
-  }
-  trap cleanup EXIT
+  # Network and containers are removed by cleanup() (EXIT/INT/TERM trap).
+  local id=$RUN_ID
   log "rspec (services: $PG_IMAGE, $REDIS_IMAGE)"
   docker network create "$id" >/dev/null
-  docker run -d --name "$id-pg" --network "$id" --network-alias pg \
+  docker run -d --label "chaskiq-ci-local=$RUN_ID" --name "$id-pg" --network "$id" --network-alias pg \
     -e POSTGRES_PASSWORD=postgres --tmpfs /var/lib/postgresql/data "$PG_IMAGE" >/dev/null
-  docker run -d --name "$id-redis" --network "$id" --network-alias redis "$REDIS_IMAGE" >/dev/null
+  docker run -d --label "chaskiq-ci-local=$RUN_ID" --name "$id-redis" --network "$id" --network-alias redis "$REDIS_IMAGE" >/dev/null
   local ready=""
   for _ in $(seq 1 60); do
     if docker exec "$id-pg" pg_isready -U postgres -h 127.0.0.1 >/dev/null 2>&1; then ready=1; break; fi
@@ -242,6 +235,24 @@ check_expected() {  # <when>
 }
 check_expected "before the run"
 
+# Everything a run creates is named/labelled with RUN_ID; cleanup() removes it
+# on any exit: success, failure, error, Ctrl-C or SIGTERM. Idempotent.
+RUN_ID="chaskiq-ci-local-$$"
+mkdir -p tmp
+RUN_TMP=$(mktemp -d tmp/ci-local-run.XXXXXX)
+job_pid=""
+cleanup() {
+  [ -z "$job_pid" ] || kill -TERM "$job_pid" 2>/dev/null || :
+  local ids
+  ids=$(docker ps -aq --filter "label=chaskiq-ci-local=$RUN_ID" 2>/dev/null || :)
+  [ -z "$ids" ] || docker rm -f $ids >/dev/null 2>&1 || :
+  docker network rm "$RUN_ID" >/dev/null 2>&1 || :
+  rm -rf "$RUN_TMP"
+}
+trap cleanup EXIT
+trap 'echo "ci-local: interrupted" >&2; exit 130' INT
+trap 'echo "ci-local: terminated" >&2; exit 143' TERM
+
 needs_test_image=""
 for j in "${jobs[@]}"; do
   case "$j" in
@@ -254,7 +265,13 @@ done
 
 failed=()
 for j in "${jobs[@]}"; do
-  if ( "run_$j" ); then
+  # In the background + wait, so a signal to this shell is handled at once
+  # instead of after the job finishes.
+  ( "run_$j" ) & job_pid=$!
+  job_rc=0
+  wait "$job_pid" || job_rc=$?
+  job_pid=""
+  if [ "$job_rc" -eq 0 ]; then
     echo "--> $j: OK"
   else
     echo "--> $j: FAILED" >&2
