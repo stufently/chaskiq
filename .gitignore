@@ -126,3 +126,6 @@ config/credentials/*.yml.enc
 !/app/assets/builds/.keep
 
 lib/tasks/wassap.rake
+
+# Gems installed by bin/ci-local and setup-ruby bundler-cache
+/vendor/bundle

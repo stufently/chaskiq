@@ -44,3 +44,6 @@ yarn-debug.log*
 config/credentials/*.key
 config/credentials/*.yml.enc
 
+
+# Gems installed by bin/ci-local (bind mount of its cache)
+/vendor/bundle

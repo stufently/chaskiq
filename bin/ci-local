@@ -7,8 +7,10 @@
 #   bin/ci-local --rspec-args "spec/models"    pass paths/options to rspec
 #
 # Everything runs in containers as the calling user (no root-owned files in
-# the tree). Gems and the yarn cache live in $CI_LOCAL_CACHE
-# (default ~/.cache/chaskiq-ci-local), node_modules in the work tree.
+# the tree). The test image matches the runners: ubuntu-26.04, GCC 15 and the
+# ruby/setup-ruby Ruby build. Gems are installed into vendor/bundle as in CI
+# (backed by $CI_LOCAL_CACHE, default ~/.cache/chaskiq-ci-local, as is the yarn
+# cache); node_modules lives in the work tree.
 # Postgres/redis versions match docker-compose.yml and .github/workflows/ruby.yml.
 # Exit code is non-zero if any job fails.
 set -euo pipefail
@@ -21,7 +23,14 @@ RUBY_VERSION=$(tr -d '[:space:]' < .ruby-version)
 NODE_MAJOR=26
 PG_IMAGE=postgres:14-alpine
 REDIS_IMAGE=redis:8.10-alpine
-TEST_IMAGE="chaskiq-ci-local:ruby-$RUBY_VERSION"
+# The runners' OS (ubuntu-latest) and the ruby/setup-ruby build of
+# .ruby-version for it: https://github.com/ruby/ruby-builder/releases
+RUNNER_OS=ubuntu-26.04
+RUBY_BUILDER_VERSION=3.3.14
+RUBY_BUILDER_SHA256=dc801dd9014d637602dd2047ae024ee980d357834935e6db823487cd188e2cca
+# Keep in sync with the env of .github/workflows/ruby.yml and rubocop-analysis.yml
+SCOUT_APM_BUILD_FLAGS="--with-cflags=-std=gnu17"
+TEST_IMAGE="chaskiq-ci-local:ruby-$RUBY_VERSION-$RUNNER_OS"
 CACHE=${CI_LOCAL_CACHE:-$HOME/.cache/chaskiq-ci-local}
 UIDGID="$(id -u):$(id -g)"
 
@@ -32,7 +41,7 @@ while [ $# -gt 0 ]; do
     --docker) jobs+=(docker) ;;
     --only) jobs=("${2:?--only needs a job name}"); shift ;;
     --rspec-args) rspec_args=${2:?--rspec-args needs a value}; shift ;;
-    -h|--help) sed -n '2,13p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,15p' "$0"; exit 0 ;;
     *) echo "unknown argument: $1" >&2; exit 2 ;;
   esac
   shift
@@ -41,16 +50,30 @@ done
 log() { printf '\n==> %s\n' "$*"; }
 
 build_test_image() {
-  log "test image $TEST_IMAGE"
+  if [ "$RUBY_VERSION" != "$RUBY_BUILDER_VERSION" ]; then
+    echo ".ruby-version is $RUBY_VERSION, but bin/ci-local pins the ruby-builder build of $RUBY_BUILDER_VERSION." >&2
+    echo "Update RUBY_BUILDER_VERSION and RUBY_BUILDER_SHA256 (digest of ruby-<ver>-$RUNNER_OS-x64.tar.gz" >&2
+    echo "from https://github.com/ruby/ruby-builder/releases/tag/ruby-<ver>)." >&2
+    return 1
+  fi
+  log "test image $TEST_IMAGE ($RUNNER_OS, ruby-builder $RUBY_VERSION)"
   docker build -q -t "$TEST_IMAGE" --build-arg "RUBY_VERSION=$RUBY_VERSION" \
+    --build-arg "RUBY_SHA256=$RUBY_BUILDER_SHA256" --build-arg "RUNNER_OS=$RUNNER_OS" \
     --build-arg "NODE_MAJOR=$NODE_MAJOR" - <<'EOF' >/dev/null
-ARG RUBY_VERSION
-FROM ruby:${RUBY_VERSION}-slim-trixie
-ARG NODE_MAJOR
+# Same OS, compiler (GCC 15, C23 by default) and Ruby binary as the GitHub
+# runners: ruby/setup-ruby installs this very ruby-builder tarball there.
+FROM ubuntu:26.04
+ARG RUBY_VERSION RUBY_SHA256 RUNNER_OS NODE_MAJOR
 RUN apt-get update -qq \
  && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
     build-essential git pkg-config libpq-dev postgresql-client libyaml-dev zlib1g-dev \
-    libvips42 imagemagick curl ca-certificates gnupg shared-mime-info \
+    libssl-dev libffi-dev libgmp-dev libvips42t64 imagemagick curl ca-certificates gnupg \
+    shared-mime-info tzdata \
+ && curl -fsSLo /tmp/ruby.tgz \
+    "https://github.com/ruby/ruby-builder/releases/download/ruby-${RUBY_VERSION}/ruby-${RUBY_VERSION}-${RUNNER_OS}-x64.tar.gz" \
+ && echo "${RUBY_SHA256}  /tmp/ruby.tgz" | sha256sum -c - \
+ && install -d "/opt/hostedtoolcache/Ruby/${RUBY_VERSION}" \
+ && tar -xzf /tmp/ruby.tgz -C "/opt/hostedtoolcache/Ruby/${RUBY_VERSION}" && rm /tmp/ruby.tgz \
  && install -d /etc/apt/keyrings \
  && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
     | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
@@ -59,16 +82,22 @@ RUN apt-get update -qq \
  && apt-get update -qq && apt-get install -yq --no-install-recommends nodejs \
  && npm install -g yarn@1.22.22 ts-node@10.9.2 \
  && rm -rf /var/lib/apt/lists/* /root/.npm
+ENV PATH=/opt/hostedtoolcache/Ruby/${RUBY_VERSION}/x64/bin:$PATH
 ENV LANG=C.UTF-8 BUNDLE_JOBS=8 BUNDLE_RETRY=3 HOME=/tmp
 EOF
 }
 
 # Run a command in the test image as the calling user, tree mounted at /app.
+# Gems go to /app/vendor/bundle like setup-ruby's bundler-cache, so RuboCop and
+# friends see them inside the tree exactly as in CI; the directory itself is a
+# bind mount of the host cache (the work tree only gets an empty, gitignored
+# vendor/bundle, created here so Docker does not create it as root).
 in_ruby() {
-  mkdir -p "$CACHE/bundle" "$CACHE/yarn"
+  mkdir -p "$CACHE/bundle-$RUNNER_OS" "$CACHE/yarn" "$ROOT/vendor/bundle"
   docker run --rm --user "$UIDGID" \
-    -e HOME=/tmp -e BUNDLE_PATH=/bundle -e BUNDLE_FROZEN=true -e YARN_CACHE_FOLDER=/yarn \
-    -v "$CACHE/bundle:/bundle" -v "$CACHE/yarn:/yarn" -v "$ROOT:/app" -w /app \
+    -e HOME=/tmp -e BUNDLE_PATH=/app/vendor/bundle -e BUNDLE_FROZEN=true -e YARN_CACHE_FOLDER=/yarn \
+    -e BUNDLE_BUILD__SCOUT_APM="$SCOUT_APM_BUILD_FLAGS" \
+    -v "$ROOT:/app" -v "$CACHE/bundle-$RUNNER_OS:/app/vendor/bundle" -v "$CACHE/yarn:/yarn" -w /app \
     "$@"
 }
 
@@ -77,8 +106,21 @@ run_rubocop() {
   # Same contract as rubocop-analysis.yml: any offense fails; the old backlog is
   # in .rubocop_todo.yml.
   in_ruby "$TEST_IMAGE" bundle install --quiet || { echo "bundle install failed" >&2; return 1; }
+  # CI lints a fresh checkout plus the gems in vendor/bundle: drop other
+  # untracked files from RuboCop's target list (its own excludes are already
+  # applied by --list-target-files).
+  mkdir -p tmp
+  in_ruby "$TEST_IMAGE" bundle exec rubocop --list-target-files > tmp/rubocop-targets.all \
+    || { echo "rubocop --list-target-files failed" >&2; return 2; }
+  { git ls-files; grep '^vendor/bundle/' tmp/rubocop-targets.all || :; } \
+    | grep -Fxf - tmp/rubocop-targets.all > tmp/rubocop-targets.txt || :
+  local skipped
+  skipped=$(grep -vFxf tmp/rubocop-targets.txt tmp/rubocop-targets.all || :)
+  [ -z "$skipped" ] || printf 'rubocop: skipping untracked files (not in a CI checkout):\n%s\n' "$skipped"
   local rc=0
-  in_ruby "$TEST_IMAGE" bundle exec rubocop --format offenses --format progress --out tmp/rubocop.txt || rc=$?
+  in_ruby "$TEST_IMAGE" bash -c 'mapfile -t files < tmp/rubocop-targets.txt
+    exec bundle exec rubocop --force-exclusion --format offenses --format progress \
+      --out tmp/rubocop.txt "${files[@]}"' || rc=$?
   if [ "$rc" -eq 0 ]; then
     echo "rubocop: clean"
     return 0
@@ -132,6 +174,16 @@ run_docker() {
     -t chaskiq-ci-local:prod .
 }
 
+# The commit under test, or empty if tracked files have uncommitted changes.
+# Passed jobs are recorded per commit in $STAMPS (read by .githooks/pre-push),
+# but only for a clean tree that did not change during the run, and rspec only
+# for a full run (no --rspec-args).
+STAMPS=tmp/ci-local/passed
+tested_commit() {
+  git diff --quiet 2>/dev/null && git diff --cached --quiet 2>/dev/null && git rev-parse -q --verify HEAD 2>/dev/null || :
+}
+commit_at_start=$(tested_commit)
+
 needs_test_image=""
 for j in "${jobs[@]}"; do
   case "$j" in
@@ -155,5 +207,12 @@ done
 if [ ${#failed[@]} -gt 0 ]; then
   printf '\nci-local FAILED: %s\n' "${failed[*]}" >&2
   exit 1
+fi
+if [ -n "$commit_at_start" ] && [ "$(tested_commit)" = "$commit_at_start" ]; then
+  mkdir -p "$(dirname "$STAMPS")"
+  for j in "${jobs[@]}"; do
+    [ "$j" = rspec ] && [ -n "$rspec_args" ] && continue
+    echo "$commit_at_start $j" >> "$STAMPS"
+  done
 fi
 printf '\nci-local: all jobs passed (%s)\n' "${jobs[*]}"
