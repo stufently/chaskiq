@@ -114,7 +114,7 @@ module MessageApis::Dialog360
     def process_statuses(statuses)
       statuses.each do |status|
         case status["status"]
-        when "read" then process_read(status["id"])
+        when "read" then process_read(status["id"]) if status["id"].present?
         when "failed" then process_error(status)
         else
           Rails.logger.info "no processing for #{status['status']} event"
@@ -130,16 +130,22 @@ module MessageApis::Dialog360
     end
 
     def process_error(params)
-      conversation_part_channel = find_channel(params["id"])
+      source_id = params["id"]
+      return if source_id.blank?
+
+      conversation_part_channel = find_channel(source_id)
       return if conversation_part_channel.blank?
 
       conversation = conversation_part_channel.conversation_part.conversation
 
       errors = params["errors"]
       errors = [] unless errors.is_a?(Array)
-      text = errors.grep(Hash).map { |error| "#{error['code']} #{error['title']}" }.join
+      text = errors.grep(Hash).map do |error|
+        title = error["title"]
+        [safe_error_code(error["code"]), (title if title.is_a?(String))].compact.join(" ")
+      end.join
       code = errors.first["code"] if errors.first.is_a?(Hash)
-      add_error_event(conversation, "bypass-internal-#{params['id']}", status: nil, code: code, text: text)
+      add_error_event(conversation, "bypass-internal-#{source_id}", status: nil, code: code, text: text)
     end
 
     def get_message_id(response_data)

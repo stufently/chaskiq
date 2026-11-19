@@ -38,8 +38,9 @@ class MessageApis::BlockManager
 
   def self.deliver_attachments(attachments, plain_text, send_text:, captionless: [], **hooks)
     hooks.assert_valid_keys(:on_success, :on_failure, :already_sent)
-    remaining = hooks.fetch(:already_sent, 0)
-    on_success = hooks[:on_success]
+    already_sent = hooks.fetch(:already_sent, 0)
+    remaining, delivered_indices = already_sent.is_a?(Integer) ? [already_sent, []] : [0, already_sent]
+    on_success = delivery_success_hook(hooks[:on_success], already_sent)
     on_failure = hooks[:on_failure]
     failures = []
     first_success = nil
@@ -47,18 +48,16 @@ class MessageApis::BlockManager
     media_delivered = false
     caption = plain_text.presence
     omit_caption = captionless.respond_to?(:call) ? captionless : ->(type, _url) { captionless.include?(type) }
+    caption = nil if caption && caption_delivered?(attachments, delivered_indices, omit_caption)
 
-    attachments.each do |media|
-      attrs = block_data(media)
-      next unless attrs.is_a?(Hash)
-
-      url = absolute_url(attrs["url"])
+    attachments.each_with_index do |media, index|
+      url = delivery_url(media)
       next unless url
 
       type = media["type"]
       media_caption = omit_caption.call(type, url) ? nil : caption
-      if remaining.positive?
-        remaining -= 1
+      if delivered_indices.include?(index) || remaining.positive?
+        remaining -= 1 if remaining.positive?
       else
         last_response = yield(type, url, media_caption)
         unless last_response.success?
@@ -66,7 +65,7 @@ class MessageApis::BlockManager
           next
         end
 
-        on_success&.call(last_response)
+        on_success&.call(last_response, index)
         first_success ||= last_response
       end
       media_delivered = true
@@ -74,10 +73,11 @@ class MessageApis::BlockManager
     end
 
     text = media_delivered ? caption : plain_text.presence
-    text_response = send_text.call(text) if text && remaining.zero?
+    text_index = attachments.size
+    text_response = send_text.call(text) if text && remaining.zero? && delivered_indices.exclude?(text_index)
     if text_response.respond_to?(:success?)
       if text_response.success?
-        on_success&.call(text_response)
+        on_success&.call(text_response, text_index)
         successful_text = text_response
       else
         failures << text_response
@@ -93,8 +93,40 @@ class MessageApis::BlockManager
              end
     result
   ensure
-    if on_failure
-      failures.each { |failure| on_failure.call(failure) unless failure.equal?(result) }
+    report_failures(on_failure, failures, result) if on_failure
+  end
+
+  def self.delivery_success_hook(callback, already_sent)
+    return unless callback
+    return callback unless already_sent.is_a?(Integer)
+
+    ->(response, _index) { callback.call(response) }
+  end
+
+  def self.caption_delivered?(attachments, delivered_indices, omit_caption)
+    return true if delivered_indices.include?(attachments.size)
+
+    delivered_indices.any? do |index|
+      media = attachments[index]
+      url = delivery_url(media)
+      url && !omit_caption.call(media["type"], url)
+    end
+  end
+
+  def self.delivery_url(media)
+    attrs = block_data(media) if media
+    absolute_url(attrs["url"]) if attrs.is_a?(Hash)
+  end
+
+  def self.report_failures(callback, failures, result)
+    failures.each do |failure|
+      next if failure.equal?(result)
+
+      begin
+        callback.call(failure)
+      rescue StandardError => e
+        Rails.logger.error("Attachment failure hook raised #{e.class}")
+      end
     end
   end
 
@@ -201,5 +233,6 @@ class MessageApis::BlockManager
     Array(node["content"]).grep(Hash).flat_map { |child| media_captions(child) }
   end
 
-  private_class_method :draft_block, :node_text, :media_captions
+  private_class_method :draft_block, :node_text, :media_captions,
+                       :delivery_success_hook, :caption_delivered?, :delivery_url, :report_failures
 end

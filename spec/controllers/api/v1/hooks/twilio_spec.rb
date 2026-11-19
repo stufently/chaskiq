@@ -498,6 +498,63 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
         assert_requested(stub, times: 1)
       end
+
+      it "does not send an incoming audio part back to the provider" do
+        media = [["AudioRecorderBlock", "https://cdn.example.com/voice.ogg"]]
+        block = { type: media.first.first, attrs: { url: media.first.last } }
+        part = thread.add_message(
+          from: recipient,
+          message: { serialized_content: { content: [{ type: "text", text: "Voice caption" }, block] }.to_json },
+          provider: "twilio",
+          message_source_id: "SM-inbound"
+        )
+        stub = stub_request(:post, endpoint).to_return(success_response("SM-duplicate"))
+
+        notify(part)
+
+        assert_not_requested(stub)
+      end
+
+      it "leaves a part to the job already sending it" do
+        part = saved_part("Caption", images.first(1))
+        first_request = Queue.new
+        finish_request = Queue.new
+        first_request_token = Queue.new
+        first_request_token << true
+        stub = stub_request(:post, endpoint).to_return do
+          unless first_request_token.empty?
+            first_request_token.pop
+            first_request << true
+            finish_request.pop
+          end
+          success_response("SM1")
+        end
+
+        sender = Thread.new { notify(part) }
+        Timeout.timeout(5) do
+          first_request.pop
+          notify(ConversationPart.find(part.id))
+        end
+        finish_request << true
+        sender.value
+
+        assert_requested(stub, times: 1)
+      ensure
+        finish_request << true if finish_request && sender&.alive?
+        sender&.join(5)
+      end
+
+      it "deduplicates callbacks per SID and keeps errors for other SIDs in the same integration" do
+        part = saved_part("Caption", [])
+        %w[SM1 SM2].each do |sid|
+          part.conversation_part_channel_sources.create!(provider: "twilio", message_source_id: sid)
+        end
+        callback = { "SmsStatus" => "undelivered", "id" => "integration" }
+
+        %w[SM1 SM1 SM2].each { |sid| api.process_event(callback.merge("SmsSid" => sid), nil) }
+
+        expect(delivery_errors.map(&:action)).to eq(["errored: undelivered", "errored: undelivered"])
+      end
     end
 
     context "with media" do

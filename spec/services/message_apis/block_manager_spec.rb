@@ -107,6 +107,27 @@ RSpec.describe MessageApis::BlockManager do
       expect(sent_texts).to be_empty
       expect(result).to be_nil
     end
+
+    it "keeps the transport exception and reports subsequent failures if one failure hook raises" do
+      transport_error = Faraday::TimeoutError.new("transport timed out")
+      first_failure = double("first failed response", success?: false)
+      last_failure = double("second failed response", success?: false)
+      responses = [first_failure, last_failure]
+      reported = []
+      on_failure = lambda do |response|
+        reported << response
+        raise "failure hook broke" if response.equal?(first_failure)
+      end
+      allow(Rails.logger).to receive(:error)
+
+      expect do
+        described_class.deliver_attachments([audio, file, image], "", send_text: send_text, on_failure: on_failure) do
+          responses.shift || raise(transport_error)
+        end
+      end.to(raise_error { |error| expect(error).to equal(transport_error) })
+      expect(reported).to eq([first_failure, last_failure])
+      expect(Rails.logger).to have_received(:error).with(/failure hook.*RuntimeError/i)
+    end
   end
 
   describe ".get_blocks" do

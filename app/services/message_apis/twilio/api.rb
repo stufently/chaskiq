@@ -83,7 +83,7 @@ module MessageApis::Twilio
       current = params["current"]
 
       case params["SmsStatus"]
-      when "read" then process_read(params["MessageSid"])
+      when "read" then process_read(params["MessageSid"]) if params["MessageSid"].present?
       # when "DELIVERED" then puts("DELIVERED!")
       when "received" then process_message(params, @package)
       when "undelivered" then process_error(params)
@@ -100,12 +100,15 @@ module MessageApis::Twilio
     end
 
     def process_error(params)
-      conversation_part_channel = find_channel_from_part_source(params["SmsSid"])
+      sid = params["SmsSid"].presence || params["MessageSid"].presence
+      return unless sid
+
+      conversation_part_channel = find_channel_from_part_source(sid)
       return unless conversation_part_channel
 
       conversation = conversation_part_channel.conversation_part.conversation
 
-      add_error_event(conversation, "bypass-internal-#{params['id']}",
+      add_error_event(conversation, "bypass-internal-#{sid}",
                       status: nil, code: params["ErrorCode"], text: params["SmsStatus"])
     end
 

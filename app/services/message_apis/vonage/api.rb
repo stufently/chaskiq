@@ -86,7 +86,7 @@ module MessageApis::Vonage
       if params["status"].present?
         case params["status"]
         when "read"
-          process_read(params["message_uuid"])
+          process_read(params["message_uuid"]) if params["message_uuid"].present?
           return
         end
       end

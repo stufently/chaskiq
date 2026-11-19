@@ -343,7 +343,25 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
         )
 
         expect { notify }.not_to raise_error
-        expect(part.conversation_part_channel_sources.pluck(:message_source_id)).to contain_exactly("wamid.2", "wamid.3")
+        expect(part.conversation_part_channel_sources.pluck(:delivery_index, :message_source_id))
+          .to contain_exactly([0, nil], [1, "wamid.2"], [2, "wamid.3"])
+        api.process_event({ "statuses" => [{ "status" => "read" }, { "status" => "failed" }] }, nil)
+        expect(part.reload.read_at).to be_nil
+        expect(delivery_errors).to be_empty
+      end
+
+      it "does not resend the attachment accepted without an id before a timeout" do
+        stub = stub_request(:post, endpoint)
+               .to_return(status: 201, body: { messages: [] }.to_json)
+               .then.to_raise(Faraday::TimeoutError)
+               .then.to_return(success_response("wamid.2"), success_response("wamid.3"))
+
+        expect { notify }.to raise_error(Faraday::TimeoutError)
+        notify
+
+        assert_requested(stub, times: 4)
+        expect(part.conversation_part_channel_sources.pluck(:delivery_index, :message_source_id))
+          .to contain_exactly([0, nil], [1, "wamid.2"], [2, "wamid.3"])
       end
 
       it "sanitizes the failed status event" do
@@ -353,6 +371,28 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
         api.process_event({ "statuses" => [{ "id" => "wamid.1", "status" => "failed", "errors" => errors }] }, nil)
 
         expect(delivery_errors.map(&:data)).to eq([{ "status" => nil, "code" => 470, "message" => "470 See [url] for details" }])
+      end
+
+      it "ignores object values in a failed status without rendering their contents" do
+        part.conversation_part_channel_sources.create!(provider: "dialog_360", message_source_id: "wamid.1")
+        errors = [{ "code" => { "phone" => "private-code" }, "title" => { "customer" => "private-title" } }]
+
+        api.process_event({ "statuses" => [{ "id" => "wamid.1", "status" => "failed", "errors" => errors }] }, nil)
+
+        expect(delivery_errors.map(&:action)).to eq(["errored: "])
+        expect(delivery_errors.map(&:data)).to eq([{ "status" => nil, "code" => nil, "message" => "" }])
+      end
+
+      it "records the same failed status once and keeps distinct actions for its provider id" do
+        part.conversation_part_channel_sources.create!(provider: "dialog_360", message_source_id: "wamid.1")
+        status = { "id" => "wamid.1", "status" => "failed" }
+        errors = [{ "code" => 470, "title" => "Re-engagement" }]
+        replay = status.merge("errors" => errors)
+
+        2.times { api.process_event({ "statuses" => [replay] }, nil) }
+        api.process_event({ "statuses" => [status.merge("errors" => [{ "code" => 471, "title" => "Rejected" }])] }, nil)
+
+        expect(delivery_errors.map(&:action)).to eq(["errored: 470 Re-engagement", "errored: 471 Rejected"])
       end
     end
   end

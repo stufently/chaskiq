@@ -456,6 +456,45 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
         expect(source_ids).to eq(%w[uuid-1 uuid-2 uuid-4 uuid-5])
       end
 
+      it "can resume sparse successes and keeps the caption already carried by later media" do
+        images = []
+        stub_request(:post, endpoint).to_return do |request|
+          images << JSON.parse(request.body).dig("message", "content", "image")
+          case images.size
+          when 1 then { status: 422, body: { title: "Invalid media" }.to_json }
+          when 4 then raise Faraday::TimeoutError
+          else successful_response(images.size)
+          end
+        end
+
+        expect { notify }.to raise_error(Faraday::TimeoutError)
+        notify
+
+        expect(images[1]).to include("caption" => "Caption")
+        expect(images.drop(4)).to eq([0, 3].map { |index| { "url" => urls[index] } })
+        expect(part.conversation_part_channel_sources.where(provider: "vonage").order(:delivery_index).pluck(:delivery_index))
+          .to eq([0, 1, 2, 3])
+      end
+
+      it "does not confuse an accepted fallback text with an attachment on resume" do
+        requests = []
+        stub_request(:post, endpoint).to_return do |request|
+          requests << JSON.parse(request.body).dig("message", "content")
+          next { status: 422, body: "{}" } if requests.size <= urls.size
+
+          successful_response(requests.size)
+        end
+
+        notify
+        notify
+
+        expect(requests[urls.size]).to eq("type" => "text", "text" => "Caption")
+        expect(requests.drop(urls.size + 1))
+          .to eq(urls.map { |url| { "type" => "image", "image" => { "url" => url } } })
+        expect(part.conversation_part_channel_sources.where(provider: "vonage").pluck(:delivery_index))
+          .to contain_exactly(0, 1, 2, 3, 4)
+      end
+
       it "makes no requests on retry after all media was sent (base-green)" do
         stub = stub_request(:post, endpoint).to_return(*(1..4).map { |number| successful_response(number) })
 
