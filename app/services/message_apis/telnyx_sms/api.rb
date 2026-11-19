@@ -143,17 +143,20 @@ module MessageApis::TelnyxSms
     def deliver_message(conversation, part, channel_id, blocks)
       text = MessageApis::BlockManager.plain_text(blocks)
       media = MessageApis::BlockManager.media_blocks(blocks)
-      return send_sms_message(channel_id, text) if media.empty? && text.present?
-      return if media.empty?
+      return if media.empty? && text.blank?
+
+      sender = resolve_outbound_phone(channel_id)
+      send_sms = ->(body, urls = []) { send_sms_message(channel_id, body, urls) { sender } }
+      return send_sms.call(text) if media.empty?
 
       attachments, links = media.partition { |block| supported_media?(block) }
       text = [text.presence, *links.filter_map { |block| attachment_url(block) }].compact.join("\n")
       MessageApis::BlockManager.deliver_attachments(
         attachments, text,
-        send_text: ->(body) { send_sms_message(channel_id, body) },
+        send_text: send_sms,
         **delivery_hooks(conversation, part)
       ) do |_type, url, caption|
-        send_sms_message(channel_id, caption, [url])
+        send_sms.call(caption, [url])
       end
     end
 
@@ -239,16 +242,23 @@ module MessageApis::TelnyxSms
     def media_block(media, message_id, index)
       content_type = media["content_type"].to_s.partition(";").first.strip.downcase.presence
       body = download_media(media["url"])
-      return serialized_block("[attachment unavailable: #{content_type || 'application/octet-stream'}]") unless body
+      return unavailable_attachment(content_type) unless body
 
       content_type ||= body.mime_type || "application/octet-stream"
-      extension = Rack::Mime::MIME_TYPES.key(content_type)
+      extension = MMS_TYPES.key(content_type) || Rack::Mime::MIME_TYPES.key(content_type)
       upload = direct_upload(file: body, filename: "#{message_id}-#{index}#{extension}", content_type: content_type)
       if content_type.start_with?("image/")
         photo_block(url: upload[:url], text: "")
       else
         file_block(url: upload[:url], text: content_type)
       end
+    rescue StandardError => e
+      Rails.logger.warn("Telnyx MMS attachment failed (#{e.class})")
+      unavailable_attachment(content_type)
+    end
+
+    def unavailable_attachment(content_type)
+      serialized_block("[attachment unavailable: #{content_type || 'application/octet-stream'}]")
     end
 
     def download_media(url)
@@ -258,7 +268,8 @@ module MessageApis::TelnyxSms
       end
 
       MessageApis::SafeDownload.fetch(url, max_bytes: MAX_MEDIA_BYTES, allow_own_host: false,
-                                           headers: { "Authorization" => "Bearer #{@api_key}" })
+                                           headers: { "Authorization" => "Bearer #{@api_key}" },
+                                           url_allowed: ->(uri) { media_url?(uri.to_s) })
     end
 
     def media_url?(url)
@@ -291,14 +302,16 @@ module MessageApis::TelnyxSms
       add_error_event(part.conversation, "telnyx-failed-#{id}", status: nil, code: error[:code], text: text)
     end
 
-    private :inbound_blocks, :media_block, :download_media, :media_url?, :app_channel, :process_status
+    private :inbound_blocks, :media_block, :unavailable_attachment,
+            :download_media, :media_url?, :app_channel, :process_status
 
     def send_sms_message(channel_id, message, media_urls = [])
       data = { to: "+#{channel_id.delete('+')}" }
       data[:text] = message if message.present?
       data[:media_urls] = media_urls if media_urls.present?
 
-      @conn.post(URL, data.merge(resolve_outbound_phone(channel_id)).to_json)
+      sender = block_given? ? yield : resolve_outbound_phone(channel_id)
+      @conn.post(URL, data.merge(sender).to_json)
     end
 
     def should_stop_conversation?(text)

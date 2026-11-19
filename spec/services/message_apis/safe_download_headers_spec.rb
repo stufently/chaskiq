@@ -38,6 +38,15 @@ RSpec.describe MessageApis::SafeDownload do
   include_examples "an authorization-free redirect", "https://files.example.com/final"
   include_examples "an authorization-free redirect", "/final"
 
+  it "checks the URL policy before resolving the first hop" do
+    policy = ->(uri) { uri.host == "other.telnyx.com" }
+    download = stub_request(:get, url).to_return(body: "rejected")
+
+    expect(described_class.fetch(url, url_allowed: policy)).to be_nil
+    expect(described_class).not_to have_received(:resolve)
+    assert_not_requested(download)
+  end
+
   it "allows a private own host by default and rejects it when the exception is disabled" do
     allow(Chaskiq::Config).to receive(:get).and_call_original
     allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://media.telnyx.com")

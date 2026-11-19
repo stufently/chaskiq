@@ -21,6 +21,25 @@ class MessageApis::SafeDownload
     end
   end
 
+  class FetchLimits
+    attr_reader :max_bytes, :max_redirects
+
+    def initialize(max_bytes: 15 * 1024 * 1024, max_redirects: 3, deadline: 30)
+      @max_bytes = max_bytes
+      @max_redirects = max_redirects
+      @deadline = deadline
+    end
+
+    def within_deadline(&)
+      return unless @deadline.positive?
+
+      Timeout.timeout(@deadline, &)
+    rescue StandardError
+      nil
+    end
+  end
+  private_constant :FetchLimits
+
   BLOCKED_RANGES = %w[
     0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8
     168.63.129.16/32 169.254.0.0/16 172.16.0.0/12 192.0.0.0/24 192.168.0.0/16
@@ -43,30 +62,26 @@ class MessageApis::SafeDownload
     []
   end
 
-  # Keep the download limits and caller-specific request options explicit.
-  def self.fetch(url, max_bytes: 15 * 1024 * 1024, max_redirects: 3, deadline: 30, # rubocop:disable Metrics/ParameterLists
-                 headers: {}, allow_own_host: true)
-    return unless deadline.positive?
-
-    Timeout.timeout(deadline) do
-      follow_redirects(url, max_bytes, max_redirects, headers, allow_own_host)
+  def self.fetch(url, headers: {}, allow_own_host: true, url_allowed: nil, **limits)
+    limits = FetchLimits.new(**limits)
+    limits.within_deadline do
+      follow_redirects(url, limits, headers, allow_own_host, url_allowed)
     end
-  rescue StandardError
-    nil
   end
 
-  def self.follow_redirects(url, max_bytes, max_redirects, headers, allow_own_host)
+  def self.follow_redirects(url, limits, headers, allow_own_host, url_allowed)
     uri = http_uri(url)
 
-    (max_redirects + 1).times do |hop|
+    (limits.max_redirects + 1).times do |hop|
       return unless uri
+      return if url_allowed && !url_allowed.call(uri)
 
       addresses = download_addresses(uri, allow_own_host)
       return unless addresses
 
-      body, location = download(uri, addresses, max_bytes, hop.zero? ? headers : {})
+      body, location = download(uri, addresses, limits.max_bytes, hop.zero? ? headers : {})
       return body unless location
-      return if hop == max_redirects
+      return if hop == limits.max_redirects
 
       uri = http_uri(URI.join(uri.to_s, location).to_s)
     end

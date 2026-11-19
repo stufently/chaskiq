@@ -395,6 +395,19 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect(outbound_ids(part)).to eq([[0, "first-id"]])
       expect(delivery_errors.map(&:data)).to eq([{ "status" => 422, "code" => "40305", "message" => "Invalid sender" }])
     end
+
+    it "samples one sender from the pool for all three requests of one MMS message" do
+      pool = %w[+15550001111 +15550002222]
+      allow(api).to receive(:phones_data).and_return({ "1" => pool })
+      allow(pool).to receive(:sample).and_return(*pool)
+      bodies = record_requests
+      attachments = (1..3).map { |index| attachment("https://files.example.com/#{index}.png") }
+
+      deliver(serialized_content: document(paragraph("caption"), *attachments))
+
+      expect(bodies.pluck("from")).to eq([pool.first] * 3)
+      expect(pool).to have_received(:sample).once
+    end
   end
 
   describe "TelnyxSms MMS and delivery webhooks" do
@@ -517,6 +530,71 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       assert_requested(first, times: 1)
       assert_requested(redirected, times: 1)
       expect(received_blocks.pluck("type")).to eq(["ImageBlock"])
+    end
+
+    shared_examples "a rejected Telnyx media redirect" do |target|
+      it "rejects a Telnyx media redirect to #{target} before making a request" do
+        url = "https://media.telnyx.com/original.png"
+        first = stub_request(:get, url).to_return(status: 302, headers: { "Location" => target })
+        redirected = serve(target)
+
+        receive_mms(image(url), text: "keep this")
+
+        assert_requested(first, times: 1)
+        assert_not_requested(redirected)
+        expect(received_blocks.pluck("text")).to eq(["keep this", "[attachment unavailable: image/png]"])
+      end
+    end
+
+    include_examples "a rejected Telnyx media redirect", "https://files.example.com/final.png"
+    include_examples "a rejected Telnyx media redirect", "http://other.telnyx.com/final.png"
+
+    it "follows a redirect to another HTTPS Telnyx subdomain without the API key" do
+      url = "https://media.telnyx.com/original.png"
+      target = "https://other.telnyx.com/final.png"
+      first = stub_request(:get, url)
+              .with(headers: { "Authorization" => "Bearer test-key" })
+              .to_return(status: 302, headers: { "Location" => target })
+      redirected = serve(target).with { |request| !request.headers.key?("Authorization") }
+
+      receive_mms(image(url))
+
+      assert_requested(first, times: 1)
+      assert_requested(redirected, times: 1)
+      expect(received_blocks.pluck("type")).to eq(["ImageBlock"])
+    end
+
+    it "keeps the text and remaining inbound MMS attachments if storage raises an error" do
+      first = "https://media.telnyx.com/first.png"
+      second = "https://media.telnyx.com/second.png"
+      [first, second].each { |url| serve(url) }
+      allow(api).to receive(:direct_upload).and_wrap_original do |upload, **options|
+        raise IOError, "private storage error detail" if options[:filename].end_with?("-0.png")
+
+        upload.call(**options)
+      end
+      allow(Rails.logger).to receive(:warn).and_call_original
+
+      expect do
+        receive_mms(image(first), image(second), text: "keep this")
+      end.to change(ActiveStorage::Blob, :count).by(1)
+
+      expect(received_blocks.pluck("type")).to eq(%w[text text ImageBlock])
+      expect(received_blocks.first(2).pluck("text")).to eq(["keep this", "[attachment unavailable: image/png]"])
+      expect(ActiveStorage::Blob.last.filename.to_s).to eq("received-id-1.png")
+      expect(Rails.logger).to have_received(:warn).with(a_string_including("IOError"))
+      expect(Rails.logger).not_to have_received(:warn).with(a_string_including("private storage error detail"))
+    end
+
+    it "stores an inbound MMS vCard with the .vcf extension" do
+      url = "https://media.telnyx.com/contact"
+      download = serve(url, body: "BEGIN:VCARD\nEND:VCARD\n", type: "text/vcard")
+
+      expect { receive_mms({ url: url, content_type: "text/vcard" }) }.to change(ActiveStorage::Blob, :count).by(1)
+
+      assert_requested(download, times: 1)
+      expect(ActiveStorage::Blob.last.filename.to_s).to eq("received-id-0.vcf")
+      expect(received_blocks.first.dig("attrs", "url")).to end_with("/received-id-0.vcf")
     end
 
     it "rejects media at a private address (base-green)" do
