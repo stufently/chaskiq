@@ -24,7 +24,7 @@ jobs:
                --build-arg NODE_ENV=production \
                --build-arg RUBY_VERSION=3.3.14 \
                --build-arg PG_MAJOR=15 \
-               --build-arg NODE_MAJOR=22 \
+               --build-arg NODE_MAJOR=26 \
                --build-arg YARN_VERSION=1.13.0 \
                --build-arg BUNDLER_VERSION=2.4.10 \
                --file Dockerfile \

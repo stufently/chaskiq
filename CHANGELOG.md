@@ -39,7 +39,7 @@ Fixed
   security repo is gone, apt exited 100); PGDG/NodeSource/Yarn repos via
   `signed-by` keyrings instead of the removed `apt-key`; deps add libyaml-dev,
   pkg-config.
-- Docker images: Node 16 (EOL) → 22 LTS, pinned to NodeSource (trixie's own
+- Docker images: Node 16 (EOL) → 26 LTS (same as CI), pinned to NodeSource (trixie's own
   nodejs 20 used to win over NODE_MAJOR); the build fails on a wrong major.
 - CI: postgres:14-alpine and redis:8.10-alpine services (as in compose), Node 26
   LTS for the spec JS deps, app store packages and E2E only with the upstream

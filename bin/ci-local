@@ -126,7 +126,7 @@ run_docker() {
     --build-arg NODE_ENV=production \
     --build-arg "RUBY_VERSION=$RUBY_VERSION" \
     --build-arg PG_MAJOR=15 \
-    --build-arg NODE_MAJOR=22 \
+    --build-arg NODE_MAJOR=26 \
     --build-arg YARN_VERSION=1.13.0 \
     --build-arg BUNDLER_VERSION=2.4.10 \
     -t chaskiq-ci-local:prod .

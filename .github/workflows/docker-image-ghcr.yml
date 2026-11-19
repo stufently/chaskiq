@@ -52,7 +52,7 @@ jobs:
             "NODE_ENV=production"
             "RUBY_VERSION=3.3.14"
             "PG_MAJOR=15"
-            "NODE_MAJOR=22"
+            "NODE_MAJOR=26"
             "YARN_VERSION=1.13.0"
             "BUNDLER_VERSION=2.4.10"
           push: true
