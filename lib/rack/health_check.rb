@@ -6,13 +6,14 @@
 module Rack
   class HealthCheck
     def call(env)
+      connected = redis_connected
       status = {
         redis: {
-          connected: redis_connected
+          connected: connected
         }
       }
 
-      return [503, {}, [status.to_json]] unless redis_connected
+      return [503, {}, [status.to_json]] unless connected
 
       [200, {}, [status.to_json]]
     end
@@ -20,7 +21,7 @@ module Rack
     protected
 
     def redis_connected
-      Redis.current.ping == "PONG"
+      (@redis ||= Redis.new).ping == "PONG"
     rescue StandardError
       false
     end

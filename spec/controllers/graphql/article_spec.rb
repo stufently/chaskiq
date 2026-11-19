@@ -30,17 +30,16 @@ RSpec.describe GraphqlController, type: :controller do
   end
 
   before :each do
-    controller.stub(:current_user).and_return(agent)
-    controller.stub(:api_authorize!).and_return(agent)
+    allow(controller).to receive(:current_user).and_return(agent)
+    allow(controller).to receive(:api_authorize!).and_return(agent)
     allow_any_instance_of(Types::BaseObject).to receive(:current_user).and_return(agent)
 
     allow_any_instance_of(Plan).to receive(
       :allow_feature!
     ).and_return(true)
 
-    Mutations::BaseMutation.any_instance
-                           .stub(:current_user)
-                           .and_return(agent)
+    allow_any_instance_of(Mutations::BaseMutation).to receive(:current_user)
+      .and_return(agent)
 
     allow_any_instance_of(GraphqlController).to receive(:doorkeeper_authorize!).and_return(agent)
     controller.instance_variable_set(:@current_agent, agent)

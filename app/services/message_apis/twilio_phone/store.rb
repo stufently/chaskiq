@@ -27,7 +27,7 @@ module MessageApis::TwilioPhone
     end
 
     def self.get_values(conversation_key)
-      Redis.current.hgetall(namespace(conversation_key))
+      hash(conversation_key).to_h
     end
 
     def self.delete_key(conversation_key, key)

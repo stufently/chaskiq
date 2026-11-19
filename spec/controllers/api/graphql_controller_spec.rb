@@ -61,9 +61,8 @@ RSpec.describe Api::GraphqlController, type: :controller do
         "HTTP_APP" => app.key
       )
 
-      OriginValidator.any_instance
-                     .stub(:is_valid?)
-                     .and_return(true)
+      allow_any_instance_of(OriginValidator).to receive(:is_valid?)
+        .and_return(true)
     end
 
     it "auth encrypted will create registered user" do
@@ -101,7 +100,7 @@ RSpec.describe Api::GraphqlController, type: :controller do
     end
 
     it "visit without geo code" do
-      Geocoder.stub(:search).and_return([])
+      allow(Geocoder).to receive(:search).and_return([])
 
       graphql_post(@graphql_client.data_for(type: "AUTH", variables: {}))
       graphql_post(@graphql_client.data_for(type: "PING", variables: {}))
@@ -123,9 +122,8 @@ RSpec.describe Api::GraphqlController, type: :controller do
         "HTTP_APP" => app.key
       )
 
-      OriginValidator.any_instance
-                     .stub(:host)
-                     .and_return("http://other.domain")
+      allow_any_instance_of(OriginValidator).to receive(:host)
+        .and_return("http://other.domain")
     end
 
     it "will return 422" do
@@ -142,9 +140,8 @@ RSpec.describe Api::GraphqlController, type: :controller do
   end
 
   it "sessionless will create Lead" do
-    OriginValidator.any_instance
-                   .stub(:is_valid?)
-                   .and_return(true)
+    allow_any_instance_of(OriginValidator).to receive(:is_valid?)
+      .and_return(true)
 
     request.headers.merge!(
       "HTTP_APP" => app.key
@@ -163,9 +160,8 @@ RSpec.describe Api::GraphqlController, type: :controller do
 
       expect(app.app_users.count).to be == 1
 
-      OriginValidator.any_instance
-                     .stub(:host)
-                     .and_return("http://localhost:3000")
+      allow_any_instance_of(OriginValidator).to receive(:host)
+        .and_return("http://localhost:3000")
 
       request.headers.merge!(
         "HTTP_APP" => app.key,
@@ -201,9 +197,8 @@ RSpec.describe Api::GraphqlController, type: :controller do
 
       expect(app.app_users.count).to be == 1
 
-      OriginValidator.any_instance
-                     .stub(:host)
-                     .and_return("http://localhost:3000")
+      allow_any_instance_of(OriginValidator).to receive(:host)
+        .and_return("http://localhost:3000")
 
       request.headers.merge!(
         "HTTP_APP" => app.key,

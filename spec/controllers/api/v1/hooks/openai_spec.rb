@@ -48,20 +48,17 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
     end
 
     it "triggers on conversation first user message" do
-      AppUser.any_instance
-             .stub(:last_visited_at)
-             .and_return(Time.zone.now)
+      allow_any_instance_of(AppUser).to receive(:last_visited_at)
+        .and_return(Time.zone.now)
 
-      AppUser.any_instance
-             .stub(:last_visited_at)
-             .and_return(Time.zone.now)
+      allow_any_instance_of(AppUser).to receive(:last_visited_at)
+        .and_return(Time.zone.now)
 
-      AppUser.any_instance
-             .stub(:last_visited_at)
-             .and_return(Time.zone.now)
+      allow_any_instance_of(AppUser).to receive(:last_visited_at)
+        .and_return(Time.zone.now)
 
-      ConversationPartContent.any_instance.stub(:serialized_content)
-                             .and_return(serialized)
+      allow_any_instance_of(ConversationPartContent).to receive(:serialized_content)
+        .and_return(serialized)
 
       perform_enqueued_jobs do
         conversation
@@ -80,9 +77,8 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
       conversation
 
-      AppPackageIntegration.any_instance
-                           .stub(:handle_registration)
-                           .and_return({})
+      allow_any_instance_of(AppPackageIntegration).to receive(:handle_registration)
+        .and_return({})
 
       # @pkg = app.app_package_integrations.create(
       #  api_secret: "aaa"

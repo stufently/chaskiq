@@ -14,7 +14,7 @@ describe('Task bot Spec', function () {
   beforeEach(() => {
     cy.appEval('ActiveJob::Base.queue_adapter = :test')
     cy.appEval('ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = true')
-    cy.appEval('Redis.current.del("app_user:1:trigger_locked")')
+    cy.appEval('Redis::Objects.redis.with { |r| r.del("app_user:1:trigger_locked") }')
     cy.appEval(`
       require 'app_packages_catalog'
       AppPackagesCatalog.update_all 

@@ -369,13 +369,11 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       ActiveJob::Base.queue_adapter = :test
       ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = false
 
-      AppPackageIntegration.any_instance
-                           .stub(:handle_registration)
-                           .and_return({})
+      allow_any_instance_of(AppPackageIntegration).to receive(:handle_registration)
+        .and_return({})
 
-      MessageApis::Twitter::Api.any_instance
-                               .stub(:handle_direct_upload)
-                               .and_return({ url: "foobar" })
+      allow_any_instance_of(MessageApis::Twitter::Api).to receive(:handle_direct_upload)
+        .and_return({ url: "foobar" })
 
       @pkg = app.app_package_integrations.create(
         api_secret: "aaa",
@@ -417,9 +415,8 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
       event = '{"event":{"type":"message_create","id":"1226014113735880708","created_timestamp":"1581139517612","message_create":{"target":{"recipient_id":"1140620289006551040"},"sender_id":"7472512","message_data":{"text":"oopkpko","entities":{"hashtags":[],"symbols":[],"user_mentions":[],"urls":[]}}}}}'
 
-      MessageApis::Twitter::Api.any_instance
-                               .stub(:make_post_request)
-                               .and_return(event)
+      allow_any_instance_of(MessageApis::Twitter::Api).to receive(:make_post_request)
+        .and_return(event)
 
       perform_enqueued_jobs do
         message = app.conversations.last.add_message(
@@ -581,7 +578,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
         }
       }
 
-      # MessageApis::Twitter::Api.any_instance.stub(:upload_media).and_return({boomer: "1"})
+      # allow_any_instance_of(MessageApis::Twitter::Api).to receive(:upload_media).and_return({boomer: "1"})
 
       # expect_any_instance_of(MessageApis::Twitter).to receive(:make_post_request).with(any_args)
 
