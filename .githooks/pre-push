@@ -8,6 +8,21 @@
 # is exactly the commit being pushed: every pushed ref must point at HEAD and
 # there must be no tracked changes (staged or not). Otherwise it refuses.
 # Deleted refs and tags are skipped; if nothing is left, the push goes through.
+#
+# git opens the connection to the remote BEFORE this hook runs. Over SSH,
+# GitHub closes an idle push connection after a few minutes (measured
+# 2026-11-19: 360 s idle went through, 480 s was cut), and git then dies of
+# SIGPIPE (exit 141) WITHOUT any error message: the push silently does not
+# happen. SSH keepalives prevent it (840 s went through with
+# ServerAliveInterval=30). So:
+# - if bin/ci-local already passed for HEAD (it records passed jobs per commit
+#   in tmp/ci-local/passed), the hook does not re-run it;
+# - over SSH without keepalives (enable them once per clone:
+#   git config core.sshCommand "ssh -o ServerAliveInterval=30"), a bin/ci-local
+#   run longer than CHASKIQ_PUSH_IDLE_LIMIT seconds (default 300) aborts the
+#   push even when green, so it fails loudly instead of being lost. Push
+#   again: the recorded result makes it instant.
+# HTTPS remotes are not affected (the pack goes in a new request).
 set -euo pipefail
 if [ "${CHASKIQ_SKIP_CI_LOCAL:-}" = 1 ]; then
   echo "pre-push: bin/ci-local skipped (CHASKIQ_SKIP_CI_LOCAL=1)" >&2
@@ -39,5 +54,46 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
 fi
 
 root=$(git rev-parse --show-toplevel)
+stamps="$root/tmp/ci-local/passed"
+need="rubocop rspec"
+case " ${CI_LOCAL_ARGS:-} " in *" --docker "*) need="$need docker" ;; esac
+missing=""
+for j in $need; do
+  grep -qxF "$head $j" "$stamps" 2>/dev/null || missing="$missing $j"
+done
+if [ -z "$missing" ]; then
+  echo "pre-push: bin/ci-local already passed for ${head:0:12} ($need), not re-running." >&2
+  exit 0
+fi
+
+# Is the connection git already opened safe to leave idle for a long run?
+remote_url=${2:-}
+keepalive=""
+case "$remote_url" in
+  http://*|https://*|file://*|/*|.*) keepalive=yes ;;
+  *)
+    ssh_cmd=${GIT_SSH_COMMAND:-$(git config --get core.sshCommand || :)}
+    if printf '%s' "$ssh_cmd" | grep -qiE 'ServerAliveInterval[= ]+[1-9]'; then
+      keepalive=yes
+    else
+      host=${remote_url#ssh://}; host=${host%%[:/]*}; host=${host#*@}
+      interval=$(ssh -G "$host" 2>/dev/null | awk '$1 == "serveraliveinterval" { print $2 }' || :)
+      if [ "${interval:-0}" -gt 0 ] 2>/dev/null && [ "$interval" -lt 300 ]; then keepalive=yes; fi
+    fi
+    ;;
+esac
+
+limit=${CHASKIQ_PUSH_IDLE_LIMIT:-300}
+start=$(date +%s)
 # shellcheck disable=SC2086
-exec "$root/bin/ci-local" ${CI_LOCAL_ARGS:-} </dev/null
+"$root/bin/ci-local" ${CI_LOCAL_ARGS:-} </dev/null
+elapsed=$(( $(date +%s) - start ))
+if [ -z "$keepalive" ] && [ "$elapsed" -gt "$limit" ]; then
+  echo >&2
+  echo "pre-push: bin/ci-local PASSED, but took ${elapsed}s (> ${limit}s) while the SSH push connection sat" >&2
+  echo "pre-push: idle without keepalives. GitHub drops it after a few minutes and git then exits silently," >&2
+  echo "pre-push: so this push is ABORTED on purpose. The result is recorded for ${head:0:12}:" >&2
+  echo "pre-push: run the same git push again, it goes through at once. To avoid this for good:" >&2
+  echo "pre-push:   git config core.sshCommand \"ssh -o ServerAliveInterval=30\"" >&2
+  exit 1
+fi
