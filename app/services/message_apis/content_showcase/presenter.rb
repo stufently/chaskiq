@@ -302,6 +302,8 @@ module MessageApis::ContentShowcase
         return if (!valid? && errors[:page_url].present?) || page_url.blank?
 
         res = FetchLinkCardService.new.call(page_url)
+        return unless res
+
         self.title = res.title
         self.cover_image = res.images.first[:url] if res.images.any?
         self.description = res.description

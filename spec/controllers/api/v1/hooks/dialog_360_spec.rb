@@ -1,4 +1,5 @@
 require "rails_helper"
+require "webmock"
 include ActiveJob::TestHelper
 
 RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
@@ -231,6 +232,73 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
     AppPackage.find_by(name: "Dialog360")
   end
 
+  describe "Dialog360 outgoing messages" do
+    include WebMock::API
+
+    around do |example|
+      WebMock.enable!
+      example.run
+    ensure
+      WebMock.reset!
+      WebMock.disable!
+    end
+
+    let(:api) { MessageApis::Dialog360::Api.new(config: { "api_key" => "test-key", "user_id" => owner_phone }) }
+    let(:recipient) { app.add_user(email: "recipient@example.com") }
+    let(:conversation) { app.conversations.create!(main_participant: recipient) }
+    let(:requests) { [] }
+
+    before do
+      recipient.external_profiles.create!(provider: "dialog_360", profile_id: user_phone)
+      allow(Chaskiq::Config).to receive(:get).and_call_original
+      allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://chat.example.com")
+
+      stub_request(:post, "https://waba.360dialog.io/v1/messages").to_return do |request|
+        requests << JSON.parse(request.body)
+        { status: 201, body: { messages: [{ id: "wamid.#{requests.size}" }] }.to_json }
+      end
+    end
+
+    def deliver_dialog_media(text, media)
+      nodes = [{ type: "text", text: text }]
+      media.each { |type, url| nodes << { type: type, attrs: { url: url } } }
+      content = { type: "doc", content: nodes }.to_json
+      part = conversation.messages.build(
+        authorable: agent_role.agent,
+        messageable: ConversationPartContent.new(serialized_content: content)
+      )
+      api.send_message(conversation, part)
+    end
+
+    it "sends every attachment in order with the caption on the first eligible request" do
+      result = deliver_dialog_media("Here are the files", [
+        ["AudioRecorderBlock", "/uploads/voice.ogg"],
+        ["ImageBlock", "/uploads/first image.png"],
+        ["VideoBlock", "https://cdn.example.com/video.mp4"],
+        ["FileBlock", "/uploads/file.pdf"]
+      ])
+
+      expect(requests.map { |request| request["type"] }).to eq(%w[audio image video document])
+      expect(requests.map { |request| request.fetch(request.fetch("type")) }).to eq([
+        { "link" => "https://chat.example.com/uploads/voice.ogg" },
+        { "link" => "https://chat.example.com/uploads/first%20image.png", "caption" => "Here are the files" },
+        { "link" => "https://cdn.example.com/video.mp4" },
+        { "link" => "https://chat.example.com/uploads/file.pdf" }
+      ])
+      expect(requests.map { |request| request["to"] }.uniq).to eq([user_phone])
+      expect(JSON.parse(result.body)).to eq("messages" => [{ "id" => "wamid.1" }])
+    end
+
+    it "sends audio without a caption and posts the text separately" do
+      deliver_dialog_media("Listen to this", [["AudioRecorderBlock", "/uploads/voice.ogg"]])
+
+      expect(requests.map { |request| request.slice("type", "audio", "text") }).to eq([
+        { "type" => "audio", "audio" => { "link" => "https://chat.example.com/uploads/voice.ogg" } },
+        { "type" => "text", "text" => { "body" => "Listen to this" } }
+      ])
+    end
+  end
+
   describe "hooks" do
     before do
       AppPackagesCatalog.update_all
@@ -393,6 +461,16 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       blocks = MessageApis::BlockManager.get_blocks(message.serialized_content)
 
       expect(blocks.size).to be == 4
+    end
+
+    it "acknowledges status callbacks for an unknown attachment ID" do
+      params = data_for_errors(id: @pkg.encoded_id, sender: user_phone, message_id: "wamid.untracked")
+      params[:statuses] << { id: "wamid.untracked", status: "read" }
+
+      perform_enqueued_jobs { post :process_event, params: params }
+
+      expect(response).to have_http_status(:ok)
+      expect(app.conversations).to be_empty
     end
 
     it "create message with error" do

@@ -1,6 +1,44 @@
 require "rails_helper"
 
 RSpec.describe MessageApis::BlockManager do
+  describe ".deliver_attachments" do
+    let(:audio) { { "type" => "AudioRecorderBlock", "attrs" => { "url" => "https://cdn.example.com/voice.ogg" } } }
+    let(:image) { { "type" => "ImageBlock", "attrs" => { "url" => "https://cdn.example.com/image.png" } } }
+    let(:file) { { "type" => "FileBlock", "attrs" => { "url" => "https://cdn.example.com/file.pdf" } } }
+    let(:sent_texts) { [] }
+    let(:send_text) { ->(text) { sent_texts << text } }
+    let(:success) { double("successful response", success?: true) }
+    let(:failure) { double("failed response", success?: false) }
+
+    it "sends a separate caption after a captionless success and returns the media response" do
+      captions = []
+      result = described_class.deliver_attachments(
+        [audio], "voice", send_text: send_text, captionless: %w[AudioRecorderBlock]
+      ) do |_type, _url, caption|
+        captions << caption
+        success
+      end
+
+      expect(captions).to eq([nil])
+      expect(sent_texts).to eq(["voice"])
+      expect(result).to equal(success)
+    end
+
+    it "keeps the caption until a caption-capable attachment succeeds after a captionless success" do
+      captions = []
+      result = described_class.deliver_attachments(
+        [audio, image, file, image], "files", send_text: send_text, captionless: %w[AudioRecorderBlock]
+      ) do |type, _url, caption|
+        captions << caption
+        type == "ImageBlock" ? failure : success
+      end
+
+      expect(captions).to eq([nil, "files", "files", nil])
+      expect(sent_texts).to be_empty
+      expect(result).to equal(success)
+    end
+  end
+
   describe ".get_blocks" do
     it "reads Dante nodes from the legacy blocks wrapper" do
       nodes = [{ "type" => "text", "text" => "hello" }]

@@ -36,10 +36,11 @@ class MessageApis::BlockManager
     blocks.grep(Hash).select { |block| MEDIA_BLOCK_TYPES.include?(block["type"]) }
   end
 
-  def self.deliver_attachments(attachments, plain_text, send_text:)
+  def self.deliver_attachments(attachments, plain_text, send_text:, captionless: [])
     first_success = nil
     last_response = nil
     caption = plain_text.presence
+    omit_caption = captionless.respond_to?(:call) ? captionless : ->(type, _url) { captionless.include?(type) }
 
     attachments.each do |media|
       attrs = block_data(media)
@@ -48,14 +49,20 @@ class MessageApis::BlockManager
       url = absolute_url(attrs["url"])
       next unless url
 
-      last_response = yield(media["type"], url, caption)
+      type = media["type"]
+      media_caption = omit_caption.call(type, url) ? nil : caption
+      last_response = yield(type, url, media_caption)
       if last_response.success?
         first_success ||= last_response
-        caption = nil
+        caption = nil if media_caption
       end
     end
 
-    return first_success if first_success
+    if first_success
+      send_text.call(caption) if caption
+      return first_success
+    end
+
     return send_text.call(plain_text) if plain_text.present?
 
     last_response
