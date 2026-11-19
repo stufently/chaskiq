@@ -1,0 +1,219 @@
+{
+  "ruby_version": "3.3.14",
+  "gem_version": "1.2",
+  "source_sha256": "5e3bf32841c6a0f3e3d60b164fa35535de68838735580ebe4cac38a6419a09ca",
+  "vectors": [
+    {
+      "name": "nested objects and arrays",
+      "input": {
+        "profile": {
+          "name": "Chaskiq",
+          "numbers": [
+            1,
+            -2,
+            3.25
+          ],
+          "flags": [
+            true,
+            false,
+            null
+          ]
+        },
+        "entries": [
+          {
+            "id": 7
+          },
+          {
+            "id": 8,
+            "empty": []
+          }
+        ],
+        "empty map": {}
+      },
+      "serialized_base64": "YTozOntzOjc6InByb2ZpbGUiO2E6Mzp7czo0OiJuYW1lIjtzOjc6IkNoYXNraXEiO3M6NzoibnVtYmVycyI7YTozOntpOjA7aToxO2k6MTtpOi0yO2k6MjtkOjMuMjU7fXM6NToiZmxhZ3MiO2E6Mzp7aTowO2I6MTtpOjE7YjowO2k6MjtOO319czo3OiJlbnRyaWVzIjthOjI6e2k6MDthOjE6e3M6MjoiaWQiO2k6Nzt9aToxO2E6Mjp7czoyOiJpZCI7aTo4O3M6NToiZW1wdHkiO2E6MDp7fX19czo5OiJlbXB0eSBtYXAiO2E6MDp7fX0=",
+      "decoded": {
+        "profile": {
+          "name": "Chaskiq",
+          "numbers": [
+            1,
+            -2,
+            3.25
+          ],
+          "flags": [
+            true,
+            false,
+            null
+          ]
+        },
+        "entries": [
+          {
+            "id": 7
+          },
+          {
+            "id": 8,
+            "empty": []
+          }
+        ],
+        "empty map": []
+      },
+      "decoded_assoc": [
+        [
+          "profile",
+          [
+            [
+              "name",
+              "Chaskiq"
+            ],
+            [
+              "numbers",
+              [
+                1,
+                -2,
+                3.25
+              ]
+            ],
+            [
+              "flags",
+              [
+                true,
+                false,
+                null
+              ]
+            ]
+          ]
+        ],
+        [
+          "entries",
+          [
+            [
+              [
+                "id",
+                7
+              ]
+            ],
+            [
+              [
+                "id",
+                8
+              ],
+              [
+                "empty",
+                []
+              ]
+            ]
+          ]
+        ],
+        [
+          "empty map",
+          []
+        ]
+      ]
+    },
+    {
+      "name": "Paddle ordered fields",
+      "input": [
+        [
+          "currency",
+          "EUR"
+        ],
+        [
+          "email",
+          "agent@example.com"
+        ],
+        [
+          "price",
+          "7.50"
+        ]
+      ],
+      "serialized_base64": "YTozOntzOjg6ImN1cnJlbmN5IjtzOjM6IkVVUiI7czo1OiJlbWFpbCI7czoxNzoiYWdlbnRAZXhhbXBsZS5jb20iO3M6NToicHJpY2UiO3M6NDoiNy41MCI7fQ==",
+      "decoded": {
+        "currency": "EUR",
+        "email": "agent@example.com",
+        "price": "7.50"
+      },
+      "decoded_assoc": [
+        [
+          "currency",
+          "EUR"
+        ],
+        [
+          "email",
+          "agent@example.com"
+        ],
+        [
+          "price",
+          "7.50"
+        ]
+      ]
+    },
+    {
+      "name": "multibyte UTF-8",
+      "input": {
+        "Привет": "café — 漢字 — 💬",
+        "combining": "é",
+        "quotes": "a\"b\nc"
+      },
+      "serialized_base64": "YTozOntzOjEyOiLQn9GA0LjQstC10YIiO3M6MjU6ImNhZsOpIOKAlCDmvKLlrZcg4oCUIPCfkqwiO3M6OToiY29tYmluaW5nIjtzOjM6ImXMgSI7czo2OiJxdW90ZXMiO3M6NToiYSJiCmMiO30=",
+      "decoded": {
+        "Привет": "café — 漢字 — 💬",
+        "combining": "é",
+        "quotes": "a\"b\nc"
+      },
+      "decoded_assoc": [
+        [
+          "Привет",
+          "café — 漢字 — 💬"
+        ],
+        [
+          "combining",
+          "é"
+        ],
+        [
+          "quotes",
+          "a\"b\nc"
+        ]
+      ]
+    },
+    {
+      "name": "floating point",
+      "input": [
+        -0.0,
+        -12.345,
+        1.25e-12,
+        123.5
+      ],
+      "serialized_base64": "YTo0OntpOjA7ZDotMC4wO2k6MTtkOi0xMi4zNDU7aToyO2Q6MS4yNWUtMTI7aTozO2Q6MTIzLjU7fQ==",
+      "decoded": [
+        -0.0,
+        -12.345,
+        1.25e-12,
+        123.5
+      ],
+      "decoded_assoc": [
+        -0.0,
+        -12.345,
+        1.25e-12,
+        123.5
+      ]
+    },
+    {
+      "name": "null and booleans",
+      "input": [
+        null,
+        true,
+        false
+      ],
+      "serialized_base64": "YTozOntpOjA7TjtpOjE7YjoxO2k6MjtiOjA7fQ==",
+      "decoded": [
+        null,
+        true,
+        false
+      ],
+      "decoded_assoc": [
+        null,
+        true,
+        false
+      ]
+    }
+  ]
+}

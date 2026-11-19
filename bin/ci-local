@@ -29,8 +29,8 @@ REDIS_IMAGE=redis:8.10-alpine
 # The runners' OS (ubuntu-latest) and the ruby/setup-ruby build of
 # .ruby-version for it: https://github.com/ruby/ruby-builder/releases
 RUNNER_OS=ubuntu-26.04
-RUBY_BUILDER_VERSION=3.3.14
-RUBY_BUILDER_SHA256=dc801dd9014d637602dd2047ae024ee980d357834935e6db823487cd188e2cca
+RUBY_BUILDER_VERSION=4.0.10
+RUBY_BUILDER_SHA256=d08c941aa89ddf5aa6bf2228daa8de21af25bab8b68a6e9f24f933b1d4c6d7d7
 # Keep in sync with the env of .github/workflows/ruby.yml and rubocop-analysis.yml
 SCOUT_APM_BUILD_FLAGS="--with-cflags=-std=gnu17"
 TEST_IMAGE="chaskiq-ci-local:ruby-$RUBY_VERSION-$RUNNER_OS"
@@ -174,7 +174,7 @@ run_docker() {
     --build-arg PG_MAJOR=15 \
     --build-arg NODE_MAJOR=26 \
     --build-arg YARN_VERSION=1.13.0 \
-    --build-arg BUNDLER_VERSION=2.4.10 \
+    --build-arg BUNDLER_VERSION=4.0.20 \
     -t chaskiq-ci-local:prod .
 }
 
