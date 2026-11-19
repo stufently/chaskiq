@@ -114,10 +114,9 @@ module MessageApis::Telegram
 
       media = blocks.find { |block| %w[ImageBlock VideoBlock FileBlock AudioRecorderBlock].include?(block["type"]) }
       if media
-        url = MessageApis::BlockManager.block_data(media)&.fetch("url", nil)
-        return if url.blank?
-
-        url = URI.join(Chaskiq::Config.get("HOST"), url).to_s unless url.match?(%r{\Ahttps?://}i)
+        media_url = MessageApis::BlockManager.block_data(media)&.fetch("url", nil)
+        url = MessageApis::BlockManager.absolute_url(media_url)
+        return unless url
       end
 
       case media&.fetch("type")

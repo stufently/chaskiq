@@ -653,8 +653,15 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       assert_requested(stub)
     end
 
+    it "escapes control characters in an outgoing mrkdwn section" do
+      stub = expect_delivery("a &lt; b &amp; c &gt; d")
+      doc = { type: "doc", content: [{ type: "text", text: "a < b & c > d" }] }
+      deliver(serialized_content: doc.to_json)
+      assert_requested(stub)
+    end
+
     it "sends HTML-only content as plain text" do
-      stub = expect_delivery("Hello & goodbye")
+      stub = expect_delivery("Hello &amp; goodbye")
       deliver(html_content: "<p><b>Hello</b> &amp; goodbye</p>")
       assert_requested(stub)
     end

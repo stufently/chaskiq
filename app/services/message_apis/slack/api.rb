@@ -988,10 +988,9 @@ module MessageApis::Slack
       when "DividerBlock"
         { type: "divider" }
       when "ImageBlock", "FileBlock", "VideoBlock", "AudioRecorderBlock"
-        url = MessageApis::BlockManager.block_data(block)&.fetch("url", nil)
-        return if url.blank?
-
-        url = URI.join(Chaskiq::Config.get("HOST"), url).to_s unless url.match?(%r{\Ahttps?://}i)
+        media_url = MessageApis::BlockManager.block_data(block)&.fetch("url", nil)
+        url = MessageApis::BlockManager.absolute_url(media_url)
+        return unless url
         if block["type"] == "ImageBlock"
           { type: "image", image_url: url, alt_text: "Image" }
         else
@@ -999,9 +998,14 @@ module MessageApis::Slack
         end
       else
         text = MessageApis::BlockManager.plain_text([block])
-        { type: "section", text: { type: "mrkdwn", text: text } } if text.present?
+        { type: "section", text: { type: "mrkdwn", text: escape_mrkdwn(text) } } if text.present?
       end
     end
+
+    def escape_mrkdwn(text)
+      text.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
+    end
+    private :escape_mrkdwn
 
     def post_data(url, data)
       @conn.post do |req|
