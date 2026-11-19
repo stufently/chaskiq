@@ -49,4 +49,44 @@ RSpec.describe ConversationPartChannelSource, type: :model do
   ensure
     adapter.throw_away! if adapter&.active?
   end
+
+  it "warns and returns the block result if the session already lost its lock" do
+    allow(Rails.logger).to receive(:warn)
+    result = described_class.with_delivery_lock(part.id, "twilio") do
+      described_class.with_connection { |connection| connection.execute("SELECT pg_advisory_unlock_all()") }
+      :delivered
+    end
+
+    expect(result).to eq(:delivered)
+    expect(Rails.logger).to have_received(:warn).with(/advisory lock was lost/)
+  end
+
+  it "times out a contended status event lock and lets a retry succeed" do
+    conversation_id = conversation.id
+    event = { provider: "dialog_360", message_source_id: "wamid.1", action: "errored: delivery failed" }
+    locked = Queue.new
+    release = Queue.new
+    owner = Thread.new do
+      described_class.with_status_event_lock(conversation_id, event) do
+        locked << true
+        release.pop
+      end
+    end
+
+    Timeout.timeout(8) do
+      locked.pop
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      expect do
+        described_class.with_status_event_lock(conversation_id, event) { raise "another session holds this lock" }
+      end.to raise_error(/timed out acquiring status event advisory lock/i)
+      expect(Process.clock_gettime(Process::CLOCK_MONOTONIC) - started).to be >= 5
+    end
+
+    release << true
+    owner.value
+    expect(described_class.with_status_event_lock(conversation_id, event) { :acquired }).to eq(:acquired)
+  ensure
+    release << true if owner&.alive?
+    owner&.join(5)
+  end
 end

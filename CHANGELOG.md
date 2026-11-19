@@ -5,17 +5,20 @@
 Fixed
 - Attachment delivery records each accepted request by index and resumes from
   the remaining requests. The delivery index is created concurrently on
-  PostgreSQL.
+  PostgreSQL. A rerun rebuilds an invalid index left by a failed build.
 - Status callbacks ignore blank provider IDs. Error events are deduplicated by
-  a session advisory lock and committed before notifications are queued.
+  a session advisory lock and committed before notifications are queued. Lock
+  contention lasting five seconds raises an error for Sidekiq to retry.
 - Delivery closes the PostgreSQL session when unlocking fails. Failure hooks
   report every failed request and raise the first hook error if delivery did
-  not already raise.
+  not already raise. A lost advisory lock is logged when unlock returns false.
 
 Known issues
 - Delivery is at least once. If the provider accepts an attachment or separate
   text request before Chaskiq records its delivery index, a retry can send
   that request again.
+- If notification fan-out fails after a status event is saved, deduplication
+  skips the replay and the notification remains unsent.
 
 ## 2026-11-19 — CI parity
 

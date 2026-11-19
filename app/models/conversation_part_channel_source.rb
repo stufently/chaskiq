@@ -3,6 +3,12 @@ require "digest"
 class ConversationPartChannelSource < ApplicationRecord
   belongs_to :conversation_part
 
+  class StatusEventLockTimeout < StandardError; end
+
+  STATUS_LOCK_TIMEOUT = 5
+  STATUS_LOCK_RETRY_INTERVAL = 0.05
+  private_constant :STATUS_LOCK_TIMEOUT, :STATUS_LOCK_RETRY_INTERVAL
+
   def self.with_delivery_lock(part_id, provider, &)
     with_session_lock(["conversation_part_delivery", part_id, provider], wait: false, &)
   end
@@ -29,14 +35,30 @@ class ConversationPartChannelSource < ApplicationRecord
   end
 
   def self.acquire_session_lock(connection, key, wait)
-    return connection.select_value("SELECT pg_try_advisory_lock(#{key})") unless wait
+    sql = "SELECT pg_try_advisory_lock(#{key})"
+    return connection.select_value(sql) unless wait
 
-    connection.execute("SELECT pg_advisory_lock(#{key})")
-    true
+    acquire_status_lock(connection, sql)
+  end
+
+  def self.acquire_status_lock(connection, sql)
+    deadline = monotonic_time + STATUS_LOCK_TIMEOUT
+    while monotonic_time < deadline
+      return true if connection.select_value(sql)
+
+      remaining = deadline - monotonic_time
+      sleep([STATUS_LOCK_RETRY_INTERVAL, remaining].min) if remaining.positive?
+    end
+    raise StatusEventLockTimeout, "Timed out acquiring status event advisory lock"
+  end
+
+  def self.monotonic_time
+    Process.clock_gettime(Process::CLOCK_MONOTONIC)
   end
 
   def self.release_session_lock(connection, key, completed)
-    connection.select_value("SELECT pg_advisory_unlock(#{key})")
+    released = connection.select_value("SELECT pg_advisory_unlock(#{key})")
+    Rails.logger.warn("Session advisory lock was lost before unlock") if released == false
   rescue StandardError => e
     # Closing an aborted PostgreSQL session releases its advisory locks.
     connection.throw_away!
@@ -45,5 +67,6 @@ class ConversationPartChannelSource < ApplicationRecord
     Rails.logger.error("Session advisory unlock failed with #{e.class}")
   end
 
-  private_class_method :with_session_lock, :hold_session_lock, :acquire_session_lock, :release_session_lock
+  private_class_method :with_session_lock, :hold_session_lock, :acquire_session_lock,
+                       :acquire_status_lock, :monotonic_time, :release_session_lock
 end
