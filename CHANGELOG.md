@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m7
+
+Fixed
+- Twilio and Dialog360 now send every attachment, one request each. The caption
+  goes only where the provider shows it: Twilio jpeg/png images, never audio.
+  Any other text is sent as its own message.
+- Twilio and Dialog360 status callbacks for an unknown attachment SID no longer
+  crash.
+- The oEmbed endpoint and Content Showcase autofill no longer return 500 when a
+  page has no preview.
+
+Security
+- The remaining server-side URL fetches now go through `SafeDownload`:
+  - SNS `SubscribeURL` is fetched only for https on port 443 at
+    `sns.<region>.amazonaws.com`, with no redirects;
+  - link cards are one GET of at most 2 MB that honours the charset and
+    verifies TLS (it used to be `VERIFY_NONE`);
+  - `og:image` and oEmbed thumbnails;
+  - `CreateUrlUpload`, limited to 100 MB.
+- oEmbed asks only registered providers. Discovery of endpoints from page HTML
+  is off.
+
+Known issues
+- In a multi-attachment send, a failure after the first successful request is
+  not reported back. Each message part stores one provider id.
+
 ## 2026-11-19 — CI repair, local CI
 
 Fixed
@@ -59,9 +85,9 @@ Security
 Known issues
 - Vonage read receipts link only the first attachment of a multi-attachment
   message: a message part stores one external id.
-- Twilio and Dialog360 still send only the first attachment. Server-side URL
-  fetches outside relaying (hooks_controller, link cards, URL uploads,
-  campaigns) do not use SafeDownload yet.
+- (fixed in m7) Twilio/Dialog360 attachments, SafeDownload outside relaying.
+  `Campaign#clean_inline_css` still fetches the app's own premailer URL directly:
+  the app builds that URL itself.
 
 ## 2026-11-19 — fork-updates-m4
 
