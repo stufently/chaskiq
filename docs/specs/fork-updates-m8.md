@@ -250,8 +250,9 @@ REVIEW_EXCLUDE: docs/specs/fork-updates-m8-probes/**
 - **Откат после выката необратим по форматам:** записи кэша 7.1 и новые JSON-токены
   `message_verifier`/AR signed id, выданные после апгрейда, не читаются при `load_defaults 7.0`.
   Сессии агентов (`cookies_serializer :json`) и токены `CHASKIQ_*` (Marshal) откат переживают.
-  Откатывать — только вместе с очисткой кэша (`Rails.cache.clear`) и с принятием того, что
-  ссылки, выданные после апгрейда, перестанут работать.
+  Откат — с принятием того, что ссылки, выданные после апгрейда, перестанут работать.
+  `Rails.cache.clear` НЕ делать: Redis общий с Sidekiq и Rack::Attack (FLUSHDB), а кэш
+  Rails 8.1 читает при обоих defaults (поправка по ревью Codex).
 - YJIT включается в production/staging (Rails 8.1 default): +память на процесс puma/sidekiq;
   при жёстком лимите памяти контейнера — следить за RSS после выката.
 - Остальное вне вехи: rack 3, Ruby 3.4, продовый `Dockerfile` на bookworm/trixie, деприкейшены

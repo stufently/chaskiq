@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m8
+
+Changed
+- `config.load_defaults 8.1` (was 7.0) with every 7.1–8.1 default on; the empty
+  `new_framework_defaults_6_0/7_0` initializers are gone. Old sessions,
+  remember-cookies, message-verifier and `CHASKIQ_*` tokens and cache entries keep
+  working (checked by the m8 compat probe). YJIT is on in production/staging:
+  watch puma/sidekiq RSS after the deploy.
+
+Fixed
+- Inbound email with deeply nested markup no longer stores an empty message: the
+  HTML5 sanitizer (new default) raises on >400 levels, so it falls back to the
+  HTML4 one, and if serialization still fails the reply is kept as text.
+
+Known issues
+- Rolling back to `load_defaults 7.0` is one-way for links and signed ids issued
+  after the upgrade (JSON message serializer). Do not run `Rails.cache.clear` on
+  rollback: Redis is shared with Sidekiq and Rack::Attack, and Rails 8.1 reads the
+  cache under both defaults.
+
 ## 2026-11-19 — fork-updates-m7
 
 Fixed
