@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 require 'URLcrypt'
 require_relative 'middleware/maintenance_mode'
 
-Dotenv::Railtie.load if defined?(Dotenv::Railtie)
+Dotenv::Rails.load if defined?(Dotenv::Rails)
 
 module Chaskiq
 
