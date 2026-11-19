@@ -123,7 +123,7 @@ gem "timezone", "~> 1.2"
 gem "bugsnag" # , '~> 6.11'
 # gem "email_reply_parser", "~> 0.5.9"
 gem "email_reply_trimmer"
-gem "rack", "~> 2.2", ">= 2.2.25"
+gem "rack", "~> 3.2", ">= 3.2.8"
 gem "rack-attack", "~> 6.8"
 gem "rack-cors", "~> 2.0", ">= 2.0.0"
 
