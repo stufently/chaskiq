@@ -1,5 +1,29 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m10
+
+Security
+- Every SNS message (Notification, SubscriptionConfirmation,
+  UnsubscribeConfirmation) is verified before anything is done with it:
+  SignatureVersion 1 and 2, the exact AWS field lists, and a signing
+  certificate fetched only from `https://sns.<region>.amazonaws.com(.cn)`
+  (TLS-verified, at most 64 KB, 5 s, no redirects), checked for its validity
+  period and cached only after a good signature. An invalid message gets 403.
+  A certificate that cannot be fetched gets 503 so SNS retries.
+- New `SNS_ALLOWED_TOPIC_ARNS` (comma-separated). When it is set, only those
+  topics are accepted. When it is empty, existing subscriptions keep working
+  (with a warning in the log) but new subscriptions are not confirmed: set it
+  before subscribing a topic.
+- A failed `SubscribeURL` confirmation returns 503 instead of 200, so SNS
+  retries it.
+- A repeated delivery of the same SNS `MessageId` is processed once (Redis
+  key, 24 h).
+
+Known issues
+- SNS raw message delivery cannot be verified and is rejected; use the
+  standard JSON envelope. After deploying, check the log that a real
+  subscription confirmation passed verification.
+
 ## 2026-11-19 — fork-updates-m13
 
 Changed

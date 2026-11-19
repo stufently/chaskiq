@@ -24,9 +24,12 @@ RSpec.describe "Rack request compatibility" do
 
   it "acknowledges SNS confirmation JSON without a content type" do
     url = "https://sns.us-east-1.amazonaws.com/confirmation"
-    allow(MessageApis::SafeDownload).to receive(:fetch).with(url, max_redirects: 0)
+    message = { "Type" => "SubscriptionConfirmation", "SubscribeURL" => url }
+    # Signature checks are covered by the SNS verifier specs; this checks the body read on Rack 3.
+    allow(MessageApis::SnsMessageVerifier).to receive(:verify!).with(message).and_return(true)
+    allow(MessageApis::SafeDownload).to receive(:fetch).with(url, max_redirects: 0).and_return(StringIO.new("ok"))
 
-    response = client.post("/api/v1/hooks", input: { "SubscribeURL" => url }.to_json,
+    response = client.post("/api/v1/hooks", input: message.to_json,
                                             "HTTP_X_AMZ_SNS_MESSAGE_TYPE" => "SubscriptionConfirmation")
 
     expect(response.status).to eq(200)
