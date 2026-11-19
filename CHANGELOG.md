@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m5
+
+Fixed
+- Telegram, Vonage and MessageBird send every attachment, each as its own
+  request, in document order. The text is the caption of the first attachment
+  that sends. If no attachment sends, the text goes as a separate message.
+- MessageBird reads the message id from the documented top-level `id`.
+
+Security
+- Twitter media uploads use `MessageApis::SafeDownload` (stdlib, no new gems):
+  - only http(s) URLs;
+  - the request goes only to the address that passed the check (no DNS
+    rebinding) and ignores ENV proxies;
+  - private, loopback, link-local, CGNAT, multicast, Azure WireServer, NAT64,
+    6to4, Teredo and IPv4-mapped/compatible addresses are refused;
+  - every redirect is re-checked, at most 3;
+  - at most 15 MB and 30 s per download.
+  - The app's own HOST (same scheme and port) is allowed.
+
+Known issues
+- Vonage read receipts link only the first attachment of a multi-attachment
+  message: a message part stores one external id.
+- Twilio and Dialog360 still send only the first attachment. Server-side URL
+  fetches outside relaying (hooks_controller, link cards, URL uploads,
+  campaigns) do not use SafeDownload yet.
+
 ## 2026-11-19 — fork-updates-m4
 
 Fixed
