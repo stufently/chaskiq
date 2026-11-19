@@ -76,8 +76,9 @@ run_rubocop() {
   log "rubocop"
   # Same contract as rubocop-analysis.yml: offenses (exit 1) are reported, not fatal
   # (the tree has a known backlog); a RuboCop error/crash (exit 2+) fails the job.
+  in_ruby "$TEST_IMAGE" bundle install --quiet || { echo "bundle install failed" >&2; return 1; }
   local rc=0
-  in_ruby "$TEST_IMAGE" bash -c 'bundle install --quiet && bundle exec rubocop --format offenses --format progress --out tmp/rubocop.txt' || rc=$?
+  in_ruby "$TEST_IMAGE" bundle exec rubocop --format offenses --format progress --out tmp/rubocop.txt || rc=$?
   if [ "$rc" -le 1 ]; then
     echo "rubocop: exit $rc (offenses are not fatal, full list in tmp/rubocop.txt)"
     return 0

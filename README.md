@@ -109,7 +109,9 @@ bin/ci-local --docker             # + production image build (docker-image-ghcr.
 bin/ci-local --only rspec --rspec-args spec/models
 ```
 
-Enable the versioned pre-push hook once per clone; it runs `bin/ci-local` and blocks the push on failure:
+Enable the versioned pre-push hook once per clone; it runs `bin/ci-local` and blocks the push on failure.
+Since `bin/ci-local` tests the work tree, the hook refuses a push unless the pushed ref is `HEAD` and tracked
+files have no uncommitted changes (`CHASKIQ_SKIP_CI_LOCAL=1` skips it in an emergency):
 
 ```bash
 git config core.hooksPath .githooks

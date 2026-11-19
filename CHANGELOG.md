@@ -38,14 +38,20 @@ Fixed
 - Docker images: base `ruby:*-slim-bullseye` → `-slim-trixie` (bullseye
   security repo is gone, apt exited 100); PGDG/NodeSource/Yarn repos via
   `signed-by` keyrings instead of the removed `apt-key`; deps add libyaml-dev,
-  pkg-config. Asset precompile uses a throwaway SECRET_KEY_BASE without NUL
-  bytes (config/application.rb puts `[key].pack('H*')` into ENV).
+  pkg-config.
+- Docker images: Node 16 (EOL) → 22 LTS, pinned to NodeSource (trixie's own
+  nodejs 20 used to win over NODE_MAJOR); the build fails on a wrong major.
 - CI: postgres:14-alpine and redis:8.10-alpine services (as in compose), Node 26
   LTS for the spec JS deps, app store packages and E2E only with the upstream
   secrets; current action versions (codeql upload-sarif v4, anchore v7).
 - Rubocop workflow: the exit-code check was expanded by the outer shell and
   never ran; offenses stay non-fatal, a RuboCop error fails the job.
 - Push Docker Image skips its steps when Docker Hub secrets are absent.
+- Workflows: release tag passed to the push script via env (script
+  injection); Docker Hub and app store secrets only in the steps that use them.
+- `bin/ci-local` fails on a `bundle install` error instead of reading it as
+  style offenses; the pre-push hook refuses unless HEAD is the pushed commit
+  and tracked files are clean.
 - CI/Rubocop build scout_apm 5.3.5's C extension as C17
   (`BUNDLE_BUILD__SCOUT_APM`): GCC 15 on ubuntu-26.04 defaults to C23.
 - RuboCop excludes `vendor/**/*`: CI installs gems into vendor/bundle and

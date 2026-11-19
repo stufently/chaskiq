@@ -14,15 +14,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
       # Docker Hub credentials are repository secrets; a fork without them skips
       # the job's steps instead of failing (the ghcr.io workflow builds the image).
       - name: Check Docker Hub credentials
         id: creds
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           if [ -n "$DOCKER_USERNAME" ] && [ -n "$DOCKER_PASSWORD" ]; then
             echo "present=true" >> "$GITHUB_OUTPUT"
@@ -38,14 +38,14 @@ jobs:
         if: steps.creds.outputs.present == 'true'
         id: vars
         run: |
-          echo "short_sha=$(git rev-parse --short=7 ${{ github.sha }})" >> "$GITHUB_OUTPUT"
+          echo "short_sha=$(git rev-parse --short=7 "$GITHUB_SHA")" >> "$GITHUB_OUTPUT"
 
       - name: Login into Registry
         if: steps.creds.outputs.present == 'true'
         uses: docker/login-action@v4
         with:
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build the Docker image
         if: steps.creds.outputs.present == 'true'
@@ -53,17 +53,17 @@ jobs:
           docker build --build-arg APP_ENV=production \
                --build-arg RUBY_VERSION=3.3.14 \
                --build-arg PG_MAJOR=15 \
-               --build-arg NODE_MAJOR=16 \
+               --build-arg NODE_MAJOR=22 \
                --build-arg YARN_VERSION=1.13.0 \
                --build-arg BUNDLER_VERSION=2.4.10 \
-               -t $GITHUB_REPOSITORY \
+               -t "$GITHUB_REPOSITORY" \
                .
 
       - name: Tag and Push Docker image
         if: steps.creds.outputs.present == 'true' && github.event_name == 'push'
         run: |
-          docker tag $GITHUB_REPOSITORY $GITHUB_REPOSITORY:$SHORT_SHA
-          docker push $GITHUB_REPOSITORY:$SHORT_SHA
+          docker tag "$GITHUB_REPOSITORY" "$GITHUB_REPOSITORY:$SHORT_SHA"
+          docker push "$GITHUB_REPOSITORY:$SHORT_SHA"
           echo "SHORT_SHA: ${SHORT_SHA}"
         env:
           SHORT_SHA: ${{ steps.vars.outputs.short_sha }}
@@ -71,13 +71,16 @@ jobs:
       - name: Tag LATEST and Push Docker image
         if: steps.creds.outputs.present == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          docker tag $GITHUB_REPOSITORY $GITHUB_REPOSITORY:latest
-          docker push $GITHUB_REPOSITORY:latest
+          docker tag "$GITHUB_REPOSITORY" "$GITHUB_REPOSITORY:latest"
+          docker push "$GITHUB_REPOSITORY:latest"
           echo "LATEST deployed!"
 
       - name: Tag RELEASE and Push Docker image
         if: steps.creds.outputs.present == 'true' && github.event_name == 'release'
+        # tag name goes through env, never into the script text (injection)
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          docker tag $GITHUB_REPOSITORY $GITHUB_REPOSITORY:${{ github.ref_name }}
-          docker push $GITHUB_REPOSITORY:${{ github.ref_name }}
-          echo "${{ github.ref_name }} deployed!"
+          docker tag "$GITHUB_REPOSITORY" "$GITHUB_REPOSITORY:$RELEASE_TAG"
+          docker push "$GITHUB_REPOSITORY:$RELEASE_TAG"
+          echo "$RELEASE_TAG deployed!"

@@ -3,11 +3,39 @@
 # Enable once per clone:  git config core.hooksPath .githooks
 # Extra jobs:             CI_LOCAL_ARGS=--docker git push
 # Skip in an emergency:   CHASKIQ_SKIP_CI_LOCAL=1 git push
+#
+# bin/ci-local tests the work tree, so the hook only runs it when the work tree
+# is exactly the commit being pushed: every pushed ref must point at HEAD and
+# there must be no tracked changes (staged or not). Otherwise it refuses.
 set -euo pipefail
 if [ "${CHASKIQ_SKIP_CI_LOCAL:-}" = 1 ]; then
   echo "pre-push: bin/ci-local skipped (CHASKIQ_SKIP_CI_LOCAL=1)" >&2
   exit 0
 fi
+
+zero=0000000000000000000000000000000000000000
+head=$(git rev-parse HEAD)
+to_test=0
+# stdin: <local ref> <local sha> <remote ref> <remote sha>, one line per ref
+while read -r local_ref local_sha _remote_ref _remote_sha; do
+  [ -n "${local_sha:-}" ] || continue
+  case "$local_sha" in "$zero"|"${zero}000000000000000000000000") continue ;; esac  # branch deletion
+  if [ "$local_sha" != "$head" ]; then
+    echo "pre-push: refusing: $local_ref is at ${local_sha:0:12}, but HEAD is ${head:0:12}." >&2
+    echo "pre-push: bin/ci-local tests the work tree; check out the commit being pushed and push again." >&2
+    exit 1
+  fi
+  to_test=1
+done
+
+[ "$to_test" = 1 ] || exit 0
+
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "pre-push: refusing: the work tree has uncommitted changes to tracked files," >&2
+  echo "pre-push: so bin/ci-local would not test the pushed commit. Commit or stash them first." >&2
+  exit 1
+fi
+
 root=$(git rev-parse --show-toplevel)
 # shellcheck disable=SC2086
 exec "$root/bin/ci-local" ${CI_LOCAL_ARGS:-} </dev/null
