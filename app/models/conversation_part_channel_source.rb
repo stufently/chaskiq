@@ -57,7 +57,7 @@ class ConversationPartChannelSource < ApplicationRecord
   end
 
   def self.release_session_lock(connection, key, completed)
-    released = unlock_if_owned(connection, key)
+    released = connection.select_value("SELECT pg_advisory_unlock(#{key})")
     Rails.logger.warn("Session advisory lock was lost before unlock") if released == false
   rescue StandardError => e
     # Closing an aborted PostgreSQL session releases its advisory locks.
@@ -67,17 +67,6 @@ class ConversationPartChannelSource < ApplicationRecord
     Rails.logger.error("Session advisory unlock failed with #{e.class}")
   end
 
-  def self.unlock_if_owned(connection, key)
-    connection.select_value(<<~SQL.squish)
-      SELECT CASE WHEN EXISTS (
-        SELECT 1 FROM pg_locks
-        WHERE locktype = 'advisory' AND pid = pg_backend_pid()
-          AND mode = 'ExclusiveLock' AND granted AND objsubid = 1
-          AND ((classid::bigint << 32) | objid::bigint) = #{key}
-      ) THEN pg_advisory_unlock(#{key}) ELSE FALSE END
-    SQL
-  end
-
   private_class_method :with_session_lock, :hold_session_lock, :acquire_session_lock,
-                       :acquire_status_lock, :monotonic_time, :release_session_lock, :unlock_if_owned
+                       :acquire_status_lock, :monotonic_time, :release_session_lock
 end

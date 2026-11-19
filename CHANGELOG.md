@@ -8,8 +8,8 @@ Changed
   between Ruby 3.3 and Ruby 4.0.
 - Vendor `php_serialize` 1.2 with writable string buffers. Paddle's PHP
   serialization stays byte-for-byte compatible.
-- Keep controller classes stable in tests and check advisory lock ownership
-  before releasing a lock.
+- Keep controller mocks stable in direct test runs and enable reloading
+  under Spring.
 
 For Docker Compose operators
 - Run `docker compose build` after `git pull`. Compose populates the new
