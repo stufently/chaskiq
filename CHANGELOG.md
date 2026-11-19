@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m4
+
+Fixed
+- Legacy `{"blocks": ...}` messages (Slack inbound, older media; Dante nodes and
+  Draft.js blocks) are relayed again by telegram, vonage, message_bird, telnyx_sms
+  and Slack.
+- Plain text puts a newline between paragraphs; a media caption is used when the
+  message has no other text.
+- Media URLs: `BlockManager.absolute_url` replaces `URI.join`. It percent-encodes
+  spaces and non-ASCII characters, keeps existing `%XX` escapes, sends
+  protocol-relative `//host` URLs as https, and rejects non-HTTP schemes.
+- Slack: message text is mrkdwn-escaped (`& < >`) and sent with `verbatim: true`,
+  so `@here` and `@channel` are not parsed as mentions.
+- SMTP without `SMTP_USERNAME` works without authentication (was 500) in
+  production, staging and development. Staging and development now also read
+  SMTP_PORT and SMTP_DOMAIN.
+
+Changed
+- docker-compose: `redis:8.10-alpine` (was 5; Sidekiq 7 needs Redis 6.2+). The
+  existing volume's RDB loads. Redis 8 is licensed AGPL/RSAL/SSPL, not BSD.
+
+Known issues
+- Telegram, Vonage and MessageBird forward only the first attachment of a message.
+- Twitter plugin downloads relayed image URLs server-side without a destination
+  check.
+- Rails 7.2 is EOL (Aug 2026); upgrade to 8.x is a separate milestone.
+
 ## 2026-11-18 — fork updates (fork-updates-m1..m3)
 
 Added
@@ -25,6 +52,5 @@ Fixed
   null-safe meta tags in App.tsx; deterministic campaign escaping spec.
 
 Known issues
-- Messages stored in the legacy `{"blocks": ...}` format (Slack inbound) are not
-  relayed by telegram/vonage/message_bird/telnyx_sms; plain text joins paragraphs
-  without a separator; Rack::Attack Redis store in staging not covered by tests.
+- (fixed in m4) legacy `{"blocks": ...}` relay, paragraph separator, staging
+  Rack::Attack Redis store test.
