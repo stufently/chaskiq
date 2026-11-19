@@ -4,8 +4,9 @@
 
 - Репозиторий: `chaskiq` (локально `/home/deploy/github/chaskiq`), ветка `main`. Дата спеки:
   2026-11-19.
-- BASE_SHA: `461cae0604a74271c6e826a6837a2a5b02b644dd` «Add fork-updates-m5 spec and probes» —
-  HEAD `main` на момент написания (код m4 влит, у m5 пока только спека). **BASE плавающий:** веха запускается после влития m5
+- BASE_SHA: `eba9ac87` «Update CHANGELOG for fork-updates-m5» (m4 и m5 влиты) плюс ровно один
+  коммит постановщика поверх — правка этой строки; клон снят с него, и `B` указывает на него.
+  Исходное значение при написании — `461cae0604a74271c6e826a6837a2a5b02b644dd`. **BASE плавающий:** веха запускается после влития m5
   (пересылка вложений и SSRF в Twitter). Все команды вычисляют BASE сами:
   `B=$(git merge-base HEAD @{u})` — коммит `main`, от которого снят клон (`make_clone.sh
   --work-branch fork-updates-m6` ставит upstream `origin/main`). Если `main` ушёл вперёд,
