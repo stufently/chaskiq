@@ -134,10 +134,10 @@ class Agent < ApplicationRecord
   # Send password_change and email_changed notifications asynchronously via
   # Active Job so that a failing mailer does not roll back the user update.
   # Other Devise notifications (reset_password, unlock, etc.) stay synchronous.
-  def send_devise_notification(notification, *args)
+  def send_devise_notification(notification, *)
     case notification
     when :password_change, :email_changed
-      devise_mailer.send(notification, self, *args).deliver_later
+      devise_mailer.send(notification, self, *).deliver_later
     else
       super
     end
