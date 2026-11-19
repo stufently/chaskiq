@@ -126,43 +126,31 @@ module MessageApis::Vonage
       # TODO: maybe handle an error here ?
       return if profile_id.blank?
 
-      message_params = build_message_params(
-        blocks: blocks,
-        plain_message: plain_message,
-        profile_id: profile_id
-      )
-
-      return if message_params.blank?
-
-      @conn.post(
-        @url,
-        message_params.to_json
-      )
-    end
-
-    def build_message_params(blocks:, plain_message:, profile_id:)
-      media = blocks.find { |block| %w[ImageBlock VideoBlock FileBlock AudioRecorderBlock].include?(block["type"]) }
-      if media
-        media_url = MessageApis::BlockManager.block_data(media)&.fetch("url", nil)
-        url = MessageApis::BlockManager.absolute_url(media_url)
-        return unless url
-      end
-
-      type = { "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file",
-               "AudioRecorderBlock" => "audio" }[media&.fetch("type")]
-      content = if type
-                  { type: type, type => { url: url, caption: plain_message } }
-                elsif plain_message.present?
-                  { type: "text", text: plain_message }
-                else
-                  return
-                end
-
-      {
-        from: { type: "whatsapp", number: @phone },
-        to: { type: "whatsapp", number: profile_id },
-        message: { content: content }
+      media_types = {
+        "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
       }
+      contents = []
+      MessageApis::BlockManager.media_blocks(blocks).each do |media|
+        attrs = MessageApis::BlockManager.block_data(media)
+        next unless attrs.is_a?(Hash)
+
+        url = MessageApis::BlockManager.absolute_url(attrs["url"])
+        next unless url
+
+        type = media_types.fetch(media["type"])
+        data = { url: url }
+        data[:caption] = plain_message if contents.empty? && plain_message.present?
+        contents << { type: type, type => data }
+      end
+      contents << { type: "text", text: plain_message } if contents.empty? && plain_message.present?
+
+      addressing = {
+        from: { type: "whatsapp", number: @phone },
+        to: { type: "whatsapp", number: profile_id }
+      }
+      contents.map do |content|
+        @conn.post(@url, addressing.merge(message: { content: content }).to_json)
+      end.first
     end
 
     def process_message(params, package)

@@ -30,6 +30,12 @@ class MessageApis::BlockManager
     nodes.flat_map { |node| media_captions(node) }.join("\n")
   end
 
+  def self.media_blocks(blocks)
+    return [] unless blocks.is_a?(Array)
+
+    blocks.grep(Hash).select { |block| MEDIA_BLOCK_TYPES.include?(block["type"]) }
+  end
+
   def self.absolute_url(url)
     return unless url.is_a?(String) && url.present?
 

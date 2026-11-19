@@ -142,29 +142,31 @@ module MessageApis::MessageBird
       # TODO: maybe handle an error here ?
       return if profile_id.blank?
 
-      media = blocks.find { |block| %w[ImageBlock VideoBlock FileBlock AudioRecorderBlock].include?(block["type"]) }
-      if media
-        media_url = MessageApis::BlockManager.block_data(media)&.fetch("url", nil)
-        url = MessageApis::BlockManager.absolute_url(media_url)
-        return unless url
-      end
+      media_types = {
+        "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
+      }
+      deliveries = []
+      MessageApis::BlockManager.media_blocks(blocks).each do |media|
+        attrs = MessageApis::BlockManager.block_data(media)
+        next unless attrs.is_a?(Hash)
 
-      message_params = {
+        url = MessageApis::BlockManager.absolute_url(attrs["url"])
+        next unless url
+
+        type = media_types.fetch(media["type"])
+        data = { url: url }
+        data[:caption] = plain_message if deliveries.empty? && plain_message.present?
+        deliveries << { type: type, content: { type => data } }
+      end
+      deliveries << { type: "text", content: { text: plain_message } } if deliveries.empty? && plain_message.present?
+
+      addressing = {
         from: @phone,
         to: profile_id.gsub("+", "")
       }
-
-      type = { "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file",
-               "AudioRecorderBlock" => "audio" }[media&.fetch("type")]
-      if type
-        message_params.merge!(type: type, content: { type => { url: url, caption: plain_message } })
-      else
-        return if plain_message.blank?
-
-        message_params.merge!(type: "text", content: { text: plain_message })
-      end
-
-      @conn.post("#{@url}send", message_params.to_json)
+      deliveries.map do |delivery|
+        @conn.post("#{@url}send", addressing.merge(delivery).to_json)
+      end.first
     end
 
     # not used fro now

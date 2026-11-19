@@ -365,6 +365,27 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       assert_requested(stub)
     end
 
+    it "sends attachments in document order and returns the first response" do
+      contents = []
+      stub_request(:post, endpoint).to_return do |request|
+        contents << JSON.parse(request.body).dig("message", "content")
+        { status: 200, body: { message_uuid: "uuid-#{contents.size}" }.to_json }
+      end
+      blocks = [
+        { type: "text", text: "See both files" },
+        { type: "ImageBlock", attrs: { url: "https://cdn.example.com/image.png" } },
+        { type: "FileBlock", attrs: { url: "https://cdn.example.com/guide.pdf" } }
+      ]
+
+      response = deliver(serialized_content: { type: "doc", content: blocks }.to_json)
+
+      expect(contents).to eq([
+        { "type" => "image", "image" => { "url" => "https://cdn.example.com/image.png", "caption" => "See both files" } },
+        { "type" => "file", "file" => { "url" => "https://cdn.example.com/guide.pdf" } }
+      ])
+      expect(api.get_message_id(JSON.parse(response.body))).to eq("uuid-1")
+    end
+
     it "sends HTML-only content as plain text" do
       stub = expect_delivery("Hello & goodbye")
       deliver(html_content: "<p><b>Hello</b> &amp; goodbye</p>")

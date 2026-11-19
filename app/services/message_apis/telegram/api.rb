@@ -112,23 +112,33 @@ module MessageApis::Telegram
       # TODO: maybe handle an error here ?
       return if channel_id.blank?
 
-      media = blocks.find { |block| %w[ImageBlock VideoBlock FileBlock AudioRecorderBlock].include?(block["type"]) }
-      if media
-        media_url = MessageApis::BlockManager.block_data(media)&.fetch("url", nil)
-        url = MessageApis::BlockManager.absolute_url(media_url)
-        return unless url
+      media_methods = {
+        "ImageBlock" => ["sendPhoto", :photo],
+        "VideoBlock" => ["sendVideo", :video],
+        "FileBlock" => ["sendDocument", :document],
+        "AudioRecorderBlock" => ["sendAudio", :audio]
+      }
+      deliveries = []
+      MessageApis::BlockManager.media_blocks(blocks).each do |media|
+        attrs = MessageApis::BlockManager.block_data(media)
+        next unless attrs.is_a?(Hash)
+
+        url = MessageApis::BlockManager.absolute_url(attrs["url"])
+        next unless url
+
+        method, field = media_methods.fetch(media["type"])
+        data = { field => url }
+        data[:caption] = plain_message if deliveries.empty? && plain_message.present?
+        deliveries << [method, data]
       end
 
-      case media&.fetch("type")
-      when "ImageBlock" then upload_telegram(channel_id, { photo: url, caption: plain_message }, method: "sendPhoto")
-      when "VideoBlock" then upload_telegram(channel_id, { video: url, caption: plain_message }, method: "sendVideo")
-      when "FileBlock" then upload_telegram(channel_id, { document: url, caption: plain_message }, method: "sendDocument")
-      when "AudioRecorderBlock" then upload_telegram(channel_id, { audio: url, caption: plain_message }, method: "sendAudio")
-      else
+      if deliveries.empty?
         return if plain_message.blank?
 
-        @conn.post("#{@url}/sendMessage", { chat_id: channel_id, text: plain_message }.to_json)
+        return @conn.post("#{@url}/sendMessage", { chat_id: channel_id, text: plain_message }.to_json)
       end
+
+      deliveries.map { |method, data| upload_telegram(channel_id, data, method: method) }.first
     end
 
     def get_profile_for_participant(conversation)

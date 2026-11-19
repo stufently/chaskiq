@@ -575,6 +575,46 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       assert_requested(stub)
     end
 
+    it "sends attachments in document order and returns the first response" do
+      calls = []
+      stub_request(:post, %r{https://api.telegram.org/bottest-bot/send(?:Document|Audio)})
+        .to_return do |request|
+          calls << [request.uri.path.split("/").last, JSON.parse(request.body)]
+          { status: 200, body: { result: { message_id: calls.size } }.to_json }
+        end
+      blocks = [
+        { type: "FileBlock", attrs: { url: "https://cdn.example.com/guide.pdf" } },
+        { type: "AudioRecorderBlock", attrs: { url: "https://cdn.example.com/clip.mp3" } }
+      ]
+
+      response = deliver(serialized_content: { type: "doc", content: blocks }.to_json)
+
+      expect(calls).to eq([
+        ["sendDocument", { "document" => "https://cdn.example.com/guide.pdf", "chat_id" => "123" }],
+        ["sendAudio", { "audio" => "https://cdn.example.com/clip.mp3", "chat_id" => "123" }]
+      ])
+      expect(api.get_message_id(JSON.parse(response.body))).to eq(1)
+    end
+
+    it "adds the caption only to the first attachment with a usable URL" do
+      calls = []
+      stub_request(:post, "https://api.telegram.org/bottest-bot/sendPhoto").to_return do |request|
+        calls << JSON.parse(request.body)
+        { status: 200, body: "{}" }
+      end
+      blocks = [
+        { type: "ImageBlock", attrs: { url: "" } },
+        { type: "text", text: "See both images" },
+        { type: "ImageBlock", attrs: { url: "https://cdn.example.com/first.png" } },
+        { type: "ImageBlock", attrs: { url: "https://cdn.example.com/second.png" } }
+      ]
+
+      deliver(serialized_content: { type: "doc", content: blocks }.to_json)
+
+      expect(calls.map { |body| body["photo"] }).to eq(%w[https://cdn.example.com/first.png https://cdn.example.com/second.png])
+      expect(calls.map { |body| body["caption"].to_s }).to eq(["See both images", ""])
+    end
+
     it "sends HTML-only content as plain text" do
       stub = expect_delivery("Hello & goodbye")
       deliver(html_content: "<p><b>Hello</b> &amp; goodbye</p>")
