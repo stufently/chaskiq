@@ -179,6 +179,19 @@ RSpec.describe Api::V1::HooksController, type: :controller do
     assert_not_requested(subscribe)
   end
 
+  it "does not request SubscribeURL on sns.s3.amazonaws.com" do
+    ENV["SNS_ALLOWED_TOPIC_ARNS"] = topic
+    cert = serve_certificate
+    url = "https://sns.s3.amazonaws.com/confirm"
+    subscribe = stub_request(:get, url)
+
+    deliver(signed(confirmation(url: url)))
+
+    expect(response).to have_http_status(:ok)
+    assert_requested(cert, times: 1)
+    assert_not_requested(subscribe)
+  end
+
   it "returns 503 when an allowed SubscribeURL fails and retries the confirmation" do
     ENV["SNS_ALLOWED_TOPIC_ARNS"] = topic
     serve_certificate

@@ -137,7 +137,7 @@ class Api::V1::HooksController < ActionController::API
 
     uri = URI.parse(subscribe_url)
     return unless uri.is_a?(URI::HTTPS) && uri.port == 443 && uri.userinfo.nil?
-    return unless uri.host&.match?(/\Asns\.[a-z0-9-]+\.amazonaws\.com(\.cn)?\z/i)
+    return unless uri.host&.match?(MessageApis::SnsMessageVerifier::CERTIFICATE_HOST)
 
     return if MessageApis::SafeDownload.fetch(subscribe_url, max_redirects: 0)
 
