@@ -101,7 +101,11 @@ Before you get started, ensure you have the following minimum versions: [Ruby 2.
 ### Local CI before pushing
 
 `bin/ci-local` repeats the GitHub Actions jobs in Docker (only Docker is needed on the host;
-containers run as your uid, gems/yarn cache in `~/.cache/chaskiq-ci-local`):
+containers run as your uid). The test image matches the runners: `ubuntu:26.04` with its GCC 15 and the
+same ruby/setup-ruby build of `.ruby-version` (checksum-pinned in the script). Gems are installed into
+`vendor/bundle` inside the tree, as setup-ruby's bundler-cache does in CI (the directory is a bind mount of
+`~/.cache/chaskiq-ci-local`, gitignored); RuboCop skips untracked files other than `vendor/bundle`, since CI
+lints a fresh checkout:
 
 ```bash
 bin/ci-local                      # rubocop + rspec (postgres:14, redis:8.10, as in CI)
@@ -115,8 +119,22 @@ files have no uncommitted changes (`CHASKIQ_SKIP_CI_LOCAL=1` skips it in an emer
 
 ```bash
 git config core.hooksPath .githooks
-CI_LOCAL_ARGS=--docker git push   # include the image build (after Dockerfile/.docker-files changes)
+git config core.sshCommand "ssh -o ServerAliveInterval=30"   # see below
+bin/ci-local --docker && CI_LOCAL_ARGS=--docker git push   # after Dockerfile/.docker-files changes
 ```
+
+git connects to the remote before the hook runs. Over SSH, GitHub drops an idle push connection after a
+few minutes (360 s idle went through, 480 s did not), and git then exits with no error message: the push
+silently does not happen. Turn on SSH keepalives for the clone once, next to the hooks:
+
+```bash
+git config core.sshCommand "ssh -o ServerAliveInterval=30"
+```
+
+`bin/ci-local` also records the jobs that passed for a clean commit in `tmp/ci-local/passed`, and the hook
+does not re-run them for that commit. Without keepalives, a hook run of `bin/ci-local` longer than
+`CHASKIQ_PUSH_IDLE_LIMIT` seconds (default 300) aborts the push even though CI passed; run the same
+`git push` again and it goes through at once.
 
 ## Setting up Chaskiq
 

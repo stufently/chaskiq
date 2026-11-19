@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-11-19 — CI parity
+
+Changed
+- `bin/ci-local` test image is `ubuntu:26.04` (GCC 15, C23 by default) with the
+  ruby/setup-ruby build of Ruby, like the runners; it used to be
+  `ruby:*-slim-trixie` with GCC 14 and missed the scout_apm C23 build failure.
+  `BUNDLE_BUILD__SCOUT_APM` is set as in the workflows.
+- `bin/ci-local` installs gems into `vendor/bundle` in the tree (bind mount of
+  its cache, now gitignored and dockerignored), as setup-ruby does, so RuboCop
+  sees them as in CI. RuboCop skips other untracked files.
+
+Fixed
+- A push could be lost after a long pre-push hook: git connects over SSH before
+  the hook, GitHub drops the idle connection after 6-8 min, and git exits 141
+  (SIGPIPE) with no message. `bin/ci-local` records passed jobs per clean
+  commit and the hook reuses them; without SSH keepalives (README:
+  `core.sshCommand`) a hook run over 300 s aborts the push loudly.
+
 ## 2026-11-19 — fork-updates-m8
 
 Changed
