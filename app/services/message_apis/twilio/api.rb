@@ -83,7 +83,7 @@ module MessageApis::Twilio
       current = params["current"]
 
       case params["SmsStatus"]
-      when "read" then process_read(params["MessageSid"]) if params["MessageSid"].present?
+      when "read" then process_read(params["MessageSid"])
       # when "DELIVERED" then puts("DELIVERED!")
       when "received" then process_message(params, @package)
       when "undelivered" then process_error(params)
@@ -93,6 +93,8 @@ module MessageApis::Twilio
     end
 
     def find_channel_from_part_source(id)
+      return if id.blank?
+
       ConversationPartChannelSource.find_by(
         provider: PROVIDER,
         message_source_id: id
@@ -101,8 +103,6 @@ module MessageApis::Twilio
 
     def process_error(params)
       sid = params["SmsSid"].presence || params["MessageSid"].presence
-      return unless sid
-
       conversation_part_channel = find_channel_from_part_source(sid)
       return unless conversation_part_channel
 

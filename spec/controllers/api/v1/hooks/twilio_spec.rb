@@ -555,6 +555,17 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
         expect(delivery_errors.map(&:action)).to eq(["errored: undelivered", "errored: undelivered"])
       end
+
+      it "ignores statuses without a SID even if an outgoing source has no provider id" do
+        part = saved_part("Caption", [])
+        part.conversation_part_channel_sources.create!(provider: "twilio", delivery_index: 0)
+
+        api.process_event({ "SmsStatus" => "read" }, nil)
+        api.process_event({ "SmsStatus" => "undelivered", "SmsSid" => "" }, nil)
+
+        expect(part.reload.read_at).to be_nil
+        expect(delivery_errors).to be_empty
+      end
     end
 
     context "with media" do

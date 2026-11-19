@@ -449,6 +449,17 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect(part.conversation_part_channel_sources.pluck(:message_source_id)).to contain_exactly("mb-1", "mb-3")
     end
 
+    it "ignores read webhooks with missing or blank provider ids" do
+      part = thread.add_message(from: agent_role.agent, message: { html_content: "Expected unread" })
+      part.conversation_part_channel_sources.create!(provider: "message_bird", delivery_index: 0)
+      part.conversation_part_channel_sources.create!(provider: "message_bird", message_source_id: "", delivery_index: 1)
+      statuses = [{ "status" => "read" }, { "status" => "read", "id" => "" }]
+
+      api.process_event({ "statuses" => statuses }, nil)
+
+      expect(part.reload.read_at).to be_nil
+    end
+
     it "keeps the caption after a failed attachment and returns the first success" do
       captions = []
       stub_request(:post, endpoint).to_return do |request|

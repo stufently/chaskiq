@@ -29,4 +29,24 @@ RSpec.describe ConversationPartChannelSource, type: :model do
     end
     expect(other_session.value).to eq(:acquired)
   end
+
+  it "discards the aborted session when unlocking fails and preserves the original exception" do
+    part_id = part.id
+    adapter = nil
+    expect do
+      described_class.with_delivery_lock(part_id, "twilio") do
+        described_class.with_connection do |connection|
+          adapter = connection
+          connection.begin_db_transaction
+          connection.execute("SELECT 1 / 0")
+        end
+      end
+    end.to raise_error(ActiveRecord::StatementInvalid, /division by zero/)
+
+    expect(adapter).not_to be_active
+    other_session = Thread.new { described_class.with_delivery_lock(part_id, "twilio") { :acquired } }
+    expect(other_session.value).to eq(:acquired)
+  ensure
+    adapter.throw_away! if adapter&.active?
+  end
 end

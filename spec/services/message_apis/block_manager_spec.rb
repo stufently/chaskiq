@@ -128,6 +128,26 @@ RSpec.describe MessageApis::BlockManager do
       expect(reported).to eq([first_failure, last_failure])
       expect(Rails.logger).to have_received(:error).with(/failure hook.*RuntimeError/i)
     end
+
+    it "raises the first failure hook exception after reporting all failures on a successful return" do
+      first_error = RuntimeError.new("first callback failure")
+      first_failure = double("first failed response", success?: false)
+      last_failure = double("second failed response", success?: false)
+      responses = [first_failure, last_failure, success]
+      reported = []
+      on_failure = lambda do |response|
+        reported << response
+        raise(response.equal?(first_failure) ? first_error : "second callback failure")
+      end
+      allow(Rails.logger).to receive(:error)
+
+      expect do
+        described_class.deliver_attachments([audio, file, image], "", send_text: send_text, on_failure: on_failure) do
+          responses.shift
+        end
+      end.to(raise_error { |error| expect(error).to equal(first_error) })
+      expect(reported).to eq([first_failure, last_failure])
+    end
   end
 
   describe ".get_blocks" do

@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m9
+
+Fixed
+- Attachment delivery records each accepted request by index and resumes from
+  the remaining requests. The delivery index is created concurrently on
+  PostgreSQL.
+- Status callbacks ignore blank provider IDs. Error events are deduplicated by
+  a session advisory lock and committed before notifications are queued.
+- Delivery closes the PostgreSQL session when unlocking fails. Failure hooks
+  report every failed request and raise the first hook error if delivery did
+  not already raise.
+
+Known issues
+- Delivery is at least once. If the provider accepts an attachment or separate
+  text request before Chaskiq records its delivery index, a retry can send
+  that request again.
+
 ## 2026-11-19 — CI parity
 
 Changed

@@ -394,6 +394,26 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
         expect(delivery_errors.map(&:action)).to eq(["errored: 470 Re-engagement", "errored: 471 Rejected"])
       end
+
+      it "holds a session lock and commits the status event before enqueuing notifications" do
+        part.conversation_part_channel_sources.create!(provider: "dialog_360", message_source_id: "wamid.1")
+        allow(ApiChannelNotificatorJob).to receive(:perform_later).and_wrap_original do |original, **args|
+          visible = Thread.new { ConversationPart.exists?(args.fetch(:part_id)) }.value
+          expect(visible).to be(true)
+          ConversationPart.with_connection do |connection|
+            expect(connection.transaction_open?).to be(false)
+            sql = "SELECT count(*) FROM pg_locks WHERE locktype = 'advisory' AND pid = pg_backend_pid()"
+            expect(connection.select_value(sql)).to eq(1)
+          end
+          original.call(**args)
+        end
+        status = { "id" => "wamid.1", "status" => "failed", "errors" => [{ "code" => 470, "title" => "Re-engagement" }] }
+
+        2.times { api.process_event({ "statuses" => [status] }, nil) }
+
+        expect(delivery_errors.map(&:action)).to eq(["errored: 470 Re-engagement"])
+        expect(ApiChannelNotificatorJob).to have_received(:perform_later).once
+      end
     end
   end
 

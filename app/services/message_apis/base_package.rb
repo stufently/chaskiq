@@ -122,7 +122,7 @@ module MessageApis
       matching_events = ConversationPartEvent.where(action: event.fetch(:action))
       parts = conversation.messages.joins(:conversation_part_channel_sources)
                           .where(messageable_type: "ConversationPartEvent", messageable_id: matching_events)
-      conversation.with_lock do
+      ConversationPartChannelSource.with_status_event_lock(conversation.id, event) do
         next if parts.exists?(conversation_part_channel_sources: event.slice(:provider, :message_source_id))
 
         conversation.add_message_event(**event)

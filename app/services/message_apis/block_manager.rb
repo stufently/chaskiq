@@ -91,9 +91,11 @@ class MessageApis::BlockManager
              else
                last_response
              end
+    completed = true
     result
   ensure
-    report_failures(on_failure, failures, result) if on_failure
+    callback_error = report_failures(on_failure, failures, result) if on_failure
+    raise callback_error if completed && callback_error
   end
 
   def self.delivery_success_hook(callback, already_sent)
@@ -119,15 +121,18 @@ class MessageApis::BlockManager
   end
 
   def self.report_failures(callback, failures, result)
+    first_error = nil
     failures.each do |failure|
       next if failure.equal?(result)
 
       begin
         callback.call(failure)
       rescue StandardError => e
+        first_error ||= e
         Rails.logger.error("Attachment failure hook raised #{e.class}")
       end
     end
+    first_error
   end
 
   def self.absolute_url(url)
