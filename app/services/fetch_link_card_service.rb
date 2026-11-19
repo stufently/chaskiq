@@ -22,7 +22,7 @@ class FetchLinkCardService < BaseService
 
     return unless body&.mime_type == "text/html"
 
-    attempt_oembed(card, url) || attempt_opengraph(card, body.read)
+    attempt_oembed(card, url) || attempt_opengraph(card, body)
   end
 
   private
@@ -76,8 +76,9 @@ class FetchLinkCardService < BaseService
     false
   end
 
-  def attempt_opengraph(card, html)
-    page = Nokogiri::HTML(html)
+  def attempt_opengraph(card, body)
+    charset = body.content_type[/;\s*charset\s*=\s*"?([^";\s]+)/i, 1]
+    page = Nokogiri::HTML(body.read, encoding: charset)
 
     card.type             = :link
     card.title            = meta_property(page, "og:title") || page.at_xpath("//title")&.content

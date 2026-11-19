@@ -49,6 +49,18 @@ RSpec.describe FetchLinkCardService do
       assert_requested(page, times: 1)
       assert_not_requested(image)
     end
+
+    it "uses the HTML charset declared in the response header" do
+      url = "https://site.example.com/article"
+      allow(MessageApis::SafeDownload).to receive(:resolve).with("site.example.com").and_return(["93.184.216.34"])
+      allow(OEmbed::Providers).to receive(:get).with(url).and_raise(OEmbed::NotFound)
+      stub_request(:get, url).to_return(
+        body: "<title>Привет</title>".encode("Windows-1251").b,
+        headers: { "Content-Type" => 'text/html; Charset="Windows-1251"' }
+      )
+
+      expect(subject.call(url).title).to eq("Привет")
+    end
   end
 
   #   before do
