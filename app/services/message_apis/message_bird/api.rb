@@ -58,7 +58,7 @@ module MessageApis::MessageBird
         }
       )
 
-      key = "#{config['sandbox'] ? 'test_' : ''}#{@api_key}"
+      key = "#{'test_' if config['sandbox']}#{@api_key}"
 
       @conn.headers = {
         authorization: "AccessKey #{key}",
