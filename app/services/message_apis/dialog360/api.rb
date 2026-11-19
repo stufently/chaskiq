@@ -222,7 +222,9 @@ module MessageApis::Dialog360
                                &.find_by(provider: PROVIDER)
                                &.profile_id
 
-      profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone) if profile_id.blank?
+      if profile_id.blank?
+        profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+      end
 
       raise ActiveRecord::Rollback if profile_id.blank?
 
@@ -287,7 +289,9 @@ module MessageApis::Dialog360
 
       profile_id = get_profile_for_participant(conversation.main_participant) if profile_id.blank?
 
-      profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone) if profile_id.blank?
+      if profile_id.blank?
+        profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+      end
 
       Rails.logger.debug template
       return if profile_id.blank?

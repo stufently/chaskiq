@@ -7,7 +7,8 @@ class ChaskiqSchema < GraphQL::Schema
     end
   end
 
-  disable_introspection_entry_points unless Chaskiq::Config.get("ENABLE_GRAPHQL_INSTROSPECTION") # if Rails.env.production?
+  # if Rails.env.production?
+  disable_introspection_entry_points unless Chaskiq::Config.get("ENABLE_GRAPHQL_INSTROSPECTION")
 
   query_analyzer(ChaskiqComplexityAnalyzer)
 

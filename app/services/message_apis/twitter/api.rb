@@ -385,7 +385,8 @@ module MessageApis::Twitter
       mime = Marcel::MimeType.for(file)
 
       return chunk_upload(file, mime, "#{media_category_prefix}_video") if mime.include?("mp4")
-      return chunk_upload(file, mime, "#{media_category_prefix}_gif") if mime.include?("gif") # && File.size(media) > 5_000_000
+      # && File.size(media) > 5_000_000
+      return chunk_upload(file, mime, "#{media_category_prefix}_gif") if mime.include?("gif")
       return chunk_upload(file, mime, "#{media_category_prefix}_image") if mime.include?("image")
 
       #

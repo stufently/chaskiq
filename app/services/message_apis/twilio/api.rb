@@ -123,7 +123,9 @@ module MessageApis::Twilio
                                &.find_by(provider: PROVIDER)
                                &.profile_id
 
-      profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone) if profile_id.blank?
+      if profile_id.blank?
+        profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+      end
 
       raise ActiveRecord::Rollback if profile_id.blank?
 

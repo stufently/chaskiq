@@ -91,7 +91,9 @@ module MessageApis::Dialog360
       # Rails.logger.info "::::: CTX:::::"
       # Rails.logger.info ctx
 
-      return search_participant(ctx: ctx) if ctx[:conversation_key].blank? && ctx.dig("field", "name") != "selected-user" && ctx.dig("values", "selected_user").blank?
+      if ctx[:conversation_key].blank? && ctx.dig("field", "name") != "selected-user" && ctx.dig("values", "selected_user").blank?
+        return search_participant(ctx: ctx)
+      end
 
       api = ctx[:package].message_api_klass
       templates = api.retrieve_templates(offset: offset_page)

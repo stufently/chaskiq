@@ -3,6 +3,8 @@ class ChaskiqPluginGenerator < Rails::Generators::NamedBase
 
   def start
     template "api.rb.template", "app/services/message_apis/#{file_name}/api.rb"
-    template "presenter.rb.template", "app/services/message_apis/#{file_name}/presenter.rb" if yes?("Would you like to add a presenter?")
+    if yes?("Would you like to add a presenter?")
+      template "presenter.rb.template", "app/services/message_apis/#{file_name}/presenter.rb"
+    end
   end
 end
