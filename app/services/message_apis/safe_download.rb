@@ -126,7 +126,7 @@ class MessageApis::SafeDownload
     nil
   end
 
-  def self.request(uri, address, headers, &block)
+  def self.request(uri, address, headers, &)
     http = Net::HTTP.new(uri.hostname, uri.port, nil)
     http.ipaddr = address
     http.use_ssl = uri.scheme == "https"
@@ -136,7 +136,7 @@ class MessageApis::SafeDownload
     request_headers = headers.reject { |name, _| name.to_s.casecmp?("Accept-Encoding") }
     request = Net::HTTP::Get.new(uri.request_uri, request_headers.merge("Accept-Encoding" => "identity"))
 
-    http.request(request, &block)
+    http.request(request, &)
   end
 
   def self.read_response(response, max_bytes)
