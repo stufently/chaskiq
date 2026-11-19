@@ -3,6 +3,15 @@
 ## 2026-11-19 — fork-updates-r1
 
 Changed
+- RuboCop backlog, first step: 16 layout/style cops autocorrected in 49 files
+  (each file compiles to the same Ruby bytecode as before); their entries are
+  removed from `.rubocop_todo.yml`. `docs/**` (frozen milestone specs and
+  probes pinned by sha256) is excluded from RuboCop. Plan for the rest:
+  `docs/specs/fork-updates-rubocop-plan.md`.
+
+## 2026-11-19 — fork-updates-r1
+
+Changed
 - Reduce the RuboCop backlog with safe autocorrection for 16 Layout and Style cops without changing runtime behavior, and exclude `docs/` from RuboCop.
 
 ## 2026-11-19 — fork-updates-m14
