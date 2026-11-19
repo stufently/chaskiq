@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "webmock"
 # https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-using-notifications.html
 def send_data(params)
   post :create, body: params.to_json
@@ -8,6 +9,45 @@ end
 
 RSpec.describe Api::V1::HooksController, type: :controller do
   # routes { Engine.routes }
+
+  describe "SNS subscription confirmation" do
+    include WebMock::API
+
+    around do |example|
+      WebMock.enable!
+      example.run
+    ensure
+      WebMock.reset!
+      WebMock.disable!
+    end
+
+    it "acknowledges a non-SNS SubscribeURL without making a request" do
+      url = "https://sns.us-east-1.amazonaws.com.example.com/confirmation"
+      outbound = stub_request(:any, url)
+
+      request.headers["x-amz-sns-message-type"] = "SubscriptionConfirmation"
+      post :create, body: { "SubscribeURL" => url }.to_json
+
+      expect(response.body).to eq("ok")
+      assert_not_requested(outbound)
+    end
+
+    it "acknowledges an SNS response without following it to a different host" do
+      url = "https://sns.cn-north-1.amazonaws.com.cn/confirmation"
+      target = "https://redirect.example.com/confirmation"
+      allow(MessageApis::SafeDownload).to receive(:resolve).with("sns.cn-north-1.amazonaws.com.cn").and_return(["54.239.1.1"])
+      allow(MessageApis::SafeDownload).to receive(:resolve).with("redirect.example.com").and_return(["93.184.216.34"])
+      sns = stub_request(:get, url).to_return(status: 302, headers: { "Location" => target })
+      redirect = stub_request(:get, target)
+
+      request.headers["x-amz-sns-message-type"] = "SubscriptionConfirmation"
+      post :create, body: { "SubscribeURL" => url }.to_json
+
+      expect(response.body).to eq("ok")
+      assert_requested(sns, times: 1)
+      assert_not_requested(redirect)
+    end
+  end
 
   let(:app) { FactoryBot.create(:app) }
   let(:subscriber) do

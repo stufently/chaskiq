@@ -15,6 +15,19 @@ RSpec.describe MessageApis::SafeDownload do
   let(:url) { "https://cdn.example.com/image.png" }
   let(:public_ip) { "93.184.216.34" }
 
+  it "preserves the content type header and normalizes the MIME type" do
+    allow(described_class).to receive(:resolve).with("cdn.example.com").and_return([public_ip])
+    content_type = "Image/PNG ; charset=UTF-8"
+    stub_request(:get, url).to_return(body: "image", headers: { "Content-Type" => content_type })
+
+    body = described_class.fetch(url)
+
+    expect(body).to be_a(StringIO)
+    expect(body.read).to eq("image")
+    expect(body.content_type).to eq(content_type)
+    expect(body.mime_type).to eq("image/png")
+  end
+
   it "refuses a private address even when DNS also returns a public address" do
     allow(described_class).to receive(:resolve).with("cdn.example.com").and_return([public_ip, "10.0.0.1"])
     download = stub_request(:get, url).to_return(body: "image")

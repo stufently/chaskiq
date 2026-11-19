@@ -1,9 +1,55 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "webmock"
 
 RSpec.describe FetchLinkCardService do
   subject { FetchLinkCardService.new }
+
+  context "with HTTP responses" do
+    include WebMock::API
+
+    around do |example|
+      WebMock.enable!
+      example.run
+    ensure
+      WebMock.reset!
+      WebMock.disable!
+    end
+
+    it "makes no request for a private page" do
+      url = "https://internal.example.com/card"
+      allow(MessageApis::SafeDownload).to receive(:resolve).with("internal.example.com").and_return(["10.0.0.1"])
+      outbound = stub_request(:any, url)
+
+      expect(subject.call(url)).to be_nil
+      assert_not_requested(outbound)
+    end
+
+    it "builds an opengraph card from one GET without requesting its private image" do
+      url = "https://site.example.com/article"
+      image_url = "https://internal.example.com/thumbnail.png"
+      html = <<~HTML
+        <html><head>
+          <meta property="og:title" content="Article title">
+          <meta property="og:image" content="#{image_url}">
+        </head></html>
+      HTML
+      allow(MessageApis::SafeDownload).to receive(:resolve).with("site.example.com").and_return(["93.184.216.34"])
+      allow(MessageApis::SafeDownload).to receive(:resolve).with("internal.example.com").and_return(["10.0.0.1"])
+      allow(OEmbed::Providers).to receive(:get).with(url).and_raise(OEmbed::NotFound)
+      page = stub_request(:get, url).to_return(body: html, headers: { "Content-Type" => "text/html; charset=UTF-8" })
+      image = stub_request(:get, image_url)
+
+      card = subject.call(url)
+
+      expect(card).to be_persisted
+      expect(card.title).to eq("Article title")
+      expect(card.image).not_to be_attached
+      assert_requested(page, times: 1)
+      assert_not_requested(image)
+    end
+  end
 
   #   before do
   #     stub_request(:head, 'http://example.xn--fiqs8s/').to_return(status: 200, headers: { 'Content-Type' => 'text/html' })

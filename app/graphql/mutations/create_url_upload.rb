@@ -27,8 +27,8 @@ module Mutations
     field :direct_upload, UrlUpload, null: false
 
     def download_to_file(uri)
-      stream = URI.parse(uri).open # URI.open(uri, "rb")
-      return stream if stream.respond_to?(:path) # Already file-like
+      stream = MessageApis::SafeDownload.fetch(uri)
+      raise GraphQL::ExecutionError, "Unable to download the file" unless stream
 
       Tempfile.new.tap do |file|
         file.binmode

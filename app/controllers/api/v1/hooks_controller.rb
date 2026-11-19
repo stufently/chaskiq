@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "open-uri"
+require "uri"
 
 class Api::V1::HooksController < ActionController::API
   include MessageApis::Helpers
@@ -104,9 +104,15 @@ class Api::V1::HooksController < ActionController::API
 
   def send_subscription_confirmation
     subscribe_url = @request_body["SubscribeURL"]
-    return nil unless !subscribe_url.to_s.empty? && !subscribe_url.nil?
+    return unless subscribe_url.is_a?(String)
 
-    URI.parse(subscribe_url).open
+    uri = URI.parse(subscribe_url)
+    return unless uri.is_a?(URI::HTTPS) && uri.port == 443 && uri.userinfo.nil?
+    return unless uri.host&.match?(/\Asns\.[a-z0-9-]+\.amazonaws\.com(\.cn)?\z/i)
+
+    MessageApis::SafeDownload.fetch(subscribe_url, max_redirects: 0)
+  rescue URI::Error
+    nil
   end
 
   def find_resources_in_recipient_parts(recipient_parts)

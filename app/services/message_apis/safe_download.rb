@@ -7,6 +7,20 @@ require "stringio"
 require "timeout"
 
 class MessageApis::SafeDownload
+  class Body < StringIO
+    attr_reader :content_type
+
+    def initialize(body, content_type:)
+      super(body)
+      @content_type = content_type
+    end
+
+    def mime_type
+      type = content_type.to_s.partition(";").first.strip.downcase
+      type unless type.empty?
+    end
+  end
+
   BLOCKED_RANGES = %w[
     0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8
     168.63.129.16/32 169.254.0.0/16 172.16.0.0/12 192.0.0.0/24 192.168.0.0/16
@@ -116,7 +130,7 @@ class MessageApis::SafeDownload
 
       body << chunk
     end
-    [StringIO.new(body), nil]
+    [Body.new(body, content_type: response["content-type"]), nil]
   end
 
   private_class_method :follow_redirects, :http_uri, :own_origin?, :download, :request, :read_response

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 # from https://framagit.org/framasoft/framapiaf/
-require "http"
 require "oembed"
-require "open-uri"
 
 class FetchLinkCardService < BaseService
   URL_PATTERN = %r{https?://\S+}
@@ -20,30 +18,14 @@ class FetchLinkCardService < BaseService
     # TODO: add a TTL here
     return card if card.persisted?
 
-    res = http_client.head(url, ssl: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
+    body = MessageApis::SafeDownload.fetch(url, max_bytes: 2 * 1024 * 1024)
 
-    return if res.code != 200 || res.mime_type != "text/html"
+    return unless body&.mime_type == "text/html"
 
-    if o = attempt_oembed(card, url)
-      o
-    else
-      attempt_opengraph(card, url)
-    end
-  end
-
-  def http_client(options = {})
-    timeout = { write: 10, connect: 10, read: 10 }.merge(options)
-
-    HTTP.headers(user_agent: user_agent)
-        .timeout(timeout)
-        .follow
+    attempt_oembed(card, url) || attempt_opengraph(card, body.read)
   end
 
   private
-
-  def user_agent
-    @user_agent ||= "#{HTTP::Request::USER_AGENT} (ChaskiqApp/Crawler; +http://github.com/chaskiq/chaskiq/)"
-  end
 
   def parse_urls(status)
     if status.local?
@@ -77,7 +59,7 @@ class FetchLinkCardService < BaseService
 
     if response.respond_to?(:thumbnail_url)
       image = begin
-        download_image(URI.parse(response.thumbnail_url))
+        download_image(response.thumbnail_url)
       rescue StandardError
         nil
       end
@@ -94,15 +76,11 @@ class FetchLinkCardService < BaseService
     false
   end
 
-  def attempt_opengraph(card, url)
-    response = http_client.get(url)
-
-    return if response.code != 200 || response.mime_type != "text/html"
-
-    page = Nokogiri::HTML(response.to_s)
+  def attempt_opengraph(card, html)
+    page = Nokogiri::HTML(html)
 
     card.type             = :link
-    card.title            = meta_property(page, "og:title") || page.at_xpath("//title").content
+    card.title            = meta_property(page, "og:title") || page.at_xpath("//title")&.content
     card.description      = meta_property(page, "og:description") || meta_property(page, "description")
 
     if meta_property(page, "og:image")
@@ -121,15 +99,16 @@ class FetchLinkCardService < BaseService
   end
 
   def download_image(url)
-    handle = URI.parse(url).open
+    handle = MessageApis::SafeDownload.fetch(url)
+    return unless handle
 
     file = Tempfile.new("foo-#{Time.now.to_i}", encoding: "ascii-8bit")
     file.write(handle.read)
     file.close
 
-    new_file = ActionDispatch::Http::UploadedFile.new(
+    ActionDispatch::Http::UploadedFile.new(
       filename: "foo-#{Time.now.to_i}.jpg",
-      type: handle.content_type,
+      type: handle.mime_type,
       tempfile: file
     )
   end
