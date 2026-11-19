@@ -13,8 +13,8 @@ gem "anycable-rails", ">= 1.5.5"
 
 gem "pg"
 gem "json", "< 3"
-gem "rails", "7.2.1.1" # , github: "rails/rails",
-gem "uri", "0.12.5"
+gem "rails", "~> 8.1.4", ">= 8.1.4.1"
+gem "uri", "~> 1.1"
 
 # Use sqlite3 as the database for Active Record
 # gem "sqlite3", group: "test"
@@ -59,7 +59,7 @@ gem "nokogiri", force_ruby_platform: true
 # gem 'tunable'
 gem "aasm"
 gem "acts_as_list", "~> 0.9.19"
-gem "acts-as-taggable-on", github: "mbleigh/acts-as-taggable-on" # branch: "support_rails_7-1"
+gem "acts-as-taggable-on", "~> 13.0"
 # github: "mbleigh/acts-as-taggable-on", branch: "support_rails_7-1"
 gem "deep_cloneable"
 gem "friendly_id", "~> 5.2"
@@ -104,7 +104,7 @@ gem "aws-sdk-rails", ">= 3.9.1"
 gem "aws-actionmailer-ses", "~> 1.2"
 gem "aws-sdk-s3", "~> 1.208", ">= 1.208.0"
 
-gem "mini_magick", "~> 4.8"
+gem "mini_magick", "~> 5.1"
 
 gem "active_importer"
 gem "faraday", ">= 2.14.1"
