@@ -35,7 +35,6 @@ require "base64"
 
 module MessageApis::Twitter
   class Api < MessageApis::BasePackage
-
     def self.definition_info
       {
         name: "Twitter",
@@ -78,6 +77,7 @@ module MessageApis::Twitter
     PROVIDER = "twitter"
     HEADERS = { "content-type" => "application/json" }.freeze # Suggested set? Any?
     include MessageApis::Helpers
+
     attr_accessor :keys,
                   :twitter_api,
                   :base_url # Default: 'https://api.twitter.com/'
@@ -91,7 +91,7 @@ module MessageApis::Twitter
 
       @keys["consumer_key"] = config["api_key"]
       @keys["consumer_secret"] = config["api_secret"]
-      @keys["access_token"] =  config["access_token"]
+      @keys["access_token"] = config["access_token"]
       @keys["access_token_secret"] = config["access_token_secret"]
     end
 

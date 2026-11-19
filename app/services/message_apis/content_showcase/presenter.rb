@@ -293,6 +293,7 @@ module MessageApis::ContentShowcase
     class AnnouncementRecord
       include ActiveModel::Model
       include ActiveModel::Validations
+
       attr_accessor :heading, :title, :page_url, :description, :cover_image
 
       validates :title, presence: true
@@ -676,7 +677,7 @@ module MessageApis::ContentShowcase
         end
 
         result = generate_collection(items)
-                 .each_with_index.map  do |o, i|
+                 .each_with_index.map do |o, i|
           o.valid? if validate
           o.autofill if autofill_index == i
           o.article_fields(i)
@@ -697,7 +698,7 @@ module MessageApis::ContentShowcase
         end
 
         result = generate_collection(items)
-                 .each_with_index.map  do |o, _i|
+                 .each_with_index.map do |o, _i|
           o
           # o.valid? #if validate
         end

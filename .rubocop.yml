@@ -54,6 +54,9 @@ AllCops:
     - 'spec/cypress/**/*'
     - 'tmp/**/*'
     - 'vendor/**/*'
+    # Frozen milestone specs and probes: their files are pinned by sha256 in the
+    # acceptance criteria of each spec, so they are never rewritten for style.
+    - 'docs/**/*'
 
 
 

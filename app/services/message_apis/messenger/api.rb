@@ -2,7 +2,6 @@
 
 module MessageApis::Messenger
   class Api < MessageApis::BasePackage
-
     def self.definition_info
       {
         name: "Messenger",

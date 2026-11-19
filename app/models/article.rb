@@ -20,6 +20,7 @@ class Article < ApplicationRecord
              optional: true
 
   include PgSearch::Model
+
   pg_search_scope :search,
                   # against: [:title, :description]
                   # ignoring: :accents,
@@ -36,6 +37,7 @@ class Article < ApplicationRecord
   acts_as_list scope: %i[app_id article_collection_id article_section_id]
 
   extend FriendlyId
+
   friendly_id :title, use: :scoped, scope: %i[app_id article_collection_id article_section_id]
 
   has_many_attached :images

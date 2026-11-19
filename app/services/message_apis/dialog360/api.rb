@@ -4,7 +4,6 @@ require "rack/mime"
 
 module MessageApis::Dialog360
   class Api < MessageApis::BasePackage
-
     def self.definition_info
       {
         name: "Dialog360",
@@ -219,9 +218,9 @@ module MessageApis::Dialog360
       @package = package
 
       profile_id = conversation.main_participant
-                                &.external_profiles
-                                &.find_by(provider: PROVIDER)
-                                &.profile_id
+                               &.external_profiles
+                               &.find_by(provider: PROVIDER)
+                               &.profile_id
 
       profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone) if profile_id.blank?
 

@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   respond_to :json, :html
   protect_from_forgery unless: -> { request.format.json? }
   include PackageIframeBehavior
+
   # protect_from_forgery with: :null_session
 
   layout :layout_by_resource

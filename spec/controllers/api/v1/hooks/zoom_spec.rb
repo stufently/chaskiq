@@ -1,5 +1,6 @@
 require "rails_helper"
 include ActiveJob::TestHelper
+
 require "app_packages_catalog"
 
 RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do

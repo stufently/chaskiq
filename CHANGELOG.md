@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-r1
+
+Changed
+- Reduce the RuboCop backlog with safe autocorrection for 16 Layout and Style cops without changing runtime behavior, and exclude `docs/` from RuboCop.
+
 ## 2026-11-19 — fork-updates-m14
 
 Changed

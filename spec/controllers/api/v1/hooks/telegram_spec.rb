@@ -556,7 +556,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
     it "sends a newline between paragraph blocks" do
       stub = expect_delivery("order\n123")
-      paragraphs = ["order", "123"].map do |text|
+      paragraphs = %w[order 123].map do |text|
         { type: "paragraph", content: [{ type: "text", text: text }] }
       end
       deliver(serialized_content: { type: "doc", content: paragraphs }.to_json)
@@ -589,9 +589,9 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       response = deliver(serialized_content: { type: "doc", content: blocks }.to_json)
 
       expect(calls).to eq([
-        ["sendDocument", { "document" => "https://cdn.example.com/guide.pdf", "chat_id" => "123" }],
-        ["sendAudio", { "audio" => "https://cdn.example.com/clip.mp3", "chat_id" => "123" }]
-      ])
+                            ["sendDocument", { "document" => "https://cdn.example.com/guide.pdf", "chat_id" => "123" }],
+                            ["sendAudio", { "audio" => "https://cdn.example.com/clip.mp3", "chat_id" => "123" }]
+                          ])
       expect(api.get_message_id(JSON.parse(response.body))).to eq(1)
     end
 

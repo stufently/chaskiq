@@ -54,7 +54,7 @@ RSpec.describe "Rack::Attack login throttling", type: :request do
 
     result = Rack::MockRequest.new(Rails.application).post(
       "/oauth/token", input: stream, "CONTENT_TYPE" => "application/json",
-      "CONTENT_LENGTH" => payload.bytesize.to_s, "REMOTE_ADDR" => "10.0.0.10"
+                      "CONTENT_LENGTH" => payload.bytesize.to_s, "REMOTE_ADDR" => "10.0.0.10"
     )
 
     expect(result.status).to eq(200)
@@ -90,14 +90,14 @@ RSpec.describe "Rack::Attack login throttling", type: :request do
       expect do
         20.times do
           post "/oauth/token.json", params: body,
-                                   env: { "REMOTE_ADDR" => ip, "CONTENT_TYPE" => "application/json" }
+                                    env: { "REMOTE_ADDR" => ip, "CONTENT_TYPE" => "application/json" }
           statuses << response.status
         end
       end.not_to raise_error
       expect(statuses).not_to include(500, 429)
 
       post "/oauth/token.json", params: body,
-                               env: { "REMOTE_ADDR" => ip, "CONTENT_TYPE" => "application/json" }
+                                env: { "REMOTE_ADDR" => ip, "CONTENT_TYPE" => "application/json" }
       expect(response.status).to eq(429)
     end
   end

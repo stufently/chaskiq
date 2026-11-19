@@ -4,7 +4,6 @@ require "rack/mime"
 
 module MessageApis::TwilioPhone
   class Api < MessageApis::BasePackage
-
     def self.definition_info
       {
         name: "TwilioPhone",

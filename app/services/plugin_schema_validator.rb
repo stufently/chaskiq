@@ -37,6 +37,7 @@ end
 
 class HiddenSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :value, :name, :id
 
   def initialize(params)
@@ -88,6 +89,7 @@ end
 
 class ActionSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :content_url, :url, :options
 
   validates :type, presence: :true, inclusion: { in: %w[frame content submit link url] }
@@ -104,6 +106,7 @@ end
 
 class ImageSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :url, :width, :height, :align, :rounded
 
   validates :type, presence: :true, inclusion: { in: %w[image] }
@@ -125,6 +128,7 @@ end
 
 class SpacerSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :size
 
   validates :size, presence: :true, inclusion: { in: %w[xs s sm m l xl] }
@@ -137,6 +141,7 @@ end
 
 class DividerSchema
   include ActiveModel::Validations
+
   attr_accessor :type
 
   def initialize(params)
@@ -146,6 +151,7 @@ end
 
 class DataTableSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :items
 
   validate :validate_items
@@ -162,6 +168,7 @@ end
 
 class DataTableItemSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :field, :value
 
   validates :type, :field, presence: :true
@@ -206,6 +213,7 @@ end
 
 class TextAreaSchema
   include ActiveModel::Validations
+
   attr_accessor :id, :name, :label, :type,
                 :placeholder, :value, :self_errors, :save_state
 
@@ -248,6 +256,7 @@ end
 
 class ListItemSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :id, :title, :subtitle, :action, :tertiary_text
 
   validates :type, :id, :title, presence: :true
@@ -288,6 +297,7 @@ end
 
 class SingleSelectItemSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :id, :text, :action
 
   validates :type, :id, :text, presence: :true
@@ -307,6 +317,7 @@ end
 
 class CheckboxSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :id, :label, :value, :options
 
   validates :type, :id, presence: :true
@@ -329,6 +340,7 @@ end
 
 class CheckboxItemSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :id, :text
 
   validates :type, :id, :text, presence: :true
@@ -341,6 +353,7 @@ end
 
 class DropdownSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :id, :label, :value, :options
 
   validates :type, :id, :label, presence: :true
@@ -361,6 +374,7 @@ end
 
 class DropdownItemSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :id, :text
 
   validates :type, :id, :text, presence: :true
@@ -373,6 +387,7 @@ end
 
 class FrameSchema
   include ActiveModel::Validations
+
   attr_accessor :type, :url
 
   validates :type, :url, presence: :true

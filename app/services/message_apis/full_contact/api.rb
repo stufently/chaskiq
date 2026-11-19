@@ -2,7 +2,6 @@
 
 module MessageApis::FullContact
   class Api < DataEnrichmentService::Base
-
     def self.definition_info
       {
         name: "FullContact",

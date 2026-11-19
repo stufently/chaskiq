@@ -2,6 +2,7 @@
 
 class ArticleSetting < ApplicationRecord
   include GlobalizeAccessors
+
   belongs_to :app
 
   store_accessor :properties, %i[

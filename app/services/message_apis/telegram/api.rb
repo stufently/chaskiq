@@ -4,7 +4,6 @@ require "rack/mime"
 
 module MessageApis::Telegram
   class Api < MessageApis::BasePackage
-
     def self.definition_info
       {
         name: "Telegram",
@@ -133,9 +132,9 @@ module MessageApis::Telegram
 
     def get_profile_for_participant(conversation)
       conversation.main_participant
-        &.external_profiles
-        &.find_by(provider: PROVIDER)
-        &.profile_id
+                  &.external_profiles
+                  &.find_by(provider: PROVIDER)
+                  &.profile_id
     end
 
     def get_media(id)

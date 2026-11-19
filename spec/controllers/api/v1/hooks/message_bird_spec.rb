@@ -425,9 +425,9 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       response = deliver(serialized_content: { blocks: blocks }.to_json)
 
       expect(contents).to eq([
-        { "type" => "video", "content" => { "video" => { "url" => "https://cdn.example.com/clip.mp4", "caption" => "See both files" } } },
-        { "type" => "file", "content" => { "file" => { "url" => "https://cdn.example.com/guide.pdf" } } }
-      ])
+                               { "type" => "video", "content" => { "video" => { "url" => "https://cdn.example.com/clip.mp4", "caption" => "See both files" } } },
+                               { "type" => "file", "content" => { "file" => { "url" => "https://cdn.example.com/guide.pdf" } } }
+                             ])
       expect(api.get_message_id(JSON.parse(response.body))).to eq("mb-1")
     end
 

@@ -654,11 +654,11 @@ module Types
     field :dashboard, Types::JsonType, null: true do
       argument :range, Types::AnyType, required: true
       argument :kind,  String, required: true
-      argument :package,  String, required: false
+      argument :package, String, required: false
     end
 
     field :app_packages_dashboard, Types::JsonType, null: true do
-      argument :package,  String, required: false
+      argument :package, String, required: false
     end
 
     def app_packages_dashboard

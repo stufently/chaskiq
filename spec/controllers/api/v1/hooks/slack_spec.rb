@@ -325,10 +325,10 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
     it "triggers on conversation first user message" do
       allow_any_instance_of(AppUser).to receive(:last_visited_at)
-             .and_return(Time.zone.now)
+        .and_return(Time.zone.now)
 
       allow_any_instance_of(ConversationPartContent).to receive(:serialized_content)
-                             .and_return(serialized)
+        .and_return(serialized)
 
       allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message).and_return({ foo: "stubbed" })
 
@@ -354,23 +354,23 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       conversation
 
       allow_any_instance_of(AppPackageIntegration).to receive(:handle_registration)
-                           .and_return({})
+        .and_return({})
 
       allow_any_instance_of(MessageApis::Slack::Api).to receive(:direct_upload)
-                             .and_return({ url: "foobar" })
+        .and_return({ url: "foobar" })
 
       allow_any_instance_of(MessageApis::Slack::Api).to receive(:create_channel)
-                             .and_return({
-                                           "channel" => { "id" => "abc" }
-                                         })
+        .and_return({
+                      "channel" => { "id" => "abc" }
+                    })
 
       allow_any_instance_of(MessageApis::Slack::Api).to receive(:join_channel)
-                             .and_return({
-                                           "channel" => { "id" => "abc" }
-                                         })
+        .and_return({
+                      "channel" => { "id" => "abc" }
+                    })
 
       allow_any_instance_of(MessageApis::Slack::Api).to receive(:update_reply_in_channel_message)
-                             .and_return(OpenStruct.new(body: ":)"))
+        .and_return(OpenStruct.new(body: ":)"))
 
       @pkg = app.app_package_integrations.create(
         app_package: app_package,
@@ -415,7 +415,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
         r = { ok: true, ts: "1234", thread_ts: "123" }
         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
-                               .and_return(OpenStruct.new(body: r.to_json))
+          .and_return(OpenStruct.new(body: r.to_json))
 
         perform_enqueued_jobs do
           message = conversation.add_message(
@@ -436,7 +436,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
         r = { ok: false, ts: "1234" }
         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
-                               .and_return(OpenStruct.new(body: r.to_json))
+          .and_return(OpenStruct.new(body: r.to_json))
 
         perform_enqueued_jobs do
           message = conversation.add_message(
@@ -452,7 +452,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       before :each do
         r = { ok: false, ts: "1234", thread_ts: "123" }
         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
-                               .and_return(OpenStruct.new(body: r.to_json))
+          .and_return(OpenStruct.new(body: r.to_json))
 
         conversation.conversation_channels.create({
                                                     provider: "slack",
@@ -541,7 +541,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
         r = { ok: true, ts: "1234", thread_ts: "123" }
         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
-                               .and_return(OpenStruct.new(body: r.to_json))
+          .and_return(OpenStruct.new(body: r.to_json))
 
         perform_enqueued_jobs do
           message = conversation.add_message(
@@ -562,7 +562,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
         r = { ok: false, ts: "1234", thread_ts: "123" }
         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
-                               .and_return(OpenStruct.new(body: r.to_json))
+          .and_return(OpenStruct.new(body: r.to_json))
 
         perform_enqueued_jobs do
           message = conversation.add_message(
@@ -631,7 +631,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
     def expect_delivery(text)
       stub = stub_request(:post, endpoint).with do |request|
         JSON.parse(request.body).fetch("blocks") == [{ "type" => "section", "text" => { "type" => "mrkdwn", "text" => text } }]
-          .map { |block| block.deep_merge("text" => { "verbatim" => true }) }
+                                                    .map { |block| block.deep_merge("text" => { "verbatim" => true }) }
       end
       stub.to_return(status: 200, body: "{}")
     end

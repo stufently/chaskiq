@@ -2,7 +2,6 @@
 
 module MessageApis::Twilio
   class Api < MessageApis::BasePackage
-
     def self.definition_info
       {
         name: "Twilio",
@@ -120,9 +119,9 @@ module MessageApis::Twilio
       @package = package
 
       profile_id = conversation.main_participant
-                                &.external_profiles
-                                &.find_by(provider: PROVIDER)
-                                &.profile_id
+                               &.external_profiles
+                               &.find_by(provider: PROVIDER)
+                               &.profile_id
 
       profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone) if profile_id.blank?
 
@@ -266,7 +265,6 @@ module MessageApis::Twilio
       agent_sender:, participant:, serialized_content:,
       text:, message_id:, channel_id:, conversation: nil
     )
-
       if conversation.blank? || conversation.closed? || new_conversation_thread?(conversation.latest_user_visible_comment_at)
 
         clear_conversation(conversation) if conversation.present?

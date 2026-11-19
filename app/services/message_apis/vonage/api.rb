@@ -2,7 +2,6 @@
 
 module MessageApis::Vonage
   class Api < MessageApis::BasePackage
-
     def self.definition_info
       {
         name: "Vonage",
@@ -44,6 +43,7 @@ module MessageApis::Vonage
     end
 
     include MessageApis::Helpers
+
     PROVIDER = "vonage"
     RESUMABLE_DELIVERY = true
 

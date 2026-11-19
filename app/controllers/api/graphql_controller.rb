@@ -4,6 +4,7 @@ require "browser/aliases"
 
 class Api::GraphqlController < ApiController
   include HashEnsurer
+
   before_action :get_app
   # before_action :authorize!
 

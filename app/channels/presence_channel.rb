@@ -2,6 +2,7 @@
 
 class PresenceChannel < ApplicationCable::Channel
   include UserFinder
+
   before_unsubscribe :offline
 
   def subscribed

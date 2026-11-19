@@ -272,19 +272,19 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
     it "sends every attachment in order with the caption on the first eligible request" do
       result = deliver_dialog_media("Here are the files", [
-        ["AudioRecorderBlock", "/uploads/voice.ogg"],
-        ["ImageBlock", "/uploads/first image.png"],
-        ["VideoBlock", "https://cdn.example.com/video.mp4"],
-        ["FileBlock", "/uploads/file.pdf"]
-      ])
+                                      ["AudioRecorderBlock", "/uploads/voice.ogg"],
+                                      ["ImageBlock", "/uploads/first image.png"],
+                                      ["VideoBlock", "https://cdn.example.com/video.mp4"],
+                                      ["FileBlock", "/uploads/file.pdf"]
+                                    ])
 
       expect(requests.map { |request| request["type"] }).to eq(%w[audio image video document])
       expect(requests.map { |request| request.fetch(request.fetch("type")) }).to eq([
-        { "link" => "https://chat.example.com/uploads/voice.ogg" },
-        { "link" => "https://chat.example.com/uploads/first%20image.png", "caption" => "Here are the files" },
-        { "link" => "https://cdn.example.com/video.mp4" },
-        { "link" => "https://chat.example.com/uploads/file.pdf" }
-      ])
+                                                                                      { "link" => "https://chat.example.com/uploads/voice.ogg" },
+                                                                                      { "link" => "https://chat.example.com/uploads/first%20image.png", "caption" => "Here are the files" },
+                                                                                      { "link" => "https://cdn.example.com/video.mp4" },
+                                                                                      { "link" => "https://chat.example.com/uploads/file.pdf" }
+                                                                                    ])
       expect(requests.map { |request| request["to"] }.uniq).to eq([user_phone])
       expect(JSON.parse(result.body)).to eq("messages" => [{ "id" => "wamid.1" }])
     end
@@ -293,9 +293,9 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       deliver_dialog_media("Listen to this", [["AudioRecorderBlock", "/uploads/voice.ogg"]])
 
       expect(requests.map { |request| request.slice("type", "audio", "text") }).to eq([
-        { "type" => "audio", "audio" => { "link" => "https://chat.example.com/uploads/voice.ogg" } },
-        { "type" => "text", "text" => { "body" => "Listen to this" } }
-      ])
+                                                                                        { "type" => "audio", "audio" => { "link" => "https://chat.example.com/uploads/voice.ogg" } },
+                                                                                        { "type" => "text", "text" => { "body" => "Listen to this" } }
+                                                                                      ])
     end
 
     context "when notifying a saved message" do

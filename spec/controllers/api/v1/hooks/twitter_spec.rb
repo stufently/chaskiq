@@ -2,7 +2,6 @@ require "rails_helper"
 include ActiveJob::TestHelper
 
 RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
-
   describe "Twitter outgoing media" do
     include WebMock::API
 
@@ -16,7 +15,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
     let(:api) do
       MessageApis::Twitter::Api.new(config: { "api_key" => "k", "api_secret" => "s",
-                                            "access_token" => "t", "access_token_secret" => "ts" })
+                                              "access_token" => "t", "access_token_secret" => "ts" })
     end
     let(:upload) { "https://upload.twitter.com/1.1/media/upload.json" }
     let(:png) { "\x89PNG\r\n\x1A\n".b + ("\x00" * 32).b }
