@@ -1,4 +1,4 @@
-# rspec examples at BASE a6ec4ad4, 635 examples, LC_ALL=C sorted
+# rspec examples at BASE b8ce925c, 675 examples, LC_ALL=C sorted
 ./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields app access messenger
 ./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields app access messenger
 ./spec/controllers/api/graphql_controller_spec.rb :: Api::GraphqlController app security, forbidden fields app access messenger
@@ -118,10 +118,39 @@
 ./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation video
 ./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with breakline
 ./spec/controllers/api/v1/hooks/telegram_spec.rb :: Api::V1::Hooks::ProviderController hooks receive two messages in single conversation
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks does not store oversized media over five MiB (base-green)
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks drops the API key on a redirect to the same Telnyx host
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks follows a redirect to another HTTPS Telnyx subdomain without the API key
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks ignores a message without text or media
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks ignores delivered and failed callbacks for a part in another app
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks keeps the text and remaining inbound MMS attachments if storage raises an error
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks logs a rejected foreign host without exposing its URL and keeps an unavailable attachment block
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks marks a part read after delivered while message.sent and delivery_unconfirmed leave it unread
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks persists a media-only inbound MMS image and file in Active Storage and deduplicates the webhook
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks records a failed delivery once on webhook replay with only sanitized fields
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks rejects a Telnyx media redirect to http://other.telnyx.com/final.png before making a request
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks rejects a Telnyx media redirect to https://files.example.com/final.png before making a request
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks rejects lookalike Telnyx hosts and URLs with userinfo (base-green)
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks rejects media at a private address (base-green)
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks rejects plain http to a Telnyx host (base-green)
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks rejects private Telnyx media even on the application's own host (base-green)
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks sends the API key to the apex, subdomain and mixed-case HTTPS media hosts
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms MMS and delivery webhooks stores an inbound MMS vCard with the .vcf extension
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages appends an unsupported PDF as a link alongside supported media and as a standalone SMS
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages keeps text-only SMS without media_urls (base-green)
 ./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages makes no request for an empty outgoing message
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages returns nil and records an errored event with only the safe provider fields
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages samples one sender from the pool for all three requests of one MMS message
 ./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages sends HTML-only content as plain text
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages sends a media-only attachment using media_urls and no text field
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages sends each supported extension in its own media_urls and captions the first request
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages sends only the remaining attachment without the original caption on retry
 ./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages sends text from the legacy blocks wrapper
 ./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages sends the outgoing Dante paragraph to the provider
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages stores each media message id with its delivery index
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages stores the message id of a link-only SMS and avoids resending it
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages stores the message id of a text-only SMS
+./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController TelnyxSms outgoing messages stores the successful id and records the later error for a partly sent message
 ./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks outbound phone resolve
 ./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks receive conversation data
 ./spec/controllers/api/v1/hooks/telnyx_sms_spec.rb :: Api::V1::Hooks::ProviderController hooks receive text with STOP
@@ -322,6 +351,11 @@
 ./spec/lib/nightfury_spec.rb :: Nightfury raises a not configured error without using global Redis
 ./spec/lib/nightfury_spec.rb :: Nightfury reads every point in a series without meta
 ./spec/lib/nightfury_spec.rb :: Nightfury uses the deployed key prefix for app metrics
+./spec/lib/php_serialize_spec.rb :: PHP preserves the php_serialize 1.2 format for Paddle ordered fields
+./spec/lib/php_serialize_spec.rb :: PHP preserves the php_serialize 1.2 format for floating point
+./spec/lib/php_serialize_spec.rb :: PHP preserves the php_serialize 1.2 format for multibyte UTF-8
+./spec/lib/php_serialize_spec.rb :: PHP preserves the php_serialize 1.2 format for nested objects and arrays
+./spec/lib/php_serialize_spec.rb :: PHP preserves the php_serialize 1.2 format for null and booleans
 ./spec/lib/rack/health_check_spec.rb :: Rack::HealthCheck creates one Redis client before the first request
 ./spec/lib/rack/health_check_spec.rb :: Rack::HealthCheck returns 200 when Redis responds
 ./spec/lib/rack/health_check_spec.rb :: Rack::HealthCheck returns 503 when Redis is unavailable
@@ -575,6 +609,12 @@
 ./spec/services/message_apis/block_manager_spec.rb :: MessageApis::BlockManager.plain_text separates paragraph blocks with a newline
 ./spec/services/message_apis/block_manager_spec.rb :: MessageApis::BlockManager.plain_text uses a Dante media caption when the message has no other text
 ./spec/services/message_apis/content_showcase/presenter_spec.rb :: MessageApis::ContentShowcase::Presenter preserves article fields when autofill cannot get a preview
+./spec/services/message_apis/safe_download_headers_spec.rb :: MessageApis::SafeDownload allows a private own host by default and rejects it when the exception is disabled
+./spec/services/message_apis/safe_download_headers_spec.rb :: MessageApis::SafeDownload checks the URL policy before resolving the first hop
+./spec/services/message_apis/safe_download_headers_spec.rb :: MessageApis::SafeDownload disables the private own host exception after a redirect as well
+./spec/services/message_apis/safe_download_headers_spec.rb :: MessageApis::SafeDownload sends caller headers only before a redirect to /final
+./spec/services/message_apis/safe_download_headers_spec.rb :: MessageApis::SafeDownload sends caller headers only before a redirect to https://files.example.com/final
+./spec/services/message_apis/safe_download_headers_spec.rb :: MessageApis::SafeDownload sends no extra headers by default (base-green)
 ./spec/services/message_apis/safe_download_spec.rb :: MessageApis::SafeDownload allows the configured HOST on a private address only on the same origin
 ./spec/services/message_apis/safe_download_spec.rb :: MessageApis::SafeDownload applies one deadline across redirects and across DNS lookups
 ./spec/services/message_apis/safe_download_spec.rb :: MessageApis::SafeDownload blocks Azure WireServer

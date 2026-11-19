@@ -5,7 +5,7 @@
 - Репозиторий: `chaskiq` (локально `/home/deploy/github/chaskiq`), ветка `main`. Дата спеки:
   2026-11-19. Спека — `docs/specs/fork-updates-r1.md`, план всей чистки —
   `docs/specs/fork-updates-rubocop-plan.md` (эта веха — R1 оттуда).
-- BASE_SHA: `a6ec4ad4964c2eecf2302abe2c073bf5f2859384` — сейчас HEAD `main`; веха запускается ПОСЛЕ влития fork-updates-m11 (Telnyx) и fork-updates-m14 (Ruby 4.0.10).
+- BASE_SHA: `b8ce925cc3c68539eea0cf173be55298dffc9f58` — сейчас HEAD `main`; веха запускается ПОСЛЕ влития fork-updates-m11 (Telnyx) и fork-updates-m14 (Ruby 4.0.10).
 - BASE плавающий: до запуска `main` уйдёт вперёд (вливаются m11 и m14), постановщик коммитит
   новое значение в строку BASE_SHA и только потом снимает клон. Команды критериев считают
   `B=$(git merge-base HEAD @{u})` сами. В `report.json` поле `base_sha` равно значению строки
@@ -47,7 +47,7 @@
 3. Список примеров BASE на том же checkout:
    `CHASKIQ_R1_CACHE=$HOME/.cache/chaskiq-r1-ci bash docs/specs/fork-updates-r1-probes/rspec_gate_r1.sh --write-base`
    (сьют должен быть зелёным; пишет `examples_base.txt`, `pending_allowed.txt`,
-   `warnings_base.txt`). Сейчас в файлах — снимок `main` a6ec4ad4 на Ruby 3.3.14: 635 примеров,
+   `warnings_base.txt`). Снят постановщиком на `main` b8ce925c (Ruby 4.0.10): 675 примеров,
    0 failures, 30 pending.
 4. Закоммитить в `main` одним коммитом постановщика: три файла из п. 3, их sha256 (и sha256
    изменённого пробника, если был п. 2) в AC-005 и строку BASE_SHA ← HEAD `main`. Только после
@@ -244,7 +244,7 @@ RuboCop — в образе `bin/ci-local` (как `in_ruby` в `bin/ci-local`: 
   `bash -c 'CI_LOCAL_CACHE=$HOME/.cache/chaskiq-r1-ci bin/ci-local --only rubocop'`
 
 - **AC-005** — коммитов в docs/specs нет, пробники и снимки постановщика не тронуты (sha256), спека не тронута.
-  `bash -c 'B=$(git merge-base HEAD @{u}) && test -z "$(git log --format=%H $B..HEAD -- docs/specs)" && printf "%s\n" "19091e7db1484919ea3ea53488f386455120262d7c3a73b67fc72d8691db6fae  docs/specs/fork-updates-r1-probes/examples_base.txt" "9d33faab642d08c0614cf64938e881dd2c8542e488fc077c3352207c2bd8f0ae  docs/specs/fork-updates-r1-probes/pending_allowed.txt" "bd546469dc06942933ee41347f73f4a888d646be0b1108f43755bb79c5cbd570  docs/specs/fork-updates-r1-probes/warnings_base.txt" "9deddcf75be22e5b72062afc58c942bba4c0c7fdb69cbe2695a9e3145239abf8  docs/specs/fork-updates-r1-probes/rspec_gate_r1.sh" "7696238f431a9af732f3847641c9b92adb1832065fad4a783faeadddcd04307f  docs/specs/fork-updates-r1-probes/r1_equiv_probe.py" "cfb55a920c24ff8516dff21df34d2b73886e35763f77ef89af71cb86ea82c792  docs/specs/fork-updates-r1-probes/r1_iseq.rb" "d9a9ad141d38213b6336f6470107b19dc83d896d8c80cd3e4793c947d46bccfe  docs/specs/fork-updates-r1-probes/r1_backlog_probe.sh" | sha256sum -c --quiet - && git diff --quiet $B HEAD -- docs/specs'`
+  `bash -c 'B=$(git merge-base HEAD @{u}) && test -z "$(git log --format=%H $B..HEAD -- docs/specs)" && printf "%s\n" "8ed9bbbc70698efba6f7598533884aa59bc65c568a9d9f2603a94f8525519086  docs/specs/fork-updates-r1-probes/examples_base.txt" "07a26708559b6bc44f07390acf03b74bec37a1395344d5f9ee5e01982533b01d  docs/specs/fork-updates-r1-probes/pending_allowed.txt" "3bdb9a9cfa0344613c7a57d6560d71009d7dca7f166e615d32eb58546447c8db  docs/specs/fork-updates-r1-probes/warnings_base.txt" "9deddcf75be22e5b72062afc58c942bba4c0c7fdb69cbe2695a9e3145239abf8  docs/specs/fork-updates-r1-probes/rspec_gate_r1.sh" "7696238f431a9af732f3847641c9b92adb1832065fad4a783faeadddcd04307f  docs/specs/fork-updates-r1-probes/r1_equiv_probe.py" "cfb55a920c24ff8516dff21df34d2b73886e35763f77ef89af71cb86ea82c792  docs/specs/fork-updates-r1-probes/r1_iseq.rb" "d9a9ad141d38213b6336f6470107b19dc83d896d8c80cd3e4793c947d46bccfe  docs/specs/fork-updates-r1-probes/r1_backlog_probe.sh" | sha256sum -c --quiet - && git diff --quiet $B HEAD -- docs/specs'`
 
 - **AC-006** — дерево чистое.
   `bash -c 'test -z "$(git status --porcelain -- . ":(exclude)report.json" ":(exclude)report-blocked.md")"'`
