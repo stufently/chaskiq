@@ -8,7 +8,8 @@ Changed
 Fixed
 - Dashboard metrics include the oldest point in series stored without metadata.
 - Twilio Phone reads use the same Kredis connection and namespace as writes, including in staging.
-- The offline checker uses the Action Cable Redis connection and channel prefix, so closing one tab keeps users online while another tab is subscribed.
+- The offline checker uses the Action Cable Redis connection and checks the exact prefixed channel, so closing one tab keeps users online only while another tab is subscribed to the same channel.
+- The Rack health check shares one Redis client across requests, including concurrent first requests.
 
 ## 2026-11-19 — CI parity
 

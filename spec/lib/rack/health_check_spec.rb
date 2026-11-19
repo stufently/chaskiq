@@ -4,6 +4,14 @@ require "rails_helper"
 require_relative "../../../lib/rack/health_check"
 
 RSpec.describe Rack::HealthCheck do
+  it "creates one Redis client before the first request" do
+    allow(Redis).to receive(:new).and_call_original
+
+    described_class.new
+
+    expect(Redis).to have_received(:new).with(no_args).once
+  end
+
   it "returns 200 when Redis responds" do
     status, _, body = described_class.new.call({})
 

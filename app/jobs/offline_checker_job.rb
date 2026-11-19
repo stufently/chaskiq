@@ -19,7 +19,8 @@ class OfflineCheckerJob < ApplicationJob
 
     channel = [cable[:channel_prefix], key].compact.join(":")
     redis = Redis.new(url: cable[:url])
-    redis.pubsub("CHANNELS", channel).any?
+    _, count = redis.pubsub("NUMSUB", channel)
+    count.positive?
   ensure
     redis&.close
   end

@@ -5,6 +5,10 @@
 
 module Rack
   class HealthCheck
+    def initialize
+      @redis = Redis.new
+    end
+
     def call(env)
       connected = redis_connected
       status = {
@@ -21,7 +25,7 @@ module Rack
     protected
 
     def redis_connected
-      (@redis ||= Redis.new).ping == "PONG"
+      @redis.ping == "PONG"
     rescue StandardError
       false
     end
