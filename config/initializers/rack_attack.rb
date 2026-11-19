@@ -13,17 +13,17 @@ Rack::Attack.throttle("logins/ip", limit: 20, period: 1.hour) do |req|
   next unless req.post? && %r{\A/+oauth/+token(?:\.[^/.?]+)?/*\z}.match?(req.path)
 
   grant_type = begin
-    begin
-      body_params = req.media_type == "application/json" ? JSON.parse(req.body.read) : req.POST
-    ensure
-      req.body&.rewind
-    end
+    body_params = if req.media_type == "application/json"
+                    JSON.parse(ActionDispatch::Request.new(req.env).raw_post)
+                  else
+                    req.POST
+                  end
     req.GET.fetch("grant_type") { body_params["grant_type"] if body_params.is_a?(Hash) }
   rescue StandardError
     # Invalid parameters must still consume an attempt.
     nil
   end
-  req.ip unless grant_type == "refresh_token"
+  (req.ip || req.env["REMOTE_ADDR"] || "unknown") unless grant_type == "refresh_token"
 end
 
 ActiveSupport::Notifications.subscribe("rack.attack") do |_name, _start, _finish, _request_id, payload|

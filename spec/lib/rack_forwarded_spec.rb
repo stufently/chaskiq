@@ -24,4 +24,26 @@ RSpec.describe Rack::Request do
 
     expect(described_class.new(env).scheme).to eq("https")
   end
+
+  it "uses the first forwarded protocol and host in proxy chains" do
+    env = Rack::MockRequest.env_for(
+      "/",
+      "HTTP_X_FORWARDED_PROTO" => "https, http",
+      "HTTP_X_FORWARDED_HOST" => "public.example, internal"
+    )
+    request = described_class.new(env)
+
+    expect(request.scheme).to eq("https")
+    expect(request.host).to eq("public.example")
+  end
+
+  it "falls back to the forwarded protocol for a chained X-Forwarded-Scheme" do
+    env = Rack::MockRequest.env_for(
+      "/",
+      "HTTP_X_FORWARDED_SCHEME" => "http, http",
+      "HTTP_X_FORWARDED_PROTO" => "https"
+    )
+
+    expect(described_class.new(env).scheme).to eq("https")
+  end
 end
