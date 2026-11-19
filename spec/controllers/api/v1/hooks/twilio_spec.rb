@@ -89,9 +89,8 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       ActiveJob::Base.queue_adapter = :test
       ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = false
 
-      AppPackageIntegration.any_instance
-                           .stub(:handle_registration)
-                           .and_return({})
+      allow_any_instance_of(AppPackageIntegration).to receive(:handle_registration)
+        .and_return({})
 
       @pkg = app.app_package_integrations.create(
         {
@@ -286,9 +285,8 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
         expect(app.app_users.size).to be == 1
 
-        Conversation.any_instance
-                    .stub(:latest_user_visible_comment_at)
-                    .and_return(10.hours.ago)
+        allow_any_instance_of(Conversation).to receive(:latest_user_visible_comment_at)
+          .and_return(10.hours.ago)
 
         get(:process_event, params: data_for(
           id: @pkg.id,
@@ -321,9 +319,8 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
         expect(app.app_users.size).to be == 1
 
-        Conversation.any_instance
-                    .stub(:latest_user_visible_comment_at)
-                    .and_return(10.minutes.ago)
+        allow_any_instance_of(Conversation).to receive(:latest_user_visible_comment_at)
+          .and_return(10.minutes.ago)
 
         get(:process_event, params: data_for(
           id: @pkg.id,

@@ -25,7 +25,7 @@ RSpec.describe AppUser, type: :model do
 
   describe "full contact enrichment" do
     it "send to enrichment" do
-      App.any_instance.stub(:gather_social_data).and_return(true)
+      allow_any_instance_of(App).to receive(:gather_social_data).and_return(true)
       visitor
       expect(app.app_users.count).to be == 1
       # expect(DataEnrichmentJob).to receive(:perform_later)
@@ -35,7 +35,7 @@ RSpec.describe AppUser, type: :model do
     end
 
     it "not send on setting false" do
-      App.any_instance.stub(:gather_social_data).and_return(false)
+      allow_any_instance_of(App).to receive(:gather_social_data).and_return(false)
       visitor
       expect(app.app_users.count).to be == 1
       expect(DataEnrichmentJob).to_not receive(:perform_later)
@@ -52,11 +52,11 @@ RSpec.describe AppUser, type: :model do
         api_secret: "12345"
       )
 
-      App.any_instance.stub(:gather_social_data).and_return(true)
+      allow_any_instance_of(App).to receive(:gather_social_data).and_return(true)
       visitor
       expect(app.app_users.count).to be == 1
 
-      MessageApis::FullContact::Api.any_instance.should_receive(:enrich_user)
+      expect_any_instance_of(MessageApis::FullContact::Api).to receive(:enrich_user)
 
       perform_enqueued_jobs do
         visitor.update(email: "miguelmichelson@gmail.com")
@@ -183,7 +183,9 @@ RSpec.describe AppUser, type: :model do
       it "merge_contact from user to app lead " do
         lead = Lead.first
         lead.update(phone: "123456")
-        expect { app.merge_contact(from: app_user, to: lead) }.to raise_exception
+        expect do
+          app.merge_contact(from: app_user, to: lead)
+        end.to raise_exception(RuntimeError, "contact origin is not a Lead")
       end
     end
   end

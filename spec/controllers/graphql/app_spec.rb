@@ -78,7 +78,7 @@ RSpec.describe GraphqlController, type: :controller do
 
     it "agents" do
       stub_current_user(agent_role)
-      # controller.stub(:current_user).and_return(agent_role.agent)
+      # allow(controller).to receive(:current_user).and_return(agent_role.agent)
       graphql_post(@graphql_client.data_for(type: "AGENTS", variables: { appKey: app.key }))
       expect(graphql_response.errors).to be_nil
       expect(graphql_response.data.app).to be_present
@@ -89,7 +89,7 @@ RSpec.describe GraphqlController, type: :controller do
       stub_current_user(agent_role)
       app.segments.create(predicates: predicates)
 
-      # controller.stub(:current_user).and_return(agent_role.agent)
+      # allow(controller).to receive(:current_user).and_return(agent_role.agent)
       graphql_post(@graphql_client.data_for(type: "SEGMENT", variables: {
                                               appKey: app.key,
                                               id: app.segments.first.id.to_s

@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m12
+
+Changed
+- Nightfury is vendored and keeps the existing Redis keys and connection settings. Rails, Cypress, RSpec, and RuboCop no longer use the deprecated APIs and configuration covered by this milestone.
+
+Fixed
+- Dashboard metrics include the oldest point in series stored without metadata.
+- Twilio Phone reads use the same Kredis connection and namespace as writes, including in staging.
+- The offline checker uses the Action Cable Redis connection and checks the exact prefixed channel, so closing one tab keeps users online only while another tab is subscribed to the same channel.
+- The Rack health check shares one Redis client across requests, including concurrent first requests.
+
 ## 2026-11-19 — agent sign-in fix
 
 Fixed

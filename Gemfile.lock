@@ -5,16 +5,6 @@ GIT
     emoji_data (0.2.0)
 
 GIT
-  remote: https://github.com/michelson/nightfury.git
-  revision: b9014eec30d94c52a63f724ef449a34d3b3f42c2
-  specs:
-    nightfury (1.0.1)
-      activesupport (>= 6.0)
-      i18n
-      redis (~> 4.0)
-      redis-namespace (~> 1.6)
-
-GIT
   remote: https://github.com/roo-rb/roo.git
   revision: 72dfeef7e9e62551d049614e3e447dc1a7466caa
   specs:
@@ -800,7 +790,6 @@ DEPENDENCIES
   mini_magick (~> 5.1)
   mustache
   net-http (>= 0.4.0)
-  nightfury!
   nokogiri
   oauth (~> 0.5.5)
   omniauth-oauth2 (>= 1.9.0)

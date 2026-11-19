@@ -48,6 +48,9 @@ def request_fixture(name)
 end
 
 RSpec.configure do |config|
+  config.mock_with :rspec do |mocks|
+    mocks.syntax = :expect
+  end
   config.before(:suite) do
     # reindex models
     # Product.reindex

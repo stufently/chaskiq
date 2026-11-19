@@ -43,7 +43,6 @@ gem "redis-namespace", "~> 1.8"
 gem "redis-objects", "~> 1.5"
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-gem "nightfury", github: "michelson/nightfury" # "~> 1.0"
 
 # gem 'tabs', github: 'michelson/tabs', branch: "upgrade"
 

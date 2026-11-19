@@ -37,9 +37,8 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
       conversation
 
-      AppPackageIntegration.any_instance
-                           .stub(:handle_registration)
-                           .and_return({})
+      allow_any_instance_of(AppPackageIntegration).to receive(:handle_registration)
+        .and_return({})
 
       @pkg = app.app_package_integrations.create(
         api_secret: "sk-xxx",

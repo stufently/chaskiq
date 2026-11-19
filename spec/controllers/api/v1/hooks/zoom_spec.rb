@@ -89,13 +89,11 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       ActiveJob::Base.queue_adapter = :test
       ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = false
 
-      AppPackageIntegration.any_instance
-                           .stub(:handle_registration)
-                           .and_return({})
+      allow_any_instance_of(AppPackageIntegration).to receive(:handle_registration)
+        .and_return({})
 
-      MessageApis::Zoom::Api.any_instance
-                            .stub(:create_fase)
-                            .and_return({ definitions: blocks[:schema] })
+      allow_any_instance_of(MessageApis::Zoom::Api).to receive(:create_fase)
+        .and_return({ definitions: blocks[:schema] })
 
       @pkg = app.app_package_integrations.create(
         api_secret: "aaa",
