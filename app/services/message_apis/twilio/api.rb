@@ -100,9 +100,7 @@ module MessageApis::Twilio
 
     def process_error(params)
       conversation_part_channel = find_channel_from_part_source(params["SmsSid"])
-      # return if conversation_part_channel.blank?
-
-      channel_id, twilio_user, agent_sender = parse_remitent(params)
+      return unless conversation_part_channel
 
       conversation = conversation_part_channel.conversation_part.conversation
 
@@ -173,7 +171,7 @@ module MessageApis::Twilio
                    send_text.call(plain_message)
                  else
                    MessageApis::BlockManager.deliver_attachments(
-                     attachments, plain_message, send_text: send_text, captionless: %w[AudioRecorderBlock]
+                     attachments, plain_message, send_text: send_text, captionless: method(:captionless_attachment?)
                    ) do |_type, url, caption|
                      params = message_params.merge(MediaUrl: url)
                      params[:Body] = caption if caption
@@ -206,6 +204,11 @@ module MessageApis::Twilio
 
       response
     end
+
+    def captionless_attachment?(type, url)
+      type != "ImageBlock" || !URI.parse(url).path.to_s.match?(/\.(?:jpe?g|png)\z/i)
+    end
+    private :captionless_attachment?
 
     def handle_post_failure; end
 

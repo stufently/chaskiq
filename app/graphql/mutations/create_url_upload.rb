@@ -2,6 +2,9 @@
 
 module Mutations
   class CreateUrlUpload < GraphQL::Schema::Mutation
+    MAX_DOWNLOAD_BYTES = 100 * 1024 * 1024
+    private_constant :MAX_DOWNLOAD_BYTES
+
     class CreateUrlUploadInput < GraphQL::Schema::InputObject
       description "File information required to prepare a direct upload"
 
@@ -27,7 +30,7 @@ module Mutations
     field :direct_upload, UrlUpload, null: false
 
     def download_to_file(uri)
-      stream = MessageApis::SafeDownload.fetch(uri)
+      stream = MessageApis::SafeDownload.fetch(uri, max_bytes: MAX_DOWNLOAD_BYTES)
       raise GraphQL::ExecutionError, "Unable to download the file" unless stream
 
       Tempfile.new.tap do |file|

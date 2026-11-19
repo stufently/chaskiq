@@ -463,6 +463,16 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect(blocks.size).to be == 4
     end
 
+    it "acknowledges status callbacks for an unknown attachment ID" do
+      params = data_for_errors(id: @pkg.encoded_id, sender: user_phone, message_id: "wamid.untracked")
+      params[:statuses] << { id: "wamid.untracked", status: "read" }
+
+      perform_enqueued_jobs { post :process_event, params: params }
+
+      expect(response).to have_http_status(:ok)
+      expect(app.conversations).to be_empty
+    end
+
     it "create message with error" do
       get(:process_event, params: data_for(
         id: @pkg.id,

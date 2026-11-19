@@ -106,6 +106,18 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       )
     end
 
+    it "acknowledges status callbacks for an unknown attachment SID" do
+      %w[undelivered read].each do |status|
+        params = data_for(id: @pkg.id, sender: user_phone, recipient: owner_phone, message_id: "SM-untracked")
+        perform_enqueued_jobs do
+          post :process_event, params: params.merge("SmsStatus" => status)
+        end
+
+        expect(response).to have_http_status(:ok)
+        expect(app.conversations).to be_empty
+      end
+    end
+
     it "receive conversation data" do
       get(:process_event,
           params: data_for(
@@ -452,6 +464,33 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
           { "MediaUrl" => "https://chat.example.com/uploads/voice.ogg" },
           { "Body" => "Listen to this" }
         ])
+      end
+
+      it "sends a standalone Body after video, document, WebP and audio attachments" do
+        deliver_media("Caption as a message", [
+          ["VideoBlock", "/uploads/video.mp4"],
+          ["FileBlock", "/uploads/file.pdf"],
+          ["ImageBlock", "/uploads/sticker.webp?download=photo.png"],
+          ["AudioRecorderBlock", "/uploads/voice.ogg"]
+        ])
+
+        expect(requests.map { |request| request.slice("MediaUrl", "Body") }).to eq([
+          { "MediaUrl" => "https://chat.example.com/uploads/video.mp4" },
+          { "MediaUrl" => "https://chat.example.com/uploads/file.pdf" },
+          { "MediaUrl" => "https://chat.example.com/uploads/sticker.webp?download=photo.png" },
+          { "MediaUrl" => "https://chat.example.com/uploads/voice.ogg" },
+          { "Body" => "Caption as a message" }
+        ])
+      end
+
+      it "uses the first supported image for the caption after ineligible attachments" do
+        deliver_media("Photo caption", [
+          ["ImageBlock", "/uploads/sticker.webp"],
+          ["ImageBlock", "/uploads/photo.JPEG?download=1"],
+          ["ImageBlock", "/uploads/another.png"]
+        ])
+
+        expect(requests.map { |request| request["Body"] }).to eq([nil, "Photo caption", nil])
       end
     end
   end

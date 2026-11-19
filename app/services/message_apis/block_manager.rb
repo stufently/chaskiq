@@ -40,6 +40,7 @@ class MessageApis::BlockManager
     first_success = nil
     last_response = nil
     caption = plain_text.presence
+    omit_caption = captionless.respond_to?(:call) ? captionless : ->(type, _url) { captionless.include?(type) }
 
     attachments.each do |media|
       attrs = block_data(media)
@@ -49,7 +50,7 @@ class MessageApis::BlockManager
       next unless url
 
       type = media["type"]
-      media_caption = captionless.include?(type) ? nil : caption
+      media_caption = omit_caption.call(type, url) ? nil : caption
       last_response = yield(type, url, media_caption)
       if last_response.success?
         first_success ||= last_response

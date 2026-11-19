@@ -24,4 +24,24 @@ RSpec.describe Mutations::CreateUrlUpload do
     expect { mutation.resolve(input: OpenStruct.new(url: url)) }.to raise_error(GraphQL::ExecutionError)
     assert_not_requested(outbound)
   end
+
+  it "uploads files larger than the default safe download limit" do
+    url = "https://cdn.example.com/large-file"
+    bytes = 16 * 1024 * 1024
+    allow(MessageApis::SafeDownload).to receive(:resolve).with("cdn.example.com").and_return(["93.184.216.34"])
+    stub_request(:get, url).to_return(body: "x" * bytes)
+
+    result = mutation.resolve(input: OpenStruct.new(url: url))
+
+    expect(ActiveStorage::Blob.find(result.fetch(:direct_upload).fetch(:blob_id)).byte_size).to eq(bytes)
+  end
+
+  it "returns a GraphQL error when the download exceeds 100 MB" do
+    url = "https://cdn.example.com/too-large"
+    allow(MessageApis::SafeDownload).to receive(:resolve).with("cdn.example.com").and_return(["93.184.216.34"])
+    stub_request(:get, url).to_return(headers: { "Content-Length" => (100 * 1024 * 1024 + 1).to_s })
+
+    expect { mutation.resolve(input: OpenStruct.new(url: url)) }
+      .to raise_error(GraphQL::ExecutionError, "Unable to download the file")
+  end
 end

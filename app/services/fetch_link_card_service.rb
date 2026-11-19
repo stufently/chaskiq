@@ -46,7 +46,10 @@ class FetchLinkCardService < BaseService
   end
 
   def attempt_oembed(card, url)
-    response = OEmbed::Providers.get(url)
+    provider = OEmbed::Providers.find(url)
+    return unless provider
+
+    response = provider.get(url)
 
     card.type          = response.type
     card.title         = response.respond_to?(:title)         ? response.title         : ""
