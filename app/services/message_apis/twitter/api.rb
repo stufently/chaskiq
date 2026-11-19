@@ -234,14 +234,13 @@ module MessageApis::Twitter
       message_data["text"] = plain_message
       event["event"]["message_create"]["message_data"] = message_data
 
-      image_block = blocks.find { |o| o["type"] == "ImageBlock" }
+      image_block = blocks.grep(Hash).find { |block| block["type"] == "ImageBlock" }
 
       if image_block.present?
+        attrs = MessageApis::BlockManager.block_data(image_block)
+        url = MessageApis::BlockManager.absolute_url(attrs["url"]) if attrs.is_a?(Hash)
 
-        url = MessageApis::BlockManager.block_data(image_block)["url"]
-        url = "#{Chaskiq::Config.get('HOST')}#{url}" unless url.include?("http")
-
-        if (uploaded_data = upload_media(url)) && uploaded_data.present?
+        if url && (uploaded_data = upload_media(url)).present?
           attachment = {}
           attachment["type"] = "media"
           attachment["media"] = {}
@@ -379,7 +378,9 @@ module MessageApis::Twitter
     # @see https://dev.twitter.com/rest/public/uploading-media
     # idea taken from twitter gem twitter/rest/upload_utils.rb
     def upload_media(media, media_category_prefix: "dm")
-      file = URI.parse(media).open
+      file = MessageApis::SafeDownload.fetch(media)
+      return unless file
+
       # TODO: try to get the id of blob in case of Active storage
       mime = Marcel::MimeType.for(file)
 
