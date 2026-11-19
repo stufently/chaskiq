@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m6
+
+Changed
+- Rails 7.2.1.1 (EOL) → 8.1.4.1. `config.load_defaults` stays at 7.0, so behaviour
+  is unchanged; raising it is a separate step.
+- acts-as-taggable-on now comes from rubygems (`~> 13.0`) instead of a git
+  branch. Also bumped: uri `~> 1.1`, mini_magick `~> 5.1`, ruby-vips 2.3,
+  jbuilder 2.15.
+- `Dotenv::Rails` replaces `Dotenv::Railtie`, keyword `enum` uses the Rails 8
+  syntax, and RSpec uses `fixture_paths`.
+
 ## 2026-11-19 — fork-updates-m5
 
 Fixed
