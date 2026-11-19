@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-11-19 — CI repair, local CI
+
+Fixed
+- Ruby 3.3.5 → 3.3.14 (latest 3.3 patch) in Gemfile, .ruby-version,
+  Gemfile.lock, Dockerfiles, compose and workflows: setup-ruby has no 3.3.5
+  build for ubuntu-26.04 runners.
+- Docker images: base `ruby:*-slim-bullseye` → `-slim-trixie` (bullseye
+  security repo is gone, apt exited 100); PGDG/NodeSource/Yarn repos via
+  `signed-by` keyrings instead of the removed `apt-key`; deps add libyaml-dev,
+  pkg-config. Asset precompile uses a throwaway SECRET_KEY_BASE without NUL
+  bytes (config/application.rb puts `[key].pack('H*')` into ENV).
+- CI: postgres:14-alpine and redis:8.10-alpine services (as in compose), Node 26
+  LTS for the spec JS deps, app store packages and E2E only with the upstream
+  secrets; current action versions (codeql upload-sarif v4, anchore v7).
+- Rubocop workflow: the exit-code check was expanded by the outer shell and
+  never ran; offenses stay non-fatal, a RuboCop error fails the job.
+- Push Docker Image skips its steps when Docker Hub secrets are absent.
+
+Added
+- `bin/ci-local` (rubocop + rspec in Docker, `--docker` for the image build)
+  and the `.githooks/pre-push` hook; CLAUDE.md with the pre-push rule.
+
 ## 2026-11-19 — fork-updates-m6
 
 Changed

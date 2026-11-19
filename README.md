@@ -98,6 +98,24 @@ To get your environment setup, follow the community setup guide for your operati
 
 Before you get started, ensure you have the following minimum versions: [Ruby 2.6+](https://www.ruby-lang.org/en/downloads/), [PostgreSQL 10+](https://www.postgresql.org/download/), [Redis 2.6+](https://redis.io/download).
 
+### Local CI before pushing
+
+`bin/ci-local` repeats the GitHub Actions jobs in Docker (only Docker is needed on the host;
+containers run as your uid, gems/yarn cache in `~/.cache/chaskiq-ci-local`):
+
+```bash
+bin/ci-local                      # rubocop + rspec (postgres:14, redis:8.10, as in CI)
+bin/ci-local --docker             # + production image build (docker-image-ghcr.yml)
+bin/ci-local --only rspec --rspec-args spec/models
+```
+
+Enable the versioned pre-push hook once per clone; it runs `bin/ci-local` and blocks the push on failure:
+
+```bash
+git config core.hooksPath .githooks
+CI_LOCAL_ARGS=--docker git push   # include the image build (after Dockerfile/.docker-files changes)
+```
+
 ## Setting up Chaskiq
 
 If you want to set up a Chaskiq for production use, see our [**Chaskiq Install Guide**](https://dev.chaskiq.io/production-configuration).

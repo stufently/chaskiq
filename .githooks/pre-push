@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Run the local CI (rubocop + rspec in Docker) before every push.
+# Enable once per clone:  git config core.hooksPath .githooks
+# Extra jobs:             CI_LOCAL_ARGS=--docker git push
+# Skip in an emergency:   CHASKIQ_SKIP_CI_LOCAL=1 git push
+set -euo pipefail
+if [ "${CHASKIQ_SKIP_CI_LOCAL:-}" = 1 ]; then
+  echo "pre-push: bin/ci-local skipped (CHASKIQ_SKIP_CI_LOCAL=1)" >&2
+  exit 0
+fi
+root=$(git rev-parse --show-toplevel)
+# shellcheck disable=SC2086
+exec "$root/bin/ci-local" ${CI_LOCAL_ARGS:-} </dev/null
