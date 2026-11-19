@@ -30,7 +30,8 @@ class Agents::SessionsController < Devise::SessionsController
       a = Doorkeeper::Application.first
 
       access_token = Doorkeeper::AccessToken.find_or_create_for(
-        a, resource, "", 1.hour, true
+        application: a, resource_owner: resource, scopes: "",
+        expires_in: 1.hour, use_refresh_token: true
       )
 
       respond_with_navigational(resource, status: :success) do

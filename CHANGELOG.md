@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-19 — agent sign-in fix
+
+Fixed
+- `POST /agents/sign_in` returned 500: it called doorkeeper's `AccessToken.find_or_create_for` with positional arguments, which doorkeeper 5.6 dropped for keywords.
+
 ## 2026-11-19 — CI parity
 
 Changed
