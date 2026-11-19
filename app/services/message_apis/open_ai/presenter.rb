@@ -108,6 +108,7 @@ module MessageApis::OpenAi
   class PromptRecord
     include ActiveModel::Model
     include ActiveModel::Validations
+
     attr_accessor :prompt
 
     def initialize(prompt:)

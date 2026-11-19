@@ -2,6 +2,7 @@
 
 class OembedController < ApplicationController
   include CorsHeaders
+
   before_action :cors_preflight_check
   after_action :cors_set_access_control_headers
 

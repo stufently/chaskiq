@@ -2,7 +2,6 @@
 
 module MessageApis::MessageBird
   class Api < MessageApis::BasePackage
-
     def self.definition_info
       {
         name: "MessageBird",

@@ -2,6 +2,7 @@
 
 class AppPackage < ApplicationRecord
   include UnionScope
+
   has_many :app_package_integrations, dependent: :destroy
   has_many :apps, through: :app_package_integrations
   belongs_to :author, class_name: "Agent", optional: true, foreign_key: :agent_id

@@ -321,7 +321,7 @@ RSpec.describe Conversation, type: :model do
         "value" => "foobar",
         "attribute" => "message_content",
         "comparison" => "eq"
-      }],
+      }]
       ]
 
       expect(app.assignment_rules.count).to be == 1

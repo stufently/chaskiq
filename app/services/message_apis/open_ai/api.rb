@@ -2,7 +2,6 @@
 
 module MessageApis::OpenAi
   class Api < MessageApis::BasePackage
-
     def self.definition_info
       {
         name: "OpenAi",

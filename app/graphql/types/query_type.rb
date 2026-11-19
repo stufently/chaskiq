@@ -3,6 +3,7 @@
 module Types
   class QueryType < Types::BaseObject
     include Helpers::Authorizator
+
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
 

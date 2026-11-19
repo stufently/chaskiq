@@ -243,7 +243,10 @@ RSpec.describe Segment, type: :model do
       end
 
       it "with user tag" do
-        app.app_users.each { |o| o.tag_list << "foo"; o.save }
+        app.app_users.each do |o|
+          o.tag_list << "foo"
+          o.save
+        end
 
         allow_any_instance_of(Segment).to receive(:predicates).and_return(predicates_on_tags)
         expect(app.segments.first.execute_query.size).to be == 1
@@ -257,7 +260,10 @@ RSpec.describe Segment, type: :model do
       end
 
       it "with user tag contains ends" do
-        app.app_users.each { |o| o.tag_list << "foo"; o.save }
+        app.app_users.each do |o|
+          o.tag_list << "foo"
+          o.save
+        end
 
         allow_any_instance_of(Segment).to receive(:predicates).and_return(
           predicates_on_tags_contains
@@ -274,7 +280,10 @@ RSpec.describe Segment, type: :model do
       end
 
       it "with user tag multiple" do
-        app.app_users.each { |o| o.tag_list << "foo"; o.save }
+        app.app_users.each do |o|
+          o.tag_list << "foo"
+          o.save
+        end
 
         allow_any_instance_of(Segment).to receive(:predicates).and_return(
           predicates_on_tags_contains_multiple
@@ -308,7 +317,10 @@ RSpec.describe Segment, type: :model do
       end
 
       it "OR with user tag multiple and by name " do
-        app.app_users.each { |o| o.tag_list << "foo"; o.save }
+        app.app_users.each do |o|
+          o.tag_list << "foo"
+          o.save
+        end
 
         app.app_users.first.update(name: "marilyn")
 

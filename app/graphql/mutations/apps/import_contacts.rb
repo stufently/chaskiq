@@ -3,6 +3,7 @@
 module Mutations
   class Apps::ImportContacts < Mutations::BaseMutation
     include Rails.application.routes.url_helpers
+
     # TODO: define return fields
     # field :post, Types::PostType, null: false
     field :app, Types::AppType, null: false

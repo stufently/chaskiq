@@ -2,7 +2,6 @@
 
 module MessageApis::Pipedrive
   class Api < MessageApis::BasePackage
-
     def self.definition_info
       {
         name: "Pipedrive",

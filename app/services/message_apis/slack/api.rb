@@ -4,7 +4,6 @@ require "oauth2"
 
 module MessageApis::Slack
   class Api
-
     def self.definition_info
       {
         name: "Slack",
@@ -104,7 +103,7 @@ module MessageApis::Slack
       @keys["channel"] = Rails.env.development? ? "chaskiq_channel-local4" : "chaskiq_channel"
       @keys["consumer_key"] = config["api_key"]
       @keys["consumer_secret"] = config["api_secret"]
-      @keys["access_token"] =  config["access_token"]
+      @keys["access_token"] = config["access_token"]
       @keys["access_token_secret"] = config["access_token_secret"]
       @keys["user_token"] = config["user_token"]
       @keys["channel_id"] = config["channel_id"]
@@ -991,6 +990,7 @@ module MessageApis::Slack
         media_url = MessageApis::BlockManager.block_data(block)&.fetch("url", nil)
         url = MessageApis::BlockManager.absolute_url(media_url)
         return unless url
+
         if block["type"] == "ImageBlock"
           { type: "image", image_url: url, alt_text: "Image" }
         else

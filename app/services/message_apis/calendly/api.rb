@@ -5,7 +5,6 @@ require "erb"
 
 module MessageApis::Calendly
   class Api < MessageApis::BasePackage
-
     def self.definition_info
       {
         name: "Calendly",

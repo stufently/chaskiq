@@ -13,104 +13,6 @@ Bundler/OrderedGems:
     - 'Gemfile'
 
 # This cop supports safe autocorrection (--autocorrect).
-Layout/EmptyLineAfterGuardClause:
-  Exclude:
-    - 'app/services/message_apis/slack/api.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: NumberOfEmptyLines.
-Layout/EmptyLineAfterMagicComment:
-  Exclude:
-    - 'docs/specs/fork-updates-m1-probes/m1_puma_probe.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-Layout/EmptyLinesAfterModuleInclusion:
-  Exclude:
-    - 'app/channels/presence_channel.rb'
-    - 'app/controllers/api/graphql_controller.rb'
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/graphql_controller.rb'
-    - 'app/controllers/oembed_controller.rb'
-    - 'app/graphql/mutations/apps/import_contacts.rb'
-    - 'app/graphql/mutations/base_mutation.rb'
-    - 'app/graphql/types/base_object.rb'
-    - 'app/graphql/types/query_type.rb'
-    - 'app/models/app_package.rb'
-    - 'app/models/article.rb'
-    - 'app/models/article_collection.rb'
-    - 'app/models/article_setting.rb'
-    - 'app/models/collection_section.rb'
-    - 'app/models/plan.rb'
-    - 'app/models/quick_reply.rb'
-    - 'app/services/message_apis/content_showcase/presenter.rb'
-    - 'app/services/message_apis/open_ai/presenter.rb'
-    - 'app/services/message_apis/twitter/api.rb'
-    - 'app/services/message_apis/vonage/api.rb'
-    - 'app/services/plugin_schema_validator.rb'
-    - 'spec/controllers/api/v1/hooks/zoom_spec.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, no_empty_lines
-Layout/EmptyLinesAroundBlockBody:
-  Exclude:
-    - 'spec/controllers/api/v1/hooks/twitter_spec.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines, beginning_only, ending_only
-Layout/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'app/services/message_apis/calendly/api.rb'
-    - 'app/services/message_apis/dialog360/api.rb'
-    - 'app/services/message_apis/full_contact/api.rb'
-    - 'app/services/message_apis/message_bird/api.rb'
-    - 'app/services/message_apis/messenger/api.rb'
-    - 'app/services/message_apis/open_ai/api.rb'
-    - 'app/services/message_apis/pipedrive/api.rb'
-    - 'app/services/message_apis/slack/api.rb'
-    - 'app/services/message_apis/telegram/api.rb'
-    - 'app/services/message_apis/telnyx_sms/api.rb'
-    - 'app/services/message_apis/twilio/api.rb'
-    - 'app/services/message_apis/twilio_phone/api.rb'
-    - 'app/services/message_apis/twitter/api.rb'
-    - 'app/services/message_apis/vonage/api.rb'
-    - 'app/services/message_apis/zoom/api.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-Layout/EmptyLinesAroundMethodBody:
-  Exclude:
-    - 'app/services/message_apis/twilio/api.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowForAlignment, AllowBeforeTrailingComments, ForceEqualSignAlignment.
-Layout/ExtraSpacing:
-  Exclude:
-    - 'app/graphql/types/app_type.rb'
-    - 'app/services/message_apis/content_showcase/presenter.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: special_inside_parentheses, consistent, align_brackets
-Layout/FirstArrayElementIndentation:
-  Exclude:
-    - 'spec/controllers/api/v1/hooks/dialog_360_spec.rb'
-    - 'spec/controllers/api/v1/hooks/message_bird_spec.rb'
-    - 'spec/controllers/api/v1/hooks/telegram_spec.rb'
-    - 'spec/controllers/api/v1/hooks/twilio_spec.rb'
-    - 'spec/controllers/api/v1/hooks/vonage_spec.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowMultipleStyles, EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle.
-# SupportedHashRocketStyles: key, separator, table
-# SupportedColonStyles: key, separator, table
-# SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
-Layout/HashAlignment:
-  Exclude:
-    - 'spec/controllers/api/v1/hooks/twitter_spec.rb'
-    - 'spec/requests/rack_attack_spec.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: Max, AllowHeredoc, AllowURI, AllowQualifiedName, URISchemes, AllowRBSInlineAnnotation, AllowCopDirectives, AllowedPatterns, SplitStrings.
 # URISchemes: http, https
 Layout/LineLength:
@@ -159,16 +61,6 @@ Layout/LineLength:
     - 'app/services/message_apis/zapier/presenter.rb'
     - 'app/services/message_apis/zoom/presenter.rb'
     - 'app/validators/hex_validator.rb'
-    - 'docs/specs/fork-updates-m1-probes/m1_config_probe.rb'
-    - 'docs/specs/fork-updates-m1-probes/m1_deps_probe.rb'
-    - 'docs/specs/fork-updates-m1-probes/m1_puma_probe.rb'
-    - 'docs/specs/fork-updates-m1-probes/m1_runtime_probe_spec.rb'
-    - 'docs/specs/fork-updates-m2-probes/m2_runtime_probe_spec.rb'
-    - 'docs/specs/fork-updates-m3-probes/m3_attack_probe_spec.rb'
-    - 'docs/specs/fork-updates-m4-probes/m4_blocks_probe_spec.rb'
-    - 'docs/specs/fork-updates-m5-probes/m5_media_probe_spec.rb'
-    - 'docs/specs/fork-updates-m6-probes/m6_deps_probe.rb'
-    - 'docs/specs/fork-updates-m7-probes/m7_probe_spec.rb'
     - 'lib/app_packages_catalog.rb'
     - 'lib/generators/chaskiq_plugin/chaskiq_plugin_generator.rb'
     - 'lib/tasks/utils.rake'
@@ -195,43 +87,6 @@ Layout/LineLength:
     - 'spec/services/schema_validations_spec.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: aligned, indented, indented_relative_to_receiver
-Layout/MultilineMethodCallIndentation:
-  Exclude:
-    - 'app/services/message_apis/dialog360/api.rb'
-    - 'app/services/message_apis/telegram/api.rb'
-    - 'app/services/message_apis/twilio/api.rb'
-    - 'spec/controllers/api/v1/hooks/slack_spec.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowForAlignment, EnforcedStyleForExponentOperator, EnforcedStyleForRationalLiterals.
-# SupportedStylesForExponentOperator: space, no_space
-# SupportedStylesForRationalLiterals: space, no_space
-Layout/SpaceAroundOperators:
-  Exclude:
-    - 'app/services/message_apis/slack/api.rb'
-    - 'app/services/message_apis/twitter/api.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces.
-# SupportedStyles: space, no_space
-# SupportedStylesForEmptyBraces: space, no_space
-Layout/SpaceBeforeBlockBraces:
-  Exclude:
-    - 'app/services/payment_services/paddle.rb'
-    - 'app/services/payment_services/stripe_service.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
-# SupportedStyles: space, no_space
-# SupportedStylesForEmptyBraces: space, no_space
-Layout/SpaceInsideBlockBraces:
-  Exclude:
-    - 'app/services/payment_services/paddle.rb'
-    - 'app/services/payment_services/stripe_service.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowedMethods, AllowedPatterns.
 Lint/AmbiguousBlockAssociation:
   Exclude:
@@ -241,7 +96,6 @@ Lint/AmbiguousBlockAssociation:
 # This cop supports safe autocorrection (--autocorrect).
 Lint/AmbiguousOperatorPrecedence:
   Exclude:
-    - 'docs/specs/fork-updates-m3-probes/m3_attack_probe_spec.rb'
     - 'spec/controllers/api/v1/hooks_controller_spec.rb'
     - 'spec/graphql/mutations/create_url_upload_spec.rb'
     - 'spec/requests/rack_attack_spec.rb'
@@ -620,12 +474,6 @@ Metrics/BlockLength:
     - 'app/services/action_trigger_factory.rb'
     - 'app/services/message_apis/dialog360/api.rb'
     - 'app/services/message_apis/twitter/api.rb'
-    - 'docs/specs/fork-updates-m1-probes/m1_runtime_probe_spec.rb'
-    - 'docs/specs/fork-updates-m2-probes/m2_runtime_probe_spec.rb'
-    - 'docs/specs/fork-updates-m3-probes/m3_attack_probe_spec.rb'
-    - 'docs/specs/fork-updates-m4-probes/m4_blocks_probe_spec.rb'
-    - 'docs/specs/fork-updates-m5-probes/m5_media_probe_spec.rb'
-    - 'docs/specs/fork-updates-m7-probes/m7_probe_spec.rb'
     - 'lib/tasks/utils.rake'
 
 # Configuration parameters: CountComments, Max, CountAsOne.
@@ -1054,8 +902,6 @@ Rails/Pluck:
   Exclude:
     - 'app/models/segment.rb'
     - 'app/services/message_apis/open_ai/api.rb'
-    - 'docs/specs/fork-updates-m5-probes/m5_media_probe_spec.rb'
-    - 'docs/specs/fork-updates-m7-probes/m7_probe_spec.rb'
     - 'spec/controllers/api/v1/hooks/dialog_360_spec.rb'
     - 'spec/controllers/api/v1/hooks/telegram_spec.rb'
     - 'spec/controllers/api/v1/hooks/twilio_spec.rb'
@@ -1074,11 +920,6 @@ Rails/Presence:
 Rails/Present:
   Exclude:
     - 'app/services/message_apis/safe_download.rb'
-
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Rails/RootPathnameMethods:
-  Exclude:
-    - 'docs/specs/fork-updates-m1-probes/m1_runtime_probe_spec.rb'
 
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Rails/StrongParametersExpect:
@@ -1577,7 +1418,6 @@ Style/Documentation:
     - 'app/services/visit_collector.rb'
     - 'app/validators/hex_validator.rb'
     - 'app/validators/url_validator.rb'
-    - 'docs/specs/fork-updates-m7-probes/m7_probe_spec.rb'
     - 'lib/app_packages_catalog.rb'
     - 'lib/auth0_web_token.rb'
     - 'lib/dummy_name.rb'
@@ -1593,11 +1433,6 @@ Style/Documentation:
 Style/EmptyStringInsideInterpolation:
   Exclude:
     - 'app/services/message_apis/message_bird/api.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-Style/ExplicitBlockArgument:
-  Exclude:
-    - 'docs/specs/fork-updates-m3-probes/m3_attack_probe_spec.rb'
 
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle.
@@ -1828,9 +1663,6 @@ Style/IfUnlessModifier:
     - 'app/services/message_apis/twilio_phone/api.rb'
     - 'app/services/message_apis/twitter/api.rb'
     - 'app/validators/hex_validator.rb'
-    - 'docs/specs/fork-updates-m1-probes/m1_config_probe.rb'
-    - 'docs/specs/fork-updates-m1-probes/m1_deps_probe.rb'
-    - 'docs/specs/fork-updates-m6-probes/m6_deps_probe.rb'
     - 'lib/generators/chaskiq_plugin/chaskiq_plugin_generator.rb'
 
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -1839,13 +1671,6 @@ Style/InverseMethods:
   Exclude:
     - 'app/models/segment_comparator.rb'
     - 'app/services/plugin_schema_validator.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: call, braces
-Style/LambdaCall:
-  Exclude:
-    - 'docs/specs/fork-updates-m6-probes/m6_deps_probe.rb'
 
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/MapIntoArray:
@@ -1892,18 +1717,6 @@ Style/MutableConstant:
   Exclude:
     - 'app/services/message_apis/oauth_utils.rb'
 
-# This cop supports safe autocorrection (--autocorrect).
-Style/NestedTernaryOperator:
-  Exclude:
-    - 'docs/specs/fork-updates-m1-probes/m1_deps_probe.rb'
-
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle, AllowedMethods, AllowedPatterns.
-# SupportedStyles: predicate, comparison
-Style/NumericPredicate:
-  Exclude:
-    - 'docs/specs/fork-updates-m1-probes/m1_puma_probe.rb'
-
 # Configuration parameters: AllowedClasses.
 Style/OneClassPerFile:
   Exclude:
@@ -1938,13 +1751,6 @@ Style/RedundantReturn:
     - 'app/services/message_apis/twilio_phone/api.rb'
     - 'app/services/message_apis/twitter/api.rb'
 
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, AllowInnerSlashes.
-# SupportedStyles: slashes, percent_r, mixed
-Style/RegexpLiteral:
-  Exclude:
-    - 'app/services/message_apis/block_manager.rb'
-
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowedMethods, AllowedPatterns.
 Style/ReturnNilInPredicateMethodDefinition:
@@ -1969,18 +1775,6 @@ Style/SafeNavigationChainLength:
     - 'app/services/message_apis/telegram/api.rb'
     - 'app/services/message_apis/twilio/api.rb'
     - 'app/services/message_apis/vonage/api.rb'
-
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/SelectByKind:
-  Exclude:
-    - 'docs/specs/fork-updates-m1-probes/m1_deps_probe.rb'
-    - 'docs/specs/fork-updates-m6-probes/m6_deps_probe.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowAsExpressionSeparator.
-Style/Semicolon:
-  Exclude:
-    - 'spec/models/segment_spec.rb'
 
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/SingleArgumentDig:
@@ -2018,18 +1812,3 @@ Style/SymbolProc:
   Exclude:
     - 'app/services/plugin_schema_validator.rb'
     - 'lib/tasks/utils.rake'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyleForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, diff_comma, no_comma
-Style/TrailingCommaInArguments:
-  Exclude:
-    - 'spec/models/conversation_spec.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, MinSize, WordRegex.
-# SupportedStyles: percent, brackets
-Style/WordArray:
-  Exclude:
-    - 'docs/specs/fork-updates-m7-probes/m7_probe_spec.rb'
-    - 'spec/controllers/api/v1/hooks/telegram_spec.rb'
