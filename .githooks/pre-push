@@ -54,12 +54,24 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   exit 1
 fi
 
+# Untracked files where the app and the specs load code from would be tested
+# locally but are not part of the push (CI would not see them).
+untracked=$(git -c core.quotepath=off ls-files -o --exclude-standard -- app lib config spec db 2>/dev/null || :)
+if [ -n "$untracked" ]; then
+  echo "pre-push: refusing: the work tree is not clean, untracked files in app/ lib/ config/ spec/ db/" >&2
+  echo "pre-push: would be tested by bin/ci-local but are not pushed:" >&2
+  printf '%s\n' "$untracked" | sed 's/^/  /' >&2
+  echo "pre-push: commit, stash (git stash -u) or remove them first." >&2
+  exit 1
+fi
+
 root=$(git rev-parse --show-toplevel)
 
 # CI_LOCAL_ARGS may only ADD jobs: rubocop + rspec always run.
 need="rubocop rspec"
 ci_args=()
-for arg in ${CI_LOCAL_ARGS:-}; do
+read -r -a requested <<< "${CI_LOCAL_ARGS:-}"
+for arg in ${requested[@]+"${requested[@]}"}; do
   case "$arg" in
     --docker) need="$need docker"; ci_args+=(--docker) ;;
     *)

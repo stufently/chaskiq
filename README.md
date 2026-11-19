@@ -136,7 +136,9 @@ git config core.sshCommand "ssh -o ServerAliveInterval=30"
 completely clean tree: no tracked changes, no untracked files, and ignored files only in generated/cache
 paths (`log/`, `tmp/`, `node_modules/`, `vendor/bundle/` ...), since a local `.env*` or `.rspec-local` could
 change the run. The hook passes the pushed commit to `bin/ci-local --commit <sha>`, which checks it before
-and after the run, and `CI_LOCAL_ARGS` may only be `--docker` (rubocop and rspec always run). Without keepalives, a hook run of `bin/ci-local` longer than
+and after the run, and `CI_LOCAL_ARGS` may only be `--docker` (rubocop and rspec always run). The hook also
+refuses a push while `app/`, `lib/`, `config/`, `spec/` or `db/` hold untracked files: they would be tested
+but not pushed. On RuboCop offenses the full list is in `tmp/rubocop.txt`. Without keepalives, a hook run of `bin/ci-local` longer than
 `CHASKIQ_PUSH_IDLE_LIMIT` seconds (default 300) aborts the push even though CI passed; run the same
 `git push` again and it goes through at once.
 

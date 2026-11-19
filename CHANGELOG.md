@@ -20,10 +20,12 @@ Fixed
   (every <= 60 s, README: `core.sshCommand`) a hook run over 300 s aborts the
   push loudly.
 - The pre-push hook accepts only `--docker` in `CI_LOCAL_ARGS` (rubocop and
-  rspec always run) and has `bin/ci-local --commit` verify the pushed commit
-  before and after the run.
-- `bin/ci-local` RuboCop: per-run target lists (parallel runs), and tracked
-  files with non-ASCII names are no longer skipped as untracked.
+  rspec always run), has `bin/ci-local --commit` verify the pushed commit
+  before and after the run, and refuses untracked files in app/, lib/,
+  config/, spec/, db/.
+- `bin/ci-local` RuboCop: per-run target lists (parallel runs), tracked files
+  with non-ASCII names are no longer skipped as untracked, and
+  `tmp/rubocop.txt` holds the offenses (it held only progress dots).
 
 ## 2026-11-19 — fork-updates-m8
 

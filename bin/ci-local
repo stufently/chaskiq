@@ -130,8 +130,8 @@ run_rubocop() {
   [ -z "$skipped" ] || printf 'rubocop: skipping untracked files (not in a CI checkout):\n%s\n' "$skipped"
   local rc=0
   in_ruby -e TARGETS="$list" "$TEST_IMAGE" bash -c 'mapfile -t files < "$TARGETS"
-    exec bundle exec rubocop --force-exclusion --format offenses --format progress \
-      --out tmp/rubocop.txt "${files[@]}"' || rc=$?
+    exec bundle exec rubocop --force-exclusion --format progress --format offenses \
+      --format simple --out tmp/rubocop.txt "${files[@]}"' || rc=$?
   if [ "$rc" -eq 0 ]; then
     echo "rubocop: clean"
     return 0
