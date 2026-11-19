@@ -31,7 +31,12 @@ ActiveSupport::Deprecation.prepend(Module.new do
 end)
 require "./config/application"
 Rails.application.initialize!
-vips = defined?(ActiveStorage::VIPS_AVAILABLE) ? ActiveStorage::VIPS_AVAILABLE : (require "active_storage/vips"; ActiveStorage::VIPS_AVAILABLE)
+vips = begin
+  require "active_storage/vips" unless defined?(ActiveStorage::VIPS_AVAILABLE)
+  ActiveStorage::VIPS_AVAILABLE
+rescue LoadError
+  "n/a"
+end
 guard = defined?(Vips) && Vips.respond_to?(:block_untrusted)
 puts "RAILS=#{Rails.version} LD=#{Rails.application.config.loaded_config_version} EL=#{Rails.application.config.eager_load} VIPS=#{vips}/#{guard}"'
 
