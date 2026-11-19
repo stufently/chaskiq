@@ -203,7 +203,7 @@ module MessageApis::TwilioPhone
       end
 
       # for users
-      return process_inbound_call(params) if params["CallSid"] && params["CallStatus"]
+      process_inbound_call(params) if params["CallSid"] && params["CallStatus"]
     end
 
     def process_incoming_call(payload, direction)

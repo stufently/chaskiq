@@ -387,7 +387,8 @@ module MessageApis::Twitter
       return chunk_upload(file, mime, "#{media_category_prefix}_video") if mime.include?("mp4")
       # && File.size(media) > 5_000_000
       return chunk_upload(file, mime, "#{media_category_prefix}_gif") if mime.include?("gif")
-      return chunk_upload(file, mime, "#{media_category_prefix}_image") if mime.include?("image")
+
+      chunk_upload(file, mime, "#{media_category_prefix}_image") if mime.include?("image")
 
       #
       # make_post_media_request('/1.1/media/upload.json',
