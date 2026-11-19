@@ -52,9 +52,16 @@ RSpec.describe ConversationPartChannelSource, type: :model do
 
   it "warns and returns the block result if the session already lost its lock" do
     allow(Rails.logger).to receive(:warn)
-    result = described_class.with_delivery_lock(part.id, "twilio") do
-      described_class.with_connection { |connection| connection.execute("SELECT pg_advisory_unlock_all()") }
-      :delivered
+    part_id = part.id
+    result = described_class.with_connection do |connection|
+      previous_level = connection.client_min_messages
+      connection.client_min_messages = "error"
+      described_class.with_delivery_lock(part_id, "twilio") do
+        connection.execute("SELECT pg_advisory_unlock_all()")
+        :delivered
+      end
+    ensure
+      connection.client_min_messages = previous_level if previous_level
     end
 
     expect(result).to eq(:delivered)

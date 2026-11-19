@@ -19,6 +19,11 @@ GIT
     faker (3.2.1)
       i18n (>= 1.8.11, < 2)
 
+PATH
+  remote: vendor/php_serialize
+  specs:
+    php_serialize (1.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -181,6 +186,8 @@ GEM
     bugsnag (6.26.0)
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
+    cgi (0.5.2)
+    cgi (0.5.2-java)
     chronic (0.10.2)
     clavius (1.0.4)
     code-scanning-rubocop (0.6.1)
@@ -193,6 +200,7 @@ GEM
     crass (1.0.6)
     css_parser (1.16.0)
       addressable
+    csv (3.3.7)
     cypress-on-rails (1.20.1)
       rack
     database_cleaner-active_record (2.2.0)
@@ -320,9 +328,6 @@ GEM
     grpc (1.85.0-arm64-darwin)
       google-protobuf (>= 3.25, < 5.0)
       googleapis-common-protos-types (~> 1.0)
-    grpc (1.85.0-x86-mingw32)
-      google-protobuf (>= 3.25, < 5.0)
-      googleapis-common-protos-types (~> 1.0)
     grpc (1.85.0-x86_64-darwin)
       google-protobuf (>= 3.25, < 5.0)
       googleapis-common-protos-types (~> 1.0)
@@ -407,7 +412,9 @@ GEM
       logger
     mini_mime (1.1.5)
     mini_portile2 (2.8.7)
-    minitest (5.25.1)
+    minitest (6.1.0)
+      drb (~> 2.0)
+      prism (>= 1.5, < 3)
     msgpack (1.7.2)
     msgpack (1.7.2-java)
     multi_json (1.21.2)
@@ -415,7 +422,7 @@ GEM
       concurrent-ruby (~> 1.2)
     multi_xml (0.9.1)
       bigdecimal (>= 3.1, < 5)
-    mustache (1.1.1)
+    mustache (1.1.3)
     net-http (0.10.0)
       net-protocol (>= 0.3.0)
       uri (>= 0.11.1)
@@ -457,6 +464,7 @@ GEM
       multi_json (>= 1.0)
     orm_adapter (0.5.0)
     os (1.1.4)
+    ostruct (0.6.3)
     parallel (2.3.0)
     parser (3.3.13.0)
       ast (~> 2.4.1)
@@ -466,7 +474,6 @@ GEM
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     phonelib (0.8.4)
-    php_serialize (1.2)
     prism (2.1.0)
     prism (2.1.0-aarch64-linux-gnu)
     prism (2.1.0-arm64-darwin)
@@ -630,8 +637,6 @@ GEM
     rubyzip (2.3.2)
     sassc (2.4.0)
       ffi (~> 1.9)
-    sassc (2.4.0-x64-mingw32)
-      ffi (~> 1.9)
     scout_apm (5.3.5)
       parser
     searchkick (5.4.0)
@@ -662,15 +667,13 @@ GEM
     spoon (0.0.6)
       ffi
     spring (4.1.1)
-    stringio (3.1.1)
+    stringio (3.2.0)
     stripe (6.5.0)
     tailwindcss-rails (2.0.31)
       railties (>= 6.0.0)
     tailwindcss-rails (2.0.31-aarch64-linux)
       railties (>= 6.0.0)
     tailwindcss-rails (2.0.31-arm64-darwin)
-      railties (>= 6.0.0)
-    tailwindcss-rails (2.0.31-x64-mingw32)
       railties (>= 6.0.0)
     tailwindcss-rails (2.0.31-x86_64-darwin)
       railties (>= 6.0.0)
@@ -710,7 +713,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webmock (3.19.1)
+    webmock (3.35.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -728,8 +731,6 @@ PLATFORMS
   arm64-darwin
   arm64-darwin-21
   java
-  x64-mingw32
-  x86-mingw32
   x86-mswin32
   x86_64-darwin-19
   x86_64-linux
@@ -749,8 +750,10 @@ DEPENDENCIES
   brakeman
   browser (~> 2.5)
   bugsnag
+  cgi (~> 0.5)
   chronic (~> 0.10.2)
   code-scanning-rubocop
+  csv (~> 3.3)
   cypress-on-rails (~> 1.17, >= 1.17.0)
   database_cleaner-active_record
   database_cleaner-redis
@@ -794,10 +797,11 @@ DEPENDENCIES
   oauth (~> 0.5.5)
   omniauth-oauth2 (>= 1.9.0)
   opensearch-ruby (>= 3.1.0)
+  ostruct (~> 0.6)
   pg
   pg_search
   phonelib
-  php_serialize (~> 1.2)
+  php_serialize!
   propshaft (>= 0.8.0)
   pry
   puma (~> 6.0)
@@ -841,7 +845,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.3.14p208
+  ruby 4.0.10
 
 BUNDLED WITH
-   2.4.10
+  4.0.20

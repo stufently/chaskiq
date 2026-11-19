@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.3.14"
+ruby "4.0.10"
 
 # gem 'google-protobuf', git: 'https://github.com/google/protobuf'
 
@@ -12,7 +12,10 @@ ruby "3.3.14"
 gem "anycable-rails", ">= 1.5.5"
 
 gem "pg"
+gem "cgi", "~> 0.5"
+gem "csv", "~> 3.3"
 gem "json", "< 3"
+gem "ostruct", "~> 0.6"
 gem "rails", "~> 8.1.4", ">= 8.1.4.1"
 gem "uri", "~> 1.1"
 
@@ -179,6 +182,6 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "php_serialize", "~> 1.2"
+gem "php_serialize", path: "vendor/php_serialize"
 gem "scout_apm"
-gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
+gem "tzinfo-data", platforms: %i[windows jruby]

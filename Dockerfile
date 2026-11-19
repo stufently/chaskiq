@@ -1,4 +1,4 @@
-ARG RUBY_VERSION=3.3.14
+ARG RUBY_VERSION=4.0.10
 FROM ruby:$RUBY_VERSION-slim-trixie
 
 ARG APP_ENV
@@ -45,6 +45,7 @@ RUN chown -R docker:docker /usr/src/app
 # Bundler install gems
 WORKDIR /tmp
 COPY Gemfile Gemfile.lock /tmp/
+COPY vendor/php_serialize/ /tmp/vendor/php_serialize/
 RUN bundle install -j ${BUNDLE_JOBS} --retry ${BUNDLE_RETRY}
 # Clean up APT when done
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \

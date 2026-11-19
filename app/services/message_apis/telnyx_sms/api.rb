@@ -306,7 +306,8 @@ module MessageApis::TelnyxSms
             :download_media, :media_url?, :app_channel, :process_status
 
     def send_sms_message(channel_id, message, media_urls = [])
-      data = { to: "+#{channel_id.delete('+')}" }
+      channel_id = channel_id.delete("+")
+      data = { to: "+#{channel_id}" }
       data[:text] = message if message.present?
       data[:media_urls] = media_urls if media_urls.present?
 

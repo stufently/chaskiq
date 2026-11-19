@@ -1,6 +1,6 @@
 class Dante::Utils
   def self.extract_plain_text(nodes)
-    nodes.inject("") do |text, node|
+    nodes.each_with_object(+"") do |node, text|
       case node["type"]
       when "text"
         text << "#{node['text']} "
@@ -8,7 +8,6 @@ class Dante::Utils
         node_content = node["content"]
         text << extract_plain_text(node_content) if node_content
       end
-      text
     end.strip
   end
 

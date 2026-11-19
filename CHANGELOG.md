@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m14
+
+Changed
+- Upgrade the application, Docker images and CI to Ruby 4.0.10 and Bundler
+  4.0.20. Session cookies, signed tokens and cache entries remain compatible
+  between Ruby 3.3 and Ruby 4.0.
+- Vendor `php_serialize` 1.2 with writable string buffers. Paddle's PHP
+  serialization stays byte-for-byte compatible.
+- Keep controller mocks stable in direct test runs and enable reloading
+  under Spring.
+
+For Docker Compose operators
+- Run `docker compose build` after `git pull`. Compose populates the new
+  `bundle_ruby4` volume with the image's gems on the first startup.
+- Compose stops mounting the old `<project>_bundle_rack3` volume. Keep it for
+  rollback to Ruby 3.3, where the old commit mounts it again. When you no
+  longer need it, run `docker volume rm <project>_bundle_rack3` with your
+  Compose project name.
+
 ## 2026-11-19 — fork-updates-m11
 
 Added

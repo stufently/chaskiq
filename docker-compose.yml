@@ -5,11 +5,11 @@ x-app: &app
     context: .
     dockerfile: ./Dockerfile.development
     args:
-      RUBY_VERSION: '3.3.14'
+      RUBY_VERSION: '4.0.10'
       PG_MAJOR: '15'
       NODE_MAJOR: '26'
       YARN_VERSION: '1.13.0'
-      BUNDLER_VERSION: '2.3.26'
+      BUNDLER_VERSION: '4.0.20'
   environment: &env
     NODE_ENV: development
     RAILS_ENV: ${RAILS_ENV:-development}
@@ -24,7 +24,7 @@ x-backend: &backend
   volumes:
     - .:/app:cached
     - rails_cache:/app/tmp/cache
-    - bundle_rack3:/usr/local/bundle
+    - bundle_ruby4:/usr/local/bundle
     - node_modules:/app/node_modules
     - packs:/app/public/packs
     - .dockerdev/.psqlrc:/root/.psqlrc:ro
@@ -113,7 +113,7 @@ services:
 volumes:
   postgres: null
   redis: null
-  bundle_rack3: null
+  bundle_ruby4: null
   node_modules: null
   rails_cache: null
   packs: null

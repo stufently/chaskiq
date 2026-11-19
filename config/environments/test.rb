@@ -10,9 +10,8 @@ Rails.application.configure do
 
   ENV['HOST'] = 'http://localhost:5002'
   ENV['WS'] = 'ws://localhost:5002/cable'
-  # Turn false under Spring and add config.action_view.cache_template_loading = true.
-  # config.cache_classes = true
-  config.cache_classes = ENV['CI'].present?
+  # Keep controller mocks stable during direct test runs. Spring requires reloading.
+  config.enable_reloading = defined?(::Spring).present?
   config.assets.compile = true
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that

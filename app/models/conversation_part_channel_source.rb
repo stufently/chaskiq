@@ -18,10 +18,10 @@ class ConversationPartChannelSource < ApplicationRecord
     with_session_lock(identity, wait: true, &)
   end
 
-  def self.with_session_lock(identity, wait:, &block)
+  def self.with_session_lock(identity, wait:, &)
     key = Digest::SHA256.digest(identity.to_json).unpack1("q>")
     with_connection do |connection|
-      uncached { hold_session_lock(connection, key, wait, &block) }
+      uncached { hold_session_lock(connection, key, wait, &) }
     end
   end
 
