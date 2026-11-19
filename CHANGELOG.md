@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-r2
+
+Changed
+- Autocorrect 10 RuboCop Style and Naming cops and remove their todo entries. Each syntax tree change is explained by the matching cop rule and preserves runtime behavior.
+
 ## 2026-11-19 — fork-updates-r1
 
 Changed
