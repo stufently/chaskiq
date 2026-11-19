@@ -15,8 +15,9 @@
 # SIGPIPE (exit 141) WITHOUT any error message: the push silently does not
 # happen. SSH keepalives prevent it (840 s went through with
 # ServerAliveInterval=30). So:
-# - if bin/ci-local already passed for HEAD (it records passed jobs per commit
-#   in tmp/ci-local/passed), the hook does not re-run it;
+# - if bin/ci-local already passed for HEAD (it records passed jobs for a
+#   completely clean tree in tmp/ci-local/passed, keyed by commit, bin/ci-local
+#   and test image), the hook does not re-run it;
 # - over SSH without keepalives (enable them once per clone:
 #   git config core.sshCommand "ssh -o ServerAliveInterval=30"), a bin/ci-local
 #   run longer than CHASKIQ_PUSH_IDLE_LIMIT seconds (default 300) aborts the
@@ -54,46 +55,70 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
 fi
 
 root=$(git rev-parse --show-toplevel)
-stamps="$root/tmp/ci-local/passed"
+
+# CI_LOCAL_ARGS may only ADD jobs: rubocop + rspec always run.
 need="rubocop rspec"
-case " ${CI_LOCAL_ARGS:-} " in *" --docker "*) need="$need docker" ;; esac
-missing=""
-for j in $need; do
-  grep -qxF "$head $j" "$stamps" 2>/dev/null || missing="$missing $j"
+ci_args=()
+for arg in ${CI_LOCAL_ARGS:-}; do
+  case "$arg" in
+    --docker) need="$need docker"; ci_args+=(--docker) ;;
+    *)
+      echo "pre-push: refusing: CI_LOCAL_ARGS may only contain --docker (got '$arg')." >&2
+      echo "pre-push: Run other bin/ci-local variants by hand; the hook always runs rubocop and rspec." >&2
+      exit 1 ;;
+  esac
 done
-if [ -z "$missing" ]; then
+
+# shellcheck disable=SC2086
+if "$root/bin/ci-local" --check-passed "$head" $need </dev/null; then
   echo "pre-push: bin/ci-local already passed for ${head:0:12} ($need), not re-running." >&2
   exit 0
 fi
 
 # Is the connection git already opened safe to leave idle for a long run?
+# Only with SSH keepalives every <= 60 s.
 remote_url=${2:-}
 keepalive=""
 case "$remote_url" in
   http://*|https://*|file://*|/*|.*) keepalive=yes ;;
   *)
     ssh_cmd=${GIT_SSH_COMMAND:-$(git config --get core.sshCommand || :)}
-    if printf '%s' "$ssh_cmd" | grep -qiE 'ServerAliveInterval[= ]+[1-9]'; then
-      keepalive=yes
-    else
+    # ssh uses the first value it is given
+    interval=$(printf '%s' "$ssh_cmd" | grep -oiE 'ServerAliveInterval[= ]+[0-9]+' | head -n 1 | grep -oE '[0-9]+$' || :)
+    if [ -z "$interval" ]; then
       host=${remote_url#ssh://}; host=${host%%[:/]*}; host=${host#*@}
       interval=$(ssh -G "$host" 2>/dev/null | awk '$1 == "serveraliveinterval" { print $2 }' || :)
-      if [ "${interval:-0}" -gt 0 ] 2>/dev/null && [ "$interval" -lt 300 ]; then keepalive=yes; fi
     fi
+    case "${interval:-0}" in
+      *[!0-9]*) ;;
+      *) if [ "${interval:-0}" -gt 0 ] && [ "$interval" -le 60 ]; then keepalive=yes; fi ;;
+    esac
     ;;
 esac
 
 limit=${CHASKIQ_PUSH_IDLE_LIMIT:-300}
 start=$(date +%s)
-# shellcheck disable=SC2086
-"$root/bin/ci-local" ${CI_LOCAL_ARGS:-} </dev/null
+"$root/bin/ci-local" --commit "$head" "${ci_args[@]}" </dev/null
 elapsed=$(( $(date +%s) - start ))
+
+# The tested commit must still be the one being pushed.
+if [ "$(git rev-parse HEAD)" != "$head" ]; then
+  echo "pre-push: refusing: HEAD moved during bin/ci-local (was ${head:0:12}); push again." >&2
+  exit 1
+fi
+
 if [ -z "$keepalive" ] && [ "$elapsed" -gt "$limit" ]; then
   echo >&2
   echo "pre-push: bin/ci-local PASSED, but took ${elapsed}s (> ${limit}s) while the SSH push connection sat" >&2
-  echo "pre-push: idle without keepalives. GitHub drops it after a few minutes and git then exits silently," >&2
-  echo "pre-push: so this push is ABORTED on purpose. The result is recorded for ${head:0:12}:" >&2
-  echo "pre-push: run the same git push again, it goes through at once. To avoid this for good:" >&2
-  echo "pre-push:   git config core.sshCommand \"ssh -o ServerAliveInterval=30\"" >&2
+  echo "pre-push: idle without keepalives (ServerAliveInterval <= 60 s). GitHub drops it after a few minutes" >&2
+  echo "pre-push: and git then exits silently, so this push is ABORTED on purpose." >&2
+  # shellcheck disable=SC2086
+  if "$root/bin/ci-local" --check-passed "$head" $need </dev/null; then
+    echo "pre-push: The result is recorded for ${head:0:12}: run the same git push again, it goes through at once." >&2
+  else
+    echo "pre-push: The result could NOT be recorded (untracked or ignored local files, see the output above)," >&2
+    echo "pre-push: so a retry would run CI again: enable keepalives first." >&2
+  fi
+  echo "pre-push: To avoid this for good:  git config core.sshCommand \"ssh -o ServerAliveInterval=30\"" >&2
   exit 1
 fi

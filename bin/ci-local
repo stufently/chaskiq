@@ -5,6 +5,9 @@
 #   bin/ci-local --docker     also build the production image (docker-image-ghcr.yml)
 #   bin/ci-local --only rubocop|rspec|docker   run a single job
 #   bin/ci-local --rspec-args "spec/models"    pass paths/options to rspec
+#   bin/ci-local --commit <sha>               fail unless the clean work tree is <sha>
+#   bin/ci-local --check-passed <sha> <job>... exit 0 if those jobs already passed
+#                                             for <sha> (used by .githooks/pre-push)
 #
 # Everything runs in containers as the calling user (no root-owned files in
 # the tree). The test image matches the runners: ubuntu-26.04, GCC 15 and the
@@ -36,12 +39,16 @@ UIDGID="$(id -u):$(id -g)"
 
 jobs=(rubocop rspec)
 rspec_args=""
+expect_commit=""
+check_passed=""
 while [ $# -gt 0 ]; do
   case "$1" in
+    --commit) expect_commit=${2:?--commit needs a sha}; shift ;;
+    --check-passed) check_passed=${2:?--check-passed needs a sha}; shift 2; break ;;
     --docker) jobs+=(docker) ;;
     --only) jobs=("${2:?--only needs a job name}"); shift ;;
     --rspec-args) rspec_args=${2:?--rspec-args needs a value}; shift ;;
-    -h|--help) sed -n '2,15p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,18p' "$0"; exit 0 ;;
     *) echo "unknown argument: $1" >&2; exit 2 ;;
   esac
   shift
@@ -109,16 +116,20 @@ run_rubocop() {
   # CI lints a fresh checkout plus the gems in vendor/bundle: drop other
   # untracked files from RuboCop's target list (its own excludes are already
   # applied by --list-target-files).
+  # Per-run lists (parallel runs must not share them); -z keeps non-ASCII names
+  # unquoted, as RuboCop prints them.
   mkdir -p tmp
-  in_ruby "$TEST_IMAGE" bundle exec rubocop --list-target-files > tmp/rubocop-targets.all \
+  all=$(mktemp tmp/rubocop-targets.XXXXXX) list=$(mktemp tmp/rubocop-targets.XXXXXX)
+  trap 'rm -f "$all" "$list"' EXIT
+  in_ruby "$TEST_IMAGE" bundle exec rubocop --list-target-files > "$all" \
     || { echo "rubocop --list-target-files failed" >&2; return 2; }
-  { git ls-files; grep '^vendor/bundle/' tmp/rubocop-targets.all || :; } \
-    | grep -Fxf - tmp/rubocop-targets.all > tmp/rubocop-targets.txt || :
+  { git ls-files -z | tr '\0' '\n'; grep '^vendor/bundle/' "$all" || :; } \
+    | grep -Fxf - "$all" > "$list" || :
   local skipped
-  skipped=$(grep -vFxf tmp/rubocop-targets.txt tmp/rubocop-targets.all || :)
+  skipped=$(grep -vFxf "$list" "$all" || :)
   [ -z "$skipped" ] || printf 'rubocop: skipping untracked files (not in a CI checkout):\n%s\n' "$skipped"
   local rc=0
-  in_ruby "$TEST_IMAGE" bash -c 'mapfile -t files < tmp/rubocop-targets.txt
+  in_ruby -e TARGETS="$list" "$TEST_IMAGE" bash -c 'mapfile -t files < "$TARGETS"
     exec bundle exec rubocop --force-exclusion --format offenses --format progress \
       --out tmp/rubocop.txt "${files[@]}"' || rc=$?
   if [ "$rc" -eq 0 ]; then
@@ -174,15 +185,62 @@ run_docker() {
     -t chaskiq-ci-local:prod .
 }
 
-# The commit under test, or empty if tracked files have uncommitted changes.
-# Passed jobs are recorded per commit in $STAMPS (read by .githooks/pre-push),
-# but only for a clean tree that did not change during the run, and rspec only
-# for a full run (no --rspec-args).
-STAMPS=tmp/ci-local/passed
+# The commit under test: HEAD, or empty if tracked files have uncommitted changes.
 tested_commit() {
   git diff --quiet 2>/dev/null && git diff --cached --quiet 2>/dev/null && git rev-parse -q --verify HEAD 2>/dev/null || :
 }
-commit_at_start=$(tested_commit)
+
+# HEAD if the tree is completely clean: no tracked changes, no untracked files,
+# and ignored files only in the generated/cache paths below (an ignored
+# .env*, .rspec-local, config/*.local etc. could change the run). Else empty.
+recordable_commit() {
+  local entry
+  while IFS= read -r -d '' entry; do
+    case "$entry" in
+      '!! '*)
+        case "${entry#!! }" in
+          log/*|tmp/*|node_modules/*|vendor/bundle/*|storage/*|coverage/*|public/assets/*|public/packs/*|public/packs-test/*|app/assets/builds/*) continue ;;
+        esac ;;
+    esac
+    return 0
+  done < <(git status --porcelain=v1 -z --ignored=matching --untracked-files=normal)
+  tested_commit
+}
+
+# Passed jobs are recorded in $STAMPS (read through --check-passed by
+# .githooks/pre-push) under a key of the commit, bin/ci-local itself and the
+# test image, and only for a recordable tree that did not change during the run;
+# rspec only for a full run (no --rspec-args).
+STAMPS=tmp/ci-local/passed
+record_key() {  # <commit> <job>
+  local image=-
+  # Content of the test image (layers + env). Not .Id: with the containerd
+  # store every rebuild gets a new id (provenance), even when fully cached.
+  [ "$2" = docker ] || image=$(docker image inspect -f '{{json .RootFS.Layers}}{{json .Config.Env}}' "$TEST_IMAGE" 2>/dev/null \
+    | sha256sum | cut -c1-16)
+  echo "$1 $(sha256sum "$ROOT/bin/ci-local" | cut -d' ' -f1) $image $2"
+}
+
+if [ -n "$check_passed" ]; then
+  [ $# -gt 0 ] || { echo "--check-passed needs job names" >&2; exit 2; }
+  [ "$(recordable_commit)" = "$check_passed" ] || exit 1
+  for j in "$@"; do
+    grep -qxF "$(record_key "$check_passed" "$j")" "$STAMPS" 2>/dev/null || exit 1
+  done
+  exit 0
+fi
+
+record_at_start=$(recordable_commit)
+check_expected() {  # <when>
+  [ -z "$expect_commit" ] && return 0
+  local now
+  now=$(tested_commit)
+  if [ "$now" != "$expect_commit" ]; then
+    echo "ci-local: $1, the work tree is ${now:-dirty (uncommitted tracked changes)}, not the expected commit $expect_commit" >&2
+    exit 1
+  fi
+}
+check_expected "before the run"
 
 needs_test_image=""
 for j in "${jobs[@]}"; do
@@ -208,11 +266,17 @@ if [ ${#failed[@]} -gt 0 ]; then
   printf '\nci-local FAILED: %s\n' "${failed[*]}" >&2
   exit 1
 fi
-if [ -n "$commit_at_start" ] && [ "$(tested_commit)" = "$commit_at_start" ]; then
+check_expected "after the run"
+if [ -n "$record_at_start" ] && [ "$(recordable_commit)" = "$record_at_start" ]; then
   mkdir -p "$(dirname "$STAMPS")"
-  for j in "${jobs[@]}"; do
-    [ "$j" = rspec ] && [ -n "$rspec_args" ] && continue
-    echo "$commit_at_start $j" >> "$STAMPS"
-  done
+  (
+    flock 9
+    for j in "${jobs[@]}"; do
+      [ "$j" = rspec ] && [ -n "$rspec_args" ] && continue
+      record_key "$record_at_start" "$j" >> "$STAMPS"
+    done
+  ) 9>> "$STAMPS.lock"
+else
+  echo "ci-local: result not recorded for the pre-push hook (tree not completely clean, see git status --ignored)"
 fi
 printf '\nci-local: all jobs passed (%s)\n' "${jobs[*]}"
