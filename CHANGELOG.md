@@ -19,6 +19,8 @@ Fixed
 - Push Docker Image skips its steps when Docker Hub secrets are absent.
 - CI/Rubocop build scout_apm 5.3.5's C extension as C17
   (`BUNDLE_BUILD__SCOUT_APM`): GCC 15 on ubuntu-26.04 defaults to C23.
+- RuboCop excludes `vendor/**/*`: CI installs gems into vendor/bundle and
+  RuboCop crashed loading their configs (exit 2).
 
 Added
 - `bin/ci-local` (rubocop + rspec in Docker, `--docker` for the image build)
