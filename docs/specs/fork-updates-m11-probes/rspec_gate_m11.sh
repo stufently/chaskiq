@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# Strict rspec gate for milestone fork-updates-m11 (Rails 8.1, load_defaults 8.1; redis:8.10-alpine as in docker-compose.yml).
+# Starts throwaway postgres+redis on a private docker network, runs the full rspec
+# suite in chaskiq-test:m1 against the current tree.
+# Pass = suite booted, 0 failures, 0 errors outside examples, examples >= MIN_EXAMPLES,
+# every example of examples_base.txt (the BASE suite, multiset) ran, the rspec process
+# exited 0, and every pending example is listed in pending_allowed.txt next to this script
+# (pending examples that already exist in the source at BASE).
+# Usage (from the repo root; P=docs/specs/fork-updates-m11-probes):
+#   bash $P/rspec_gate_m11.sh                 full suite, strict
+#   bash $P/rspec_gate_m11.sh --only <file>   one spec file; pass = it ran, 0 failures
+#   bash $P/rspec_gate_m11.sh --write-base    COORDINATOR ONLY, on a clean clone of BASE right before
+#       launch: full suite must be green (rc 0, 0 failures, 0 errors outside); rewrites examples_base.txt
+#       from this run (pending_allowed.txt stays). Then commit it and refresh its sha256 in AC-007.
+# MIN_EXAMPLES = number of examples in examples_base.txt (no hardcoded count).
+# Needs: image chaskiq-test:m1, gems in $HOME/.cache/chaskiq-m6/bundle (Rails 8.1 set from fork-updates-m6).
+set -euo pipefail
+HERE=$(cd "$(dirname "$0")" && pwd)
+ROOT=$(git rev-parse --show-toplevel)
+cd "$ROOT"
+MIN_EXAMPLES=$(grep -vc '^#' "$HERE/examples_base.txt")
+BUNDLE_DIR=${CHASKIQ_M6_BUNDLE:-$HOME/.cache/chaskiq-m6/bundle}
+IMG=chaskiq-test:m1
+ID="chqm11-$(printf '%s' "$ROOT" | sha256sum | cut -c1-8)-$$"
+cleanup() {
+  docker rm -f "$ID-pg" "$ID-redis" >/dev/null 2>&1 || :
+  docker network rm "$ID" >/dev/null 2>&1 || :
+}
+trap cleanup EXIT
+mkdir -p tmp "$BUNDLE_DIR"
+rm -f tmp/rspec-m11.json tmp/rspec-m11-failures.txt tmp/rspec-m11-pending.txt
+docker network create "$ID" >/dev/null
+docker run -d --name "$ID-pg" --network "$ID" --network-alias pg \
+  -e POSTGRES_PASSWORD=password --tmpfs /var/lib/postgresql/data postgres:14-alpine >/dev/null
+docker run -d --name "$ID-redis" --network "$ID" --network-alias redis redis:8.10-alpine >/dev/null
+for _ in $(seq 1 60); do
+  docker exec "$ID-pg" pg_isready -U postgres -h 127.0.0.1 >/dev/null 2>&1 && break
+  sleep 1
+done
+docker exec "$ID-pg" pg_isready -U postgres -h 127.0.0.1 >/dev/null
+MODE=${1:-}
+TARGET=""
+if [ "$MODE" = "--only" ]; then
+  TARGET=${2:?--only needs a spec file}
+  test -f "$TARGET" || { echo "FAIL: $TARGET missing"; exit 1; }
+fi
+rc=0
+docker run --rm --network "$ID" --user "$(id -u):$(id -g)" \
+  -e HOME=/tmp -e BUNDLE_PATH=/bundle -e RAILS_ENV=test \
+  -e DATABASE_URL=postgres://postgres:password@pg:5432/chaskiq_test \
+  -e REDIS_URL=redis://redis:6379/0 \
+  -e M11_TARGET="$TARGET" \
+  -v "$BUNDLE_DIR:/bundle" -v "$ROOT:/app" -w /app "$IMG" \
+  bash -c 'bundle install --quiet && bin/rails db:create db:schema:load >/dev/null && bundle exec rspec --format progress --format json --out tmp/rspec-m11.json $M11_TARGET' || rc=$?
+echo "rspec container rc=$rc"
+test -s tmp/rspec-m11.json || { echo "FAIL: no rspec json (suite did not run)"; exit 1; }
+jq -r '.examples[] | select(.status=="failed") | "\(.file_path) :: \(.full_description)"' tmp/rspec-m11.json | LC_ALL=C sort > tmp/rspec-m11-failures.txt
+jq -r '.examples[] | select(.status=="pending") | "\(.file_path) :: \(.full_description)"' tmp/rspec-m11.json | LC_ALL=C sort > tmp/rspec-m11-pending.txt
+total=$(jq -r '.summary.example_count' tmp/rspec-m11.json)
+failed=$(jq -r '.summary.failure_count' tmp/rspec-m11.json)
+pending=$(jq -r '.summary.pending_count' tmp/rspec-m11.json)
+outside=$(jq -r '.summary.errors_outside_of_examples_count' tmp/rspec-m11.json)
+echo "examples=$total failures=$failed pending=$pending errors_outside=$outside"
+if [ "$MODE" = "--only" ]; then
+  if [ "$rc" = 0 ] && [ "$total" -gt 0 ] && [ "$failed" = 0 ] && [ "$outside" = 0 ]; then echo "PASS: $TARGET"; exit 0; fi
+  echo "FAIL: $TARGET"; cat tmp/rspec-m11-failures.txt; exit 1
+fi
+if [ "$MODE" = "--write-base" ]; then
+  if [ "$rc" != 0 ] || [ "$failed" != 0 ] || [ "$outside" != 0 ] || [ "$total" = 0 ]; then
+    echo "FAIL: BASE suite is not green, examples_base.txt not written"; cat tmp/rspec-m11-failures.txt; exit 1
+  fi
+  sha=$(git rev-parse HEAD)
+  { echo "# rspec examples at BASE $sha, $total examples, LC_ALL=C sorted (written by rspec_gate_m11.sh --write-base)"
+    jq -r '.examples[] | "\(.file_path) :: \(.full_description)"' tmp/rspec-m11.json | LC_ALL=C sort; } > "$HERE/examples_base.txt"
+  echo "WROTE: $HERE/examples_base.txt ($total examples)"
+  exit 0
+fi
+grep -v '^#' "$HERE/pending_allowed.txt" | LC_ALL=C sort > tmp/rspec-m11-pending-allowed.txt
+new_pending=$(LC_ALL=C comm -23 tmp/rspec-m11-pending.txt tmp/rspec-m11-pending-allowed.txt)
+jq -r '.examples[] | "\(.file_path) :: \(.full_description)"' tmp/rspec-m11.json | LC_ALL=C sort > tmp/rspec-m11-examples.txt
+grep -v '^#' "$HERE/examples_base.txt" | LC_ALL=C sort > tmp/rspec-m11-examples-base.txt
+missing=$(LC_ALL=C comm -23 tmp/rspec-m11-examples-base.txt tmp/rspec-m11-examples.txt)
+ok=1
+if [ "$rc" != 0 ]; then echo "FAIL: rspec process exited $rc"; ok=0; fi
+if [ -n "$missing" ]; then echo "FAIL: BASE examples did not run:"; printf '%s\n' "$missing"; ok=0; fi
+if [ "$failed" != 0 ]; then echo "FAIL: $failed failures:"; cat tmp/rspec-m11-failures.txt; ok=0; fi
+if [ "$outside" != 0 ]; then echo "FAIL: errors outside examples $outside"; ok=0; fi
+if [ "$total" -lt "$MIN_EXAMPLES" ]; then echo "FAIL: example count $total < $MIN_EXAMPLES"; ok=0; fi
+if [ -n "$new_pending" ]; then echo "FAIL: pending examples not allowed:"; printf '%s\n' "$new_pending"; ok=0; fi
+[ "$ok" = 1 ] && echo "PASS: full suite green" && exit 0
+exit 1
