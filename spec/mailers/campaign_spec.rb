@@ -6,9 +6,10 @@ RSpec.describe CampaignMailer, type: :mailer do
   # let(:template){ FactoryBot.create(:chaskiq_template) }
   let(:app) { FactoryBot.create(:app) }
   let!(:subscriber) do
-    app.add_user(email: Faker::Internet.email, properties: {
+    # Fixed values: Faker names like "O'Hara" come back HTML-escaped in the body.
+    app.add_user(email: "jane.doe@example.com", properties: {
                    custom_country: "albania",
-                   name: Faker::Name.unique.name,
+                   name: "Jane Doe",
                    country: "Athens",
                    company: "Acme"
                  })
