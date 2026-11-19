@@ -49,6 +49,14 @@ Known issues
 - In a multi-attachment send, a failure after the first successful request is
   not reported back. Each message part stores one provider id.
 
+## 2026-11-19 — strict RuboCop
+
+Changed
+- RuboCop offenses now fail CI and `bin/ci-local`. The existing backlog (2554
+  offenses) is regenerated into `.rubocop_todo.yml` as per-file excludes only, so
+  every cop stays on for new files; `inherit_mode: merge: Exclude` keeps the
+  todo excludes alongside `.rubocop.yml`'s own.
+
 ## 2026-11-19 — CI repair, local CI
 
 Fixed

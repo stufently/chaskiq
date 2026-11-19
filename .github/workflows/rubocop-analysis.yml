@@ -33,15 +33,15 @@ jobs:
         with:
           bundler-cache: true
 
-      # Offenses (exit 1) go to code scanning and do not fail the job (known
-      # backlog); a RuboCop error or crash (exit 2) does.
+      # Any offense fails the job; the existing backlog is listed per file in
+      # .rubocop_todo.yml (shrink it, do not grow it).
       - name: Rubocop run
         run: |
           rc=0
           bundle exec rubocop --require code_scanning --format progress \
             --format CodeScanning::SarifFormatter --out rubocop.sarif || rc=$?
           echo "rubocop exit code: $rc"
-          [ "$rc" -le 1 ]
+          [ "$rc" -eq 0 ]
 
       - name: Upload Sarif output
         if: always() && hashFiles('rubocop.sarif') != ''
