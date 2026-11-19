@@ -4,8 +4,7 @@
 
 - Репозиторий: `chaskiq` (локально `/home/deploy/github/chaskiq`), ветка `main`. Дата спеки:
   2026-11-19.
-- BASE_SHA: `ea8e6d0712ec790fe93a4ba0a5e3d1c476d22187` «Fix m6 spec BASE_SHA line for validator» (HEAD `main` при написании: m4 и m5 влиты, m6 ещё
-  нет). **BASE плавающий:** веха запускается ПОСЛЕ влития fork-updates-m6 (Rails 8.1). Поверх
+- BASE_SHA: `bcfdbc9dd170f1c5e2595ef0953a23c02d83f860` «Update CHANGELOG for fork-updates-m6» (m4, m5 и m6 — Rails 8.1 — влиты). **BASE плавающий:** веха запускается ПОСЛЕ влития fork-updates-m6 (Rails 8.1). Поверх
   BASE_SHA в `main` могут лежать только коммиты постановщика, правящие эту строку; клон снят с
   последнего из них. Все команды вычисляют BASE сами: `B=$(git merge-base HEAD @{u})` — коммит
   `main`, от которого снят клон (`make_clone.sh --work-branch fork-updates-m7` ставит upstream
