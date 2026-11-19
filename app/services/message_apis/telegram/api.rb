@@ -118,27 +118,14 @@ module MessageApis::Telegram
         "FileBlock" => ["sendDocument", :document],
         "AudioRecorderBlock" => ["sendAudio", :audio]
       }
-      deliveries = []
-      MessageApis::BlockManager.media_blocks(blocks).each do |media|
-        attrs = MessageApis::BlockManager.block_data(media)
-        next unless attrs.is_a?(Hash)
-
-        url = MessageApis::BlockManager.absolute_url(attrs["url"])
-        next unless url
-
-        method, field = media_methods.fetch(media["type"])
+      send_text = ->(text) { @conn.post("#{@url}/sendMessage", { chat_id: channel_id, text: text }.to_json) }
+      attachments = MessageApis::BlockManager.media_blocks(blocks)
+      MessageApis::BlockManager.deliver_attachments(attachments, plain_message, send_text: send_text) do |type, url, caption|
+        method, field = media_methods.fetch(type)
         data = { field => url }
-        data[:caption] = plain_message if deliveries.empty? && plain_message.present?
-        deliveries << [method, data]
+        data[:caption] = caption if caption
+        upload_telegram(channel_id, data, method: method)
       end
-
-      if deliveries.empty?
-        return if plain_message.blank?
-
-        return @conn.post("#{@url}/sendMessage", { chat_id: channel_id, text: plain_message }.to_json)
-      end
-
-      deliveries.map { |method, data| upload_telegram(channel_id, data, method: method) }.first
     end
 
     def get_profile_for_participant(conversation)

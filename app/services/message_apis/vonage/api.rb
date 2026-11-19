@@ -129,28 +129,19 @@ module MessageApis::Vonage
       media_types = {
         "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
       }
-      contents = []
-      MessageApis::BlockManager.media_blocks(blocks).each do |media|
-        attrs = MessageApis::BlockManager.block_data(media)
-        next unless attrs.is_a?(Hash)
-
-        url = MessageApis::BlockManager.absolute_url(attrs["url"])
-        next unless url
-
-        type = media_types.fetch(media["type"])
-        data = { url: url }
-        data[:caption] = plain_message if contents.empty? && plain_message.present?
-        contents << { type: type, type => data }
-      end
-      contents << { type: "text", text: plain_message } if contents.empty? && plain_message.present?
-
       addressing = {
         from: { type: "whatsapp", number: @phone },
         to: { type: "whatsapp", number: profile_id }
       }
-      contents.map do |content|
-        @conn.post(@url, addressing.merge(message: { content: content }).to_json)
-      end.first
+      post_content = ->(data) { @conn.post(@url, addressing.merge(message: { content: data }).to_json) }
+      send_text = ->(text) { post_content.call(type: "text", text: text) }
+      attachments = MessageApis::BlockManager.media_blocks(blocks)
+      MessageApis::BlockManager.deliver_attachments(attachments, plain_message, send_text: send_text) do |block_type, url, caption|
+        type = media_types.fetch(block_type)
+        data = { url: url }
+        data[:caption] = caption if caption
+        post_content.call(type: type, type => data)
+      end
     end
 
     def process_message(params, package)

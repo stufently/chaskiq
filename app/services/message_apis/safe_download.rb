@@ -4,13 +4,14 @@ require "ipaddr"
 require "net/http"
 require "socket"
 require "stringio"
+require "timeout"
 
 class MessageApis::SafeDownload
   BLOCKED_RANGES = %w[
     0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8
-    169.254.0.0/16 172.16.0.0/12 192.0.0.0/24 192.168.0.0/16
+    168.63.129.16/32 169.254.0.0/16 172.16.0.0/12 192.0.0.0/24 192.168.0.0/16
     198.18.0.0/15 224.0.0.0/4 240.0.0.0/4
-    ::/128 ::1/128 fc00::/7 fe80::/10 ff00::/8
+    ::/96 64:ff9b::/96 64:ff9b:1::/48 2001::/32 2002::/16 fc00::/7 fe80::/10 ff00::/8
   ].map { |range| IPAddr.new(range).freeze }.freeze
   private_constant :BLOCKED_RANGES
 
@@ -28,7 +29,17 @@ class MessageApis::SafeDownload
     []
   end
 
-  def self.fetch(url, max_bytes: 15 * 1024 * 1024, max_redirects: 3)
+  def self.fetch(url, max_bytes: 15 * 1024 * 1024, max_redirects: 3, deadline: 30)
+    return unless deadline.positive?
+
+    Timeout.timeout(deadline) do
+      follow_redirects(url, max_bytes, max_redirects)
+    end
+  rescue StandardError
+    nil
+  end
+
+  def self.follow_redirects(url, max_bytes, max_redirects)
     uri = http_uri(url)
 
     (max_redirects + 1).times do |hop|
@@ -38,15 +49,13 @@ class MessageApis::SafeDownload
       return if addresses.empty?
       return if addresses.any? { |address| blocked_ip?(address) } && !own_origin?(uri)
 
-      body, location = download(uri, addresses.first, max_bytes)
+      body, location = download(uri, addresses, max_bytes)
       return body unless location
       return if hop == max_redirects
 
       uri = http_uri(URI.join(uri.to_s, location).to_s)
     end
 
-    nil
-  rescue StandardError
     nil
   end
 
@@ -62,7 +71,24 @@ class MessageApis::SafeDownload
     own && uri.scheme == own.scheme && uri.hostname.casecmp?(own.hostname) && uri.port == own.port
   end
 
-  def self.download(uri, address, max_bytes)
+  def self.download(uri, addresses, max_bytes)
+    addresses.each do |address|
+      received_response = false
+      begin
+        request(uri, address) do |response|
+          received_response = true
+          # Returning here prevents Net::HTTP from draining a rejected or redirect body.
+          return read_response(response, max_bytes)
+        end
+      rescue Net::OpenTimeout, SocketError, SystemCallError, IOError, OpenSSL::SSL::SSLError
+        raise if received_response
+      end
+    end
+
+    nil
+  end
+
+  def self.request(uri, address, &block)
     http = Net::HTTP.new(uri.hostname, uri.port, nil)
     http.ipaddr = address
     http.use_ssl = uri.scheme == "https"
@@ -71,24 +97,27 @@ class MessageApis::SafeDownload
     http.max_retries = 0
     request = Net::HTTP::Get.new(uri.request_uri, "Accept-Encoding" => "identity")
 
-    # Return from the request block to avoid draining rejected or redirect bodies.
-    http.request(request) do |response|
-      if response.is_a?(Net::HTTPRedirection)
-        location = response["location"]
-        return [nil, location] if location && !location.empty?
-      end
-      return unless response.is_a?(Net::HTTPSuccess)
-      return if response.content_length && response.content_length > max_bytes
-
-      body = String.new(encoding: Encoding::BINARY)
-      response.read_body do |chunk|
-        return if body.bytesize + chunk.bytesize > max_bytes
-
-        body << chunk
-      end
-      return [StringIO.new(body), nil]
-    end
+    http.request(request, &block)
   end
 
-  private_class_method :http_uri, :own_origin?, :download
+  def self.read_response(response, max_bytes)
+    if response.is_a?(Net::HTTPRedirection)
+      location = response["location"]
+      return [nil, location] if location && !location.empty?
+    end
+    return unless response.is_a?(Net::HTTPSuccess)
+
+    content_length = response.content_length
+    return if content_length && content_length > max_bytes
+
+    body = String.new(encoding: Encoding::BINARY)
+    response.read_body do |chunk|
+      return if body.bytesize + chunk.bytesize > max_bytes
+
+      body << chunk
+    end
+    [StringIO.new(body), nil]
+  end
+
+  private_class_method :follow_redirects, :http_uri, :own_origin?, :download, :request, :read_response
 end

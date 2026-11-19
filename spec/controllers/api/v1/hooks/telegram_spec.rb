@@ -615,6 +615,39 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect(calls.map { |body| body["caption"].to_s }).to eq(["See both images", ""])
     end
 
+    it "keeps the caption after a failed attachment and returns the first success" do
+      url = "https://api.telegram.org/bottest-bot/sendPhoto"
+      captions = []
+      stub_request(:post, url).to_return do |request|
+        captions << JSON.parse(request.body)["caption"]
+        { status: captions.size == 1 ? 400 : 200, body: { result: { message_id: captions.size } }.to_json }
+      end
+      blocks = [{ type: "text", text: "Show these images" }] + %w[first second third].map do |name|
+        { type: "ImageBlock", attrs: { url: "https://cdn.example.com/#{name}.png" } }
+      end
+
+      response = deliver(serialized_content: { type: "doc", content: blocks }.to_json)
+
+      expect(captions).to eq(["Show these images", "Show these images", nil])
+      expect(api.get_message_id(JSON.parse(response.body))).to eq(2)
+    end
+
+    it "sends text on its own after every attachment is rejected" do
+      images = stub_request(:post, "https://api.telegram.org/bottest-bot/sendPhoto").to_return(status: 400)
+      text = stub_request(:post, endpoint).with do |request|
+        JSON.parse(request.body) == { "chat_id" => "123", "text" => "Keep this text" }
+      end.to_return(status: 200, body: { result: { message_id: 3 } }.to_json)
+      blocks = [{ type: "text", text: "Keep this text" }] + %w[first second].map do |name|
+        { type: "ImageBlock", attrs: { url: "https://cdn.example.com/#{name}.png" } }
+      end
+
+      response = deliver(serialized_content: { type: "doc", content: blocks }.to_json)
+
+      assert_requested(images, times: 2)
+      assert_requested(text, times: 1)
+      expect(api.get_message_id(JSON.parse(response.body))).to eq(3)
+    end
+
     it "sends HTML-only content as plain text" do
       stub = expect_delivery("Hello & goodbye")
       deliver(html_content: "<p><b>Hello</b> &amp; goodbye</p>")

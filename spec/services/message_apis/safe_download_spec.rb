@@ -29,6 +29,18 @@ RSpec.describe MessageApis::SafeDownload do
     expect(described_class.blocked_ip?("::ffff:93.184.216.34")).to be(false)
   end
 
+  it "blocks Azure WireServer" do
+    expect(described_class.blocked_ip?("168.63.129.16")).to be(true)
+    expect(described_class.blocked_ip?("::ffff:168.63.129.16")).to be(true)
+    expect(described_class.blocked_ip?("168.63.129.17")).to be(false)
+  end
+
+  it "blocks NAT64, 6to4, Teredo and IPv4-compatible prefixes" do
+    %w[64:ff9b::1 64:ff9b:1::1 2002::1 2001::1 ::192.0.2.5].each do |address|
+      expect(described_class.blocked_ip?(address)).to be(true), "expected #{address} to be blocked"
+    end
+  end
+
   it "blocks a redirect to a host that resolves to a private address" do
     internal_url = "https://internal.example.com/image.png"
     allow(described_class).to receive(:resolve).with("cdn.example.com").and_return([public_ip])
@@ -50,6 +62,38 @@ RSpec.describe MessageApis::SafeDownload do
     assert_not_requested(next_hop)
     expect(described_class.fetch(url, max_redirects: 1).read).to eq("image")
     assert_requested(next_hop, times: 1)
+  end
+
+  it "applies one deadline across redirects and across DNS lookups" do
+    allow(described_class).to receive(:resolve).with("cdn.example.com").and_return([public_ip])
+    first_hop = stub_request(:get, url).to_return do
+      sleep 0.12
+      { status: 302, headers: { "Location" => "https://other.example.com/image.png" } }
+    end
+    allow(described_class).to receive(:resolve).with("other.example.com") do
+      sleep 0.12
+      [public_ip]
+    end
+    next_hop = stub_request(:get, "https://other.example.com/image.png").to_return(body: "image")
+
+    expect(described_class.fetch(url, deadline: 0.2)).to be_nil
+    assert_requested(first_hop, times: 1)
+    assert_not_requested(next_hop)
+  end
+
+  it "uses a checked fallback address after a connection error" do
+    fallback_ip = "8.8.8.8"
+    allow(described_class).to receive(:resolve).with("cdn.example.com").and_return([public_ip, fallback_ip])
+    attempted_addresses = []
+    allow_any_instance_of(Net::HTTP).to receive(:ipaddr=).and_wrap_original do |set_address, address|
+      attempted_addresses << address
+      set_address.call(address)
+    end
+    download = stub_request(:get, url).to_raise(Errno::ECONNREFUSED).then.to_return(body: "image")
+
+    expect(described_class.fetch(url)&.read).to eq("image")
+    expect(attempted_addresses).to eq([public_ip, fallback_ip])
+    assert_requested(download, times: 2)
   end
 
   it "refuses an oversized Content-Length" do

@@ -110,7 +110,7 @@ module MessageApis::MessageBird
     end
 
     def get_message_id(response_data)
-      response_data["messages"].first["id"]
+      response_data["id"] || response_data.dig("messages", 0, "id")
     end
 
     def send_message(conversation, part)
@@ -145,28 +145,19 @@ module MessageApis::MessageBird
       media_types = {
         "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
       }
-      deliveries = []
-      MessageApis::BlockManager.media_blocks(blocks).each do |media|
-        attrs = MessageApis::BlockManager.block_data(media)
-        next unless attrs.is_a?(Hash)
-
-        url = MessageApis::BlockManager.absolute_url(attrs["url"])
-        next unless url
-
-        type = media_types.fetch(media["type"])
-        data = { url: url }
-        data[:caption] = plain_message if deliveries.empty? && plain_message.present?
-        deliveries << { type: type, content: { type => data } }
-      end
-      deliveries << { type: "text", content: { text: plain_message } } if deliveries.empty? && plain_message.present?
-
       addressing = {
         from: @phone,
         to: profile_id.gsub("+", "")
       }
-      deliveries.map do |delivery|
-        @conn.post("#{@url}send", addressing.merge(delivery).to_json)
-      end.first
+      post_content = ->(data) { @conn.post("#{@url}send", addressing.merge(data).to_json) }
+      send_text = ->(text) { post_content.call(type: "text", content: { text: text }) }
+      attachments = MessageApis::BlockManager.media_blocks(blocks)
+      MessageApis::BlockManager.deliver_attachments(attachments, plain_message, send_text: send_text) do |block_type, url, caption|
+        type = media_types.fetch(block_type)
+        data = { url: url }
+        data[:caption] = caption if caption
+        post_content.call(type: type, content: { type => data })
+      end
     end
 
     # not used fro now
