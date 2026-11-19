@@ -111,9 +111,9 @@ Rails.application.configure do
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
       address: ENV['SMTP_ADDRESS'],
-      user_name: ENV['SMTP_USERNAME'], # Your SMTP user here.
-      password: ENV['SMTP_PASSWORD'], # Your SMTP password here.
-      authentication: :login,
+      user_name: (ENV['SMTP_USERNAME'] unless ENV['SMTP_USERNAME'].to_s.empty?),
+      password: (ENV['SMTP_PASSWORD'] unless ENV['SMTP_USERNAME'].to_s.empty?),
+      authentication: (:login unless ENV['SMTP_USERNAME'].to_s.empty?),
       enable_starttls_auto: true,
       port: ENV.fetch('SMTP_PORT', 25).to_i,
       domain: ENV.fetch('SMTP_DOMAIN', 'localhost.localdomain')

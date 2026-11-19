@@ -548,6 +548,33 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       assert_requested(stub)
     end
 
+    it "sends text from the legacy blocks wrapper" do
+      stub = expect_delivery("forwarded text")
+      legacy = { blocks: [{ type: "text", text: "forwarded text" }], entityMap: {} }
+      deliver(serialized_content: legacy.to_json)
+      assert_requested(stub)
+    end
+
+    it "sends a newline between paragraph blocks" do
+      stub = expect_delivery("order\n123")
+      paragraphs = ["order", "123"].map do |text|
+        { type: "paragraph", content: [{ type: "text", text: text }] }
+      end
+      deliver(serialized_content: { type: "doc", content: paragraphs }.to_json)
+      assert_requested(stub)
+    end
+
+    it "encodes a space in a relative photo URL" do
+      allow(Chaskiq::Config).to receive(:get).and_call_original
+      allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://chat.example.com/")
+      stub = stub_request(:post, "https://api.telegram.org/bottest-bot/sendPhoto").with do |request|
+        JSON.parse(request.body)["photo"] == "https://chat.example.com/uploads/my%20photo.png"
+      end.to_return(status: 200, body: "{}")
+      image = { type: "ImageBlock", attrs: { url: "/uploads/my photo.png" } }
+      deliver(serialized_content: { type: "doc", content: [image] }.to_json)
+      assert_requested(stub)
+    end
+
     it "sends HTML-only content as plain text" do
       stub = expect_delivery("Hello & goodbye")
       deliver(html_content: "<p><b>Hello</b> &amp; goodbye</p>")

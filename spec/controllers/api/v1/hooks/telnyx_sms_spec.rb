@@ -229,6 +229,13 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       assert_requested(stub, times: 2)
     end
 
+    it "sends text from the legacy blocks wrapper" do
+      stub = expect_delivery("forwarded text")
+      legacy = { blocks: [{ type: "text", text: "forwarded text" }], entityMap: {} }
+      deliver(serialized_content: legacy.to_json)
+      assert_requested(stub)
+    end
+
     it "sends HTML-only content as plain text" do
       stub = expect_delivery("Hello & goodbye")
       deliver(html_content: "<p><b>Hello</b> &amp; goodbye</p>")
