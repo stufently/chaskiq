@@ -4,7 +4,7 @@
 
 - Репозиторий: `chaskiq` (локально `/home/deploy/github/chaskiq`), ветка `main`. Дата спеки:
   2026-11-19. Спека — `docs/specs/fork-updates-m8.md`.
-- BASE_SHA: `8aa9452009c27a2c8ff073d7fbb559ee49bac11d` — HEAD `main` на момент написания (Rails 8.1.4.1 после m6, `load_defaults 7.0`).
+- BASE_SHA: `2648dc617db371c731c2b13f6760ed2e0c5b7d9a` — `main` с влитыми m6 (Rails 8.1.4.1, `load_defaults 7.0`), m7 и правками CI (Ruby 3.3.14).
 - BASE плавающий: если до запуска `main` уйдёт вперёд (например, влита веха m7), постановщик
   коммитит новое значение в строку BASE_SHA и только потом снимает клон. Команды критериев
   считают `B=$(git merge-base HEAD @{u})` сами. В `report.json` поле `base_sha` равно значению
