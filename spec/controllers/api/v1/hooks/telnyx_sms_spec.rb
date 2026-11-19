@@ -246,5 +246,363 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       deliver(serialized_content: "", html_content: "")
       assert_not_requested(stub)
     end
+
+    def document(*blocks)
+      { type: "doc", content: blocks }.to_json
+    end
+
+    def attachment(url, type: "ImageBlock")
+      { type: type, attrs: { url: url } }
+    end
+
+    def paragraph(text)
+      { type: "paragraph", content: [{ type: "text", text: text }] }
+    end
+
+    def outgoing_part(content)
+      thread.messages.create!(authorable: agent_role.agent,
+                              messageable: ConversationPartContent.new(serialized_content: content))
+    end
+
+    def record_requests(*replies)
+      bodies = []
+      replies = [accepted("sent")] if replies.empty?
+      stub_request(:post, endpoint).to_return do |request|
+        bodies << JSON.parse(request.body)
+        replies.size > 1 ? replies.shift : replies.first
+      end
+      bodies
+    end
+
+    def accepted(id)
+      { status: 200, body: { data: { id: id } }.to_json }
+    end
+
+    def rejected
+      errors = [{ code: "40305", title: "Invalid sender", source: { pointer: "/private-provider-field" } }]
+      { status: 422, body: { errors: errors }.to_json }
+    end
+
+    def outbound_ids(part)
+      part.conversation_part_channel_sources.where(provider: "TelnyxSms").pluck(:delivery_index, :message_source_id)
+    end
+
+    def delivery_errors
+      thread.messages.reload.map(&:messageable).grep(ConversationPartEvent).select do |event|
+        event.action.start_with?("errored:")
+      end
+    end
+
+    it "sends each supported extension in its own media_urls and captions the first request" do
+      urls = %w[jpg JPEG png gif mp4 3gp txt vcf vcard].map { |ext| "https://files.example.com/a.#{ext}?id=1" }
+      bodies = record_requests
+      deliver(serialized_content: document(paragraph("caption"), *urls.map { |url| attachment(url) }))
+
+      expect(bodies.pluck("media_urls")).to eq(urls.map { |url| [url] })
+      expect(bodies.pluck("text")).to eq(["caption"] + ([nil] * (urls.size - 1)))
+      bodies.drop(1).each { |body| expect(body).not_to have_key("text") }
+      expect(bodies.pluck("to").uniq).to eq(["+123"])
+    end
+
+    it "sends a media-only attachment using media_urls and no text field" do
+      url = "https://files.example.com/clip.MP4"
+      bodies = record_requests
+      deliver(serialized_content: document(attachment(url, type: "VideoBlock")))
+
+      expect(bodies.pluck("media_urls")).to eq([[url]])
+      expect(bodies.first).not_to have_key("text")
+    end
+
+    it "appends an unsupported PDF as a link alongside supported media and as a standalone SMS" do
+      pdf = "/rails/active_storage/blobs/redirect/abc/report.pdf"
+      link = MessageApis::BlockManager.absolute_url(pdf)
+      photo = "https://files.example.com/photo.png"
+      bodies = record_requests
+      pdf_block = attachment(pdf, type: "FileBlock")
+      deliver(serialized_content: document(paragraph("read this"), attachment(photo), pdf_block))
+      deliver(serialized_content: document(pdf_block))
+
+      expect(bodies.pluck("text")).to eq(["read this\n#{link}", link])
+      expect(bodies.first["media_urls"]).to eq([photo])
+      expect(bodies.last).not_to have_key("media_urls")
+    end
+
+    it "keeps text-only SMS without media_urls (base-green)" do
+      bodies = record_requests
+      deliver(serialized_content: document(paragraph("SMS")))
+
+      expect(bodies.size).to eq(1)
+      expect(bodies.first).not_to have_key("media_urls")
+    end
+
+    it "stores each media message id with its delivery index" do
+      record_requests(accepted("image-id"), accepted("video-id"))
+      part = outgoing_part(document(attachment("https://files.example.com/photo.png"),
+                                    attachment("https://files.example.com/clip.mp4", type: "VideoBlock")))
+
+      api.notify_message(conversation: thread, part: part, channel: nil)
+
+      expect(outbound_ids(part)).to contain_exactly([0, "image-id"], [1, "video-id"])
+    end
+
+    it "stores the message id of a text-only SMS" do
+      record_requests(accepted("text-id"))
+      part = outgoing_part(document(paragraph("SMS")))
+
+      api.notify_message(conversation: thread, part: part, channel: nil)
+
+      expect(outbound_ids(part)).to eq([[nil, "text-id"]])
+    end
+
+    it "stores the message id of a link-only SMS and avoids resending it" do
+      bodies = record_requests(accepted("link-id"))
+      part = outgoing_part(document(attachment("https://files.example.com/report.pdf", type: "FileBlock")))
+
+      2.times { api.notify_message(conversation: thread, part: part, channel: nil) }
+
+      expect(outbound_ids(part)).to eq([[0, "link-id"]])
+      expect(bodies.pluck("text")).to eq(["https://files.example.com/report.pdf"])
+    end
+
+    it "sends only the remaining attachment without the original caption on retry" do
+      bodies = record_requests(accepted("second-id"))
+      first = "https://files.example.com/1.png"
+      second = "https://files.example.com/2.png"
+      part = outgoing_part(document(paragraph("caption"), attachment(first), attachment(second)))
+      part.conversation_part_channel_sources.create!(provider: "TelnyxSms", delivery_index: 0,
+                                                     message_source_id: "first-id")
+
+      api.notify_message(conversation: thread, part: part, channel: nil)
+
+      expect(bodies.pluck("media_urls")).to eq([[second]])
+      expect(bodies.first).not_to have_key("text")
+      expect(outbound_ids(part)).to contain_exactly([0, "first-id"], [1, "second-id"])
+    end
+
+    it "returns nil and records an errored event with only the safe provider fields" do
+      record_requests(rejected)
+
+      expect(deliver(serialized_content: document(paragraph("fail")))).to be_nil
+      expect(delivery_errors.map(&:data)).to eq([{ "status" => 422, "code" => "40305", "message" => "Invalid sender" }])
+    end
+
+    it "stores the successful id and records the later error for a partly sent message" do
+      record_requests(accepted("first-id"), rejected)
+      part = outgoing_part(document(attachment("https://files.example.com/1.png"), attachment("https://files.example.com/2.png")))
+
+      api.notify_message(conversation: thread, part: part, channel: nil)
+
+      expect(outbound_ids(part)).to eq([[0, "first-id"]])
+      expect(delivery_errors.map(&:data)).to eq([{ "status" => 422, "code" => "40305", "message" => "Invalid sender" }])
+    end
+  end
+
+  describe "TelnyxSms MMS and delivery webhooks" do
+    include WebMock::API
+
+    around do |example|
+      WebMock.enable!
+      example.run
+    ensure
+      WebMock.reset!
+      WebMock.disable!
+    end
+
+    let(:package) { double(app: app, app_id: app.id) }
+    let(:api) { MessageApis::TelnyxSms::Api.new(config: { api_key: "test-key", package: package }) }
+    let(:png) { "\x89PNG\r\n\x1A\n#{'0' * 64}".b }
+
+    before do
+      allow(MessageApis::SafeDownload).to receive(:resolve).and_return(["93.184.216.34"])
+    end
+
+    def webhook(type, payload)
+      params = { data: { event_type: type, payload: payload } }.with_indifferent_access
+      api.process_event(params, package)
+    end
+
+    def receive_mms(*media, text: nil)
+      payload = { id: "received-id", from: { phone_number: "+15557770000" }, text: text, media: media }
+      webhook("message.received", payload)
+    end
+
+    def received_content
+      app.conversations.last.messages.last.messageable
+    end
+
+    def received_blocks
+      MessageApis::BlockManager.get_blocks(received_content.serialized_content)
+    end
+
+    def image(url)
+      { url: url, content_type: "image/png" }
+    end
+
+    def serve(url, body: png, type: "image/png")
+      stub_request(:get, url).to_return(body: body, headers: { "Content-Type" => type })
+    end
+
+    it "persists a media-only inbound MMS image and file in Active Storage and deduplicates the webhook" do
+      photo = "https://media.telnyx.com/photo.png"
+      file = "https://media.telnyx.com/report.pdf?signature=temporary"
+      downloads = [serve(photo), serve(file, body: "%PDF-1.4\n%%EOF\n", type: "application/pdf")]
+
+      expect do
+        2.times { receive_mms(image(photo), { url: file }) }
+      end.to change(ActiveStorage::Blob, :count).by(2)
+
+      downloads.each { |download| assert_requested(download, times: 1) }
+      expect(received_content.html_content).to eq("")
+      expect(received_blocks.pluck("type")).to eq(%w[ImageBlock FileBlock])
+      urls = received_blocks.map { |block| block.dig("attrs", "url") }
+      expect(urls).to all(start_with("/rails/active_storage/"))
+      expect(urls.map { |url| File.basename(url) }).to eq(%w[received-id-0.png received-id-1.pdf])
+    end
+
+    it "sends the API key to the apex, subdomain and mixed-case HTTPS media hosts" do
+      urls = %w[https://telnyx.com/a.png https://media.telnyx.com/b.png https://Mms.Media.Telnyx.COM/c.png]
+      downloads = urls.map do |url|
+        stub_request(:get, url.downcase)
+          .with(headers: { "Authorization" => "Bearer test-key" })
+          .to_return(body: png, headers: { "Content-Type" => "image/png" })
+      end
+
+      receive_mms(*urls.map { |url| image(url) }, text: "first\nsecond")
+
+      downloads.each { |download| assert_requested(download, times: 1) }
+      expect(received_blocks.pluck("type")).to eq(%w[text text ImageBlock ImageBlock ImageBlock])
+    end
+
+    it "rejects plain http to a Telnyx host (base-green)" do
+      url = "http://media.telnyx.com/photo.png"
+      download = serve(url)
+      receive_mms(image(url), text: "keep this")
+
+      assert_not_requested(download)
+      expect(received_content.html_content).to eq("keep this")
+    end
+
+    it "rejects lookalike Telnyx hosts and URLs with userinfo (base-green)" do
+      urls = %w[https://eviltelnyx.com/a https://telnyx.com.evil.com/a https://telnyx.co/a https://user@media.telnyx.com/a]
+      downloads = urls.map { |url| serve(url) }
+      receive_mms(*urls.map { |url| image(url) }, text: "keep this")
+
+      downloads.each { |download| assert_not_requested(download) }
+      expect(received_blocks.pluck("type")).not_to include("ImageBlock")
+    end
+
+    it "logs a rejected foreign host without exposing its URL and keeps an unavailable attachment block" do
+      url = "https://files.example.com/private.png?token=temporary"
+      download = serve(url)
+      allow(Rails.logger).to receive(:warn).and_call_original
+
+      receive_mms(image(url), text: "keep this")
+
+      assert_not_requested(download)
+      expect(Rails.logger).to have_received(:warn).with(a_string_matching(/Telnyx/i))
+      expect(Rails.logger).not_to have_received(:warn).with(a_string_including(url))
+      expect(received_blocks.pluck("text")).to eq(["keep this", "[attachment unavailable: image/png]"])
+    end
+
+    it "drops the API key on a redirect to the same Telnyx host" do
+      url = "https://media.telnyx.com/original.png"
+      location = "https://media.telnyx.com/final.png"
+      first = stub_request(:get, url)
+              .with(headers: { "Authorization" => "Bearer test-key" })
+              .to_return(status: 302, headers: { "Location" => location })
+      redirected = serve(location).with { |request| !request.headers.key?("Authorization") }
+
+      receive_mms(image(url))
+
+      assert_requested(first, times: 1)
+      assert_requested(redirected, times: 1)
+      expect(received_blocks.pluck("type")).to eq(["ImageBlock"])
+    end
+
+    it "rejects media at a private address (base-green)" do
+      url = "https://media.telnyx.com/photo.png"
+      allow(MessageApis::SafeDownload).to receive(:resolve).with("media.telnyx.com").and_return(["10.0.0.5"])
+      download = serve(url)
+
+      receive_mms(image(url), text: "keep this")
+
+      assert_not_requested(download)
+      expect(received_blocks.pluck("type")).not_to include("ImageBlock")
+    end
+
+    it "rejects private Telnyx media even on the application's own host (base-green)" do
+      url = "https://media.telnyx.com/photo.png"
+      allow(MessageApis::SafeDownload).to receive(:resolve).with("media.telnyx.com").and_return(["10.0.0.5"])
+      allow(Chaskiq::Config).to receive(:get).and_call_original
+      allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://media.telnyx.com")
+      download = serve(url)
+
+      receive_mms(image(url), text: "keep this")
+
+      assert_not_requested(download)
+    end
+
+    it "does not store oversized media over five MiB (base-green)" do
+      url = "https://media.telnyx.com/clip.mp4"
+      serve(url, body: "0" * ((5 * 1024 * 1024) + 1), type: "video/mp4")
+
+      expect do
+        receive_mms({ url: url, content_type: "video/mp4" }, text: "keep this")
+      end.not_to change(ActiveStorage::Blob, :count)
+      expect(received_blocks.pluck("type")).not_to include("FileBlock")
+    end
+
+    it "ignores a message without text or media" do
+      expect { receive_mms }.not_to change(Conversation, :count)
+    end
+
+    def tracked_part(owner_app)
+      recipient = owner_app.add_user(email: "status-recipient@example.com")
+      conversation = owner_app.conversations.create!(main_participant: recipient)
+      content = ConversationPartContent.new(html_content: "tracked message")
+      part = conversation.messages.create!(authorable: recipient, messageable: content)
+      part.conversation_part_channel_sources.create!(provider: "TelnyxSms", message_source_id: "tracked-id")
+      part
+    end
+
+    def delivery_status(status, event: "message.finalized", errors: [])
+      webhook(event, { id: "tracked-id", to: [{ status: status }], errors: errors })
+    end
+
+    def status_events(part)
+      part.conversation.messages.reload.map(&:messageable).grep(ConversationPartEvent)
+    end
+
+    it "marks a part read after delivered while message.sent and delivery_unconfirmed leave it unread" do
+      part = tracked_part(app)
+      delivery_status("sent", event: "message.sent")
+      expect(part.reload.read_at).to be_nil
+      delivery_status("delivery_unconfirmed")
+      expect(part.reload.read_at).to be_nil
+
+      delivery_status("delivered")
+      expect(part.reload.read_at).to be_present
+    end
+
+    it "records a failed delivery once on webhook replay with only sanitized fields" do
+      part = tracked_part(app)
+      error = { code: "40002", title: "Invalid destination https://files.example.com/private", source: { pointer: "/raw" } }
+
+      2.times { delivery_status("delivery_failed", errors: [error]) }
+
+      expect(part.reload.read_at).to be_nil
+      event_data = { "status" => nil, "code" => "40002", "message" => "Invalid destination [url]" }
+      expect(status_events(part).map(&:data)).to eq([event_data])
+    end
+
+    it "ignores delivered and failed callbacks for a part in another app" do
+      part = tracked_part(FactoryBot.create(:app))
+
+      delivery_status("delivered")
+      delivery_status("delivery_failed", errors: [{ title: "Invalid destination" }])
+
+      expect(part.reload.read_at).to be_nil
+      expect(status_events(part)).to be_empty
+    end
   end
 end
