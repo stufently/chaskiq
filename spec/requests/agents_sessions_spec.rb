@@ -13,17 +13,22 @@ RSpec.describe "Agent sign in", type: :request do
     { agent: { email: agent.email, password: password } }
   end
 
+  def issued_token
+    Doorkeeper::AccessToken.find_by!(token: response.parsed_body["access_token"])
+  end
+
+  def expect_token_record(token)
+    expect(token).to have_attributes(application_id: oauth_app.id, resource_owner_id: agent.id,
+                                     expires_in: 1.hour.to_i, refresh_token: be_present)
+    expect(token.scopes.to_s).to eq("")
+  end
+
   def expect_token_response
     expect(response).to have_http_status(:ok)
-    body = response.parsed_body
-    token = Doorkeeper::AccessToken.find_by!(token: body["access_token"])
-    expect(token.application).to eq(oauth_app)
-    expect(token.resource_owner_id).to eq(agent.id)
-    expect(token.scopes.to_s).to eq("")
-    expect(token.expires_in).to eq(1.hour.to_i)
-    expect(body["expires_in"]).to eq(1.hour.to_i)
-    expect(body["refresh_token"]).to be_present
-    expect(body["refresh_token"]).to eq(token.refresh_token)
+    token = issued_token
+    expect_token_record(token)
+    expect(response.parsed_body).to include("expires_in" => 1.hour.to_i,
+                                            "refresh_token" => token.refresh_token)
   end
 
   it "returns an access token for a JSON sign in" do
