@@ -237,8 +237,10 @@ module MessageApis::TwilioPhone
                        app.conversations.create(
                          main_participant: participant,
                          conversation_channels_attributes: [
-                           provider: PROVIDER,
-                           provider_channel_id: channel_id # phone_number
+                           {
+                             provider: PROVIDER,
+                             provider_channel_id: channel_id
+                           } # phone_number
                          ]
                        )
                      end
@@ -389,8 +391,10 @@ module MessageApis::TwilioPhone
                   .find_each do |block_part|
         # modify block
         block_part.blocks = block_part.blocks.merge({ "schema" => [
-                                                      "type" => "text",
-                                                      "text" => "Call ended"
+                                                      {
+                                                        "type" => "text",
+                                                        "text" => "Call ended"
+                                                      }
                                                     ] })
         block_part.save_replied(nil)
       end
@@ -553,8 +557,10 @@ module MessageApis::TwilioPhone
           conversation = conversation.app.conversations.create(
             main_participant: profile.app_user,
             conversation_channels_attributes: [
-              provider: "TwilioPhone",
-              provider_channel_id: profile.profile_id # phone_number
+              {
+                provider: "TwilioPhone",
+                provider_channel_id: profile.profile_id
+              } # phone_number
             ]
           )
           @conversation_key = conversation.key

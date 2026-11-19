@@ -202,8 +202,10 @@ module MessageApis::Vonage
         conversation = @package.app.conversations.create(
           main_participant: participant,
           conversation_channels_attributes: [
-            provider: PROVIDER,
-            provider_channel_id: channel_id
+            {
+              provider: PROVIDER,
+              provider_channel_id: channel_id
+            }
           ]
         )
       end

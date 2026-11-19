@@ -233,8 +233,10 @@ module MessageApis::Dialog360
 
       conversation.update(
         conversation_channels_attributes: [
-          provider: PROVIDER,
-          provider_channel_id: profile_id
+          {
+            provider: PROVIDER,
+            provider_channel_id: profile_id
+          }
         ]
       )
     end
@@ -414,8 +416,10 @@ module MessageApis::Dialog360
           conversation = app.conversations.create(
             main_participant: participant,
             conversation_channels_attributes: [
-              provider: PROVIDER,
-              provider_channel_id: channel_id
+              {
+                provider: PROVIDER,
+                provider_channel_id: channel_id
+              }
             ]
           )
         end
