@@ -1,4 +1,4 @@
-# План: бэклог RuboCop в ноль (вехи R1–R9)
+# План: бэклог RuboCop в ноль (вехи R1–R9, плюс R2b)
 
 Дата: 2026-11-19. Цель владельца: `.rubocop_todo.yml` пуст и удалён, поведение приложения не
 меняется (найденные баги чинятся отдельно, с тестом и строкой в `CHANGELOG.md`). Настройка в
@@ -86,7 +86,7 @@ RuboCop 1.92.3, rubocop-rails 2.38.0, Ruby 3.3.14, образ `bin/ci-local`, `.
 - После влития m11 (Telnyx) и m14 (Ruby 4.0.10) числа сдвинутся немного; каждая спека
   перемеряет перед запуском.
 
-## R1 — Layout/Style без изменения байткода (спека готова)
+## R1 — Layout/Style без изменения байткода (влита, main 96509378)
 
 - Копы: 16 (12 Layout + `Style/RegexpLiteral`, `Semicolon`, `TrailingCommaInArguments`,
   `WordArray`), 126 офенсов, 49 файлов; плюс `docs/**` в `AllCops: Exclude` с причиной (пробники
@@ -96,38 +96,52 @@ RuboCop 1.92.3, rubocop-rails 2.38.0, Ruby 3.3.14, образ `bin/ci-local`, `.
 - Риски: нет по построению; остаточный — каскады (закрыты вторым проходом, проверено).
 - Спека: `docs/specs/fork-updates-r1.md`.
 
-## R2 — автокоррект Style/Naming/Bundler с изменением байткода
+## R2 — автокоррект Style/Naming с меняющимся байткодом, каждое отличие объяснено (спека готова)
 
-- Копы: 26, 136 офенсов, 64 файла. `Style/GuardClause` 36 + `IfUnlessModifier` 15 (вместе: второй
-  порождает первый), `HashAsLastArrayItem` 17, `StringConcatenation` 15 (u), `RedundantParentheses`
-  14, `ArgumentsForwarding` 4, `SymbolProc` 3 (u), `SingleArgumentDig` 3 (u), `DirectiveScope` 3
-  (u), `RedundantReturn`, `MapIntoArray` (u), `InverseMethods` (u),
-  `ReturnNilInPredicateMethodDefinition` (u), `MultipleComparison` по 2, по одному —
-  `SafeNavigation`, `MutableConstant`, `HashEachMethods`, `FloatDivision`, `CaseLikeIf` (все u),
-  `SuperArguments`, `RedundantRegexpEscape`, `ModuleMemberExistenceCheck`,
-  `EmptyStringInsideInterpolation`; `Naming/BlockForwarding` 2, `Naming/MemoizedInstanceVariableName`
-  3 (u); `Bundler/OrderedGems` 2.
-- Подход: коп за копом (`-a`/`-A --only <коп>`, отдельный коммит на коп); `r1_iseq.rb` в
-  отчётном режиме — список файлов с `DIFF` по копу, в `report.json` у каждого объяснение
-  эквивалентности. Рекомендация — механический прогон по готовой спеке (Codex), разбор DIFF —
-  ревью.
-- Риски: `StringConcatenation` (`a + b` → `"#{a}#{b}"`: при `b` не String было исключение, станет
-  `to_s`) — в каждом месте убедиться, что операнды строки; `MemoizedInstanceVariableName`
-  переименовывает ivar — грепнуть чтения ivar вне метода; `MutableConstant` (`.freeze` у
-  константы, которую где-то мутируют → FrozenError); `ArgumentsForwarding`/`SuperArguments` меняют
-  сигнатуры — проверить `method(...).parameters`-зависимый код; `Bundler/OrderedGems` меняет
-  порядок `Bundler.require` — `Gemfile.lock` не меняется, проверить загрузку 4 сред.
+- Копы: 10, 95 офенсов, 46 файлов (замер на `main` d8c82e37, Ruby 4.0.10): `Style/GuardClause` 36,
+  `HashAsLastArrayItem` 17, `IfUnlessModifier` 15, `RedundantParentheses` 14, `ArgumentsForwarding`
+  4, `DirectiveScope` 3, `RedundantReturn` 2, `Naming/BlockForwarding` 2, `SuperArguments` 1,
+  `EmptyStringInsideInterpolation` 1. `GuardClause` рождает 5 офенсов `Rails/Blank` (4 файла,
+  `return unless x.present?`) — их НЕ исправляет R2: они вносятся в todo новой секцией (R3).
+- Подход: коп за копом (коммит на коп); `r2_canon.rb` переводит старую и новую форму каждого
+  преобразования в одну каноническую (Prism-деревья без позиций, литералы точно) при проверяемых
+  условиях; необъяснённое отличие — FAIL; каждый коммит проверяется отдельно (родитель → коммит
+  объяснён одним своим копом). Объявленные добавления в todo: `Metrics/BlockLength`
+  `app/models/app.rb`, `ReturnNilInPredicateMethodDefinition` `open_ai/api.rb`, новая секция
+  `Rails/Blank` (4 файла).
+- Риски: guard clause не в хвосте метода (ловит правило «только хвост»), `return` в блоке.
+- Спека: `docs/specs/fork-updates-r2.md`.
+
+## R2b — Style-автокоррект, равенство которого механически не доказывается (ручной разбор)
+
+- Копы: 16, 41 офенс (по `main` d8c82e37): `Style/StringConcatenation` 15, `SymbolProc` 3,
+  `SingleArgumentDig` 3, `Naming/MemoizedInstanceVariableName` 3, `MapIntoArray` 2,
+  `InverseMethods` 2, `MultipleComparison` 2, `ReturnNilInPredicateMethodDefinition` 2 (+1 из R2),
+  `Bundler/OrderedGems` 2, `SafeNavigation`, `HashEachMethods`, `FloatDivision`, `CaseLikeIf`,
+  `ModuleMemberExistenceCheck`, `MutableConstant`, `RedundantRegexpEscape` по 1.
+- Почему не R2: равенство зависит от типа получателя (`+` против интерполяции, `&:m` и арность
+  блока, `dig` против `[]`, `each`+`<<` против `map`, `!=` против `!(==)`, `x == a` против
+  `[a].include?(x)` и `===` в `case`, `false&.m`, `keys.each` против `each_key`) или меняет
+  поведение (`return` → `return false`, `.freeze`, переименование ivar, порядок `Bundler.require`).
+- Подход: по месту — тип получателя установлен чтением кода (и тестом, если не очевиден);
+  `r2_canon.rb` отчётом показывает, что других отличий нет; поведенческие (`nil`→`false`,
+  `.freeze`, ivar, порядок гемов) — с тестом или отказ от автокорректа в пользу ручной правки.
+- Риски: тип, который не виден из кода (динамические значения из JSON/параметров).
 
 ## R3 — Rails-автокоррект и `frozen_string_literal`
 
-- Копы: 8, 166 офенсов, 151 файл. `Rails/OrderArguments` 19 (u), `Pluck` 9 (u), `Presence` 4,
-  `StrongParametersExpect` 3 (u), `Delegate` 2, `WhereRange` 1 (u), `Present` 1;
-  `Style/FrozenStringLiteralComment` 127 файлов (u, +1 строка в каждом).
+- Копы: 8, 166 офенсов, 151 файл по замеру BASE, плюс `Rails/Blank` из R2 (+5 офенсов, 4 файла). `Rails/OrderArguments` 19 (u), `Pluck` 9 (u), `Presence` 4,
+  `StrongParametersExpect` 3 (u), `Delegate` 2, `WhereRange` 1 (u), `Present` 1, `Blank` 5 (u, из
+  R2: `return unless x.present?` в `connection.rb`, `types/app_type.rb`, `email_chat_notifier_job.rb`,
+  `action_trigger.rb` ×2); `Style/FrozenStringLiteralComment` 127 файлов (u, +1 строка в каждом).
 - Подход: Rails-копы — по одному с тестом на каждое место, где меняется SQL или ответ:
   `order("x desc")` → `order(x: :desc)` (сравнить `to_sql`), `pluck` вместо `map` (только для
   отношений без загруженных ассоциаций), `params.expect` вместо `require.permit` (меняет ответ на
   кривые параметры: 400 вместо 500/игнора — сверить контракт API, при сомнении оставить
-  `require.permit` и настроить коп с причиной). `frozen_string_literal: true` — механически; доказательство
+  `require.permit` и настроить коп с причиной). `Rails/Blank` (`unless x.present?` → `if x.blank?`)
+  — только после проверки типа получателя в каждом из 5 мест: `blank? == !present?` верно для
+  ActiveSupport `Object`, но не для класса со своим `present?`/`blank?`; тип установить чтением кода,
+  в пробнике — грепом `def present?`/`def blank?` в `app/`, `lib/`, `config/` и гемах по `Gemfile.lock`. `frozen_string_literal: true` — механически; доказательство
   безопасности: полный сьют на Ruby 4.0 с `RUBYOPT=-W:deprecated` (Ruby 4 предупреждает при
   мутации «chilled» литерала) без новых warning-строк, плюс грепом места `<<`/`concat`/`gsub!`/
   `force_encoding` по литералам в этих 127 файлах.
