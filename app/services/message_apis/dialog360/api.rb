@@ -42,6 +42,13 @@ module MessageApis::Dialog360
     include MessageApis::Helpers
 
     PROVIDER = "dialog_360"
+    MEDIA_TYPES = {
+      "ImageBlock" => "image",
+      "VideoBlock" => "video",
+      "FileBlock" => "document",
+      "AudioRecorderBlock" => "audio"
+    }.freeze
+    private_constant :MEDIA_TYPES
 
     attr_accessor :url, :api_key, :conn
 
@@ -157,13 +164,6 @@ module MessageApis::Dialog360
       return nil if message["serialized_content"].blank?
 
       blocks = MessageApis::BlockManager.get_blocks(message["serialized_content"])
-
-      # TODO: support more blocks
-      image_block = blocks.find { |o| o["type"] == "ImageBlock" }
-      video_block = blocks.find { |o| o["type"] == "VideoBlock" }
-      audio_block = blocks.find { |o| o["type"] == "AudioRecorderBlock" }
-      file_block = blocks.find { |o| o["type"] == "FileBlock" }
-      is_plain = !image_block || !video_block || !file_block
       plain_message = MessageApis::BlockManager.plain_text(blocks)
 
       profile_id = get_profile_for_participant(conversation.main_participant)
@@ -176,61 +176,20 @@ module MessageApis::Dialog360
         to: profile_id
       }
 
-      endpoint = Chaskiq::Config.get("HOST") # "https://chaskiq.sa.ngrok.io"
+      post_message = ->(content) { @conn.post("#{@url}/messages", message_params.merge(content).to_json) }
+      send_text = ->(text) { post_message.call(type: "text", text: { body: text }) }
+      attachments = MessageApis::BlockManager.media_blocks(blocks)
 
-      # TODO: support audio / video / gif
-      if image_block
-        message_params.merge!({
-                                type: "image",
-                                image: {
-                                  link: endpoint + MessageApis::BlockManager.block_data(image_block)["url"],
-                                  caption: plain_message
-                                }
-                              })
-      elsif video_block
-        message_params.merge!({
-                                type: "video",
-                                video: {
-                                  link: endpoint + MessageApis::BlockManager.block_data(video_block)["url"],
-                                  caption: plain_message
-                                }
-                              })
+      return send_text.call(plain_message) if attachments.empty?
 
-      elsif audio_block
-        message_params.merge!({
-                                type: "audio",
-                                audio: {
-                                  link: endpoint + MessageApis::BlockManager.block_data(audio_block)["url"]
-                                }
-                              })
-
-      elsif file_block
-        message_params.merge!({
-                                type: "document",
-                                document: {
-                                  link: endpoint + MessageApis::BlockManager.block_data(file_block)["url"],
-                                  caption: plain_message
-                                }
-                              })
-      elsif is_plain
-        message_params.merge!({
-                                type: "text",
-                                text: { body: plain_message }
-                              })
+      MessageApis::BlockManager.deliver_attachments(
+        attachments, plain_message, send_text: send_text, captionless: %w[AudioRecorderBlock]
+      ) do |block_type, url, caption|
+        type = MEDIA_TYPES.fetch(block_type)
+        media = { link: url }
+        media[:caption] = caption if caption
+        post_message.call(type: type, type => media)
       end
-
-      r = @conn.post(
-        "#{@url}/messages",
-        message_params.to_json
-      )
-
-      Rails.logger.debug "---###########---"
-
-      Rails.logger.info r.body
-
-      Rails.logger.debug "---###########---"
-
-      r
     end
 
     def upload_media(media)

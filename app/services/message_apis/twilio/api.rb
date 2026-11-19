@@ -164,12 +164,23 @@ module MessageApis::Twilio
       # TODO: maybe handle an error here ?
       return if profile_id.blank?
 
-      message_params = process_message_params(blocks, profile_id)
+      message_params = { From: "whatsapp:#{@phone}", To: profile_id }
+      send_text = ->(text) { @conn.post(@url, message_params.merge(Body: text)) }
+      plain_message = MessageApis::BlockManager.plain_text(blocks)
+      attachments = MessageApis::BlockManager.media_blocks(blocks)
 
-      response = @conn.post(
-        @url,
-        message_params
-      )
+      response = if attachments.empty?
+                   send_text.call(plain_message)
+                 else
+                   MessageApis::BlockManager.deliver_attachments(
+                     attachments, plain_message, send_text: send_text, captionless: %w[AudioRecorderBlock]
+                   ) do |_type, url, caption|
+                     params = message_params.merge(MediaUrl: url)
+                     params[:Body] = caption if caption
+                     @conn.post(@url, params)
+                   end
+                 end
+      return unless response
 
       unless response.success?
         body = begin
@@ -197,34 +208,6 @@ module MessageApis::Twilio
     end
 
     def handle_post_failure; end
-
-    def process_message_params(blocks, profile_id)
-      # TODO: support more blocks
-      image_block = blocks.find { |o| o["type"] == "ImageBlock" }
-      file_block = blocks.find { |o| o["type"] == "FileBlock" }
-
-      plain_message = MessageApis::BlockManager.plain_text(blocks)
-
-      message_params = {
-        From: "whatsapp:#{@phone}",
-        Body: plain_message,
-        To: profile_id
-      }
-
-      if image_block
-        message_params.merge!({
-                                MediaUrl: Chaskiq::Config.get("HOST") + MessageApis::BlockManager.block_data(image_block)["url"]
-                              })
-      end
-
-      if file_block
-        message_params.merge!({
-                                MediaUrl: Chaskiq::Config.get("HOST") + MessageApis::BlockManager.block_data(file_block)["url"]
-                              })
-      end
-
-      message_params
-    end
 
     def enqueue_process_event(params, package)
       HookMessageReceiverJob.perform_later(

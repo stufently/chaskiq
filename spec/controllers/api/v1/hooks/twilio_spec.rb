@@ -406,5 +406,53 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       deliver(serialized_content: doc.to_json)
       assert_requested(stub)
     end
+
+    context "with media" do
+      let(:requests) { [] }
+
+      before do
+        allow(Chaskiq::Config).to receive(:get).and_call_original
+        allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://chat.example.com")
+
+        stub_request(:post, endpoint).to_return do |request|
+          requests << Rack::Utils.parse_query(request.body)
+          { status: 201, body: { sid: "SM#{requests.size}" }.to_json }
+        end
+      end
+
+      def deliver_media(text, media)
+        nodes = [{ type: "text", text: text }]
+        media.each { |type, url| nodes << { type: type, attrs: { url: url } } }
+        deliver(serialized_content: { type: "doc", content: nodes }.to_json)
+      end
+
+      it "sends every attachment in order and includes the caption once" do
+        result = deliver_media("Here are the files", [
+          ["ImageBlock", "/uploads/first image.png"],
+          ["VideoBlock", "https://cdn.example.com/video.mp4"],
+          ["FileBlock", "/uploads/file.pdf"],
+          ["AudioRecorderBlock", "/uploads/voice.ogg"]
+        ])
+
+        expect(requests.map { |request| request.fetch("MediaUrl") }).to eq([
+          "https://chat.example.com/uploads/first%20image.png",
+          "https://cdn.example.com/video.mp4",
+          "https://chat.example.com/uploads/file.pdf",
+          "https://chat.example.com/uploads/voice.ogg"
+        ])
+        expect(requests.map { |request| request["Body"] }).to eq(["Here are the files", nil, nil, nil])
+        expect(requests.map { |request| request["To"] }.uniq).to eq([user_phone])
+        expect(JSON.parse(result.body)).to eq("sid" => "SM1")
+      end
+
+      it "sends audio without a caption and posts the text separately" do
+        deliver_media("Listen to this", [["AudioRecorderBlock", "/uploads/voice.ogg"]])
+
+        expect(requests.map { |request| request.slice("MediaUrl", "Body") }).to eq([
+          { "MediaUrl" => "https://chat.example.com/uploads/voice.ogg" },
+          { "Body" => "Listen to this" }
+        ])
+      end
+    end
   end
 end
