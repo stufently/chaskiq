@@ -1,5 +1,33 @@
 # Changelog
 
+## 2026-11-19 — fork-updates-m9
+
+Fixed
+- Multi-attachment sends (Telegram, Vonage, MessageBird, Twilio, Dialog360)
+  report every failed request as an `errored:` event, and every provider id is
+  stored, so Vonage/Dialog360/Twilio receipts match any attachment. A retried
+  job sends only the attachments not yet accepted.
+- Error events carry only status, provider code and a short text (URLs
+  replaced, ≤200 chars); raw provider bodies no longer reach the Messenger.
+- Migration: `conversation_part_channel_sources.delivery_index` (run
+  `db:migrate`; the index is built concurrently).
+- Attachment delivery records each accepted request by index and resumes from
+  the remaining requests. The delivery index is created concurrently on
+  PostgreSQL. A rerun rebuilds an invalid index left by a failed build.
+- Status callbacks ignore blank provider IDs. Error events are deduplicated by
+  a session advisory lock and committed before notifications are queued. Lock
+  contention lasting five seconds raises an error for Sidekiq to retry.
+- Delivery closes the PostgreSQL session when unlocking fails. Failure hooks
+  report every failed request and raise the first hook error if delivery did
+  not already raise. A lost advisory lock is logged when unlock returns false.
+
+Known issues
+- Delivery is at least once. If the provider accepts an attachment or separate
+  text request before Chaskiq records its delivery index, a retry can send
+  that request again.
+- If notification fan-out fails after a status event is saved, deduplication
+  skips the replay and the notification remains unsent.
+
 ## 2026-11-19 — fork-updates-m10
 
 Security

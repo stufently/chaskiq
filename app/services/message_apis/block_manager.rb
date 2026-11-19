@@ -36,36 +36,103 @@ class MessageApis::BlockManager
     blocks.grep(Hash).select { |block| MEDIA_BLOCK_TYPES.include?(block["type"]) }
   end
 
-  def self.deliver_attachments(attachments, plain_text, send_text:, captionless: [])
+  def self.deliver_attachments(attachments, plain_text, send_text:, captionless: [], **hooks)
+    hooks.assert_valid_keys(:on_success, :on_failure, :already_sent)
+    already_sent = hooks.fetch(:already_sent, 0)
+    remaining, delivered_indices = already_sent.is_a?(Integer) ? [already_sent, []] : [0, already_sent]
+    on_success = delivery_success_hook(hooks[:on_success], already_sent)
+    on_failure = hooks[:on_failure]
+    failures = []
     first_success = nil
     last_response = nil
+    media_delivered = false
     caption = plain_text.presence
     omit_caption = captionless.respond_to?(:call) ? captionless : ->(type, _url) { captionless.include?(type) }
+    caption = nil if caption && caption_delivered?(attachments, delivered_indices, omit_caption)
 
-    attachments.each do |media|
-      attrs = block_data(media)
-      next unless attrs.is_a?(Hash)
-
-      url = absolute_url(attrs["url"])
+    attachments.each_with_index do |media, index|
+      url = delivery_url(media)
       next unless url
 
       type = media["type"]
       media_caption = omit_caption.call(type, url) ? nil : caption
-      last_response = yield(type, url, media_caption)
-      if last_response.success?
+      if delivered_indices.include?(index) || remaining.positive?
+        remaining -= 1 if remaining.positive?
+      else
+        last_response = yield(type, url, media_caption)
+        unless last_response.success?
+          failures << last_response
+          next
+        end
+
+        on_success&.call(last_response, index)
         first_success ||= last_response
-        caption = nil if media_caption
+      end
+      media_delivered = true
+      caption = nil if media_caption
+    end
+
+    text = media_delivered ? caption : plain_text.presence
+    text_index = attachments.size
+    text_response = send_text.call(text) if text && remaining.zero? && delivered_indices.exclude?(text_index)
+    if text_response.respond_to?(:success?)
+      if text_response.success?
+        on_success&.call(text_response, text_index)
+        successful_text = text_response
+      else
+        failures << text_response
       end
     end
 
-    if first_success
-      send_text.call(caption) if caption
-      return first_success
+    result = if media_delivered
+               first_success || successful_text
+             elsif text
+               text_response
+             else
+               last_response
+             end
+    completed = true
+    result
+  ensure
+    callback_error = report_failures(on_failure, failures, result) if on_failure
+    raise callback_error if completed && callback_error
+  end
+
+  def self.delivery_success_hook(callback, already_sent)
+    return unless callback
+    return callback unless already_sent.is_a?(Integer)
+
+    ->(response, _index) { callback.call(response) }
+  end
+
+  def self.caption_delivered?(attachments, delivered_indices, omit_caption)
+    return true if delivered_indices.include?(attachments.size)
+
+    delivered_indices.any? do |index|
+      media = attachments[index]
+      url = delivery_url(media)
+      url && !omit_caption.call(media["type"], url)
     end
+  end
 
-    return send_text.call(plain_text) if plain_text.present?
+  def self.delivery_url(media)
+    attrs = block_data(media) if media
+    absolute_url(attrs["url"]) if attrs.is_a?(Hash)
+  end
 
-    last_response
+  def self.report_failures(callback, failures, result)
+    first_error = nil
+    failures.each do |failure|
+      next if failure.equal?(result)
+
+      begin
+        callback.call(failure)
+      rescue StandardError => e
+        first_error ||= e
+        Rails.logger.error("Attachment failure hook raised #{e.class}")
+      end
+    end
+    first_error
   end
 
   def self.absolute_url(url)
@@ -171,5 +238,6 @@ class MessageApis::BlockManager
     Array(node["content"]).grep(Hash).flat_map { |child| media_captions(child) }
   end
 
-  private_class_method :draft_block, :node_text, :media_captions
+  private_class_method :draft_block, :node_text, :media_captions,
+                       :delivery_success_hook, :caption_delivered?, :delivery_url, :report_failures
 end

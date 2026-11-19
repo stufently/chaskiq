@@ -42,6 +42,7 @@ module MessageApis::Dialog360
     include MessageApis::Helpers
 
     PROVIDER = "dialog_360"
+    RESUMABLE_DELIVERY = true
     MEDIA_TYPES = {
       "ImageBlock" => "image",
       "VideoBlock" => "video",
@@ -122,6 +123,8 @@ module MessageApis::Dialog360
     end
 
     def find_channel(id)
+      return if id.blank?
+
       ConversationPartChannelSource.find_by(
         provider: PROVIDER,
         message_source_id: id
@@ -129,27 +132,20 @@ module MessageApis::Dialog360
     end
 
     def process_error(params)
-      conversation_part_channel = find_channel(params["id"])
+      source_id = params["id"]
+      conversation_part_channel = find_channel(source_id)
       return if conversation_part_channel.blank?
 
       conversation = conversation_part_channel.conversation_part.conversation
 
-      # crea el mensaje con el channel de una, asi cuando se cree
-      # el notify_message va a bypasear el canal
-      # conversation.add_message()
-
       errors = params["errors"]
-      msg = ""
-      msg = errors.map { |o| "#{o['code']} #{o['title']}" }.join if errors.is_a?(Array)
-
-      conversation.add_message_event(
-        action: "errored: #{msg}",
-        provider: PROVIDER,
-        message_source_id: "bypass-internal-#{params['id']}",
-        data: {
-          status: params
-        }
-      )
+      errors = [] unless errors.is_a?(Array)
+      text = errors.grep(Hash).map do |error|
+        title = error["title"]
+        [safe_error_code(error["code"]), (title if title.is_a?(String))].compact.join(" ")
+      end.join
+      code = errors.first["code"] if errors.first.is_a?(Hash)
+      add_error_event(conversation, "bypass-internal-#{source_id}", status: nil, code: code, text: text)
     end
 
     def get_message_id(response_data)
@@ -183,7 +179,8 @@ module MessageApis::Dialog360
       return send_text.call(plain_message) if attachments.empty?
 
       MessageApis::BlockManager.deliver_attachments(
-        attachments, plain_message, send_text: send_text, captionless: %w[AudioRecorderBlock]
+        attachments, plain_message,
+        send_text: send_text, captionless: %w[AudioRecorderBlock], **delivery_hooks(conversation, part)
       ) do |block_type, url, caption|
         type = MEDIA_TYPES.fetch(block_type)
         media = { link: url }

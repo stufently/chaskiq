@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_23_132840) do
+ActiveRecord::Schema[7.0].define(version: 2026_11_19_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -439,9 +439,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_23_132840) do
     t.string "message_source_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "delivery_index"
     t.index ["conversation_part_id"], name: "index_conversation_part_channel_sources_on_conversation_part_id"
     t.index ["message_source_id"], name: "index_conversation_part_channel_sources_on_message_source_id"
     t.index ["provider"], name: "index_conversation_part_channel_sources_on_provider"
+    t.index ["conversation_part_id", "provider", "delivery_index"], name: "index_part_channel_sources_on_delivery_slot", unique: true, where: "(delivery_index IS NOT NULL)"
   end
 
   create_table "conversation_part_contents", force: :cascade do |t|

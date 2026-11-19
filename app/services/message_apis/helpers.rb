@@ -141,6 +141,8 @@ module MessageApis
     end
 
     def find_channel(id)
+      return if id.blank?
+
       ConversationPartChannelSource.find_by(
         provider: self.class::PROVIDER,
         message_source_id: id

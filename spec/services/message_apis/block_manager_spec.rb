@@ -37,6 +37,117 @@ RSpec.describe MessageApis::BlockManager do
       expect(sent_texts).to be_empty
       expect(result).to equal(success)
     end
+
+    it "calls on_success for every successful request before the next one" do
+      text_response = double("successful text", success?: true)
+      calls = []
+      send_caption = lambda do |_caption|
+        calls << :text
+        text_response
+      end
+      result = described_class.deliver_attachments(
+        [audio, audio], "voice",
+        send_text: send_caption, captionless: %w[AudioRecorderBlock],
+        on_success: ->(response) { calls << response }
+      ) do
+        calls << :audio
+        success
+      end
+
+      expect(calls).to eq([:audio, success, :audio, success, :text, text_response])
+      expect(result).to equal(success)
+    end
+
+    it "calls on_failure after sending the remaining attachments" do
+      calls = []
+      replies = [success, failure, success]
+      result = described_class.deliver_attachments(
+        [image, file, audio], "files", send_text: send_text, on_failure: ->(response) { calls << response }
+      ) do |type, _url, _caption|
+        calls << type
+        replies.shift
+      end
+
+      expect(calls).to eq(["ImageBlock", "FileBlock", "AudioRecorderBlock", failure])
+      expect(result).to equal(success)
+    end
+
+    it "excludes the returned failure from on_failure" do
+      hidden_failures = []
+      last_failure = double("last failed response", success?: false)
+      replies = [failure, last_failure]
+      result = described_class.deliver_attachments(
+        [image, file], "", send_text: send_text, on_failure: ->(response) { hidden_failures << response }
+      ) { replies.shift }
+
+      expect(hidden_failures).to eq([failure])
+      expect(result).to equal(last_failure)
+    end
+
+    it "consumes the caption when already_sent replays eligible media" do
+      captions = []
+      unusable = image.merge("attrs" => { "url" => "" })
+      result = described_class.deliver_attachments(
+        [unusable, image, file], "files", send_text: send_text, already_sent: 1
+      ) do |type, _url, caption|
+        captions << [type, caption]
+        success
+      end
+
+      expect(captions).to eq([["FileBlock", nil]])
+      expect(sent_texts).to be_empty
+      expect(result).to equal(success)
+    end
+
+    it "counts a separate caption in already_sent" do
+      result = described_class.deliver_attachments(
+        [audio], "voice", send_text: send_text, captionless: %w[AudioRecorderBlock], already_sent: 2
+      ) { raise "already delivered audio" }
+
+      expect(sent_texts).to be_empty
+      expect(result).to be_nil
+    end
+
+    it "keeps the transport exception and reports subsequent failures if one failure hook raises" do
+      transport_error = Faraday::TimeoutError.new("transport timed out")
+      first_failure = double("first failed response", success?: false)
+      last_failure = double("second failed response", success?: false)
+      responses = [first_failure, last_failure]
+      reported = []
+      on_failure = lambda do |response|
+        reported << response
+        raise "failure hook broke" if response.equal?(first_failure)
+      end
+      allow(Rails.logger).to receive(:error)
+
+      expect do
+        described_class.deliver_attachments([audio, file, image], "", send_text: send_text, on_failure: on_failure) do
+          responses.shift || raise(transport_error)
+        end
+      end.to(raise_error { |error| expect(error).to equal(transport_error) })
+      expect(reported).to eq([first_failure, last_failure])
+      expect(Rails.logger).to have_received(:error).with(/failure hook.*RuntimeError/i)
+    end
+
+    it "raises the first failure hook exception after reporting all failures on a successful return" do
+      first_error = RuntimeError.new("first callback failure")
+      first_failure = double("first failed response", success?: false)
+      last_failure = double("second failed response", success?: false)
+      responses = [first_failure, last_failure, success]
+      reported = []
+      on_failure = lambda do |response|
+        reported << response
+        raise(response.equal?(first_failure) ? first_error : "second callback failure")
+      end
+      allow(Rails.logger).to receive(:error)
+
+      expect do
+        described_class.deliver_attachments([audio, file, image], "", send_text: send_text, on_failure: on_failure) do
+          responses.shift
+        end
+      end.to(raise_error { |error| expect(error).to equal(first_error) })
+      expect(reported).to eq([first_failure, last_failure])
+    end
   end
 
   describe ".get_blocks" do

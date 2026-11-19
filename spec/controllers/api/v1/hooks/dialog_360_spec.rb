@@ -297,9 +297,139 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
         { "type" => "text", "text" => { "body" => "Listen to this" } }
       ])
     end
+
+    context "when notifying a saved message" do
+      let(:endpoint) { "https://waba.360dialog.io/v1/messages" }
+      let(:part) do
+        images = %w[first second third].map { |name| { type: "ImageBlock", attrs: { url: "https://cdn.example.com/#{name}.png" } } }
+        conversation.add_message(from: agent_role.agent, message: { serialized_content: { content: images }.to_json })
+      end
+
+      def notify
+        api.notify_message(conversation: conversation, part: part, channel: user_phone)
+      end
+
+      def success_response(id)
+        { status: 201, body: { messages: [{ id: id }] }.to_json }
+      end
+
+      def delivery_errors
+        conversation.messages.where(messageable_type: "ConversationPartEvent").map(&:messageable)
+                    .select { |event| event.action.start_with?("errored:") }
+      end
+
+      it "records a partial failure for rejected media" do
+        error = { errors: [{ code: 1008, title: "Required parameter is missing" }] }
+        stub_request(:post, endpoint).to_return(success_response("wamid.1"), { status: 400, body: error.to_json }, success_response("wamid.3"))
+
+        notify
+
+        expect(delivery_errors.map(&:data)).to eq([{ "status" => 400, "code" => 1008, "message" => "Required parameter is missing" }])
+      end
+
+      it "matches a failed status to a later provider id" do
+        notify
+        status = { "id" => "wamid.3", "status" => "failed", "errors" => [{ "code" => 470, "title" => "Re-engagement" }] }
+
+        api.process_event({ "statuses" => [status] }, nil)
+
+        expect(delivery_errors.map(&:action)).to eq(["errored: 470 Re-engagement"])
+        expect(part.conversation_part_channel_sources.pluck(:message_source_id)).to contain_exactly("wamid.1", "wamid.2", "wamid.3")
+      end
+
+      it "keeps other ids when an accepted response has an empty messages array" do
+        stub_request(:post, endpoint).to_return(
+          { status: 201, body: { messages: [] }.to_json }, success_response("wamid.2"), success_response("wamid.3")
+        )
+
+        expect { notify }.not_to raise_error
+        expect(part.conversation_part_channel_sources.pluck(:delivery_index, :message_source_id))
+          .to contain_exactly([0, nil], [1, "wamid.2"], [2, "wamid.3"])
+        api.process_event({ "statuses" => [{ "status" => "read" }, { "status" => "failed" }] }, nil)
+        expect(part.reload.read_at).to be_nil
+        expect(delivery_errors).to be_empty
+      end
+
+      it "does not resend the attachment accepted without an id before a timeout" do
+        stub = stub_request(:post, endpoint)
+               .to_return(status: 201, body: { messages: [] }.to_json)
+               .then.to_raise(Faraday::TimeoutError)
+               .then.to_return(success_response("wamid.2"), success_response("wamid.3"))
+
+        expect { notify }.to raise_error(Faraday::TimeoutError)
+        notify
+
+        assert_requested(stub, times: 4)
+        expect(part.conversation_part_channel_sources.pluck(:delivery_index, :message_source_id))
+          .to contain_exactly([0, nil], [1, "wamid.2"], [2, "wamid.3"])
+      end
+
+      it "sanitizes the failed status event" do
+        part.conversation_part_channel_sources.create!(provider: "dialog_360", message_source_id: "wamid.1")
+        errors = [{ "code" => 470, "title" => "See https://example.com/why for details", "href" => "https://example.com/docs" }]
+
+        api.process_event({ "statuses" => [{ "id" => "wamid.1", "status" => "failed", "errors" => errors }] }, nil)
+
+        expect(delivery_errors.map(&:data)).to eq([{ "status" => nil, "code" => 470, "message" => "470 See [url] for details" }])
+      end
+
+      it "ignores object values in a failed status without rendering their contents" do
+        part.conversation_part_channel_sources.create!(provider: "dialog_360", message_source_id: "wamid.1")
+        errors = [{ "code" => { "phone" => "private-code" }, "title" => { "customer" => "private-title" } }]
+
+        api.process_event({ "statuses" => [{ "id" => "wamid.1", "status" => "failed", "errors" => errors }] }, nil)
+
+        expect(delivery_errors.map(&:action)).to eq(["errored: "])
+        expect(delivery_errors.map(&:data)).to eq([{ "status" => nil, "code" => nil, "message" => "" }])
+      end
+
+      it "records the same failed status once and keeps distinct actions for its provider id" do
+        part.conversation_part_channel_sources.create!(provider: "dialog_360", message_source_id: "wamid.1")
+        status = { "id" => "wamid.1", "status" => "failed" }
+        errors = [{ "code" => 470, "title" => "Re-engagement" }]
+        replay = status.merge("errors" => errors)
+
+        2.times { api.process_event({ "statuses" => [replay] }, nil) }
+        api.process_event({ "statuses" => [status.merge("errors" => [{ "code" => 471, "title" => "Rejected" }])] }, nil)
+
+        expect(delivery_errors.map(&:action)).to eq(["errored: 470 Re-engagement", "errored: 471 Rejected"])
+      end
+
+      it "holds a session lock and commits the status event before enqueuing notifications" do
+        part.conversation_part_channel_sources.create!(provider: "dialog_360", message_source_id: "wamid.1")
+        allow(ApiChannelNotificatorJob).to receive(:perform_later).and_wrap_original do |original, **args|
+          visible = Thread.new { ConversationPart.exists?(args.fetch(:part_id)) }.value
+          expect(visible).to be(true)
+          ConversationPart.with_connection do |connection|
+            expect(connection.transaction_open?).to be(false)
+            sql = "SELECT count(*) FROM pg_locks WHERE locktype = 'advisory' AND pid = pg_backend_pid()"
+            expect(connection.select_value(sql)).to eq(1)
+          end
+          original.call(**args)
+        end
+        status = { "id" => "wamid.1", "status" => "failed", "errors" => [{ "code" => 470, "title" => "Re-engagement" }] }
+
+        2.times { api.process_event({ "statuses" => [status] }, nil) }
+
+        expect(delivery_errors.map(&:action)).to eq(["errored: 470 Re-engagement"])
+        expect(ApiChannelNotificatorJob).to have_received(:perform_later).once
+      end
+    end
   end
 
   describe "hooks" do
+    include WebMock::API
+
+    around(description: "create message with error") do |example|
+      WebMock.enable!
+      stub_request(:post, "https://waba-sandbox.360dialog.io/v1/messages")
+        .to_return(status: 201, body: { messages: [{ id: "1" }] }.to_json)
+      example.run
+    ensure
+      WebMock.reset!
+      WebMock.disable!
+    end
+
     before do
       AppPackagesCatalog.update_all
     end

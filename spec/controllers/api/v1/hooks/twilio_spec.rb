@@ -416,6 +416,155 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       assert_requested(stub)
     end
 
+    context "when notifying a saved message" do
+      let(:images) { %w[first second third].map { |name| ["ImageBlock", "https://cdn.example.com/#{name}.png"] } }
+
+      def saved_part(text, media)
+        blocks = [{ type: "text", text: text }] + media.map { |type, url| { type: type, attrs: { url: url } } }
+        thread.add_message(from: agent_role.agent, message: { serialized_content: { content: blocks }.to_json })
+      end
+
+      def notify(part)
+        api.notify_message(conversation: thread, part: part, channel: user_phone)
+      end
+
+      def delivery_errors
+        thread.messages.where(messageable_type: "ConversationPartEvent").map(&:messageable)
+              .select { |event| event.action.start_with?("errored:") }
+      end
+
+      def success_response(sid)
+        { status: 201, body: { sid: sid }.to_json }
+      end
+
+      it "emits one safe event for a partial failure" do
+        error = { code: 21_620, message: "Invalid  media\nhttps://cdn.example.com/second.png #{'x' * 250}",
+                  more_info: "https://www.twilio.com/docs/errors/21620" }
+        stub_request(:post, endpoint).to_return(
+          success_response("SM1"), { status: 400, body: error.to_json }, success_response("SM3")
+        )
+        part = saved_part("Caption", images)
+
+        notify(part)
+
+        expect(delivery_errors.size).to eq(1)
+        event = delivery_errors.first
+        data = event.data
+        expect(data.keys).to contain_exactly("status", "code", "message")
+        expect(data).to include("status" => 400, "code" => 21_620)
+        expect(data.fetch("message")).to start_with("Invalid media [url] ")
+        expect(data.fetch("message")).not_to include("https://")
+        expect(data.fetch("message").length).to be <= 200
+        expect(event.action).to eq("errored: #{data.fetch('message')}")
+        expect(part.conversation_part_channel_sources.pluck(:message_source_id)).to contain_exactly("SM1", "SM3")
+      end
+
+      it "stores only safe fields from an undelivered status callback" do
+        part = saved_part("Caption", [])
+        part.conversation_part_channel_sources.create!(provider: "twilio", message_source_id: "SM2")
+
+        api.process_event({ "SmsStatus" => "undelivered", "SmsSid" => "SM2", "ErrorCode" => "30008",
+                            "id" => "callback", "To" => user_phone, "MediaUrl0" => images.first.last }, nil)
+
+        expect(delivery_errors.map(&:data)).to eq([{ "status" => nil, "code" => "30008", "message" => "undelivered" }])
+      end
+
+      it "reports a single failed media request once (base-green)" do
+        stub = stub_request(:post, endpoint).to_return(status: 400, body: { message: "Rejected image" }.to_json)
+
+        notify(saved_part("", images.first(1)))
+
+        assert_requested(stub, times: 1)
+        expect(delivery_errors.map(&:action)).to eq(["errored: Rejected image"])
+      end
+
+      it "does not resend the separate text after audio and text were accepted (base-green)" do
+        stub = stub_request(:post, endpoint).to_return(success_response("SM1"), success_response("SM2"))
+        part = saved_part("Voice caption", [["AudioRecorderBlock", "https://cdn.example.com/voice.ogg"]])
+
+        2.times { notify(part) }
+
+        assert_requested(stub, times: 2)
+      end
+
+      it "does not resend a single text after it was accepted (base-green)" do
+        stub = stub_request(:post, endpoint).to_return(success_response("SM1"))
+        part = saved_part("Hello", [])
+
+        2.times { notify(part) }
+
+        assert_requested(stub, times: 1)
+      end
+
+      it "does not send an incoming audio part back to the provider" do
+        media = [["AudioRecorderBlock", "https://cdn.example.com/voice.ogg"]]
+        block = { type: media.first.first, attrs: { url: media.first.last } }
+        part = thread.add_message(
+          from: recipient,
+          message: { serialized_content: { content: [{ type: "text", text: "Voice caption" }, block] }.to_json },
+          provider: "twilio",
+          message_source_id: "SM-inbound"
+        )
+        stub = stub_request(:post, endpoint).to_return(success_response("SM-duplicate"))
+
+        notify(part)
+
+        assert_not_requested(stub)
+      end
+
+      it "leaves a part to the job already sending it" do
+        part = saved_part("Caption", images.first(1))
+        first_request = Queue.new
+        finish_request = Queue.new
+        first_request_token = Queue.new
+        first_request_token << true
+        stub = stub_request(:post, endpoint).to_return do
+          unless first_request_token.empty?
+            first_request_token.pop
+            first_request << true
+            finish_request.pop
+          end
+          success_response("SM1")
+        end
+
+        sender = Thread.new { notify(part) }
+        Timeout.timeout(5) do
+          first_request.pop
+          notify(ConversationPart.find(part.id))
+        end
+        finish_request << true
+        sender.value
+
+        assert_requested(stub, times: 1)
+      ensure
+        finish_request << true if finish_request && sender&.alive?
+        sender&.join(5)
+      end
+
+      it "deduplicates callbacks per SID and keeps errors for other SIDs in the same integration" do
+        part = saved_part("Caption", [])
+        %w[SM1 SM2].each do |sid|
+          part.conversation_part_channel_sources.create!(provider: "twilio", message_source_id: sid)
+        end
+        callback = { "SmsStatus" => "undelivered", "id" => "integration" }
+
+        %w[SM1 SM1 SM2].each { |sid| api.process_event(callback.merge("SmsSid" => sid), nil) }
+
+        expect(delivery_errors.map(&:action)).to eq(["errored: undelivered", "errored: undelivered"])
+      end
+
+      it "ignores statuses without a SID even if an outgoing source has no provider id" do
+        part = saved_part("Caption", [])
+        part.conversation_part_channel_sources.create!(provider: "twilio", delivery_index: 0)
+
+        api.process_event({ "SmsStatus" => "read" }, nil)
+        api.process_event({ "SmsStatus" => "undelivered", "SmsSid" => "" }, nil)
+
+        expect(part.reload.read_at).to be_nil
+        expect(delivery_errors).to be_empty
+      end
+    end
+
     context "with media" do
       let(:requests) { [] }
 
