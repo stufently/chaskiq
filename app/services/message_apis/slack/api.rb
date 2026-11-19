@@ -994,11 +994,11 @@ module MessageApis::Slack
         if block["type"] == "ImageBlock"
           { type: "image", image_url: url, alt_text: "Image" }
         else
-          { type: "section", text: { type: "mrkdwn", text: "<#{url}|View attachment>" } }
+          { type: "section", text: { type: "mrkdwn", text: "<#{url}|View attachment>", verbatim: true } }
         end
       else
         text = MessageApis::BlockManager.plain_text([block])
-        { type: "section", text: { type: "mrkdwn", text: escape_mrkdwn(text) } } if text.present?
+        { type: "section", text: { type: "mrkdwn", text: escape_mrkdwn(text), verbatim: true } } if text.present?
       end
     end
 

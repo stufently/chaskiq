@@ -642,6 +642,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
     def expect_delivery(text)
       stub = stub_request(:post, endpoint).with do |request|
         JSON.parse(request.body).fetch("blocks") == [{ "type" => "section", "text" => { "type" => "mrkdwn", "text" => text } }]
+          .map { |block| block.deep_merge("text" => { "verbatim" => true }) }
       end
       stub.to_return(status: 200, body: "{}")
     end
@@ -656,6 +657,13 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
     it "escapes control characters in an outgoing mrkdwn section" do
       stub = expect_delivery("a &lt; b &amp; c &gt; d")
       doc = { type: "doc", content: [{ type: "text", text: "a < b & c > d" }] }
+      deliver(serialized_content: doc.to_json)
+      assert_requested(stub)
+    end
+
+    it "sends @here as verbatim mrkdwn" do
+      stub = expect_delivery("@here hi")
+      doc = { type: "doc", content: [{ type: "text", text: "@here hi" }] }
       deliver(serialized_content: doc.to_json)
       assert_requested(stub)
     end
@@ -682,6 +690,8 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       ]
       stub = stub_request(:post, endpoint).with do |request|
         blocks = JSON.parse(request.body).fetch("blocks")
+        next false unless blocks.first&.dig("text")&.delete("verbatim") == true
+
         blocks.map { |block| block["type"] } == %w[section divider image] &&
           blocks.first.fetch("text") == { "type" => "mrkdwn", "text" => "Heading" } &&
           blocks.last.fetch("image_url") == "https://chat.example.com/uploads/photo.jpg"

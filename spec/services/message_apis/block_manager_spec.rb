@@ -23,6 +23,18 @@ RSpec.describe MessageApis::BlockManager do
       expect(blocks.last).to include("type" => "ImageBlock")
       expect(described_class.block_data(blocks.last)).to eq("url" => url)
     end
+
+    it "keeps the Draft.js media text as a caption and preserves its URL" do
+      url = "/uploads/attachment"
+
+      %w[image file recorded-audio recorded-video video].each do |type|
+        content = { blocks: [{ key: "m1", type: type, text: "#{type} caption", data: { url: url } }] }
+        blocks = described_class.get_blocks(content.to_json)
+
+        expect(described_class.block_data(blocks.first)).to include("url" => url)
+        expect(described_class.plain_text(blocks)).to eq("#{type} caption")
+      end
+    end
   end
 
   describe ".plain_text" do
@@ -42,6 +54,14 @@ RSpec.describe MessageApis::BlockManager do
 
       expect(described_class.plain_text(blocks)).to eq("foo\n\nbar")
     end
+
+    it "uses a Dante media caption when the message has no other text" do
+      image = { "type" => "ImageBlock", "attrs" => { "caption" => "  Photo caption  " } }
+      text = { "type" => "text", "text" => "Message text" }
+
+      expect(described_class.plain_text([image])).to eq("Photo caption")
+      expect(described_class.plain_text([image, text])).to eq("Message text")
+    end
   end
 
   describe ".absolute_url" do
@@ -50,6 +70,22 @@ RSpec.describe MessageApis::BlockManager do
 
       expect(described_class.absolute_url("/uploads/my file%20(1).png"))
         .to eq("https://chat.example.com/base/uploads/my%20file%20(1).png")
+    end
+
+    it "uses the host from a protocol-relative URL" do
+      allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://chat.example.com/base/")
+
+      expect(described_class.absolute_url("//cdn.example.com/my file.png"))
+        .to eq("https://cdn.example.com/my%20file.png")
+    end
+
+    it "percent-encodes unicode letters with ASCII case-folding equivalents" do
+      allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://chat.example.com")
+
+      expect(described_class.absolute_url("HTTPS://cdn.example.com/\u212A\u017F.png"))
+        .to eq("HTTPS://cdn.example.com/%E2%84%AA%C5%BF.png")
+      expect(described_class.absolute_url("\u212A:file.png"))
+        .to eq("https://chat.example.com/%E2%84%AA:file.png")
     end
   end
 end

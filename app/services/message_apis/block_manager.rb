@@ -4,6 +4,9 @@ require "uri"
 class MessageApis::BlockManager
   include ActionView::Helpers::SanitizeHelper
 
+  MEDIA_BLOCK_TYPES = %w[ImageBlock FileBlock AudioRecorderBlock VideoBlock].freeze
+  private_constant :MEDIA_BLOCK_TYPES
+
   def self.get_blocks(serialized_content)
     document = JSON.parse(serialized_content)
     return unless document.is_a?(Hash)
@@ -20,25 +23,29 @@ class MessageApis::BlockManager
   end
 
   def self.plain_text(blocks)
-    blocks.grep(Hash).map { |block| node_text(block).strip }.reject(&:empty?).join("\n")
+    nodes = blocks.grep(Hash)
+    text = nodes.map { |node| node_text(node).strip }.reject(&:empty?).join("\n")
+    return text unless text.empty?
+
+    nodes.flat_map { |node| media_captions(node) }.join("\n")
   end
 
   def self.absolute_url(url)
     return unless url.is_a?(String) && url.present?
 
-    unless url.match?(%r{\Ahttps?://}i)
-      return if url.match?(/\A[a-z][a-z\d+.-]*:/i)
-
+    if url.start_with?("//")
+      url = "https:#{url}"
+    elsif !url.match?(/\A[A-Za-z][A-Za-z0-9+.-]*:/)
       host = Chaskiq::Config.get("HOST").to_s.sub(%r{/+\z}, "")
       url = "#{host}/#{url.sub(%r{\A/+}, '')}"
     end
 
-    address = url.match(%r{\A(https?://[^/?\#]*)(.*)\z}im)
+    address = url.match(%r{\A([Hh][Tt][Tt][Pp][Ss]?://[^/?#]*)(.*)\z}m)
     return unless address
 
     authority, suffix = address.captures
     path_and_query, separator, fragment = suffix.partition("#")
-    unsafe = /%(?![a-f0-9]{2})|[^a-z0-9._~!$&'()*+,;=:@\/?%\-]/i
+    unsafe = /%(?![A-Fa-f0-9]{2})|[^A-Za-z0-9._~!$&'()*+,;=:@\/?%\-]/
     encoded = authority + URI::DEFAULT_PARSER.escape(path_and_query, unsafe) +
               separator + URI::DEFAULT_PARSER.escape(fragment, unsafe)
     encoded if URI.parse(encoded).host.present?
@@ -85,15 +92,19 @@ class MessageApis::BlockManager
   end
 
   def self.draft_block(block)
-    type = block["type"]
-    case type
-    when "image", "file", "recorded-audio", "recorded-video", "video", "divider"
-      { "type" => block_mapping(type), "attrs" => block["data"] }
-    else
-      text = block["text"].to_s
-      children = text.empty? ? [] : [{ "type" => "text", "text" => text }]
-      { "type" => "paragraph", "content" => children }
+    type = block_mapping(block["type"])
+    text = block["text"].to_s
+    media = MEDIA_BLOCK_TYPES.include?(type)
+    if media || type == "DividerBlock"
+      attrs = block["data"]
+      if media && text.present?
+        attrs = (attrs.is_a?(Hash) ? attrs : {}).merge("caption" => text)
+      end
+      return { "type" => type, "attrs" => attrs }
     end
+
+    children = text.empty? ? [] : [{ "type" => "text", "text" => text }]
+    { "type" => "paragraph", "content" => children }
   end
 
   def self.node_text(node)
@@ -112,5 +123,15 @@ class MessageApis::BlockManager
     end
   end
 
-  private_class_method :draft_block, :node_text
+  def self.media_captions(node)
+    if MEDIA_BLOCK_TYPES.include?(node["type"])
+      attrs = block_data(node)
+      caption = attrs["caption"] if attrs.is_a?(Hash)
+      return [caption.strip] if caption.is_a?(String) && caption.present?
+    end
+
+    Array(node["content"]).grep(Hash).flat_map { |child| media_captions(child) }
+  end
+
+  private_class_method :draft_block, :node_text, :media_captions
 end
