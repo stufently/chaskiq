@@ -1,5 +1,5 @@
-ARG RUBY_VERSION
-FROM ruby:$RUBY_VERSION-slim-bullseye
+ARG RUBY_VERSION=3.3.14
+FROM ruby:$RUBY_VERSION-slim-trixie
 
 ARG APP_ENV
 
@@ -61,6 +61,8 @@ WORKDIR /usr/src/app
 COPY --chown=docker:docker . /usr/src/app/
 
 # Precompile assets - production only
+# Throwaway SECRET_KEY_BASE: config/application.rb puts [key].pack('H*') into ENV,
+# which raises on a NUL byte (~22% of random keys), so pick a key without one.
 # Clean up temp files and Yarn cache folder
 RUN NODE_OPTIONS="--max-old-space-size=2048" \
     RAILS_ENV=${APP_ENV} \
@@ -68,7 +70,7 @@ RUN NODE_OPTIONS="--max-old-space-size=2048" \
     AWS_SECRET_ACCESS_KEY=aa0000 \
     AWS_S3_BUCKET=test \
     AWS_S3_REGION=us-east-1 \
-    SECRET_KEY_BASE=`bin/rails secret` \
+    SECRET_KEY_BASE="$(ruby -rsecurerandom -e 'loop { k = SecureRandom.hex(64); break puts(k) unless [k].pack("H*").include?("\0") }')" \
     bundle exec rails assets:precompile --trace \
     && rm -rf /usr/src/app/node_modules /usr/src/app/tmp/cache/* /tmp/* \
     && yarn cache clean
