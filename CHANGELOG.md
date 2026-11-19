@@ -17,6 +17,8 @@ Fixed
 - Rubocop workflow: the exit-code check was expanded by the outer shell and
   never ran; offenses stay non-fatal, a RuboCop error fails the job.
 - Push Docker Image skips its steps when Docker Hub secrets are absent.
+- CI/Rubocop build scout_apm 5.3.5's C extension as C17
+  (`BUNDLE_BUILD__SCOUT_APM`): GCC 15 on ubuntu-26.04 defaults to C23.
 
 Added
 - `bin/ci-local` (rubocop + rspec in Docker, `--docker` for the image build)

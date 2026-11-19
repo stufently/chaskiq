@@ -6,6 +6,11 @@ on:
   push:
     branches-ignore:
       - 'l10n_master2'
+env:
+  # ubuntu-26.04 ships GCC 15 (C23 by default); scout_apm 5.3.5's C extension
+  # only builds as C17. Drop once scout_apm is upgraded.
+  BUNDLE_BUILD__SCOUT_APM: "--with-cflags=-std=gnu17"
+
 jobs:
   test:
     runs-on: ubuntu-latest
