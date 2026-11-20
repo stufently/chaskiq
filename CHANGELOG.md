@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-20 — fork-updates-r3b1
+
+- Changed: Rails/Blank and Rails/Presence autocorrected in 7 files of app/ and lib/ (9 places;
+  receiver types checked per site).
+
 ## 2026-11-20 — fork-updates-r6b
 
 - Changed: Lint/UnusedMethodArgument allows unused keyword arguments (plugin interface, owner

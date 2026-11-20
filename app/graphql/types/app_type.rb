@@ -306,13 +306,9 @@ module Types
 
       conversation = object.conversations.find_by(key: id)
 
-      if conversation.present?
-        conversation.log_async(
-          action: "conversation_viewed",
-          user: current_user,
-          ip: context[:request].remote_ip
-        )
-      end
+      conversation.presence&.log_async(action: "conversation_viewed",
+                                       user: current_user,
+                                       ip: context[:request].remote_ip)
 
       conversation
     end
@@ -721,7 +717,7 @@ module Types
     end
 
     def sort_conversations(sort)
-      return unless sort.present?
+      return if sort.blank?
 
       s = case sort
           when "updated" then "updated_at desc"

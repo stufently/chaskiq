@@ -49,7 +49,7 @@ class ActionTrigger
       end
     end
 
-    return unless next_step["controls"].present?
+    return if next_step["controls"].blank?
 
     conversation.add_message(
       step_id: next_step[:step_uid],
@@ -115,7 +115,7 @@ class ActionTrigger
       )
     end
 
-    return unless next_step["controls"].present?
+    return if next_step["controls"].blank?
 
     message = message.conversation.add_message(
       step_id: next_step[:step_uid],

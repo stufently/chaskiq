@@ -64,7 +64,7 @@ class AppPackagesCatalog
   def self.update(pkg)
     data = "MessageApis::#{pkg}::Api".constantize.definition_info
     pkg = AppPackage.find_or_create_by(name: data[:name])
-    pkg.update(data) if pkg.present?
+    pkg.presence&.update(data)
   end
 
   def self.update_all(dev_packages: false)

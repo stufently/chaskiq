@@ -700,15 +700,6 @@ Naming/VariableNumber:
     - 'app/services/action_trigger_factory.rb'
     - 'spec/models/segment_spec.rb'
 
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: NilOrEmpty, NotPresent, UnlessPresent.
-Rails/Blank:
-  Exclude:
-    - 'app/channels/application_cable/connection.rb'
-    - 'app/graphql/types/app_type.rb'
-    - 'app/jobs/email_chat_notifier_job.rb'
-    - 'app/services/action_trigger.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforceForPrefixed.
 Rails/Delegate:
@@ -743,14 +734,6 @@ Rails/Pluck:
     - 'spec/controllers/api/v1/hooks/telegram_spec.rb'
     - 'spec/controllers/api/v1/hooks/twilio_spec.rb'
     - 'spec/controllers/api/v1/hooks/twitter_spec.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-Rails/Presence:
-  Exclude:
-    - 'app/controllers/agents/sessions_controller.rb'
-    - 'app/graphql/mutations/articles/article_settings_delete_lang.rb'
-    - 'app/graphql/types/app_type.rb'
-    - 'lib/app_packages_catalog.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: NotNilAndNotEmpty, NotBlank, UnlessBlank.
