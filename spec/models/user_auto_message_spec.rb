@@ -97,7 +97,7 @@ RSpec.describe UserAutoMessage, type: :model do
     end
 
     it "template compilation" do
-      notification = message.show_notification_for(subscriber)
+      message.show_notification_for(subscriber)
       allow_any_instance_of(UserAutoMessage).to receive(:html_content).and_return(premailer_template)
       html = message.mustache_template_for(subscriber)
       expect(html).to be_include("click?r=http://google.com")

@@ -58,7 +58,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
     describe "single hook" do
       it "receive message" do
         perform_enqueued_jobs do
-          message = conversation.add_message(
+          conversation.add_message(
             from: user,
             message: {
               html_content: "foo",

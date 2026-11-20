@@ -134,7 +134,7 @@ RSpec.describe "Rack::Attack login throttling", type: :request do
   end
 
   it "keeps the limit for one hour" do
-    start = Time.zone.at((Time.now.to_i / 3600 + 1) * 3600 + 1)
+    start = Time.zone.at((((Time.now.to_i / 3600) + 1) * 3600) + 1)
     travel_to(start) { 20.times { expect(post_token("/oauth/token", "10.0.2.4")).not_to eq(429) } }
     travel_to(start + 3590) { expect(post_token("/oauth/token", "10.0.2.4")).to eq(429) }
     travel_to(start + 3610) { expect(post_token("/oauth/token", "10.0.2.4")).not_to eq(429) }

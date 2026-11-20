@@ -1035,7 +1035,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
 
         expect(ConversationPart.last).to_not be_read
 
-        response = send_data(message_notification_params)
+        send_data(message_notification_params)
 
         # we are not interested in subject of replied messages
         expect(Conversation.last.subject).to_not be_present
@@ -1052,7 +1052,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
 
         expect(ConversationPart.last).to_not be_read
 
-        response = send_data(message_notification_params)
+        send_data(message_notification_params)
         # expect(response.status).to be == 200
         expect(ConversationPart.last.messageable.serialized_content).to be_present
       end
@@ -1066,7 +1066,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
 
         expect(ConversationPart.last).to_not be_read
 
-        response = send_data(message_notification_params)
+        send_data(message_notification_params)
 
         # puts ConversationPart.last.messageable.html_content
         expect(ConversationPart.last.messageable.serialized_content).to be_present
@@ -1080,7 +1080,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
       end
 
       it "serializes an email reply with 1000 nested divs" do
-        nested_html = "<div>" * 1000 + "Nested text" + "</div>" * 1000
+        nested_html = ("<div>" * 1000) + "Nested text" + ("</div>" * 1000)
         stub_email_receipt("<p>Reply <strong>before nesting</strong></p>#{nested_html}")
 
         expect { send_data(message_notification_params) }.to change { conversation.messages.count }.by(1)
@@ -1130,7 +1130,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
         :enabled?
       ).and_return(true)
 
-      response = send_data(message_notification_params)
+      send_data(message_notification_params)
       expect(ConversationPart.last.email_message_id).to be == "message_id-1234"
       expect(Conversation.last.subject).to be_present
       expect(ConversationPart.last.messageable.serialized_content).to be_present
@@ -1157,7 +1157,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
         :enabled?
       ).and_return(true)
 
-      response = send_data(message_notification_params)
+      send_data(message_notification_params)
       expect(ConversationPart.last.email_message_id).to be == "message_id-1234"
       expect(ConversationPart.last.messageable.serialized_content).to be_present
     end
@@ -1193,7 +1193,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
         :enabled?
       ).and_return(true)
 
-      response = send_data(message_notification_params)
+      send_data(message_notification_params)
 
       conversation_part = ConversationPart.where(messageable_type: "ConversationPartContent").last
 
@@ -1229,7 +1229,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
         :message_id
       ).and_return("message_id-1234")
 
-      response = send_data(message_notification_params)
+      send_data(message_notification_params)
 
       expect(ConversationPart.all).to be_empty
     end
@@ -1251,7 +1251,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
         :message_id
       ).and_return("message_id-1234")
 
-      response = send_data(message_notification_params)
+      send_data(message_notification_params)
       expect(ConversationPart.last.email_message_id).to be == "message_id-1234"
       expect(ConversationPart.last.messageable.serialized_content).to be_present
     end

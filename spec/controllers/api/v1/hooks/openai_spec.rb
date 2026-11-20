@@ -103,8 +103,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
                                                     data: { prompt: "foofof" }
                                                   })
 
-        channel = conversation.conversation_channels.find_by(provider: "open_ai")
-
         # get(:process_event, params: message_blocks(
         #  channel: channel.provider_channel_id)
         # )
@@ -122,7 +120,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
         )
 
         perform_enqueued_jobs do
-          message = conversation.add_message(
+          conversation.add_message(
             from: user,
             message: {
               html_content: "foo",

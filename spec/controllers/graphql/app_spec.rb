@@ -267,6 +267,7 @@ RSpec.describe GraphqlController, type: :controller do
       )
 
       expect(graphql_response.errors).to be_present
+      expect(app.agents.count).to eq(count)
     end
   end
 end

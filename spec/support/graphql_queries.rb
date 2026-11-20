@@ -58,7 +58,7 @@ module GraphQL
     end
 
     def data_for(type:, variables: {})
-      data = {
+      {
         query: @actions[type],
         variables: variables
       }
