@@ -22,7 +22,6 @@ class Role < ApplicationRecord
   delegate :country_code, to: :agent
   delegate :region, to: :agent
   delegate :region_code, to: :agent
-  delegate :avatar_url, to: :agent
   delegate :lang, to: :agent
   delegate :available, to: :agent
   delegate :sign_in_count, to: :agent

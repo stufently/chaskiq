@@ -3,7 +3,8 @@
 class Plan
   include ActiveModel::Model
 
-  attr_accessor :name, :stripe_id, :id, :features, :description
+  attr_accessor :name, :stripe_id, :id, :description
+  attr_reader :features
 
   def self.all
     path = Rails.root.join("config/subscriptions.yml")
