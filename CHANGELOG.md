@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-20 — fork-updates-r4
+
+Changed
+- Use RuboCop to convert compact class and module declarations to nested
+  declarations in 65 files. Verify that constant resolution and class ancestry
+  agree with the previous declarations. Keep compact declarations in the five
+  files still listed in the `Style/ClassAndModuleChildren` todo.
+
 ## 2026-11-20 — fork-updates-r7a
 
 Changed
