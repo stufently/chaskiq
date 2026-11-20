@@ -3,21 +3,17 @@
 require "rails_helper"
 
 RSpec.describe "Rack::Attack oauth throttle path matching" do
-  let(:throttle_entry) do
+  let(:throttle) do
     Rack::Attack.throttles.find do |t|
-      name = t.is_a?(Array) ? t[0] : t.name
-      name == "logins/ip"
+      t.respond_to?(:name) ? t.name == "logins/ip" : t[0] == "logins/ip"
     end
-  end
-
-  let(:throttle_block) do
-    throttle_entry.is_a?(Array) ? throttle_entry[1] : throttle_entry.block
   end
 
   def throttle_discriminator(path, method: "POST")
     env = Rack::MockRequest.env_for(path, method: method)
     req = Rack::Request.new(env)
-    throttle_block.call(req)
+    block = throttle.respond_to?(:block) ? throttle.block : throttle[1]
+    block.call(req)
   end
 
   it "matches POST /oauth/token" do

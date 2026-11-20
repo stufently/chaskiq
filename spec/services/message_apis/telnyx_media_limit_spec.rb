@@ -8,7 +8,9 @@ RSpec.describe MessageApis::TelnyxSms::Api do
 
   around do |example|
     WebMock.enable!
+    WebMock.reset!
     example.run
+    WebMock.reset!
     WebMock.disable!
   end
 
