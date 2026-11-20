@@ -105,7 +105,6 @@ module Api
 
         _, conversation, from = handle_conversation_part(mail, json_message)
 
-        json_message["mail"]["messageId"]
         # for now just skip the message
         return if from.blank?
 

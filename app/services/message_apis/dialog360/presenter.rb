@@ -109,8 +109,6 @@ module MessageApis
           ] }
         end
 
-        templates["offset"]
-        nil
         # Rails.logger.debug templates
         # Rails.logger.debug ctx
 

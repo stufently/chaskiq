@@ -145,7 +145,7 @@ module MessageApis
     def self.read_response(response, max_bytes)
       if response.is_a?(Net::HTTPRedirection)
         location = response["location"]
-        return [nil, location] if location && !location.empty?
+        return [nil, location] unless location.to_s.empty?
       end
       return unless response.is_a?(Net::HTTPSuccess)
 
