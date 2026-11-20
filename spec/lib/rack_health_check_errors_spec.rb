@@ -7,7 +7,7 @@ RSpec.describe Rack::HealthCheck do
   describe "#redis_connected" do
     it "does not rescue non-StandardError exceptions" do
       check = described_class.new
-      non_standard = Class.new(StandardError)
+      non_standard = Class.new(Exception) # rubocop:disable Lint/InheritException
       redis_double = instance_double(Redis)
       allow(redis_double).to receive(:ping).and_raise(non_standard)
       check.instance_variable_set(:@redis, redis_double)
