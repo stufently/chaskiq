@@ -13,8 +13,6 @@ class CampaignMailer < ApplicationMailer
     headers "X-CHASKIQ-CAMPAIGN-ID" => campaign.id
     headers "X-CHASKIQ-CAMPAIGN-TO" => subscriber.id
 
-    attrs = subscriber.attributes
-
     @campaign = campaign
 
     @subscriber = subscriber
@@ -31,8 +29,6 @@ class CampaignMailer < ApplicationMailer
   end
 
   def test(campaign)
-    content_type = "text/html"
-
     @campaign = campaign
 
     @subscriber = {

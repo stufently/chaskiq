@@ -61,9 +61,6 @@ module MessageApis
       # them configuration options before it’s inserted. Leaving this option
       # blank will skip configuration.
       def self.configure_hook(kind:, ctx:)
-        label = "epa"
-        app = ctx[:package].app
-
         default_prompt = ctx[:package].settings["main_prompt"]
 
         value = ctx.dig(:values, :prompt)

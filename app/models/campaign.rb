@@ -103,8 +103,6 @@ class Campaign < Message
   end
 
   def mustache_template_for(subscriber, html: nil)
-    link_prefix = host + "/campaigns/#{id}/tracks/#{subscriber.encoded_id}/click?r="
-
     # html = LinkRenamer.convert(premailer, link_prefix)
     subscriber_options = subscriber.attributes
                                    .merge(attributes_for_template(subscriber))
@@ -119,12 +117,12 @@ class Campaign < Message
 
   def campaign_url
     host = Rails.application.routes.default_url_options[:host]
-    campaign_url = "#{host}/campaigns/#{id}"
+    "#{host}/campaigns/#{id}"
   end
 
   def campaign_api_url
     host = Rails.application.routes.default_url_options[:host]
-    campaign_url = "#{host}/api/v1/apps/#{app.key}/messages/#{id}"
+    "#{host}/api/v1/apps/#{app.key}/messages/#{id}"
   end
 
   def apply_premailer(opts = {})
@@ -202,11 +200,11 @@ class Campaign < Message
   def self.decode_email(address)
     # "campaigns-#{app.key}-#{id}@#{app.outgoing_email_domain}"
 
-    addr, domain = address.split("@")
-    camp, encoded = addr.split("+")
+    addr, = address.split("@")
+    _, encoded = addr.split("+")
     app_key, campaign_id = decoded_email(encoded).split("-")
     app = App.find_by(key: app_key)
-    campaign = app.campaigns.find(campaign_id)
+    app.campaigns.find(campaign_id)
   rescue StandardError => e
     Rails.logger.error("error on decoding campaign email #{e}")
     nil

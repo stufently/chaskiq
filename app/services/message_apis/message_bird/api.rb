@@ -93,7 +93,6 @@ module MessageApis
 
       def process_event(params, package)
         @package = package
-        current = params["current"]
 
         process_statuses(params["statuses"]) if params["statuses"].present?
 
@@ -201,15 +200,12 @@ module MessageApis
         message = params["message"]
 
         sender_id = message["from"]
-        to = message["to"]
         message_id = message["id"]
 
         # determine the id of the user (channel)
         is_agent = sender_id == package.user_id.to_s
 
         channel_id = is_agent ? message["to"] : message["from"]
-        dialog_user = sender_id
-
         conversation = find_conversation_by_channel(channel_id)
 
         return if conversation && conversation.conversation_part_channel_sources
@@ -247,15 +243,15 @@ module MessageApis
       end
 
       def find_conversation_by_channel(channel)
-        conversation = @package
-                       .app
-                       .conversations
-                       .joins(:conversation_channels)
-                       .where(
-                         "conversation_channels.provider =? AND
+        @package
+          .app
+          .conversations
+          .joins(:conversation_channels)
+          .where(
+            "conversation_channels.provider =? AND
                           conversation_channels.provider_channel_id =?",
-                         PROVIDER, channel
-                       ).first
+            PROVIDER, channel
+          ).first
       end
 
       def serialize_content(data)

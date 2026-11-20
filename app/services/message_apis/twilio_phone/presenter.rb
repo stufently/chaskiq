@@ -4,7 +4,7 @@ module MessageApis::TwilioPhone
   class Presenter
     # Initialize flow webhook URL
     # Sent when an app has been inserted into a conversation, message or the home screen, so that you can render the app.
-    def self.initialize_hook(params)
+    def self.initialize_hook(_params)
       {
         # ctx: ctx,
         # values: { block_type: "block_type" },
@@ -132,7 +132,7 @@ module MessageApis::TwilioPhone
 
     # Submit Sheet flow webhook URL (optional)
     # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
-    def self.sheet_hook(params)
+    def self.sheet_hook(_params)
       {}
     end
 
@@ -173,7 +173,7 @@ module MessageApis::TwilioPhone
         on_hold: MessageApis::TwilioPhone::Store.get_data(@conversation.key, :holdStatus)
       }.to_json
 
-      template = ERB.new <<~SHEET_VIEW
+      ERB.new <<~SHEET_VIEW
         <html lang="en">
           <head>
             <meta charset="UTF-8">
@@ -232,7 +232,7 @@ module MessageApis::TwilioPhone
         agent_in_call: @agent_in_call
       }.to_json
 
-      template = ERB.new <<~SHEET_VIEW
+      ERB.new <<~SHEET_VIEW
         <html lang="en">
           <head>
             <meta charset="UTF-8">
@@ -321,7 +321,6 @@ module MessageApis::TwilioPhone
 
     def self.definitions_for_content(kind:, ctx:)
       conversation = Conversation.find_by(key: ctx[:conversation_key])
-      user = conversation&.main_participant
 
       data = {
         app_id: ctx[:package].app.id,
@@ -372,7 +371,7 @@ module MessageApis::TwilioPhone
                       } })
       end
 
-      definitions = [
+      [
         {
           text: "New phonecall",
           type: "text",
