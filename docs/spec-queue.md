@@ -11,4 +11,4 @@ Status: TODO → SPEC → RUNNING → ACCEPTED (merged). One line per milestone.
 | fork-updates-m12 | third-party deprecations: nightfury `Redis.current`, rspec old `any_instance` syntax, other boot warnings | — | ACCEPTED |
 | fork-updates-m13 | rack 2.2 → 3 | m12 | ACCEPTED |
 | fork-updates-m14 | Ruby 3.3 → latest supported | m13 | ACCEPTED |
-| fork-updates-m15+ | RuboCop backlog (.rubocop_todo.yml) in chunks | m9–m14 merged | R1, R2 ACCEPTED; R2b/R3 next (plan: docs/specs/fork-updates-rubocop-plan.md) |
+| fork-updates-m15+ | RuboCop backlog (.rubocop_todo.yml) in chunks | m9–m14 merged | R1, R2, R3, R7a ACCEPTED; mut m9-m14 RUNNING (qw2) (plan: docs/specs/fork-updates-rubocop-plan.md) |
