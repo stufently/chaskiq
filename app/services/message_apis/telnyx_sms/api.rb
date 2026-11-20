@@ -176,7 +176,7 @@ module MessageApis
         response_data.dig("data", "id")
       end
 
-      def process_message(params, package)
+      def process_message(params, _package)
         data = params[:data]
 
         case data[:event_type]

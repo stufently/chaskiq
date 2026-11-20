@@ -787,7 +787,7 @@ module MessageApis
         params.keys.include?("challenge")
       end
 
-      def oauth_authorize(app, package)
+      def oauth_authorize(_app, package)
         oauth_client.auth_code.authorize_url(
           user_scope: "channels:history,channels:write,channels:read",
           scope: "files:read,channels:history,channels:join,chat:write,channels:read,channels:manage,chat:write.customize,users:read,users:read.email",

@@ -186,7 +186,7 @@ module MessageApis
         JSON.parse(response.body)
       end
 
-      def register_webhook(app_package, integration)
+      def register_webhook(_app_package, integration)
         subscription_url = integration.hook_url
         # "#{ENV['HOST']}/api/v1/hooks/#{integration.app.key}/#{app_package.name.underscore}/#{integration.id}"
         data = {

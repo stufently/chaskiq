@@ -76,7 +76,7 @@ module MessageApis
         "#{BASE_URL}#{url}"
       end
 
-      def create_fase(message, klass)
+      def create_fase(message, _klass)
         value = message.blocks.dig("values", "email")
         response = @conn.post(
           "https://api.zoom.us/v2/users/#{value}/meetings",

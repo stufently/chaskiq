@@ -69,7 +69,7 @@ module MessageApis
         end
       end
 
-      def notify_added(conversation)
+      def notify_added(_conversation)
         authorize!
 
         # TODO: handle this only on UI ?

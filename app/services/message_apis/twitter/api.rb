@@ -438,7 +438,7 @@ module MessageApis
       end
       # API Registration methods
 
-      def register_webhook(app_package, integration)
+      def register_webhook(_app_package, integration)
         url = CGI.escape(integration.hook_url)
         make_post_request("/1.1/account_activity/all/development/webhooks.json?url=#{url}", nil)
       end
@@ -447,7 +447,7 @@ module MessageApis
         JSON.parse(make_get_request("/1.1/account_activity/all/development/webhooks.json"))
       end
 
-      def unregister(app_package, integration)
+      def unregister(_app_package, _integration)
         delete_webhooks
       end
 

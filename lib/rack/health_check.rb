@@ -11,7 +11,7 @@ module Rack
       @redis = Redis.new
     end
 
-    def call(env)
+    def call(_env)
       connected = redis_connected
       status = {
         redis: {
