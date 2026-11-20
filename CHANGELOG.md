@@ -9,6 +9,8 @@ Fixed
   property has no content.
 - Fetch campaign premailer HTML through `SafeDownload` with same-origin
   redirects and raise `Campaign::PremailerFetchError` on fetch failure.
+  Trust the origin from the route configuration so the development premailer
+  works without a separate `HOST` setting.
 
 Removed
 - Remove duplicate definitions of `Plan#features=`, `Role#avatar_url`, and

@@ -63,21 +63,23 @@ module MessageApis
       []
     end
 
-    def self.fetch(url, headers: {}, allow_own_host: true, url_allowed: nil, **limits)
-      limits = FetchLimits.new(**limits)
+    # Only pass trusted_origin for an origin taken from trusted application configuration.
+    def self.fetch(url, headers: {}, allow_own_host: true, url_allowed: nil, **options)
+      address_options = { allow_own_host: allow_own_host, trusted_origin: options.delete(:trusted_origin) }
+      limits = FetchLimits.new(**options)
       limits.within_deadline do
-        follow_redirects(url, limits, headers, allow_own_host, url_allowed)
+        follow_redirects(url, limits, headers, address_options, url_allowed)
       end
     end
 
-    def self.follow_redirects(url, limits, headers, allow_own_host, url_allowed)
+    def self.follow_redirects(url, limits, headers, address_options, url_allowed)
       uri = http_uri(url)
 
       (limits.max_redirects + 1).times do |hop|
         return unless uri
         return if url_allowed && !url_allowed.call(uri)
 
-        addresses = download_addresses(uri, allow_own_host)
+        addresses = download_addresses(uri, **address_options)
         return unless addresses
 
         body, location = download(uri, addresses, limits.max_bytes, hop.zero? ? headers : {})
@@ -90,12 +92,13 @@ module MessageApis
       nil
     end
 
-    def self.download_addresses(uri, allow_own_host)
+    def self.download_addresses(uri, allow_own_host:, trusted_origin:)
       addresses = resolve(uri.hostname)
       return if addresses.empty?
-      return if addresses.any? { |address| blocked_ip?(address) } && !(allow_own_host && own_origin?(uri))
+      return addresses if same_origin?(uri, trusted_origin)
+      return addresses if addresses.none? { |address| blocked_ip?(address) }
 
-      addresses
+      addresses if allow_own_host && same_origin?(uri, http_uri(Chaskiq::Config.get("HOST").to_s))
     end
 
     def self.http_uri(url)
@@ -105,9 +108,8 @@ module MessageApis
       nil
     end
 
-    def self.own_origin?(uri)
-      own = http_uri(Chaskiq::Config.get("HOST").to_s)
-      own && uri.scheme == own.scheme && uri.hostname.casecmp?(own.hostname) && uri.port == own.port
+    def self.same_origin?(uri, origin)
+      origin && uri.scheme.casecmp?(origin.scheme) && uri.hostname.casecmp?(origin.hostname) && uri.port == origin.port
     end
 
     def self.download(uri, addresses, max_bytes, headers)
@@ -159,7 +161,7 @@ module MessageApis
       [Body.new(body, content_type: response["content-type"]), nil]
     end
 
-    private_class_method :follow_redirects, :download_addresses, :http_uri, :own_origin?,
+    private_class_method :follow_redirects, :download_addresses, :http_uri, :same_origin?,
                          :download, :request, :read_response
   end
 end

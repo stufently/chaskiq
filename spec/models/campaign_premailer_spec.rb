@@ -62,4 +62,20 @@ RSpec.describe Campaign do
 
     expect { campaign.clean_inline_css(url) }.to raise_error(StandardError)
   end
+
+  it "stores the premailer from the development route without a configured HOST" do
+    local_host = "http://localhost:3000"
+    allow(Rails.application.routes).to receive(:default_url_options).and_return({ host: local_host })
+    allow(Chaskiq::Config).to receive(:get).with("HOST").and_return(nil)
+    allow(MessageApis::SafeDownload).to receive(:resolve).with("localhost").and_return(["127.0.0.1"])
+    app = FactoryBot.create(:app)
+    saved_campaign = FactoryBot.create(:campaign, app: app, from_email: "sender@example.com")
+    local_url = "#{local_host}/apps/#{app.key}/premailer/#{saved_campaign.id}?exclude_gif=true"
+    page = stub_request(:get, local_url).to_return(body: "<p>Development preview</p>")
+
+    saved_campaign.apply_premailer(exclude_gif: true)
+
+    expect(saved_campaign.reload.premailer).to include("Development preview")
+    assert_requested(page, times: 1)
+  end
 end
