@@ -202,10 +202,11 @@ R5b разбита: **R5b-1** (черновик спеки: `docs/specs/fork-upd
 хвосты R6a/R6b (`UselessAssignment` в 11 файлах `keep`, `UnusedMethodArgument` в 2 презентерах),
 `Lint/Void` и `UselessOr` в `app/`, три места-кандидата R6a, `Rails/Present` (`safe_download.rb:148`)
 — 25 файлов четырьмя патчами постановщика, 7 характеризационных спек и спека правки D1, 15 мутантов;
-решения владельца D1–D4 — в блоке решений R7 (D1 — правка поведения, остальные — оставить). **R5b-2** — остальные `Lint` в
-`app/`+`lib/` (раздел 10 спеки R5b-1); решения владельца там: `InterpolationCheck`
-(`lib/subdomain_routes.rb`, маршрутизация по `'www.#{DOMAIN}'` буквально) и `UnreachableCode`
-(`eu_location?` — заглушка `return true`). `Lint` в `spec/` — после mut-m9-m14.
+решения владельца D1–D4 — в блоке решений R7 (D1 — правка поведения, остальные — оставить). **R5b-2** (черновик спеки:
+`docs/specs/fork-updates-r5b2.md`, `qw2`) — остальные `Lint` в `app/`+`lib/`: 11 копов, 52 офенса, 18 файлов
+четырьмя патчами без смены поведения, 12 характеризационных спек, 20 мутантов; решения владельца E1/E2
+(мёртвый код `subdomain_routes.rb` и `eu_location?`) — в блоке решений R7. `Lint` в `spec/` — R6c
+(черновик: `docs/specs/fork-updates-r6c.md`).
 
 - Копы: 19, 87 офенсов, 45 файлов. Каждое место — разбор «баг или намерение»; баг чинится с
   тестом и строкой в CHANGELOG, намерение — переписать явно (без `rubocop:disable`).
@@ -239,7 +240,9 @@ R5b разбита: **R5b-1** (черновик спеки: `docs/specs/fork-upd
 восемь файлов, где автокоррект оставляет `Lint/Void`) — в R5b. R6b — `Lint/UnusedMethodArgument`
 (решение владельца — в блоке R7: `_` позиционным, `AllowUnusedKeywordArguments: true`; спека
 готова: `docs/specs/fork-updates-r6b.md`, 28 файлов, 45 переименований, 2 ERB-презентера в `keep`).
-`UselessAssignment` в `spec/` — R6c, после mut-m9-m14.
+`UselessAssignment` в `spec/` — R6c (черновик спеки `docs/specs/fork-updates-r6c.md`, `qw2`: все `Lint` в
+`spec/` — `UselessAssignment` 27 в 12 файлах, `Void` 3, `AmbiguousBlockAssociation` 4,
+`AmbiguousOperatorPrecedence` 5, `EmptyFile` 1 — одним патчем постановщика).
 
 - Копы: 2, 353 офенса, 115 файлов. `UselessAssignment` 188 (автокоррект убирает присваивание,
   правая часть остаётся), `UnusedMethodArgument` 165 (48 позиционных — `_arg`; 117 keyword-
@@ -272,6 +275,15 @@ R5b разбита: **R5b-1** (черновик спеки: `docs/specs/fork-upd
   CHANGELOG); **D2** `pipedrive/api.rb:114` — исключение на ответе без `data` оставить (голое чтение с
   комментарием); **D3** `audit.rb` — `agent_name` агента без имени остаётся `""`; **D4**
   `safe_download.rb:148` — `unless location.to_s.empty?` (строка из пробелов — по-прежнему переход).
+- R5b-2 (решения 2026-11-20, спека `docs/specs/fork-updates-r5b2.md`, раздел 3): **E1**
+  `lib/subdomain_routes.rb` — `PersonalizedDomain`, `NoSubdomain` и константу `DOMAIN` удалить, оставить
+  `SubdomainOrDomain` (единственный используемый, `config/routes.rb:57`) с характеризационной спекой;
+  **E2** `api_controller.rb` — `eu_location?` и закомментированный `raise EULocationError` удалить;
+  `EULocationError` (назван в `rescue` `api/graphql_controller.rb:49`) и `EuCountries`
+  (`messenger_type.rb:37`) остаются. Поведение не меняется (CHANGELOG: Removed/Changed).
+- Все вехи с новыми тестами (правило владельца 2026-11-20): чтение исходников `app/`/`lib/`/`config/`
+  как текста в спеках запрещено и убийством мутанта не считается; критерий `source_scan.py` в каждой такой
+  спеке.
 - Metrics (R8) — реальные лимиты с письменной причиной (ориентир: MethodLength ~25,
   LineLength ~140, spec/ вне BlockLength), методы сверх лимита — отдельными вехами
   рефакторинга с тестами.
@@ -325,6 +337,14 @@ R5b разбита: **R5b-1** (черновик спеки: `docs/specs/fork-upd
 `delete_key` удаляет `hash(namespace(k))`, то есть ключ с двойным namespace, и данные, записанные
 `set`, не удаляются никогда (мутанты M259/M267 это чинят). Отдельная веха Codex: тест «красный на
 BASE», фикс, запись Fixed в CHANGELOG; после неё M259/M267 — обычные мутанты.
+
+- Хвост D1 (R5b-1, нашёл Codex-ревью): в `slack/api.rb` `notify_message` событие `assigned` с `data`
+  `nil`/массивом всё ещё падает на `data["email"].present?` (строка ниже удалённого `data["label"]`).
+  Безопасное чтение (`data.is_a?(Hash) && data["email"].present?`) — правка поведения, нужно решение
+  владельца; кандидат в веху вместе с фиксом `delete_key`.
+- `EuCountries.include?(code)` в `app/graphql/types/messenger_type.rb:37` попадает в `Module#include?`
+  и бросает `TypeError` на строке/nil (метод модуля — `includes?`): `needs_privacy_consent` при
+  настройке "eu" падает. Кандидат в ту же веху фиксов (тест «красный на BASE»).
 
 ## R9 — удалить `.rubocop_todo.yml`
 
