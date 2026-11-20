@@ -132,6 +132,12 @@ RSpec.describe Api::GraphqlController, type: :controller do
       graphql_post(@graphql_client.data_for(type: "AUTH", variables: {}))
 
       expect(response.status).to be == 422
+      json = response.parsed_body
+      expect(json["errors"]).to be_an(Array)
+      expect(json["errors"].first["data"]).to eq({})
+      expect(json["errors"].first["message"]).to be_a(String)
+      expect(json["errors"].first["message"]).not_to be_empty
+      expect(json["errors"].first["message"]).not_to include("::")
 
       graphql_post(@graphql_client.data_for(type: "PING", variables: {}))
 

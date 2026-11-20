@@ -16,12 +16,16 @@ RSpec.describe Middleware::RackBadRequest do
     response = client.get("/", "QUERY_STRING" => "item=one&item[]=two", lint: true)
 
     expect(response.status).to eq(400)
+    expect(response.headers["content-type"]).to eq("text/plain")
+    expect(response.body).to eq("Bad Request")
   end
 
   it "turns an invalid query parameter into a 400 response" do
     response = client.get("/", "QUERY_STRING" => "item=%", lint: true)
 
     expect(response.status).to eq(400)
+    expect(response.headers["content-type"]).to eq("text/plain")
+    expect(response.body).to eq("Bad Request")
   end
 
   it "lets unrelated application errors propagate" do
