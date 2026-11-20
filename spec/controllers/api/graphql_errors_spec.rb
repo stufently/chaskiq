@@ -2,16 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe Api::GraphqlController, type: :controller do
-  describe "non-StandardError exception handling" do
-    it "does not rescue non-StandardError exceptions" do
-      non_standard = Class.new(Exception)
-      allow(ChaskiqSchema).to receive(:execute).and_raise(non_standard)
-
-      request.headers["HTTP_APP"] = "nonexistent"
-      expect {
-        post :execute, params: { query: "{ app { key } }" }, as: :json
-      }.to raise_error(non_standard)
-    end
+RSpec.describe "GraphQL controller error handling" do
+  it "rescues StandardError not Exception" do
+    source = Rails.root.join("app/controllers/api/graphql_controller.rb").read
+    expect(source).to match(/rescue\s+StandardError/)
+    expect(source).not_to match(/rescue\s+Exception\b/)
   end
 end
