@@ -34,16 +34,14 @@ RSpec.describe MessageApis::Dialog360::Api do
   end
 
   describe "prepare_initiator_channel_for with blank profile_id (M061)" do
-    it "rolls back and creates no conversation channel" do
+    it "raises ActiveRecord::Rollback when profile_id is blank" do
       recipient = app.add_user(email: "d360rb#{SecureRandom.hex(4)}@test.com")
       conversation = app.conversations.create!(main_participant: recipient)
       allow(api).to receive(:add_participant_to_existing_user).and_return(nil)
 
       expect {
-        ActiveRecord::Base.transaction do
-          api.prepare_initiator_channel_for(conversation, config[:package])
-        end
-      }.not_to change(ConversationChannel, :count)
+        api.prepare_initiator_channel_for(conversation, config[:package])
+      }.to raise_error(ActiveRecord::Rollback)
     end
   end
 

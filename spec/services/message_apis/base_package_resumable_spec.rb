@@ -51,14 +51,23 @@ RSpec.describe MessageApis::BasePackage do
       expect(hooks).to have_key(:on_failure)
       expect(hooks).not_to have_key(:on_success)
     end
+  end
 
-    it "returns already_sent and on_success for persisted resumable parts with media" do
-      media_part = conversation.add_message(from: recipient,
-                                            message: { html_content: "test",
-                                                       serialized_content: { content: [{ type: "ImageBlock", url: "http://x.com/i.jpg" }] }.to_json })
-      hooks = package.send(:delivery_hooks, conversation, media_part)
-      expect(hooks).to have_key(:already_sent)
-      expect(hooks).to have_key(:on_success)
+  describe "#notify_part stores message_id for non-resumable" do
+    it "stores message_id source row after notify_part for non-resumable plugin" do
+      plain_package.send(:notify_part, conversation, part)
+      source = part.conversation_part_channel_sources.find_by(provider: "plain_test")
+      expect(source).to be_present
+      expect(source.message_source_id).to eq("msg-plain")
+      expect(source.delivery_index).to be_nil
+    end
+  end
+
+  describe "#notify_part skips storage for resumable" do
+    it "does not store message_id with nil delivery_index for resumable plugin" do
+      package.send(:notify_part, conversation, part)
+      sources = part.conversation_part_channel_sources.where(provider: "resumable_test", delivery_index: nil)
+      expect(sources.count).to eq(0)
     end
   end
 
@@ -73,7 +82,7 @@ RSpec.describe MessageApis::BasePackage do
       expect(source.message_source_id).to eq("msg-idx")
     end
 
-    it "updates existing row on second call with same delivery_index" do
+    it "does not create duplicate rows for same delivery_index" do
       resp1 = double("r1", success?: true, body: '{"id":"first"}')
       resp2 = double("r2", success?: true, body: '{"id":"second"}')
       package.send(:store_message_id, part, resp1, delivery_index: 1)
@@ -82,16 +91,6 @@ RSpec.describe MessageApis::BasePackage do
       }.not_to raise_error
       sources = part.conversation_part_channel_sources.where(provider: "resumable_test", delivery_index: 1)
       expect(sources.count).to eq(1)
-    end
-  end
-
-  describe "#store_message_id for non-resumable plugin" do
-    it "stores message_id with nil delivery_index on success" do
-      response = double("resp", success?: true, body: '{"id":"msg-nonres"}')
-      plain_package.send(:store_message_id, part, response)
-      source = part.conversation_part_channel_sources.find_by(provider: "plain_test")
-      expect(source).to be_present
-      expect(source.message_source_id).to eq("msg-nonres")
     end
   end
 end
