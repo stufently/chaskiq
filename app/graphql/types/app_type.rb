@@ -307,8 +307,8 @@ module Types
       conversation = object.conversations.find_by(key: id)
 
       conversation.presence&.log_async(action: "conversation_viewed",
-          user: current_user,
-          ip: context[:request].remote_ip)
+                                       user: current_user,
+                                       ip: context[:request].remote_ip)
 
       conversation
     end
