@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-11-20 — fork-updates-r5
+
+Fixed
+- Compare usage against the configured limit in `Plan#limit_reached?` and treat
+  unlimited and unlisted features as having no limit.
+- Fall back to named metadata in link cards when the matching Open Graph
+  property has no content. Treat blank metadata as absent so the card can
+  use the document title.
+- Fetch campaign premailer HTML through `SafeDownload` with same-origin
+  redirects and raise `Campaign::PremailerFetchError` on fetch failure.
+  Trust the origin from the route configuration so the development premailer
+  works without a separate `HOST` setting. Compare the redirect origin
+  case-insensitively so host capitalization does not block a local redirect.
+
+Removed
+- Remove duplicate definitions of `Plan#features=`, `Role#avatar_url`, and
+  `AppUserDashboard#conversations`.
+
 ## 2026-11-20 — fork-updates-r4
 
 Changed

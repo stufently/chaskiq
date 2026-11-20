@@ -25,18 +25,6 @@ class AppUserDashboard
     end
   end
 
-  def conversations
-    resource.conversations.group(:state).count
-            .map do |k, v|
-      {
-        id: k || "unknown",
-        label: k || "unknown",
-        value: v,
-        color: "hsl(#{colors}, 70%, 50%)"
-      }
-    end
-  end
-
   def visits
     resource.visits
             .all.group_by_day(:created_at)

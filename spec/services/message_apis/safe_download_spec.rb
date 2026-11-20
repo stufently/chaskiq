@@ -150,4 +150,35 @@ RSpec.describe MessageApis::SafeDownload do
     assert_not_requested(other_port)
     assert_not_requested(other_scheme)
   end
+
+  context "with a trusted origin and no configured HOST" do
+    let(:trusted_origin) { URI.parse("http://LOCALHOST:3000") }
+    let(:local_url) { "http://localhost:3000/premailer" }
+
+    before do
+      allow(Chaskiq::Config).to receive(:get).and_call_original
+      allow(Chaskiq::Config).to receive(:get).with("HOST").and_return(nil)
+      allow(described_class).to receive(:resolve).with("localhost").and_return(["127.0.0.1"])
+    end
+
+    it "allows both hops of a same-origin redirect on a loopback address" do
+      stub_request(:get, local_url).to_return(status: 302, headers: { "Location" => "/preview" })
+      preview = stub_request(:get, "http://localhost:3000/preview").to_return(body: "preview")
+
+      body = described_class.fetch(local_url, allow_own_host: false, trusted_origin: trusted_origin)
+
+      expect(body&.read).to eq("preview")
+      assert_requested(preview, times: 1)
+    end
+
+    it "refuses a redirect to a different port on the same private host" do
+      other_url = "http://localhost:3001/preview"
+      first_hop = stub_request(:get, local_url).to_return(status: 302, headers: { "Location" => other_url })
+      next_hop = stub_request(:get, other_url).to_return(body: "other service")
+
+      expect(described_class.fetch(local_url, trusted_origin: trusted_origin)).to be_nil
+      assert_requested(first_hop, times: 1)
+      assert_not_requested(next_hop)
+    end
+  end
 end
