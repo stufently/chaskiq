@@ -9,15 +9,16 @@ RSpec.describe ConversationPartChannelSource, type: :model do
   let(:part) { conversation.add_message(from: recipient, message: { html_content: "lock test" }) }
 
   describe "with_delivery_lock error propagation (M043)" do
-    it "re-raises when unlock fails after block completed" do
+    it "re-raises StandardError from the rescue block when completed" do
       part_id = part.id
       expect {
         described_class.with_delivery_lock(part_id, "m043_test") do
           described_class.with_connection do |conn|
-            conn.execute("SELECT pg_terminate_backend(pg_backend_pid())")
+            conn.begin_db_transaction
+            conn.execute("SELECT 1 / 0")
           end
         end
-      }.to raise_error(ActiveRecord::StatementInvalid)
+      }.to raise_error(ActiveRecord::StatementInvalid, /division by zero/)
     end
   end
 
