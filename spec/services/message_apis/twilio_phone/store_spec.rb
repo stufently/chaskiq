@@ -66,4 +66,26 @@ RSpec.describe MessageApis::TwilioPhone::Store do
     values = described_class.get_values("#{conv_key}/data")
     expect(values).to include("k1" => "v1", "k2" => "v2")
   end
+
+  it "locked_agents key ends with /locked_agents/<key>" do
+    list = described_class.locked_agents("myapp")
+    redis_key = list.key
+    expect(redis_key).to end_with("/locked_agents/myapp")
+  end
+
+  it "locked_agents data written via raw Kredis.unique_list is visible" do
+    raw_list = Kredis.unique_list("/twilio_phone//locked_agents/rawtest")
+    raw_list.append("agent-x")
+    list = described_class.locked_agents("rawtest")
+    expect(list.elements).to include("agent-x")
+  ensure
+    raw_list&.clear
+  end
+
+  it "del_callblock removes the key entirely" do
+    cb_key = "#{described_class.send(:namespace, conv_key)}/callblock"
+    described_class.set_callblock(cb_key, "http://example.com/cb")
+    described_class.del_callblock(cb_key)
+    expect(Kredis.string(cb_key).assigned?).to be false
+  end
 end
