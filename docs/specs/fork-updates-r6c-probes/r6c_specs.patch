@@ -1,0 +1,396 @@
+diff --git a/spec/controllers/api/v1/hooks/csat_spec.rb b/spec/controllers/api/v1/hooks/csat_spec.rb
+index a06a493e..6be4bf25 100644
+--- a/spec/controllers/api/v1/hooks/csat_spec.rb
++++ b/spec/controllers/api/v1/hooks/csat_spec.rb
+@@ -58,7 +58,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+     describe "single hook" do
+       it "receive message" do
+         perform_enqueued_jobs do
+-          message = conversation.add_message(
++          conversation.add_message(
+             from: user,
+             message: {
+               html_content: "foo",
+diff --git a/spec/controllers/api/v1/hooks/dialog_360_spec.rb b/spec/controllers/api/v1/hooks/dialog_360_spec.rb
+index 36d9277f..95e02fab 100644
+--- a/spec/controllers/api/v1/hooks/dialog_360_spec.rb
++++ b/spec/controllers/api/v1/hooks/dialog_360_spec.rb
+@@ -230,7 +230,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   end
+ 
+   let(:app_package) do
+-    1
+     AppPackage.find_by(name: "Dialog360")
+   end
+ 
+diff --git a/spec/controllers/api/v1/hooks/message_bird_spec.rb b/spec/controllers/api/v1/hooks/message_bird_spec.rb
+index 8c305d48..264a7fc5 100644
+--- a/spec/controllers/api/v1/hooks/message_bird_spec.rb
++++ b/spec/controllers/api/v1/hooks/message_bird_spec.rb
+@@ -186,7 +186,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   end
+ 
+   let(:app_package) do
+-    1
+     AppPackage.find_by(name: "MessageBird")
+   end
+ 
+diff --git a/spec/controllers/api/v1/hooks/openai_spec.rb b/spec/controllers/api/v1/hooks/openai_spec.rb
+index 8d1bcb5b..4da47d8a 100644
+--- a/spec/controllers/api/v1/hooks/openai_spec.rb
++++ b/spec/controllers/api/v1/hooks/openai_spec.rb
+@@ -103,8 +103,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+                                                     data: { prompt: "foofof" }
+                                                   })
+ 
+-        channel = conversation.conversation_channels.find_by(provider: "open_ai")
+-
+         # get(:process_event, params: message_blocks(
+         #  channel: channel.provider_channel_id)
+         # )
+@@ -122,7 +120,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+         )
+ 
+         perform_enqueued_jobs do
+-          message = conversation.add_message(
++          conversation.add_message(
+             from: user,
+             message: {
+               html_content: "foo",
+diff --git a/spec/controllers/api/v1/hooks/pipedrive_spec.rb b/spec/controllers/api/v1/hooks/pipedrive_spec.rb
+index d9a5d425..d7095a00 100644
+--- a/spec/controllers/api/v1/hooks/pipedrive_spec.rb
++++ b/spec/controllers/api/v1/hooks/pipedrive_spec.rb
+@@ -17,7 +17,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+ 
+   def data_for(id:, app:)
+     # sent on created
+-    data = {
++    {
+       "v" => 1,
+       "matches_filters" => { "current" => [] },
+       "meta" => { "v" => 1, "action" => "updated", "object" => "person", "id" => 11, "company_id" => 7_468_915, "user_id" => 11_379_745, "host" => "michelson.pipedrive.com", "timestamp" => 1_581_613_434, "timestamp_micro" => 1_581_613_434_223_943, "permitted_user_ids" => [11_379_745], "trans_pending" => false, "is_bulk_update" => false, "pipedrive_service_name" => false, "matches_filters" => { "current" => [] }, "webhook_id" => "136435" },
+@@ -127,7 +127,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+       expect do
+         post(:process_event, params: data_for(id: @pkg.encoded_id, app: app))
+         perform_enqueued_jobs
+-      end.to_not change { AppUser.count } # .by(1)
++      end.to_not(change { AppUser.count }) # .by(1)
+     end
+ 
+     it "update profile" do
+@@ -150,7 +150,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+         expect do
+           post(:process_event, params: delete_data_for(id: @pkg.encoded_id, app: app))
+           perform_enqueued_jobs
+-        end.to change { ExternalProfile.count }
++        end.to(change { ExternalProfile.count })
+       end
+ 
+       it "will update profile" do
+diff --git a/spec/controllers/api/v1/hooks/slack_spec.rb b/spec/controllers/api/v1/hooks/slack_spec.rb
+index f0bcd1ff..e3e49cfb 100644
+--- a/spec/controllers/api/v1/hooks/slack_spec.rb
++++ b/spec/controllers/api/v1/hooks/slack_spec.rb
+@@ -413,8 +413,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+                                                     provider_channel_id: "123"
+                                                   })
+ 
+-        channel = conversation.conversation_channels.find_by(provider: "slack")
+-
+         r = { ok: true, ts: "1234", thread_ts: "123" }
+         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
+           .and_return(OpenStruct.new(body: r.to_json))
+@@ -434,8 +432,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+                                                     provider_channel_id: "123"
+                                                   })
+ 
+-        channel = conversation.conversation_channels.find_by(provider: "slack")
+-
+         r = { ok: false, ts: "1234" }
+         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
+           .and_return(OpenStruct.new(body: r.to_json))
+@@ -539,8 +535,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+                                                     provider_channel_id: "123"
+                                                   })
+ 
+-        channel = conversation.conversation_channels.find_by(provider: "slack")
+-
+         r = { ok: true, ts: "1234", thread_ts: "123" }
+         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
+           .and_return(OpenStruct.new(body: r.to_json))
+@@ -560,8 +554,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+                                                     provider_channel_id: "123"
+                                                   })
+ 
+-        channel = conversation.conversation_channels.find_by(provider: "slack")
+-
+         r = { ok: false, ts: "1234", thread_ts: "123" }
+         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
+           .and_return(OpenStruct.new(body: r.to_json))
+diff --git a/spec/controllers/api/v1/hooks/telegram_spec.rb b/spec/controllers/api/v1/hooks/telegram_spec.rb
+index e4f2fdd1..01ef65a7 100644
+--- a/spec/controllers/api/v1/hooks/telegram_spec.rb
++++ b/spec/controllers/api/v1/hooks/telegram_spec.rb
+@@ -336,7 +336,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   end
+ 
+   let(:app_package) do
+-    1
+     AppPackage.find_by(name: "Telegram")
+   end
+ 
+diff --git a/spec/controllers/api/v1/hooks/twitter_spec.rb b/spec/controllers/api/v1/hooks/twitter_spec.rb
+index 7852bca0..eb3ba528 100644
+--- a/spec/controllers/api/v1/hooks/twitter_spec.rb
++++ b/spec/controllers/api/v1/hooks/twitter_spec.rb
+@@ -530,7 +530,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+         message_data: image_data
+       ))
+       perform_enqueued_jobs
+-      conversation = app.conversations.first
+ 
+       serialized = '{
+         "blocks":
+@@ -570,7 +569,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+           "entityMap":{}
+         }'
+ 
+-      options = {
++      {
+         from: app.agents.first,
+         message: {
+           html_content: "aa",
+diff --git a/spec/controllers/api/v1/hooks_controller_spec.rb b/spec/controllers/api/v1/hooks_controller_spec.rb
+index b5fe2630..2c4782e3 100644
+--- a/spec/controllers/api/v1/hooks_controller_spec.rb
++++ b/spec/controllers/api/v1/hooks_controller_spec.rb
+@@ -1035,7 +1035,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+ 
+         expect(ConversationPart.last).to_not be_read
+ 
+-        response = send_data(message_notification_params)
++        send_data(message_notification_params)
+ 
+         # we are not interested in subject of replied messages
+         expect(Conversation.last.subject).to_not be_present
+@@ -1052,7 +1052,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+ 
+         expect(ConversationPart.last).to_not be_read
+ 
+-        response = send_data(message_notification_params)
++        send_data(message_notification_params)
+         # expect(response.status).to be == 200
+         expect(ConversationPart.last.messageable.serialized_content).to be_present
+       end
+@@ -1066,7 +1066,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+ 
+         expect(ConversationPart.last).to_not be_read
+ 
+-        response = send_data(message_notification_params)
++        send_data(message_notification_params)
+ 
+         # puts ConversationPart.last.messageable.html_content
+         expect(ConversationPart.last.messageable.serialized_content).to be_present
+@@ -1080,7 +1080,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+       end
+ 
+       it "serializes an email reply with 1000 nested divs" do
+-        nested_html = "<div>" * 1000 + "Nested text" + "</div>" * 1000
++        nested_html = ("<div>" * 1000) + "Nested text" + ("</div>" * 1000)
+         stub_email_receipt("<p>Reply <strong>before nesting</strong></p>#{nested_html}")
+ 
+         expect { send_data(message_notification_params) }.to change { conversation.messages.count }.by(1)
+@@ -1130,7 +1130,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+         :enabled?
+       ).and_return(true)
+ 
+-      response = send_data(message_notification_params)
++      send_data(message_notification_params)
+       expect(ConversationPart.last.email_message_id).to be == "message_id-1234"
+       expect(Conversation.last.subject).to be_present
+       expect(ConversationPart.last.messageable.serialized_content).to be_present
+@@ -1157,7 +1157,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+         :enabled?
+       ).and_return(true)
+ 
+-      response = send_data(message_notification_params)
++      send_data(message_notification_params)
+       expect(ConversationPart.last.email_message_id).to be == "message_id-1234"
+       expect(ConversationPart.last.messageable.serialized_content).to be_present
+     end
+@@ -1193,7 +1193,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+         :enabled?
+       ).and_return(true)
+ 
+-      response = send_data(message_notification_params)
++      send_data(message_notification_params)
+ 
+       conversation_part = ConversationPart.where(messageable_type: "ConversationPartContent").last
+ 
+@@ -1229,7 +1229,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+         :message_id
+       ).and_return("message_id-1234")
+ 
+-      response = send_data(message_notification_params)
++      send_data(message_notification_params)
+ 
+       expect(ConversationPart.all).to be_empty
+     end
+@@ -1251,7 +1251,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+         :message_id
+       ).and_return("message_id-1234")
+ 
+-      response = send_data(message_notification_params)
++      send_data(message_notification_params)
+       expect(ConversationPart.last.email_message_id).to be == "message_id-1234"
+       expect(ConversationPart.last.messageable.serialized_content).to be_present
+     end
+diff --git a/spec/controllers/graphql/agent_spec.rb b/spec/controllers/graphql/agent_spec.rb
+deleted file mode 100644
+index e69de29b..00000000
+diff --git a/spec/controllers/graphql/app_package_integration_spec.rb b/spec/controllers/graphql/app_package_integration_spec.rb
+index da23cae3..a2fb059d 100644
+--- a/spec/controllers/graphql/app_package_integration_spec.rb
++++ b/spec/controllers/graphql/app_package_integration_spec.rb
+@@ -99,7 +99,7 @@ RSpec.describe GraphqlController, type: :controller do
+                            }
+                          }
+                        ))
+-        end.to_not change { app.app_package_integrations.count }
++        end.to_not(change { app.app_package_integrations.count })
+ 
+         expect(graphql_response.errors).to be_nil
+         expect(graphql_response.data.integrationsCreate.errors.api_secret).to be_present
+@@ -182,7 +182,7 @@ RSpec.describe GraphqlController, type: :controller do
+                                                     slack_channel_name_leads: "chan1"
+                                                   }
+                                                 }))
+-        end.to_not change { app.app_package_integrations.count }
++        end.to_not(change { app.app_package_integrations.count })
+         expect(graphql_response.errors).to be_present
+       end
+     end
+diff --git a/spec/controllers/graphql/app_spec.rb b/spec/controllers/graphql/app_spec.rb
+index da943975..f69aaa7d 100644
+--- a/spec/controllers/graphql/app_spec.rb
++++ b/spec/controllers/graphql/app_spec.rb
+@@ -267,6 +267,7 @@ RSpec.describe GraphqlController, type: :controller do
+       )
+ 
+       expect(graphql_response.errors).to be_present
++      expect(app.agents.count).to eq(count)
+     end
+   end
+ end
+diff --git a/spec/controllers/graphql/app_user_spec.rb b/spec/controllers/graphql/app_user_spec.rb
+index 91212164..ead627cc 100644
+--- a/spec/controllers/graphql/app_user_spec.rb
++++ b/spec/controllers/graphql/app_user_spec.rb
+@@ -88,7 +88,7 @@ RSpec.describe GraphqlController, type: :controller do
+       expect(graphql_response.data.createExternalProfile.profile.profileId).to be == "#{profile_id}xxx"
+       expect(ExternalProfile.count).to be == 2
+ 
+-      r = graphql_post(
++      graphql_post(
+         @graphql_client.data_for(
+           type: "CONTACT_SEARCH_BY_PROFILE",
+           variables: {
+diff --git a/spec/controllers/graphql/article_spec.rb b/spec/controllers/graphql/article_spec.rb
+index 62cbf37e..ab2e1307 100644
+--- a/spec/controllers/graphql/article_spec.rb
++++ b/spec/controllers/graphql/article_spec.rb
+@@ -140,7 +140,7 @@ RSpec.describe GraphqlController, type: :controller do
+ 
+   context "collections" do
+     before :each do
+-      article = app.articles.create(
++      app.articles.create(
+         title: "hello world",
+         author: agent,
+         article_content_attributes: {
+@@ -223,7 +223,7 @@ RSpec.describe GraphqlController, type: :controller do
+ 
+   context "sections" do
+     before :each do
+-      article = app.articles.create(
++      app.articles.create(
+         title: "hello world",
+         author: agent,
+         article_content_attributes: {
+diff --git a/spec/graphql/mutations/create_url_upload_spec.rb b/spec/graphql/mutations/create_url_upload_spec.rb
+index cbfb2d35..db894671 100644
+--- a/spec/graphql/mutations/create_url_upload_spec.rb
++++ b/spec/graphql/mutations/create_url_upload_spec.rb
+@@ -39,7 +39,7 @@ RSpec.describe Mutations::CreateUrlUpload do
+   it "returns a GraphQL error when the download exceeds 100 MB" do
+     url = "https://cdn.example.com/too-large"
+     allow(MessageApis::SafeDownload).to receive(:resolve).with("cdn.example.com").and_return(["93.184.216.34"])
+-    stub_request(:get, url).to_return(headers: { "Content-Length" => (100 * 1024 * 1024 + 1).to_s })
++    stub_request(:get, url).to_return(headers: { "Content-Length" => ((100 * 1024 * 1024) + 1).to_s })
+ 
+     expect { mutation.resolve(input: OpenStruct.new(url: url)) }
+       .to raise_error(GraphQL::ExecutionError, "Unable to download the file")
+diff --git a/spec/models/app_spec.rb b/spec/models/app_spec.rb
+index d5bcddf8..94cc5dab 100644
+--- a/spec/models/app_spec.rb
++++ b/spec/models/app_spec.rb
+@@ -116,8 +116,8 @@ RSpec.describe App, type: :model do
+ 
+   it "create_conversation" do
+     app_user = app.add_user(email: "test@test.cl", first_name: "dsdsa")
+-    agent1 = app.add_agent({ email: "test@test.cl", first_name: "dsdsa" }).agent
+-    agent2 = app.add_agent({ email: "test2@test.cl", first_name: "dsdsa" }).agent
++    app.add_agent({ email: "test@test.cl", first_name: "dsdsa" }).agent
++    app.add_agent({ email: "test2@test.cl", first_name: "dsdsa" }).agent
+     conversations = app.start_conversation(
+       message: { serialized_content: default_content },
+       from: app_user
+@@ -128,7 +128,7 @@ RSpec.describe App, type: :model do
+ 
+   it "create_conversation assignee override" do
+     app_user = app.add_user(email: "test@test.cl", first_name: "dsdsa")
+-    agent1 = app.add_agent({ email: "test@test.cl", first_name: "dsdsa" }).agent
++    app.add_agent({ email: "test@test.cl", first_name: "dsdsa" }).agent
+     agent2 = app.add_agent({ email: "test2@test.cl", first_name: "dsdsa" }).agent
+ 
+     conversations = app.start_conversation(
+diff --git a/spec/models/user_auto_message_spec.rb b/spec/models/user_auto_message_spec.rb
+index cbe8544e..98627b6a 100644
+--- a/spec/models/user_auto_message_spec.rb
++++ b/spec/models/user_auto_message_spec.rb
+@@ -97,7 +97,7 @@ RSpec.describe UserAutoMessage, type: :model do
+     end
+ 
+     it "template compilation" do
+-      notification = message.show_notification_for(subscriber)
++      message.show_notification_for(subscriber)
+       allow_any_instance_of(UserAutoMessage).to receive(:html_content).and_return(premailer_template)
+       html = message.mustache_template_for(subscriber)
+       expect(html).to be_include("click?r=http://google.com")
+diff --git a/spec/requests/rack_attack_spec.rb b/spec/requests/rack_attack_spec.rb
+index fdc6add7..05e18d23 100644
+--- a/spec/requests/rack_attack_spec.rb
++++ b/spec/requests/rack_attack_spec.rb
+@@ -134,7 +134,7 @@ RSpec.describe "Rack::Attack login throttling", type: :request do
+   end
+ 
+   it "keeps the limit for one hour" do
+-    start = Time.zone.at((Time.now.to_i / 3600 + 1) * 3600 + 1)
++    start = Time.zone.at((((Time.now.to_i / 3600) + 1) * 3600) + 1)
+     travel_to(start) { 20.times { expect(post_token("/oauth/token", "10.0.2.4")).not_to eq(429) } }
+     travel_to(start + 3590) { expect(post_token("/oauth/token", "10.0.2.4")).to eq(429) }
+     travel_to(start + 3610) { expect(post_token("/oauth/token", "10.0.2.4")).not_to eq(429) }
+diff --git a/spec/support/graphql_queries.rb b/spec/support/graphql_queries.rb
+index b179d207..db8b5a1e 100644
+--- a/spec/support/graphql_queries.rb
++++ b/spec/support/graphql_queries.rb
+@@ -58,7 +58,7 @@ module GraphQL
+     end
+ 
+     def data_for(type:, variables: {})
+-      data = {
++      {
+         query: @actions[type],
+         variables: variables
+       }
