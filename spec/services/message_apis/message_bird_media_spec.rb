@@ -1,8 +1,17 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "webmock"
 
 RSpec.describe "MessageBird get_media" do
+  include WebMock::API
+
+  around do |example|
+    WebMock.enable!
+    example.run
+    WebMock.disable!
+  end
+
   let(:config) { { "api_key" => "test-key", "user_id" => "test-user" } }
   let(:api) { MessageApis::MessageBird::Api.new(config: config) }
 

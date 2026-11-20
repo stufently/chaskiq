@@ -9,7 +9,7 @@ RSpec.describe Api::GraphqlController, type: :controller do
       allow(ChaskiqSchema).to receive(:execute).and_raise(ArgumentError, "test error")
 
       post :execute, params: { query: "{ app { key } }" }, as: :json
-      expect(response).to have_http_status(:unprocessable_entity).or have_http_status(:ok).or have_http_status(:internal_server_error)
+      expect(response).to have_http_status(:ok).or have_http_status(:internal_server_error).or have_http_status(:unprocessable_entity)
     end
 
     it "does not rescue non-StandardError exceptions" do

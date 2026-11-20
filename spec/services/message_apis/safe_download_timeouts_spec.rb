@@ -1,8 +1,17 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "webmock"
 
 RSpec.describe MessageApis::SafeDownload do
+  include WebMock::API
+
+  around do |example|
+    WebMock.enable!
+    example.run
+    WebMock.disable!
+  end
+
   describe ".fetch open_timeout" do
     it "sets open_timeout to 5 on the Net::HTTP instance" do
       url = "https://example.com/file.txt"

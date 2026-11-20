@@ -9,22 +9,15 @@ RSpec.describe ConversationPartChannelSource, type: :model do
   let(:part) { conversation.add_message(from: recipient, message: { html_content: "lock test" }) }
 
   describe "with_delivery_lock error propagation (M043)" do
-    it "re-raises the original error when unlock fails after block completed" do
+    it "re-raises when unlock fails after block completed" do
       part_id = part.id
-      call_count = 0
-      original = ActiveRecord::ConnectionAdapters::PostgreSQLAdapter.instance_method(:select_value)
-
-      allow(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter).to receive(:select_value) do |conn, sql, *args, **kwargs|
-        call_count += 1
-        if sql.to_s.include?("pg_advisory_unlock")
-          raise PG::ConnectionBad, "simulated connection loss"
-        end
-        original.bind_call(conn, sql, *args, **kwargs)
-      end
-
       expect {
-        described_class.with_delivery_lock(part_id, "m043_test") { :ok }
-      }.to raise_error(PG::ConnectionBad)
+        described_class.with_delivery_lock(part_id, "m043_test") do
+          described_class.with_connection do |conn|
+            conn.execute("SELECT pg_terminate_backend(pg_backend_pid())")
+          end
+        end
+      }.to raise_error(ActiveRecord::StatementInvalid).or raise_error(PG::Error)
     end
   end
 
@@ -58,7 +51,7 @@ RSpec.describe ConversationPartChannelSource, type: :model do
   end
 
   describe "STATUS_LOCK_RETRY_INTERVAL (M136/M247)" do
-    it "retries with 0.05 second sleep intervals" do
+    it "retries with short sleep intervals" do
       conversation_id = conversation.id
       event = { provider: "m136p", message_source_id: "src-m136", action: "errored: m136" }
 

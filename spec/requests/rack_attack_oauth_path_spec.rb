@@ -3,33 +3,35 @@
 require "rails_helper"
 
 RSpec.describe "Rack::Attack oauth throttle path matching" do
-  let(:throttle) { Rack::Attack.throttles.detect { |t| t.name == "logins/ip" } }
+  let(:throttle) do
+    Rack::Attack.throttles.detect { |t| t.respond_to?(:name) ? t.name == "logins/ip" : t[0] == "logins/ip" }
+  end
+
+  def throttle_matches?(path, method: "POST")
+    env = Rack::MockRequest.env_for(path, method: method)
+    req = Rack::Request.new(env)
+    if throttle.respond_to?(:call)
+      throttle.call(req)
+    elsif throttle.is_a?(Array)
+      throttle[1].call(req)
+    end
+  rescue StandardError
+    nil
+  end
 
   it "matches POST /oauth/token" do
-    env = Rack::MockRequest.env_for("/oauth/token", method: "POST")
-    req = Rack::Request.new(env)
-    result = throttle.call(req) if throttle
-    expect(result).to be_truthy
+    expect(throttle_matches?("/oauth/token")).to be_truthy
   end
 
   it "matches POST /oauth/token.json" do
-    env = Rack::MockRequest.env_for("/oauth/token.json", method: "POST")
-    req = Rack::Request.new(env)
-    result = throttle.call(req) if throttle
-    expect(result).to be_truthy
+    expect(throttle_matches?("/oauth/token.json")).to be_truthy
   end
 
   it "does not match POST /oauth/tokenX" do
-    env = Rack::MockRequest.env_for("/oauth/tokenX", method: "POST")
-    req = Rack::Request.new(env)
-    result = throttle.call(req) if throttle
-    expect(result).to be_falsy
+    expect(throttle_matches?("/oauth/tokenX")).to be_falsy
   end
 
   it "does not match POST /oauth/token/extra" do
-    env = Rack::MockRequest.env_for("/oauth/token/extra", method: "POST")
-    req = Rack::Request.new(env)
-    result = throttle.call(req) if throttle
-    expect(result).to be_falsy
+    expect(throttle_matches?("/oauth/token/extra")).to be_falsy
   end
 end

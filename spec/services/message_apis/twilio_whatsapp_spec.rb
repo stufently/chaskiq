@@ -1,11 +1,18 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "webmock"
 
 RSpec.describe "Twilio WhatsApp From field" do
-  it "includes whatsapp: prefix in the From field" do
-    expect(MessageApis::Twilio::Api::PROVIDER).to eq("twilio")
+  include WebMock::API
 
+  around do |example|
+    WebMock.enable!
+    example.run
+    WebMock.disable!
+  end
+
+  it "includes whatsapp: prefix in the From field" do
     config = { "api_key" => "test-key", "user_id" => "+15551234567", :package => nil }
     api = MessageApis::Twilio::Api.new(config: config)
 

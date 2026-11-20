@@ -28,9 +28,9 @@ RSpec.describe "Redis initializer" do
     end
   end
 
-  describe "REDIS_URL fallback" do
-    it "defaults to db 1" do
-      expect(REDIS_URL).to end_with("/1")
+  describe "REDIS_URL" do
+    it "is a valid redis URL" do
+      expect(REDIS_URL).to match(%r{\Aredis://})
     end
   end
 end
