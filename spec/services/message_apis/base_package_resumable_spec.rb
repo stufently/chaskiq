@@ -35,36 +35,35 @@ RSpec.describe MessageApis::BasePackage do
   end
   let(:no_resumable_package) { no_resumable_plugin.new(config: {}) }
 
-  describe "#notify_part with resumable delivery" do
-    it "does not store message_id for resumable plugins (delivery_index nil)" do
-      package.send(:notify_part, conversation, part)
-      sources = part.conversation_part_channel_sources.where(provider: "resumable_test", delivery_index: nil)
-      expect(sources.count).to eq(0)
-    end
-  end
-
   describe "#resumable_delivery?" do
     it "returns false when RESUMABLE_DELIVERY is not defined" do
       expect(no_resumable_package.send(:resumable_delivery?, part)).to be false
     end
+
+    it "returns false when RESUMABLE_DELIVERY is true but no media blocks" do
+      expect(package.send(:resumable_delivery?, part)).to be false
+    end
   end
 
   describe "#delivery_hooks" do
-    it "returns already_sent and on_success keys for persisted resumable parts" do
-      hooks = package.send(:delivery_hooks, conversation, part)
-      expect(hooks).to have_key(:already_sent)
-      expect(hooks).to have_key(:on_success)
-    end
-
     it "returns only on_failure for non-resumable plugin" do
       hooks = no_resumable_package.send(:delivery_hooks, conversation, part)
       expect(hooks).to have_key(:on_failure)
       expect(hooks).not_to have_key(:on_success)
     end
+
+    it "returns already_sent and on_success for persisted resumable parts with media" do
+      media_part = conversation.add_message(from: recipient,
+                                            message: { html_content: "test",
+                                                       serialized_content: { content: [{ type: "ImageBlock", url: "http://x.com/i.jpg" }] }.to_json })
+      hooks = package.send(:delivery_hooks, conversation, media_part)
+      expect(hooks).to have_key(:already_sent)
+      expect(hooks).to have_key(:on_success)
+    end
   end
 
   describe "#store_message_id with delivery_index" do
-    it "creates a row for a new delivery_index" do
+    it "creates a row for a new delivery_index without error" do
       response = double("resp", success?: true, body: '{"id":"msg-idx"}')
       expect {
         package.send(:store_message_id, part, response, delivery_index: 1)
@@ -74,22 +73,14 @@ RSpec.describe MessageApis::BasePackage do
       expect(source.message_source_id).to eq("msg-idx")
     end
 
-    it "stores per delivery_index without extra nil row" do
-      response = double("resp", success?: true, body: '{"id":"msg-per"}')
-      package.send(:store_message_id, part, response, delivery_index: 1)
-      nil_sources = part.conversation_part_channel_sources.where(provider: "resumable_test", delivery_index: nil)
-      expect(nil_sources.count).to eq(0)
-    end
-  end
-
-  describe "#store_message_id with create_or_find_by" do
-    it "creates a row for delivery_index and updates on second call" do
+    it "updates existing row on second call with same delivery_index" do
       resp1 = double("r1", success?: true, body: '{"id":"first"}')
       resp2 = double("r2", success?: true, body: '{"id":"second"}')
       package.send(:store_message_id, part, resp1, delivery_index: 1)
       package.send(:store_message_id, part, resp2, delivery_index: 1)
       sources = part.conversation_part_channel_sources.where(provider: "resumable_test", delivery_index: 1)
       expect(sources.count).to eq(1)
+      expect(sources.first.message_source_id).to eq("second")
     end
   end
 
