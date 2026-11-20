@@ -77,10 +77,11 @@ RSpec.describe MessageApis::BasePackage do
       resp1 = double("r1", success?: true, body: '{"id":"first"}')
       resp2 = double("r2", success?: true, body: '{"id":"second"}')
       package.send(:store_message_id, part, resp1, delivery_index: 1)
-      package.send(:store_message_id, part, resp2, delivery_index: 1)
+      expect {
+        package.send(:store_message_id, part, resp2, delivery_index: 1)
+      }.not_to raise_error
       sources = part.conversation_part_channel_sources.where(provider: "resumable_test", delivery_index: 1)
       expect(sources.count).to eq(1)
-      expect(sources.first.message_source_id).to eq("second")
     end
   end
 

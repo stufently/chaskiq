@@ -9,23 +9,9 @@ RSpec.describe MessageApis::SafeDownload do
       stub_request(:get, url).to_return(status: 200, body: "data", headers: { "content-type" => "text/plain" })
 
       timeouts = []
-      original_new = Net::HTTP.method(:new)
-      allow(Net::HTTP).to receive(:new) do |*args|
-        http = original_new.call(*args)
-        allow(http).to receive(:open_timeout=) do |val|
-          timeouts << val
-          http.instance_variable_set(:@open_timeout, val)
-        end
-        allow(http).to receive(:request) do |req, &block|
-          resp = Net::HTTPOK.new("1.1", 200, "OK")
-          allow(resp).to receive(:body).and_return("data")
-          allow(resp).to receive(:content_length).and_return(4)
-          allow(resp).to receive(:read_body) { |&blk| blk.call("data") }
-          allow(resp).to receive(:[]).and_return("text/plain")
-          block.call(resp) if block
-          resp
-        end
-        http
+      allow_any_instance_of(Net::HTTP).to receive(:open_timeout=) do |http, val|
+        timeouts << val
+        http.instance_variable_set(:@open_timeout, val)
       end
 
       described_class.fetch(url)
