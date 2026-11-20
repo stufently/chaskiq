@@ -54,7 +54,7 @@ module Agents
 
       if request.headers["access-token"]
         token = current_agent.access_tokens.find_by(token: request.headers["access-token"])
-        token.destroy if token.present?
+        token.presence&.destroy
       end
 
       signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))

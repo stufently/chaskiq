@@ -38,7 +38,7 @@ module ApplicationCable
     def get_session_data
       request.query_parameters
 
-      return unless app.present?
+      return if app.blank?
 
       OriginValidator.new(
         app: app.domain_url,

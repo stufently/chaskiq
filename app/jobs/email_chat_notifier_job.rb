@@ -15,7 +15,7 @@ class EmailChatNotifierJob < ApplicationJob
 
     # TODO: handle notification of private notes with mentions (@)
     response = ChatNotifierMailer.notify(message).deliver_now
-    return unless response.present?
+    return if response.blank?
 
     message_id = response.header[:ses_message_id]&.value
     return if message_id.blank?
