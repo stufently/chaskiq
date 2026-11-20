@@ -1,0 +1,29 @@
+MUTB BASELINE 104 examples in 27 files
+SURVIVED M043 app/models/conversation_part_channel_source.rb: failed 0 (in ), outside 0
+SURVIVED M136 app/models/conversation_part_channel_source.rb: failed 0 (in ), outside 0
+SURVIVED M100 vendor/nightfury/lib/nightfury/metric/time_series.rb: failed 0 (in ), outside 0
+SURVIVED M101 vendor/nightfury/lib/nightfury/metric/time_series.rb: failed 0 (in ), outside 0
+SURVIVED M103 vendor/nightfury/lib/nightfury/metric/time_series.rb: failed 0 (in ), outside 0
+SURVIVED M118 vendor/nightfury/lib/nightfury/metric/count_time_series.rb: failed 0 (in ), outside 0
+SURVIVED M177 config/initializers/redis.rb: failed 0 (in ), outside 0
+SURVIVED M182 app/controllers/api/graphql_controller.rb: failed 0 (in ), outside 0
+SURVIVED M206 vendor/nightfury/lib/nightfury/metric/count_time_series.rb: failed 0 (in ), outside 0
+SURVIVED M247 app/models/conversation_part_channel_source.rb: failed 0 (in ), outside 0
+SURVIVED N04 app/models/conversation_part_channel_source.rb: failed 0 (in ), outside 0
+FAIL: M043 app/models/conversation_part_channel_source.rb: not killed by an assertion in spec/models/conversation_part_channel_source_lock_spec.rb (failed 0 (in ), outside 0)
+FAIL: M136 app/models/conversation_part_channel_source.rb: not killed by an assertion in spec/models/conversation_part_channel_source_lock_spec.rb (failed 0 (in ), outside 0)
+FAIL: M100 vendor/nightfury/lib/nightfury/metric/time_series.rb: not killed by an assertion in spec/lib/nightfury_time_series_spec.rb (failed 0 (in ), outside 0)
+FAIL: M101 vendor/nightfury/lib/nightfury/metric/time_series.rb: not killed by an assertion in spec/lib/nightfury_time_series_spec.rb (failed 0 (in ), outside 0)
+FAIL: M103 vendor/nightfury/lib/nightfury/metric/time_series.rb: not killed by an assertion in spec/lib/nightfury_time_series_spec.rb (failed 0 (in ), outside 0)
+FAIL: M118 vendor/nightfury/lib/nightfury/metric/count_time_series.rb: not killed by an assertion in spec/lib/nightfury_count_time_series_spec.rb (failed 0 (in ), outside 0)
+FAIL: M177 config/initializers/redis.rb: not killed by an assertion in spec/initializers/redis_initializer_spec.rb (failed 0 (in ), outside 0)
+FAIL: M182 app/controllers/api/graphql_controller.rb: not killed by an assertion in spec/controllers/api/graphql_errors_spec.rb (failed 0 (in ), outside 0)
+FAIL: M206 vendor/nightfury/lib/nightfury/metric/count_time_series.rb: not killed by an assertion in spec/lib/nightfury_count_time_series_spec.rb (failed 0 (in ), outside 0)
+FAIL: M247 app/models/conversation_part_channel_source.rb: not killed by an assertion in spec/models/conversation_part_channel_source_lock_spec.rb (failed 0 (in ), outside 0)
+FAIL: N04 app/models/conversation_part_channel_source.rb: not killed by an assertion in spec/models/conversation_part_channel_source_lock_spec.rb (failed 0 (in ), outside 0)
+FAIL: run exited 1
+FAIL: M177 config/initializers/redis.rb: not killed by an assertion in spec/initializers/redis_initializer_spec.rb (failed 0 (in ), outside 0)
+FAIL: M182 app/controllers/api/graphql_controller.rb: not killed by an assertion in spec/controllers/api/graphql_errors_spec.rb (failed 0 (in ), outside 0)
+FAIL: M206 vendor/nightfury/lib/nightfury/metric/count_time_series.rb: not killed by an assertion in spec/lib/nightfury_count_time_series_spec.rb (failed 0 (in ), outside 0)
+FAIL: M247 app/models/conversation_part_channel_source.rb: not killed by an assertion in spec/models/conversation_part_channel_source_lock_spec.rb (failed 0 (in ), outside 0)
+FAIL: N04 app/models/conversation_part_channel_source.rb: not killed by an assertion in spec/models/conversation_part_channel_source_lock_spec.rb (failed 0 (in ), outside 0)

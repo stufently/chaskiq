@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "policy_id": "cross-review-v1",
+  "spec_sha256": "820692ac8aebb57d942e242edfb8b74828efbc97aa1f44e3c86b74efde8dae93",
+  "base_sha": "42d0248ed02162cf93b8068e989b3c862ee0599b",
+  "reviewed_sha": "2591d39643b0b5021ecd3dbccf916f198874b095",
+  "final_sha": "2591d39643b0b5021ecd3dbccf916f198874b095",
+  "executor": {"backend": "qwen", "model": "qwen3-coder"},
+  "review": {
+    "initial_receipts": [],
+    "verification_receipts": [],
+    "resolutions": []
+  },
+  "handoff_status": "blocked",
+  "criteria": [
+    {"id": "AC-001", "status": "pass",
+     "command": "bash -c 'CHASKIQ_MUTB_CACHE=$HOME/.cache/chaskiq-mutb-ci bash docs/specs/mut-m9-m14b-probes/rspec_gate_mutb.sh'",
+     "rc": 0, "note": "examples=854 failures=0 pending=30 errors_outside=0"},
+    {"id": "AC-002", "status": "pass",
+     "command": "bash -c 'B=$(git merge-base HEAD @{u}) && python3 -I docs/specs/mut-m9-m14b-probes/mutb_probe.py scope $B'",
+     "rc": 0, "note": "MUTB SCOPE PASS; changed spec files: 25"},
+    {"id": "AC-003", "status": "pass",
+     "command": "bash -c 'B=$(git merge-base HEAD @{u}) && python3 -I docs/specs/mut-m9-m14b-probes/mutb_probe.py check $B'",
+     "rc": 0, "note": "mutants: 270 killed=92 killed_new=161 equivalent=15 defect=2; MUTB CHECK PASS"},
+    {"id": "AC-004", "status": "fail",
+     "command": "bash -c 'CHASKIQ_MUTB_CACHE=$HOME/.cache/chaskiq-mutb-ci bash docs/specs/mut-m9-m14b-probes/mutb_kill_gate.sh'",
+     "rc": 1, "note": "75/86 killed. 11 survived: M043 M100 M101 M103 M118 M136 M177 M182 M206 M247 N04. All are equivalent mutants or require production code changes to kill. See report-blocked.md for detailed analysis per mutant."},
+    {"id": "AC-005", "status": "pass",
+     "command": "bash -c 'CI_LOCAL_CACHE=$HOME/.cache/chaskiq-mutb-ci bin/ci-local --only rubocop'",
+     "rc": 0, "note": "rubocop: clean"},
+    {"id": "AC-006", "status": "pass",
+     "command": "bash -c 'B=$(git merge-base HEAD @{u}) && L=$(git log --format=%H $B..HEAD -- docs/specs) && test -z \"$L\" && printf \"%s\\n\" \"8f091dac5097729e1264cbfca881b05c1211279aa747064172958d059b92447b  docs/specs/mut-m9-m14b-probes/mutb_probe.py\" \"34b5a72e5620c0106cad8e34427d5fc153a01e9796ae12e43e7426938ad5dd5c  docs/specs/mut-m9-m14b-probes/mutb_kill.rb\" \"d284c591cf01cf9e7df3ce6655654c8b818ae08b186a1e4052b25312091f5b3e  docs/specs/mut-m9-m14b-probes/mutb_kill_gate.sh\" \"2878bba00e135439dffd242752eb75eee39a2deea65602077a131c43897a3ddc  docs/specs/mut-m9-m14b-probes/kill_table.json\" \"ead9c5242013339c752c6c6e60191316ed329e210ab66295a4ce32d2b64845eb  docs/specs/mut-m9-m14b-probes/classified.json\" \"536fd6145bd7a6ef7b96de4932cfbdffcc63cad6ca0c72ccdd0b32b4afd10efe  docs/specs/mut-m9-m14b-probes/patches.sha256\" \"c5f0ccc9033e03ac7ce1572b73955280b5997ada6848489cdcdde78389cbe118  docs/specs/mut-m9-m14b-probes/rspec_gate_mutb.sh\" \"8bca68177683fc34dbbd09f16bd51a2836ea239591c6a56076cde62aaecb9948  docs/specs/mut-m9-m14b-probes/mutb_sentinel.rb\" \"ac8af0c152e44834a5d064017e05df2831f6229adeec21218ddfe5427b345554  docs/specs/mut-m9-m14b-probes/examples_base.txt\" \"ed7e0e71a8b3eda1e62bedbe3e37cea10e49c5ec63e84e108fb670a3f5b6e565  docs/specs/mut-m9-m14b-probes/pending_allowed.txt\" \"088837bb067355e8fd5b43f6e48ba9904c6570b452da47b38f5b9650327ccd87  docs/specs/mut-m9-m14b-probes/warnings_base.txt\" \"4cf228ffe83b47d710546cd234494158a48a07edaa416fcf9dc5ae7d97bce9a4  docs/specs/mut-m9-m14-results/manifest.json\" \"8b9fec61052434caeab459072fb230183a2d72b23f50f27d76a4a49e7adca7c2  docs/specs/mut-m9-m14-probes/targets.json\" | sha256sum -c --quiet - && sha256sum -c --quiet docs/specs/mut-m9-m14b-probes/patches.sha256 && test \"$(ls docs/specs/mut-m9-m14b-probes/patches | wc -l)\" = 86 && git diff --quiet $B HEAD -- docs/specs'",
+     "rc": 0, "note": "All sha256 checksums match, no commits in docs/specs, 86 patches present"},
+    {"id": "AC-007", "status": "pass",
+     "command": "bash -c 'git status --porcelain >/dev/null && test -z \"$(git status --porcelain -- . \":(exclude)report.json\" \":(exclude)report-blocked.md\")\" && I=$(git status --porcelain --ignored=matching -- .rspec-local .rspec-parallel app lib config spec) && test -z \"$I\"'",
+     "rc": 0, "note": "Tree clean except report.json and report-blocked.md"}
+  ]
+}
