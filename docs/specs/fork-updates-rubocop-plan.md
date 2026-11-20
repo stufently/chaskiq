@@ -163,7 +163,16 @@ RuboCop 1.92.3, rubocop-rails 2.38.0, Ruby 3.3.14, образ `bin/ci-local`, `.
   `Module::DelegationError` на `nil` — проверить арность и `nil`-получателя.
 - Риски: SQL-эквивалентность `OrderArguments`/`WhereRange`; контракт API для `expect`.
 
-## R4 — `Style/ClassAndModuleChildren` (70 файлов)
+## R4 — `Style/ClassAndModuleChildren` (70 файлов; спека готова: `docs/specs/fork-updates-r4.md`)
+
+Идёт раньше R2b/R3b (ручной разбор с тестами): проверяется механически. На черновике пробник
+разрешения констант нашёл `Twilio` в `message_apis/twilio_phone/api.rb` — вложение дало бы
+`MessageApis::Twilio`; файл оставлен компактным в todo (`::Twilio` + тест — в R7). Ещё четыре
+презентера (`article_search`, `calendly`, `twilio_phone`, `ui_catalog`) вычисляют ERB с
+`result(binding)` — константы в шаблонах пробник не видит, они тоже компактны до R7. Итого 65 файлов
+вложены, 5 в `KEEP`. Проверка (после ревью Codex): комментарии неизменны, разрешение — до и после
+загрузки плагинов `before_start.rb` и статически по определениям в `app/`/`lib/`, предки классов
+BASE vs дерево в двух процессах; рост `Layout/LineLength` — ровно в двух файлах.
 
 - Копы: 1, 70 офенсов/файлов (`app/controllers/agents/*`, `api/v1/*`, `app/services/dante/*`,
   `message_apis/*/{api,presenter}.rb`, `app/graphql/types/*`). Автокоррект `-A` переводит
