@@ -222,7 +222,9 @@ BASE vs дерево в двух процессах; рост `Layout/LineLength
 `Lint/UselessAssignment` в 64 файлах `app/`+`lib/` автокорректом (119 мест), проверка — побайтный
 повтор команд RuboCop на BASE; 11 файлов `keep` (ERB с `binding`, `audit.rb` без автокоррекции,
 восемь файлов, где автокоррект оставляет `Lint/Void`) — в R5b. R6b — `Lint/UnusedMethodArgument`
-(решение владельца ниже) и `UselessAssignment` в `spec/` после mut-m9-m14.
+(решение владельца — в блоке R7: `_` позиционным, `AllowUnusedKeywordArguments: true`; спека
+готова: `docs/specs/fork-updates-r6b.md`, 28 файлов, 45 переименований, 2 ERB-презентера в `keep`).
+`UselessAssignment` в `spec/` — R6c, после mut-m9-m14.
 
 - Копы: 2, 353 офенса, 115 файлов. `UselessAssignment` 188 (автокоррект убирает присваивание,
   правая часть остаётся), `UnusedMethodArgument` 165 (48 позиционных — `_arg`; 117 keyword-
@@ -245,6 +247,10 @@ BASE vs дерево в двух процессах; рост `Layout/LineLength
   «# Class for X» пользы не несут.
 - `Naming/AccessorMethodName` и `Naming/MethodParameterName` — отключить в `.rubocop.yml` с
   причиной (переименование публичных методов ломает плагины и интеграции).
+- `Lint/UnusedMethodArgument` (R6b, решение 2026-11-20): неиспользуемые ПОЗИЦИОННЫЕ аргументы —
+  префикс `_` (автокоррект RuboCop, вызывающий код не меняется); в `.rubocop.yml`
+  `AllowUnusedKeywordArguments: true` с причиной: имена keyword-аргументов — часть интерфейса
+  плагинов и интеграций (их передают по имени).
 - Metrics (R8) — реальные лимиты с письменной причиной (ориентир: MethodLength ~25,
   LineLength ~140, spec/ вне BlockLength), методы сверх лимита — отдельными вехами
   рефакторинга с тестами.
