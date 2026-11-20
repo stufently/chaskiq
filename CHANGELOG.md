@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-20 — fork-updates-r3
+
+Changed
+- Add `# frozen_string_literal: true` to 127 files with RuboCop. Static analysis and the full test suite with all string literals frozen found no literal mutations.
+
 ## 2026-11-19 — fork-updates-r2
 
 Changed
