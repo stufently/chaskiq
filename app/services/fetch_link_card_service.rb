@@ -80,8 +80,7 @@ class FetchLinkCardService < BaseService
   end
 
   def attempt_opengraph(card, body)
-    charset = body.content_type[/;\s*charset\s*=\s*"?([^";\s]+)/i, 1]
-    page = Nokogiri::HTML(body.read, encoding: charset)
+    page = parse_card_page(body)
 
     card.type             = :link
     card.title            = meta_property(page, "og:title") || page.at_xpath("//title")&.content
@@ -100,6 +99,15 @@ class FetchLinkCardService < BaseService
 
     card.save_with_optional_image!
     card
+  end
+
+  def parse_card_page(body)
+    charset = body.content_type[/;\s*charset\s*=\s*"?([^";\s]+)/i, 1]
+    page = Nokogiri::HTML(body.read, encoding: charset)
+    page.css("meta[content]").each do |meta|
+      meta.remove_attribute("content") unless meta["content"].presence
+    end
+    page
   end
 
   def download_image(url)

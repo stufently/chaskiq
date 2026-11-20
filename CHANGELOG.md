@@ -6,7 +6,8 @@ Fixed
 - Compare usage against the configured limit in `Plan#limit_reached?` and treat
   unlimited and unlisted features as having no limit.
 - Fall back to named metadata in link cards when the matching Open Graph
-  property has no content.
+  property has no content. Treat blank metadata as absent so the card can
+  use the document title.
 - Fetch campaign premailer HTML through `SafeDownload` with same-origin
   redirects and raise `Campaign::PremailerFetchError` on fetch failure.
   Trust the origin from the route configuration so the development premailer

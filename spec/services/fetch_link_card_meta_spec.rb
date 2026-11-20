@@ -54,4 +54,25 @@ RSpec.describe FetchLinkCardService do
       expect(service.call(url).title).to eq("Document title")
     end
   end
+
+  context "with an empty named title" do
+    let(:html) { '<meta name="og:title" content=""><title>Document title</title>' }
+
+    it "uses the document title" do
+      expect(service.call(url)).to have_attributes(title: "Document title")
+    end
+  end
+
+  context "with a blank title property and a populated named title" do
+    let(:html) do
+      <<~HTML
+        <meta property="og:title" content=" ">
+        <meta name="og:title" content="Named title">
+      HTML
+    end
+
+    it "uses the named title" do
+      expect(service.call(url)).to have_attributes(title: "Named title")
+    end
+  end
 end
