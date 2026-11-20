@@ -133,7 +133,7 @@ module MessageApis
         check_and_create_channel(subject, event) if @package.settings[:new_message].present?
       end
 
-      def check_and_create_channel(subject, event)
+      def check_and_create_channel(subject, _event)
         subject.conversation_channels.find_or_create_by(provider: PROVIDER, provider_channel_id: subject.id)
       end
 
@@ -143,7 +143,7 @@ module MessageApis
         process_message(params, @package)
       end
 
-      def send_message(conversation, part)
+      def send_message(_conversation, part)
         if (url = @package.settings["new_message"]) && url.present?
           a = post(url, serialized_message(part))
           a if a.success?

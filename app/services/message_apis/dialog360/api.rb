@@ -78,7 +78,7 @@ module MessageApis
         self
       end
 
-      def register_webhook(app_package, integration)
+      def register_webhook(_app_package, integration)
         data = {
           url: integration.hook_url # .gsub("http://localhost:3000", "https://chaskiq.sa.ngrok.io")
         }
@@ -476,7 +476,7 @@ module MessageApis
         end
       end
 
-      def add_participant(dialog_user, message, contacts = [])
+      def add_participant(dialog_user, _message, contacts = [])
         app = @package.app
         profile = contacts.find { |o| o["wa_id"] == dialog_user }
 

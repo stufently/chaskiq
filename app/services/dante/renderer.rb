@@ -83,7 +83,7 @@ module Dante
       "<#{tag}#{class_string} #{attrs_string}>#{content_string}</#{tag}>"
     end
 
-    def handle_mark(element, mark, node)
+    def handle_mark(element, mark, _node)
       case mark[:type]
       when "textStyle"
         color = mark[:attrs][:color].is_a?(Hash) && mark[:attrs][:color].key?(:color) ? mark[:attrs][:color][:color] : mark[:attrs][:color]

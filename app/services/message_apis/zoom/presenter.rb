@@ -18,7 +18,7 @@ module MessageApis
 
       # Submit flow webhook URL
       # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur multiple times as an end-user interacts with your app.
-      def self.submit_hook(params)
+      def self.submit_hook(_params)
         []
       end
 

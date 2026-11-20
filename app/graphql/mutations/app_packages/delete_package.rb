@@ -21,7 +21,7 @@ module Mutations
         { app_package: @app_package, errors: @app_package.errors }
       end
 
-      def delete_app_package(id)
+      def delete_app_package(_id)
         @app_package.destroy
       end
 

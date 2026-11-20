@@ -52,7 +52,7 @@ module MessageApis
         self
       end
 
-      def register_webhook(app_package, integration)
+      def register_webhook(_app_package, integration)
         data = {
           url: integration.hook_url
         }
@@ -264,7 +264,7 @@ module MessageApis
         end
       end
 
-      def add_participant(dialog_user, message)
+      def add_participant(dialog_user, _message)
         app = @package.app
 
         return unless dialog_user

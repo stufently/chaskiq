@@ -70,7 +70,7 @@ module MessageApis
         self
       end
 
-      def register_webhook(app_package, integration)
+      def register_webhook(_app_package, integration)
         data = {
           url: integration.hook_url,
           events: ["message.created", "message.updated"],
@@ -292,7 +292,7 @@ module MessageApis
         end
       end
 
-      def add_participant(channel_id, message, contact)
+      def add_participant(channel_id, _message, contact)
         app = @package.app
 
         return unless channel_id

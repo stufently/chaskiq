@@ -56,6 +56,11 @@ Naming/AccessorMethodName:
 # (short names mirror external APIs); renaming them breaks plugins and integrations.
 Naming/MethodParameterName:
   Enabled: false
+# Owner decision 2026-11-20 (same plan, R6): keyword argument names are part of the plugin and
+# integration interfaces (callers pass them by name), so an unused keyword argument stays as it is;
+# unused positional arguments get a `_` prefix instead.
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
 AllCops:
   NewCops: enable
   Exclude:

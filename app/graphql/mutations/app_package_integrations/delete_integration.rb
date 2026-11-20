@@ -17,7 +17,7 @@ module Mutations
         { integration: @integration, errors: @integration.errors }
       end
 
-      def delete_integration(id)
+      def delete_integration(_id)
         # TODO: async relation data destroy
         @integration.destroy
       end

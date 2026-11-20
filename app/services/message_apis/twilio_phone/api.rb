@@ -87,7 +87,7 @@ module MessageApis::TwilioPhone
     end
 
     # this is called when create a conversation from profile
-    def prepare_block_initiator_channel_for(conversation, pkg, initiator_block)
+    def prepare_block_initiator_channel_for(conversation, pkg, _initiator_block)
       conversation.add_message(
         from: pkg.app.agents.bots.first,
         controls: {
@@ -135,7 +135,7 @@ module MessageApis::TwilioPhone
       { status: :ok }
     end
 
-    def send_message(conversation, part)
+    def send_message(_conversation, part)
       return if part.private_note?
 
       part.message.as_json
@@ -415,7 +415,7 @@ module MessageApis::TwilioPhone
       # block_part.save_replied(nil)
     end
 
-    def conference_call(params, conversation, opts)
+    def conference_call(_params, conversation, opts)
       response = Twilio::TwiML::VoiceResponse.new
       response.say(message: opts[:message]) if opts[:message].present?
 
@@ -532,7 +532,7 @@ module MessageApis::TwilioPhone
       token.to_jwt
     end
 
-    def self.find_or_create_profile(conversation, package)
+    def self.find_or_create_profile(conversation, _package)
       participant = conversation.main_participant
       profile = participant.external_profiles.find_by(provider: "TwilioPhone")
       if profile.blank?
@@ -545,7 +545,7 @@ module MessageApis::TwilioPhone
       profile
     end
 
-    def self.get_profile(conversation, package)
+    def self.get_profile(conversation, _package)
       profile = conversation.main_participant.external_profiles.find_by(provider: "TwilioPhone")
       # when a user has a phone number but not a profile , lets create a new conversation for the valid user or create a new profile in this conversation
       if profile.blank?

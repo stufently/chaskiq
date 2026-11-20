@@ -318,7 +318,7 @@ class Segment < ApplicationRecord
     }
   end
 
-  def exists_fragment(clause, attribute, value)
+  def exists_fragment(clause, attribute, _value)
     {
       clause: clause,
       fragment: {
@@ -337,7 +337,7 @@ class Segment < ApplicationRecord
     predicates&.filter { |o| o[:clause] == clause }&.map { |o| o[:fragment] }&.flatten || []
   end
 
-  def nested_preds_group(clause, attributes)
+  def nested_preds_group(_clause, attributes)
     return attributes if attributes.blank?
 
     attributes.map do |o|

@@ -19,7 +19,7 @@ module Mutations
         { campaign: @campaign, errors: @campaign.errors }
       end
 
-      def delete_campaign(id)
+      def delete_campaign(_id)
         # TODO: async relation data destroy
         @campaign.destroy
       end

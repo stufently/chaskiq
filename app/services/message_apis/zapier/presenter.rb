@@ -57,7 +57,7 @@ module MessageApis
         }
       end
 
-      def self.definitions_for_button(kind, ctx)
+      def self.definitions_for_button(_kind, ctx)
         conversation = Conversation.find_by(key: ctx[:conversation_key])
         conversation.main_participant
 
@@ -86,7 +86,7 @@ module MessageApis
 
       # Submit Sheet flow webhook URL (optional)
       # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
-      def self.sheet_hook(params)
+      def self.sheet_hook(_params)
         { a: 11_111 }
       end
 

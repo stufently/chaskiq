@@ -56,7 +56,7 @@ module Types
       }
     end
 
-    def toggle_subscription_state(app_state, op)
+    def toggle_subscription_state(_app_state, op)
       if op
         app_user.subscribe! unless app_user.subscribed?
       else
