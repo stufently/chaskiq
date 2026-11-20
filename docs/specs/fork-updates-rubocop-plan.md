@@ -152,7 +152,10 @@ RuboCop 1.92.3, rubocop-rails 2.38.0, Ruby 3.3.14, образ `bin/ci-local`, `.
 проверка — побайтный повтор команд RuboCop на BASE и guard типа получателя: у классов каждого места
 (таблица в спеке) и их наследников `present?`/`presence` — из ActiveSupport/ActiveRecord::Core
 (глобально это неверно: свои есть у ActionText::RichText, roo, scout_apm, rspec-mocks, snaky_hash).
-R3b-2 — `OrderArguments`, `Pluck`, `WhereRange`, `StrongParametersExpect`, `Delegate`.
+R3b-2 (спека `docs/specs/fork-updates-r3b2.md`, `qw2`) — `Rails/OrderArguments` 19, `Pluck` 9, `WhereRange` 1,
+`Delegate` 2: 31 офенс, 22 файла, четыре патча автокоррекции без изменения поведения (голое имя в `ORDER BY` =
+выходной столбец SELECT; `pluck` только на массивах); 13 характеризационных спек, 23 мутанта.
+R3b-3 — `Rails/StrongParametersExpect` (3 места), решение G1 ниже: перевести все три с тестами.
 
 - Копы: 8, 44 офенса (замер BASE прежнего R3 + `Rails/Blank` из R2): `Rails/OrderArguments` 19
   (u), `Pluck` 9 (u), `Blank` 5 (u, из R2: `return unless x.present?` в `connection.rb`,
@@ -331,6 +334,34 @@ R5b разбита: **R5b-1** (черновик спеки: `docs/specs/fork-upd
   «чистки». Конкретные числа — решение владельца по распределению выше.
 - Риски: рефакторинг крупных методов меняет поведение — только с характеризационными тестами;
   поэтому выбросы — отдельные вехи, а не часть R8.
+
+## Решения владельца 2026-11-20, вторая партия (и делегирование)
+
+Владелец ответил на вопросы 1–6, 7, 9, 10, 16, остальное поручил решать координатору («принимай все решения
+сам»). Выбрано:
+
+- **Веха фиксов (Codex, тест «красный на BASE» на каждый, Fixed в CHANGELOG):** `TwilioPhone::Store.delete_key`
+  (удалять тот же ключ, что пишет `set`); Slack `assigned` с `data` nil/массивом (`data.is_a?(Hash) &&`);
+  `EuCountries` (`includes?` — метод модуля, `messenger_type.rb:37` зовёт его). Туда же: удалить `EULocationError`
+  и его `rescue` в `graphql_controller.rb:49`.
+- **G1 → R3b-3:** `StrongParametersExpect` — перевести все три с тестами; в `package_iframe_behavior.rb:71` вручную
+  `params.expect(user: [:id])[:id]` (400 вместо 500/404 — запись Changed в CHANGELOG).
+- **R6c-хвост:** `twitter_spec.rb:524` «send message» — добавить проверку запроса к API (WebMock).
+- **R2b:** `ReturnNilInPredicateMethodDefinition` — принять с тестом; `MutableConstant` `HEADERS` — `.freeze`;
+  `MemoizedInstanceVariableName` — переименовать `api_controller.rb:93` и `app.rb:256`, `api_controller.rb:139`
+  (`@app_user` читают другие методы) — в Exclude с причиной; `Bundler/OrderedGems` — сортировать, доказать
+  полным rspec и загрузкой приложения.
+- **R7:** `FormatStringToken` — `unannotated` в `.rubocop.yml` с причиной; `OneClassPerFile` —
+  `plugin_schema_validator.rb` в Exclude с причиной (схема-валидатор из 19 мелких классов), остальные 4 разнести
+  по файлам Zeitwerk; `PredicateMethod` — `app/graphql/types/**` в Exclude (имена фиксирует схема GraphQL),
+  остальные 6 переименовать с alias старого имени; `PredicatePrefix` — переименовать, старое имя alias;
+  `VariableName`/`VariableNumber` — переименовать локальные; `ClassAndModuleChildren` 5 оставленных с R4 —
+  Exclude с причиной (`::Twilio` и ERB-шаблоны, риск без выгоды); `MixinUsage` в spec — в блок конфигурации RSpec.
+- **R8 (лимиты, выбросы — отдельные вехи рефакторинга с тестами):** `MethodLength` Max 30, `AbcSize` 30,
+  `CyclomaticComplexity`/`PerceivedComplexity` 13, `ClassLength` 300 с Exclude `app/services/message_apis/**`
+  (адаптеры интеграций, длина — от API провайдера), `BlockLength` Exclude `lib/tasks/**` и `config/routes.rb`,
+  `ParameterLists` 7, `ModuleLength` — Max по `concerns/user_handler.rb` с вехой рефакторинга,
+  `LineLength` 140 + `AllowedPatterns` для URL и base64.
 
 ## Вне бэклога: дефект `TwilioPhone::Store.delete_key` (найден мутациями mut-m9-m14b)
 
