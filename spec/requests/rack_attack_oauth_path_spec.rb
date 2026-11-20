@@ -3,32 +3,27 @@
 require "rails_helper"
 
 RSpec.describe "Rack::Attack oauth throttle path matching" do
-  let(:throttle) do
-    Rack::Attack.throttles.find do |t|
-      t.respond_to?(:name) ? t.name == "logins/ip" : t[0] == "logins/ip"
-    end
-  end
+  let(:throttle) { Rack::Attack.throttles["logins/ip"] }
 
-  def throttle_discriminator(path, method: "POST")
+  def throttle_matches?(path, method: "POST")
     env = Rack::MockRequest.env_for(path, method: method)
     req = Rack::Request.new(env)
-    block = throttle.respond_to?(:block) ? throttle.block : throttle[1]
-    block.call(req)
+    throttle.matched_by?(req)
   end
 
   it "matches POST /oauth/token" do
-    expect(throttle_discriminator("/oauth/token")).to be_truthy
+    expect(throttle_matches?("/oauth/token")).to be true
   end
 
   it "matches POST /oauth/token.json" do
-    expect(throttle_discriminator("/oauth/token.json")).to be_truthy
+    expect(throttle_matches?("/oauth/token.json")).to be true
   end
 
   it "does not match POST /oauth/tokenX" do
-    expect(throttle_discriminator("/oauth/tokenX")).to be_nil
+    expect(throttle_matches?("/oauth/tokenX")).to be false
   end
 
   it "does not match POST /oauth/token/extra" do
-    expect(throttle_discriminator("/oauth/token/extra")).to be_nil
+    expect(throttle_matches?("/oauth/token/extra")).to be false
   end
 end
