@@ -92,5 +92,3 @@ module PaymentServices
     end
   end
 end
-
-# frozen_string_literal: true
