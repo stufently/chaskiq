@@ -13,8 +13,9 @@ RSpec.describe MessageApis::TelnyxSms::Api do
   end
 
   let(:app) { FactoryBot.create(:app) }
+  let(:pkg) { OpenStruct.new(app: app, settings: { "phones" => "+15551234567" }) }
   let(:config) do
-    { "api_key" => "test-key", "profile_id" => "test-profile", :package => OpenStruct.new(app: app) }
+    { "api_key" => "test-key", "profile_id" => "test-profile", :package => pkg }
   end
   let(:api) { described_class.new(config: config) }
 
@@ -54,8 +55,7 @@ RSpec.describe MessageApis::TelnyxSms::Api do
         .to_return(status: 200, body: '{"data":{}}')
 
       api.send(:send_sms_message, "15550001", "hi")
-      expect(WebMock).to have_requested(:post, described_class::URL)
-        .with(body: hash_including("to" => "+15550001"))
+      assert_requested(:post, described_class::URL, body: hash_including("to" => "+15550001"))
     end
 
     it "does not double the + when input already has one" do
@@ -64,8 +64,7 @@ RSpec.describe MessageApis::TelnyxSms::Api do
         .to_return(status: 200, body: '{"data":{}}')
 
       api.send(:send_sms_message, "+15550001", "hi")
-      expect(WebMock).to have_requested(:post, described_class::URL)
-        .with(body: hash_including("to" => "+15550001"))
+      assert_requested(:post, described_class::URL, body: hash_including("to" => "+15550001"))
     end
   end
 end

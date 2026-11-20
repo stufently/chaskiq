@@ -17,7 +17,7 @@ RSpec.describe ConversationPartChannelSource, type: :model do
             conn.execute("SELECT pg_terminate_backend(pg_backend_pid())")
           end
         end
-      }.to raise_error(ActiveRecord::StatementInvalid).or raise_error(PG::Error)
+      }.to raise_error(ActiveRecord::StatementInvalid)
     end
   end
 

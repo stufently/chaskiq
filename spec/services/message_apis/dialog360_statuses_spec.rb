@@ -40,7 +40,9 @@ RSpec.describe MessageApis::Dialog360::Api do
       allow(api).to receive(:add_participant_to_existing_user).and_return(nil)
 
       expect {
-        api.prepare_initiator_channel_for(conversation, config[:package])
+        ActiveRecord::Base.transaction do
+          api.prepare_initiator_channel_for(conversation, config[:package])
+        end
       }.not_to change(ConversationChannel, :count)
     end
   end
@@ -66,7 +68,7 @@ RSpec.describe MessageApis::Dialog360::Api do
 
       result = api.send(:send_message, conversation, part)
       expect(result).to be_nil
-      expect(WebMock).not_to have_requested(:post, /360dialog/)
+      expect(WebMock).not_to have_been_requested
     end
   end
 end

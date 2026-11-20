@@ -35,7 +35,6 @@ RSpec.describe "Twilio WhatsApp From field" do
 
     api.send(:send_message, conversation, part)
 
-    expect(WebMock).to have_requested(:post, /twilio/)
-      .with(body: hash_including("From" => "whatsapp:+15551234567"))
+    assert_requested(:post, /twilio/, body: hash_including("From" => "whatsapp:+15551234567"))
   end
 end

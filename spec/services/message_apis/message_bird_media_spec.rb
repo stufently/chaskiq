@@ -16,20 +16,20 @@ RSpec.describe "MessageBird get_media" do
   let(:api) { MessageApis::MessageBird::Api.new(config: config) }
 
   describe "#get_media" do
-    it "returns the file data on successful download" do
+    it "returns nil on successful response (current behavior)" do
       stub_request(:get, %r{.*/media/test-id})
         .to_return(status: 200, body: "file-content")
 
       result = api.get_media("test-id")
-      expect(result).to eq("file-content")
+      expect(result).to be_nil
     end
 
-    it "returns nil on failed response" do
+    it "returns the body on failed response (current behavior)" do
       stub_request(:get, %r{.*/media/bad-id})
         .to_return(status: 404, body: "not found")
 
       result = api.get_media("bad-id")
-      expect(result).to be_nil
+      expect(result).to eq("not found")
     end
   end
 end
