@@ -4,6 +4,8 @@ require "link_renamer"
 require "open-uri"
 
 class Campaign < Message
+  class PremailerFetchError < StandardError; end
+
   validates :from_name, presence: true # , unless: :step_1?
   validates :from_email, presence: true # , unless: :step_1?
   validates :subject, presence: true # , unless: :step_1?
@@ -135,7 +137,7 @@ class Campaign < Message
 
   # will remove content blocks text
   def clean_inline_css(url)
-    html = URI.open(url).readlines.join
+    html = fetch_premailer_html(url.to_s)
     document = Roadie::Document.new html
     new_html = document.transform
 
@@ -148,6 +150,17 @@ class Campaign < Message
     end
 
     doc.to_html
+  end
+
+  # The premailer page is the app's own view: fetched with SafeDownload limits, redirects only
+  # within the same origin; no page - PremailerFetchError (the job fails, as with URI.open).
+  def fetch_premailer_html(url)
+    origin = URI.parse(url)
+    same_origin = ->(uri) { [uri.scheme, uri.host, uri.port] == [origin.scheme, origin.host, origin.port] }
+    body = MessageApis::SafeDownload.fetch(url, allow_own_host: true, url_allowed: same_origin)
+    raise PremailerFetchError, "premailer page not fetched: #{url}" unless body
+
+    body.read
   end
 
   def attributes_for_template(subscriber)
