@@ -880,7 +880,6 @@ module MessageApis
 
         if part.messageable.is_a?(ConversationPartEvent)
           data = messageable.data
-          data_label = data["label"]
 
           data_fmt = if data.is_a?(Hash)
                        data.reject { |k, v| v.blank? or ["id"].include?(k) }
