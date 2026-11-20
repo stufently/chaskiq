@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-20 — fork-updates-r6b
+
+- Changed: Lint/UnusedMethodArgument allows unused keyword arguments (plugin interface, owner
+  decision); unused positional arguments renamed to `_name` in 28 files of app/ and lib/ (45 places,
+  RuboCop autocorrect); two ERB presenters stay in the todo.
+
 ## 2026-11-20 — fork-updates-r6a
 
 - Changed: Lint/UselessAssignment autocorrected in 64 files of app/ and lib/ (119 unused local
