@@ -22,10 +22,16 @@ RSpec.describe "GraphQL error handling", type: :request do
       stub_const("TestFatalError", fatal_class)
       allow(ChaskiqSchema).to receive(:execute).and_raise(fatal_class, "fatal")
 
-      expect {
-        post "/api/graphql", params: { query: "{ app { key } }" },
-                             headers: { "HTTP_APP" => app_record.key, "Content-Type" => "application/json" }
-      }.to raise_error(fatal_class)
+      old_show = Rails.application.config.action_dispatch.show_exceptions
+      begin
+        Rails.application.config.action_dispatch.show_exceptions = :none
+        expect {
+          post "/api/graphql", params: { query: "{ app { key } }" },
+                               headers: { "HTTP_APP" => app_record.key, "Content-Type" => "application/json" }
+        }.to raise_error(fatal_class)
+      ensure
+        Rails.application.config.action_dispatch.show_exceptions = old_show
+      end
     end
   end
 end
