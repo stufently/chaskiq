@@ -198,7 +198,7 @@ module Types
 
       app_packages = app_packages.where.not("id in(?)", integrations) if integrations.any?
 
-      app_packages = app_packages.order("id asc").distinct
+      app_packages.order("id asc").distinct
     end
 
     def agent_app_packages
@@ -747,7 +747,7 @@ module Types
       filters["users"].each_with_index do |filter, _index|
         ors = ors.nil? ? BotTask.infix([filter]) : ors.or(BotTask.infix([filter]))
       end
-      collection = collection.where(ors) if ors.present?
+      collection.where(ors) if ors.present?
     end
   end
 end

@@ -69,7 +69,7 @@ module MessageApis
       # them configuration options before it’s inserted. Leaving this option
       # blank will skip configuration.
       def self.configure_hook(kind:, ctx:)
-        api = ctx[:package].message_api_klass
+        ctx[:package].message_api_klass
         # conversation_part = ctx[:package].app.conversation_parts.find_by(key: ctx[:conversation_part])
 
         definitions = [

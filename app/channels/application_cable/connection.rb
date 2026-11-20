@@ -36,7 +36,7 @@ module ApplicationCable
     end
 
     def get_session_data
-      params = request.query_parameters
+      request.query_parameters
 
       return unless app.present?
 

@@ -108,7 +108,7 @@ module MessageApis
           events: ["invitee.created", "invitee.canceled"]
         }
         url = url("/hooks")
-        response = @conn.post do |req|
+        @conn.post do |req|
           req.url url
           req.headers["Content-Type"] = "application/json"
           req.body = data.to_json
@@ -123,7 +123,7 @@ module MessageApis
 
       def delete_webhook(id)
         url = url("/hooks/#{id}")
-        response = @conn.delete(url, nil)
+        @conn.delete(url, nil)
       end
 
       def delete_webhooks

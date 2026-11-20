@@ -213,7 +213,7 @@ class AppUser < ApplicationRecord
 
   def delay_for_trigger
     settings = is_a?(AppUser) ? app.user_tasks_settings : app.lead_tasks_settings
-    delay = settings["delay"] ? 2.minutes.from_now : 0.minutes.from_now
+    settings["delay"] ? 2.minutes.from_now : 0.minutes.from_now
   end
 
   def available?

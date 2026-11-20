@@ -139,7 +139,7 @@ module MessageApis
       end
 
       def find_conversation_by_channel(channel)
-        conversation = @package
+        @package
                        .app
                        .conversations
                        .joins(:conversation_channels)

@@ -115,7 +115,7 @@ class Agent < ApplicationRecord
     email_address = email.downcase
     hash = Digest::MD5.hexdigest(email_address)
     d = "https://ui-avatars.com/api/#{URI.encode_www_form_component(display_name)}/128"
-    image_src = "https://www.gravatar.com/avatar/#{hash}?d=#{d}"
+    "https://www.gravatar.com/avatar/#{hash}?d=#{d}"
   end
 
   def as_json(options = nil)
@@ -178,7 +178,7 @@ class Agent < ApplicationRecord
   end
 
   def get_remote_avatar_url
-    url = begin
+    begin
       avatar.variant(resize_to_limit: [100, 100]).processed
     rescue StandardError
       nil

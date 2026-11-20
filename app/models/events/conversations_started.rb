@@ -4,7 +4,7 @@ module Events
   class ConversationsStarted
     def self.perform(event)
       conversation = event.eventable
-      app = conversation.app
+      conversation.app
 
       # EventTriggerProcessorJob.perform_later(
       #  id: app.id ,

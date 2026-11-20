@@ -109,7 +109,7 @@ module Dante
     end
 
     def render
-      rendered_content = traverse_nodes(raw[:content]).join(" ")
+      traverse_nodes(raw[:content]).join(" ")
     end
   end
 end

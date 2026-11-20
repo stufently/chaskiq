@@ -527,7 +527,7 @@ module MessageApis
         end
 
         def article_fields(index = 0)
-          fields = [
+          [
             {
               type: "text",
               style: "header",

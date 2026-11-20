@@ -55,7 +55,7 @@ class SegmentComparator
   end
 
   def compare_with(user_input, predicate_value, comparison)
-    result = case comparison
+    case comparison
              when "contains_start" then user_input.start_with?(predicate_value)
              when "contains_ends" then user_input.end_with?(predicate_value)
              when "is_null" then user_input.blank?

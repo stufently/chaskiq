@@ -14,7 +14,7 @@ module Api
               payload, sig_header, ENV.fetch("STRIPE_SIGNING_SECRET", nil)
             )
           rescue JSON::ParserError,
-                 Stripe::SignatureVerificationError => e
+                 Stripe::SignatureVerificationError
             # Invalid signature
             status 400
             return
@@ -25,7 +25,7 @@ module Api
           when "customer.subscription.deleted", "customer.subscription.updated"
             process_subscription(event.data.object)
           when "payment_intent.succeeded"
-            payment_intent = event.data.object
+            event.data.object
           when "checkout.session.completed"
             event.data.object.client_reference_id
             process_event(event.data.object)

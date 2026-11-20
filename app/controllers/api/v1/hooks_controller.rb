@@ -88,8 +88,8 @@ module Api
 
         mail_body = read_mail_file(action)
         mail       = Mail.read_from_string(mail_body)
-        from       = mail.from
-        to         = mail.to
+        mail.from
+        mail.to
         recipients = mail.recipients # ["messages+aaa@hermessenger.com"] de aqui sale el app y el mensaje!
 
         mail.part # will convert plain into multipart
@@ -103,9 +103,9 @@ module Api
         text = EmailReplyTrimmer.trim(body)
         message = text.gsub("\n", "<br/>")
 
-        app, conversation, from = handle_conversation_part(mail, json_message)
+        _, conversation, from = handle_conversation_part(mail, json_message)
 
-        messageId = json_message["mail"]["messageId"]
+        json_message["mail"]["messageId"]
         # for now just skip the message
         return if from.blank?
 
@@ -156,7 +156,7 @@ module Api
       end
 
       def decode_inbound_address(address)
-        app, role = App.decode_inbound_address(address)
+        _, _ = App.decode_inbound_address(address)
       end
 
       def read_mail_file(action)
@@ -200,7 +200,7 @@ module Api
 
       def handle_inbound_recipient(mail)
         recipient = mail.recipients.first
-        app, agent = decode_inbound_address(recipient)
+        app, _ = decode_inbound_address(recipient)
         return if app.blank?
         return unless app&.plan&.enabled?("InboundEmails")
 
@@ -208,7 +208,7 @@ module Api
       end
 
       def handle_inbound_recipient_from_forwarded(mail, val)
-        app, agent = decode_inbound_address(val)
+        app, _ = decode_inbound_address(val)
         return if app.blank?
         return unless app&.plan&.enabled?("InboundEmails")
 
@@ -270,7 +270,7 @@ module Api
             image_mark
           )
         else
-          message = image_mark.dup << message
+          image_mark.dup << message
         end
       end
 

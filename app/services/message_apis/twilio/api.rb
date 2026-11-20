@@ -80,7 +80,7 @@ module MessageApis
 
       def process_event(params, package)
         @package = package
-        current = params["current"]
+        params["current"]
 
         case params["SmsStatus"]
         when "read" then process_read(params["MessageSid"])
@@ -205,7 +205,7 @@ module MessageApis
 
       def process_message(params, package)
         @package = package
-        app = package.app
+        package.app
         message_id = params["SmsMessageSid"]
 
         # determine the id of the user (channel)
@@ -298,7 +298,7 @@ module MessageApis
       end
 
       def find_conversation_by_channel(channel)
-        conversation = @package
+        @package
                        .app
                        .conversations
                        .joins(:conversation_channels)
@@ -310,7 +310,7 @@ module MessageApis
       end
 
       def serialize_content(data)
-        text = data["Body"]
+        data["Body"]
 
         if data["NumMedia"].to_i.positive?
           attachment_block(data)
@@ -320,7 +320,7 @@ module MessageApis
       end
 
       def attachment_block(data)
-        attachment = data["attachment"]
+        data["attachment"]
 
         media_blocks = []
 
@@ -350,7 +350,7 @@ module MessageApis
 
         app = @package.app
 
-        data = {
+        {
           properties: {
             name: twilio_user,
             twilio_id: twilio_user

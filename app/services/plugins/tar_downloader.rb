@@ -92,7 +92,7 @@ module Plugins
         Rails.autoloaders.main.push_dir(destination_folder)
         Rails.autoloaders.main.require_dependency("#{destination_folder}/api.rb")
 
-        definition_info = "MessageApis::#{package_name}::Api".constantize.definition_info
+        "MessageApis::#{package_name}::Api".constantize.definition_info
 
         Plugin.load_plugin_and_create_packages_from_fs(destination_folder, @tag)
 

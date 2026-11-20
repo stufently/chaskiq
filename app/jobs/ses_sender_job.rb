@@ -8,6 +8,6 @@ class SesSenderJob < ApplicationJob
     return if subscription.blank? || subscription.unsubscribed?
 
     mailer     = campaign.prepare_mail_to(subscription)
-    response   = mailer.deliver_now
+    mailer.deliver_now
   end
 end

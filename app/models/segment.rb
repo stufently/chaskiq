@@ -39,13 +39,13 @@ class Segment < ApplicationRecord
 
   def query
     app
-    app_users = AppUser.arel_table
+    AppUser.arel_table
     app.app_users.arel_table[Arel.star]
   end
 
   def execute_query
-    arel_table = AppUser.arel_table
-    user_table = AppUser.arel_table
+    AppUser.arel_table
+    AppUser.arel_table
     query_builder
   end
 
@@ -65,9 +65,9 @@ class Segment < ApplicationRecord
   # https://jes.al/2016/01/querying-json-fields-in-postgresql-using-activerecord/
 
   def query_builder
-    tags = Arel::Table.new :tags # Base Rel-var
+    Arel::Table.new :tags # Base Rel-var
     query = nil
-    tags_query = nil
+    nil
     Array(predicates_for_arel).each_with_index do |predicate, _index|
       next if predicate["type"] == "match"
 
@@ -95,11 +95,11 @@ class Segment < ApplicationRecord
     # date predicates
     case predicate["type"]
     when "date"
-      check = cast_date(field).send(predicate["comparison"], Chronic.parse(predicate["value"]))
+      cast_date(field).send(predicate["comparison"], Chronic.parse(predicate["value"]))
     when "string"
-      check = check_string(predicate, field)
+      check_string(predicate, field)
     when "integer"
-      check = check_integer(predicate, field)
+      check_integer(predicate, field)
     end
   end
 
@@ -163,7 +163,7 @@ class Segment < ApplicationRecord
 
     or_predicate = predicates.find { |o| o["type"] == "match" && o["value"] == "or" }
 
-    any_tags = or_predicate.present?
+    or_predicate.present?
 
     tags_query = nil
     base_taggings = Arel::Table.new(:taggings)
@@ -340,7 +340,7 @@ class Segment < ApplicationRecord
   def nested_preds_group(clause, attributes)
     return attributes if attributes.blank?
 
-    q = attributes.map do |o|
+    attributes.map do |o|
       [{
         term: {
           "custom_attributes.name": { value: o["attribute"] }

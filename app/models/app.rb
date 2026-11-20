@@ -246,10 +246,10 @@ class App < ApplicationRecord
   end
 
   def query_segment(kind)
-    predicates = inbound_settings[kind]["predicates"]
+    inbound_settings[kind]["predicates"]
     segment = segments.new
     segment.assign_attributes(predicates: inbound_settings[kind]["predicates"])
-    app_users = segment.execute_query.availables
+    segment.execute_query.availables
   end
 
   def availability

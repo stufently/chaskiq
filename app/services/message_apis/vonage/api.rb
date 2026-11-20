@@ -82,7 +82,7 @@ module MessageApis
 
       def process_event(params, package)
         @package = package
-        current = params["current"]
+        params["current"]
 
         if params["status"].present?
           case params["status"]
@@ -151,7 +151,7 @@ module MessageApis
       def process_message(params, package)
         @package = package
 
-        app = package.app
+        package.app
 
         message_id = params["message_uuid"]
 
@@ -225,7 +225,7 @@ module MessageApis
       end
 
       def find_conversation_by_channel(channel)
-        conversation = @package
+        @package
                        .app
                        .conversations
                        .joins(:conversation_channels)
@@ -255,7 +255,7 @@ module MessageApis
 
       def media_block(data)
         media_type = data["type"]
-        media = case media_type
+        case media_type
                 when "unsupported" then nil
                 when "image"
                   url = data["image"]["url"]

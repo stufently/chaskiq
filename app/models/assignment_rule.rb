@@ -8,7 +8,7 @@ class AssignmentRule < ApplicationRecord
   default_scope { order("priority asc") }
 
   def check_rule_for(text, part)
-    match_condition = conditions.find { |o| o["type"] == "match" }
+    conditions.find { |o| o["type"] == "match" }
     query_conditions = conditions.reject { |o| o["type"] == "match" }
 
     # we will accept empty conditions as a true, ok ?

@@ -28,7 +28,7 @@ COORDS = [
 task user_gen: :environment do
   # coords = [-33.447487, -70.673676] #chili
   10.times do
-    coords = COORDS.sample
+    COORDS.sample
     # coords = [Random.rand*180-90, Random.rand*90-45] # anywhere
 
     App.last.add_user(

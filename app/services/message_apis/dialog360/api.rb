@@ -104,7 +104,7 @@ module MessageApis
 
       def process_event(params, package)
         @package = package
-        current = params["current"]
+        params["current"]
 
         process_statuses(params["statuses"]) if params["statuses"].present?
 
