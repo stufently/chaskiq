@@ -1,45 +1,47 @@
 # frozen_string_literal: true
 
-class Dante::AudioRecorderRenderer
-  def initialize(block_key:, data:, domain: nil)
-    @block_key = block_key
-    @data = data
-    @domain = domain
-  end
+module Dante
+  class AudioRecorderRenderer
+    def initialize(block_key:, data:, domain: nil)
+      @block_key = block_key
+      @data = data
+      @domain = domain
+    end
 
-  def render
-    url, caption = @data.values_at(:url, :caption)
-    audio_url = get_url(url, @domain)
+    def render
+      url, caption = @data.values_at(:url, :caption)
+      audio_url = get_url(url, @domain)
 
-    figure = <<~HTML
-      <figure id="#{@block_key}" class="graf graf--figure">
-        <div>
+      figure = <<~HTML
+        <figure id="#{@block_key}" class="graf graf--figure">
           <div>
-            #{url && "<audio src=\"#{audio_url}\" controls></audio>"}
+            <div>
+              #{url && "<audio src=\"#{audio_url}\" controls></audio>"}
+            </div>
           </div>
-        </div>
-        #{caption_html(caption)}
-      </figure>
-    HTML
+          #{caption_html(caption)}
+        </figure>
+      HTML
 
-    figure.strip
-  end
+      figure.strip
+    end
 
-  private
+    private
 
-  def get_url(url, domain)
-    domain ? "#{domain}#{url}" : url
-  end
+    def get_url(url, domain)
+      domain ? "#{domain}#{url}" : url
+    end
 
-  def caption_html(caption)
-    return "" unless caption && caption != "type a caption (optional)"
+    def caption_html(caption)
+      return "" unless caption && caption != "type a caption (optional)"
 
-    <<~HTML
-      <figcaption class="imageCaption">
-        <span>
-          <span data-text="true">#{caption}</span>
-        </span>
-      </figcaption>
-    HTML
+      <<~HTML
+        <figcaption class="imageCaption">
+          <span>
+            <span data-text="true">#{caption}</span>
+          </span>
+        </figcaption>
+      HTML
+    end
   end
 end

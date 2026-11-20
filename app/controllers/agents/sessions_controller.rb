@@ -1,73 +1,75 @@
 # frozen_string_literal: true
 
-class Agents::SessionsController < Devise::SessionsController
-  include Trackeable
+module Agents
+  class SessionsController < Devise::SessionsController
+    include Trackeable
 
-  skip_before_action :verify_authenticity_token, only: [:destroy]
-  skip_before_action :verify_signed_out_user, only: [:destroy]
+    skip_before_action :verify_authenticity_token, only: [:destroy]
+    skip_before_action :verify_signed_out_user, only: [:destroy]
 
-  skip_before_action :require_no_authentication, only: [:create]
-  before_action :clear_session, only: [:create]
+    skip_before_action :require_no_authentication, only: [:create]
+    before_action :clear_session, only: [:create]
 
-  def new
-    redirect_to "/" and return
-  end
+    def new
+      redirect_to "/" and return
+    end
 
-  def create
-    require_no_authentication
+    def create
+      require_no_authentication
 
-    self.resource = warden.authenticate!(auth_options)
+      self.resource = warden.authenticate!(auth_options)
 
-    # need this session for /oauth/applications & authorization
-    # for credential (aprove)
-    # TODO: figure out how can avoid this
-    # like customize /oauth/applications
-    # sign_in(resource_name, resource, {store: true})
+      # need this session for /oauth/applications & authorization
+      # for credential (aprove)
+      # TODO: figure out how can avoid this
+      # like customize /oauth/applications
+      # sign_in(resource_name, resource, {store: true})
 
-    track_event(resource, "login")
+      track_event(resource, "login")
 
-    if session[:return_to].blank?
-      a = Doorkeeper::Application.first
+      if session[:return_to].blank?
+        a = Doorkeeper::Application.first
 
-      access_token = Doorkeeper::AccessToken.find_or_create_for(
-        application: a, resource_owner: resource, scopes: "",
-        expires_in: 1.hour, use_refresh_token: true
-      )
+        access_token = Doorkeeper::AccessToken.find_or_create_for(
+          application: a, resource_owner: resource, scopes: "",
+          expires_in: 1.hour, use_refresh_token: true
+        )
 
-      respond_with_navigational(resource, status: :success) do
-        render json: {
-          access_token: access_token.token,
-          refresh_token: access_token.refresh_token,
-          expires_in: access_token.expires_in
-        }
+        respond_with_navigational(resource, status: :success) do
+          render json: {
+            access_token: access_token.token,
+            refresh_token: access_token.refresh_token,
+            expires_in: access_token.expires_in
+          }
+        end
+      else
+        redirect_to session[:return_to]
+        session[:return_to] = nil
       end
-    else
-      redirect_to session[:return_to]
-      session[:return_to] = nil
-    end
-  end
-
-  # DELETE /resource/sign_out
-  def destroy
-    track_event(current_agent, "logout")
-
-    if request.headers["access-token"]
-      token = current_agent.access_tokens.find_by(token: request.headers["access-token"])
-      token.destroy if token.present?
     end
 
-    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
-    set_flash_message! :notice, :signed_out if signed_out
-    yield if block_given?
-    # respond_to_on_destroy
-    respond_with_navigational(resource, status: :success) do
-      render json: { a: "ok" }
+    # DELETE /resource/sign_out
+    def destroy
+      track_event(current_agent, "logout")
+
+      if request.headers["access-token"]
+        token = current_agent.access_tokens.find_by(token: request.headers["access-token"])
+        token.destroy if token.present?
+      end
+
+      signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+      set_flash_message! :notice, :signed_out if signed_out
+      yield if block_given?
+      # respond_to_on_destroy
+      respond_with_navigational(resource, status: :success) do
+        render json: { a: "ok" }
+      end
     end
-  end
 
-  private
+    private
 
-  def clear_session
-    request.env["warden"].logout
+    def clear_session
+      request.env["warden"].logout
+    end
   end
 end

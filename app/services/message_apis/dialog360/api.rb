@@ -2,518 +2,520 @@
 
 require "rack/mime"
 
-module MessageApis::Dialog360
-  class Api < MessageApis::BasePackage
-    def self.definition_info
-      {
-        name: "Dialog360",
-        tag_list: ["conversations.added"],
-        description: "Interfaces 360 Dialog Whatsapp",
-        icon: "https://logo.clearbit.com/360 Dialog.com",
-        state: "enabled",
-        capability_list: %w[conversations bots conversations_initiator],
-        definitions: [
-          {
-            name: "user_id",
-            label: "Phone",
-            type: "string",
-            required: true,
-            hint: "The 360 Dialog Whatsapp number (format: 14155231223)",
-            grid: { xs: "w-full", sm: "w-full" }
-          },
-          {
-            name: "api_key",
-            label: "Your 360Dialog API key",
-            type: "string",
-            required: true,
-            grid: { xs: "w-full", sm: "w-full" }
-          },
-          {
-            name: "sandbox",
-            label: "is sandbox",
-            type: "checkbox",
-            grid: { xs: "w-full", sm: "w-full" }
-          }
-        ]
-      }
-    end
-
-    include MessageApis::Helpers
-
-    PROVIDER = "dialog_360"
-    RESUMABLE_DELIVERY = true
-    MEDIA_TYPES = {
-      "ImageBlock" => "image",
-      "VideoBlock" => "video",
-      "FileBlock" => "document",
-      "AudioRecorderBlock" => "audio"
-    }.freeze
-    private_constant :MEDIA_TYPES
-
-    attr_accessor :url, :api_key, :conn
-
-    def initialize(config:)
-      @api_key = config["api_key"]
-      @api_token = config["api_secret"]
-      @phone = config["user_id"]
-      @url = if config["sandbox"].present?
-               "https://waba-sandbox.360dialog.io/v1"
-             else
-               "https://waba.360dialog.io/v1"
-             end
-      @package = config[:package]
-      @conn = Faraday.new(
-        request: {
-          params_encoder: Faraday::FlatParamsEncoder
+module MessageApis
+  module Dialog360
+    class Api < MessageApis::BasePackage
+      def self.definition_info
+        {
+          name: "Dialog360",
+          tag_list: ["conversations.added"],
+          description: "Interfaces 360 Dialog Whatsapp",
+          icon: "https://logo.clearbit.com/360 Dialog.com",
+          state: "enabled",
+          capability_list: %w[conversations bots conversations_initiator],
+          definitions: [
+            {
+              name: "user_id",
+              label: "Phone",
+              type: "string",
+              required: true,
+              hint: "The 360 Dialog Whatsapp number (format: 14155231223)",
+              grid: { xs: "w-full", sm: "w-full" }
+            },
+            {
+              name: "api_key",
+              label: "Your 360Dialog API key",
+              type: "string",
+              required: true,
+              grid: { xs: "w-full", sm: "w-full" }
+            },
+            {
+              name: "sandbox",
+              label: "is sandbox",
+              type: "checkbox",
+              grid: { xs: "w-full", sm: "w-full" }
+            }
+          ]
         }
-      )
+      end
 
-      @conn.headers = {
-        "D360-Api-Key": @api_key,
-        "Content-Type" => "application/json",
-        "Accept" => "application/json"
-      }
+      include MessageApis::Helpers
 
-      self
-    end
+      PROVIDER = "dialog_360"
+      RESUMABLE_DELIVERY = true
+      MEDIA_TYPES = {
+        "ImageBlock" => "image",
+        "VideoBlock" => "video",
+        "FileBlock" => "document",
+        "AudioRecorderBlock" => "audio"
+      }.freeze
+      private_constant :MEDIA_TYPES
 
-    def register_webhook(app_package, integration)
-      data = {
-        url: integration.hook_url # .gsub("http://localhost:3000", "https://chaskiq.sa.ngrok.io")
-      }
+      attr_accessor :url, :api_key, :conn
 
-      response = @conn.post("#{@url}/configs/webhook", data.to_json)
-      response.status
-    end
+      def initialize(config:)
+        @api_key = config["api_key"]
+        @api_token = config["api_secret"]
+        @phone = config["user_id"]
+        @url = if config["sandbox"].present?
+                 "https://waba-sandbox.360dialog.io/v1"
+               else
+                 "https://waba.360dialog.io/v1"
+               end
+        @package = config[:package]
+        @conn = Faraday.new(
+          request: {
+            params_encoder: Faraday::FlatParamsEncoder
+          }
+        )
 
-    def retrieve_templates(offset:)
-      response = @conn.get("#{@url}/configs/templates?limit=10&offset=#{offset}")
-      response.body
-    end
+        @conn.headers = {
+          "D360-Api-Key": @api_key,
+          "Content-Type" => "application/json",
+          "Accept" => "application/json"
+        }
 
-    def unregister(app_package, integration)
-      # delete_webhooks
-    end
+        self
+      end
 
-    def trigger(event)
-      # case event.action
-      # when 'email_changed' then register_contact(event.eventable)
-      # end
-    end
+      def register_webhook(app_package, integration)
+        data = {
+          url: integration.hook_url # .gsub("http://localhost:3000", "https://chaskiq.sa.ngrok.io")
+        }
 
-    def process_event(params, package)
-      @package = package
-      current = params["current"]
+        response = @conn.post("#{@url}/configs/webhook", data.to_json)
+        response.status
+      end
 
-      process_statuses(params["statuses"]) if params["statuses"].present?
+      def retrieve_templates(offset:)
+        response = @conn.get("#{@url}/configs/templates?limit=10&offset=#{offset}")
+        response.body
+      end
 
-      process_message(params, @package) if params["messages"].present?
-    end
+      def unregister(app_package, integration)
+        # delete_webhooks
+      end
 
-    def process_statuses(statuses)
-      statuses.each do |status|
-        case status["status"]
-        when "read" then process_read(status["id"])
-        when "failed" then process_error(status)
-        else
-          Rails.logger.info "no processing for #{status['status']} event"
+      def trigger(event)
+        # case event.action
+        # when 'email_changed' then register_contact(event.eventable)
+        # end
+      end
+
+      def process_event(params, package)
+        @package = package
+        current = params["current"]
+
+        process_statuses(params["statuses"]) if params["statuses"].present?
+
+        process_message(params, @package) if params["messages"].present?
+      end
+
+      def process_statuses(statuses)
+        statuses.each do |status|
+          case status["status"]
+          when "read" then process_read(status["id"])
+          when "failed" then process_error(status)
+          else
+            Rails.logger.info "no processing for #{status['status']} event"
+          end
         end
       end
-    end
 
-    def find_channel(id)
-      return if id.blank?
+      def find_channel(id)
+        return if id.blank?
 
-      ConversationPartChannelSource.find_by(
-        provider: PROVIDER,
-        message_source_id: id
-      )
-    end
-
-    def process_error(params)
-      source_id = params["id"]
-      conversation_part_channel = find_channel(source_id)
-      return if conversation_part_channel.blank?
-
-      conversation = conversation_part_channel.conversation_part.conversation
-
-      errors = params["errors"]
-      errors = [] unless errors.is_a?(Array)
-      text = errors.grep(Hash).map do |error|
-        title = error["title"]
-        [safe_error_code(error["code"]), (title if title.is_a?(String))].compact.join(" ")
-      end.join
-      code = errors.first["code"] if errors.first.is_a?(Hash)
-      add_error_event(conversation, "bypass-internal-#{source_id}", status: nil, code: code, text: text)
-    end
-
-    def get_message_id(response_data)
-      response_data["messages"].first["id"]
-    end
-
-    def send_message(conversation, part)
-      return if part.private_note?
-
-      message = part.message.as_json
-
-      return nil if message["serialized_content"].blank?
-
-      blocks = MessageApis::BlockManager.get_blocks(message["serialized_content"])
-      plain_message = MessageApis::BlockManager.plain_text(blocks)
-
-      profile_id = get_profile_for_participant(conversation.main_participant)
-
-      # TODO: maybe handle an error here ?
-      return if profile_id.blank?
-
-      message_params = {
-        from: { type: "whatsapp", number: @phone },
-        to: profile_id
-      }
-
-      post_message = ->(content) { @conn.post("#{@url}/messages", message_params.merge(content).to_json) }
-      send_text = ->(text) { post_message.call(type: "text", text: { body: text }) }
-      attachments = MessageApis::BlockManager.media_blocks(blocks)
-
-      return send_text.call(plain_message) if attachments.empty?
-
-      MessageApis::BlockManager.deliver_attachments(
-        attachments, plain_message,
-        send_text: send_text, captionless: %w[AudioRecorderBlock], **delivery_hooks(conversation, part)
-      ) do |block_type, url, caption|
-        type = MEDIA_TYPES.fetch(block_type)
-        media = { link: url }
-        media[:caption] = caption if caption
-        post_message.call(type: type, type => media)
-      end
-    end
-
-    def upload_media(media)
-      # conn = @conn do |f|
-      #  f.request :multipart
-      #  f.request :url_encoded
-      #  f.adapter :net_http # This is what ended up making it work
-      # end
-
-      # payload = { :file => Faraday::UploadIO.new('...', 'image/jpeg') }
-
-      # conn.post('/', payload)
-    end
-
-    def get_profile_for_participant(participant)
-      participant
-        &.external_profiles
-        &.find_by(provider: PROVIDER)
-        &.profile_id
-    end
-
-    def get_profile_for_participant_label(participant)
-      if (l = get_profile_for_participant(participant)) && l.present?
-        "Dialog360 profile: #{l}"
-      end
-    end
-
-    def prepare_initiator_channel_for(conversation, package)
-      Rails.logger.debug conversation.inspect
-      @package = package
-
-      profile_id = conversation.main_participant
-                               &.external_profiles
-                               &.find_by(provider: PROVIDER)
-                               &.profile_id
-
-      if profile_id.blank?
-        profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+        ConversationPartChannelSource.find_by(
+          provider: PROVIDER,
+          message_source_id: id
+        )
       end
 
-      raise ActiveRecord::Rollback if profile_id.blank?
+      def process_error(params)
+        source_id = params["id"]
+        conversation_part_channel = find_channel(source_id)
+        return if conversation_part_channel.blank?
 
-      conversation = find_conversation_by_channel(PROVIDER, profile_id) || conversation
-      # clear_conversation(previous_conversation) if previous_conversation.present?
+        conversation = conversation_part_channel.conversation_part.conversation
 
-      conversation.update(
-        conversation_channels_attributes: [
-          {
-            provider: PROVIDER,
-            provider_channel_id: profile_id
-          }
-        ]
-      )
-    end
+        errors = params["errors"]
+        errors = [] unless errors.is_a?(Array)
+        text = errors.grep(Hash).map do |error|
+          title = error["title"]
+          [safe_error_code(error["code"]), (title if title.is_a?(String))].compact.join(" ")
+        end.join
+        code = errors.first["code"] if errors.first.is_a?(Hash)
+        add_error_event(conversation, "bypass-internal-#{source_id}", status: nil, code: code, text: text)
+      end
 
-    def add_participant_to_existing_user(app_user, phone)
-      dialog_user = phone.to_s
+      def get_message_id(response_data)
+        response_data["messages"].first["id"]
+      end
 
-      app = @package.app
+      def send_message(conversation, part)
+        return if part.private_note?
 
-      external_profile = app.external_profiles.find_by(
-        provider: PROVIDER,
-        profile_id: dialog_user
-      )
+        message = part.message.as_json
 
-      # creates the profile
-      if external_profile.blank?
-        app_user.external_profiles.create(
+        return nil if message["serialized_content"].blank?
+
+        blocks = MessageApis::BlockManager.get_blocks(message["serialized_content"])
+        plain_message = MessageApis::BlockManager.plain_text(blocks)
+
+        profile_id = get_profile_for_participant(conversation.main_participant)
+
+        # TODO: maybe handle an error here ?
+        return if profile_id.blank?
+
+        message_params = {
+          from: { type: "whatsapp", number: @phone },
+          to: profile_id
+        }
+
+        post_message = ->(content) { @conn.post("#{@url}/messages", message_params.merge(content).to_json) }
+        send_text = ->(text) { post_message.call(type: "text", text: { body: text }) }
+        attachments = MessageApis::BlockManager.media_blocks(blocks)
+
+        return send_text.call(plain_message) if attachments.empty?
+
+        MessageApis::BlockManager.deliver_attachments(
+          attachments, plain_message,
+          send_text: send_text, captionless: %w[AudioRecorderBlock], **delivery_hooks(conversation, part)
+        ) do |block_type, url, caption|
+          type = MEDIA_TYPES.fetch(block_type)
+          media = { link: url }
+          media[:caption] = caption if caption
+          post_message.call(type: type, type => media)
+        end
+      end
+
+      def upload_media(media)
+        # conn = @conn do |f|
+        #  f.request :multipart
+        #  f.request :url_encoded
+        #  f.adapter :net_http # This is what ended up making it work
+        # end
+
+        # payload = { :file => Faraday::UploadIO.new('...', 'image/jpeg') }
+
+        # conn.post('/', payload)
+      end
+
+      def get_profile_for_participant(participant)
+        participant
+          &.external_profiles
+          &.find_by(provider: PROVIDER)
+          &.profile_id
+      end
+
+      def get_profile_for_participant_label(participant)
+        if (l = get_profile_for_participant(participant)) && l.present?
+          "Dialog360 profile: #{l}"
+        end
+      end
+
+      def prepare_initiator_channel_for(conversation, package)
+        Rails.logger.debug conversation.inspect
+        @package = package
+
+        profile_id = conversation.main_participant
+                                 &.external_profiles
+                                 &.find_by(provider: PROVIDER)
+                                 &.profile_id
+
+        if profile_id.blank?
+          profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+        end
+
+        raise ActiveRecord::Rollback if profile_id.blank?
+
+        conversation = find_conversation_by_channel(PROVIDER, profile_id) || conversation
+        # clear_conversation(previous_conversation) if previous_conversation.present?
+
+        conversation.update(
+          conversation_channels_attributes: [
+            {
+              provider: PROVIDER,
+              provider_channel_id: profile_id
+            }
+          ]
+        )
+      end
+
+      def add_participant_to_existing_user(app_user, phone)
+        dialog_user = phone.to_s
+
+        app = @package.app
+
+        external_profile = app.external_profiles.find_by(
           provider: PROVIDER,
           profile_id: dialog_user
         )
-        app_user.update(phone: dialog_user)
+
+        # creates the profile
+        if external_profile.blank?
+          app_user.external_profiles.create(
+            provider: PROVIDER,
+            profile_id: dialog_user
+          )
+          app_user.update(phone: dialog_user)
+        end
+        dialog_user
+
+        # participant = external_profile&.app_user
+        # means the external profile belongs to somebody else
+        # return nil if participant && participant.id != app_user.id
+        # dialog_user if participant && participant.id == app_user.id
       end
-      dialog_user
 
-      # participant = external_profile&.app_user
-      # means the external profile belongs to somebody else
-      # return nil if participant && participant.id != app_user.id
-      # dialog_user if participant && participant.id == app_user.id
-    end
+      def send_template_message(template:, conversation_key:, parameters:, selected_user:)
+        parameters = [parameters] unless parameters.is_a?(Array)
 
-    def send_template_message(template:, conversation_key:, parameters:, selected_user:)
-      parameters = [parameters] unless parameters.is_a?(Array)
+        conversation = @package.app.conversations.find_by(key: conversation_key)
+        profile_id = nil
 
-      conversation = @package.app.conversations.find_by(key: conversation_key)
-      profile_id = nil
+        if conversation.blank? && conversation_key.blank? && selected_user.present?
+          participant = @package.app.app_users.find(selected_user)
 
-      if conversation.blank? && conversation_key.blank? && selected_user.present?
-        participant = @package.app.app_users.find(selected_user)
+          profile_id = get_profile_for_participant(participant)
 
-        profile_id = get_profile_for_participant(participant)
+          conversation = find_conversation_by_channel(PROVIDER, profile_id) if profile_id.present?
 
-        conversation = find_conversation_by_channel(PROVIDER, profile_id) if profile_id.present?
+          options = {
+            # from: author,
+            participant: participant,
+            initiator_channel: PROVIDER
+          }
 
-        options = {
-          # from: author,
-          participant: participant,
-          initiator_channel: PROVIDER
+          conversation = @package.app.start_conversation(options) if conversation.blank?
+        end
+
+        profile_id = get_profile_for_participant(conversation.main_participant) if profile_id.blank?
+
+        if profile_id.blank?
+          profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+        end
+
+        Rails.logger.debug template
+        return if profile_id.blank?
+
+        paramters_list = parameters.compact
+
+        data = {
+          to: profile_id,
+          type: "template",
+          template: {
+            namespace: template["namespace"],
+            name: template["name"],
+            language: {
+              policy: "deterministic",
+              code: template["language"]
+            },
+            components: [{
+              type: "body",
+              parameters: paramters_list.map { |o| { type: "text", text: o } }
+            }]
+          }
         }
 
-        conversation = @package.app.start_conversation(options) if conversation.blank?
-      end
+        Rails.logger.debug "***************"
+        Rails.logger.debug data
 
-      profile_id = get_profile_for_participant(conversation.main_participant) if profile_id.blank?
-
-      if profile_id.blank?
-        profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
-      end
-
-      Rails.logger.debug template
-      return if profile_id.blank?
-
-      paramters_list = parameters.compact
-
-      data = {
-        to: profile_id,
-        type: "template",
-        template: {
-          namespace: template["namespace"],
-          name: template["name"],
-          language: {
-            policy: "deterministic",
-            code: template["language"]
-          },
-          components: [{
-            type: "body",
-            parameters: paramters_list.map { |o| { type: "text", text: o } }
-          }]
-        }
-      }
-
-      Rails.logger.debug "***************"
-      Rails.logger.debug data
-
-      s = @conn.post(
-        "#{@url}/messages",
-        data.to_json
-      )
-
-      # puts "TEMPLATE ******* "
-      # puts template
-
-      json = JSON.parse(s.body)
-
-      if s.success?
-        json_message = json["messages"].first
-        return if json_message.blank?
-
-        message_id = json_message["id"]
-
-        conversation.add_message(
-          from: @package.app.agents.first,
-          message: {
-            html_content: "WHATSAPP TEMPLATE SENT: #{template['name']}"
-            # serialized_content: serialized_content
-          },
-          provider: PROVIDER,
-          message_source_id: message_id,
-          check_assignment_rules: false
+        s = @conn.post(
+          "#{@url}/messages",
+          data.to_json
         )
 
+        # puts "TEMPLATE ******* "
+        # puts template
+
+        json = JSON.parse(s.body)
+
+        if s.success?
+          json_message = json["messages"].first
+          return if json_message.blank?
+
+          message_id = json_message["id"]
+
+          conversation.add_message(
+            from: @package.app.agents.first,
+            message: {
+              html_content: "WHATSAPP TEMPLATE SENT: #{template['name']}"
+              # serialized_content: serialized_content
+            },
+            provider: PROVIDER,
+            message_source_id: message_id,
+            check_assignment_rules: false
+          )
+
+        end
+        json.merge({ "conversation_key" => conversation.key })
       end
-      json.merge({ "conversation_key" => conversation.key })
-    end
 
-    # not used fro now
-    def mark_as_read(id)
-      message_params = {
-        status: "read"
-      }
-      @conn.post(
-        "#{@url}/messages/#{id}",
-        message_params.to_json
-      )
-    end
+      # not used fro now
+      def mark_as_read(id)
+        message_params = {
+          status: "read"
+        }
+        @conn.post(
+          "#{@url}/messages/#{id}",
+          message_params.to_json
+        )
+      end
 
-    def get_media(id)
-      response = @conn.get(
-        "#{@url}/media/#{id}"
-      )
-      return nil unless response.success?
+      def get_media(id)
+        response = @conn.get(
+          "#{@url}/media/#{id}"
+        )
+        return nil unless response.success?
 
-      response.body
-    end
+        response.body
+      end
 
-    def handle_direct_upload(id, content_type = nil)
-      file_string = get_media(id)
+      def handle_direct_upload(id, content_type = nil)
+        file_string = get_media(id)
 
-      mime = content_type.split(";").first
-      extension = Rack::Mime::MIME_TYPES.invert[mime].to_s
+        mime = content_type.split(";").first
+        extension = Rack::Mime::MIME_TYPES.invert[mime].to_s
 
-      direct_upload(
-        file: StringIO.new(file_string),
-        filename: "#{id}#{extension}",
-        content_type: content_type || "image/jpeg"
-      )
-    end
+        direct_upload(
+          file: StringIO.new(file_string),
+          filename: "#{id}#{extension}",
+          content_type: content_type || "image/jpeg"
+        )
+      end
 
-    def process_message(params, package)
-      @package = package
+      def process_message(params, package)
+        @package = package
 
-      app = package.app
+        app = package.app
 
-      messages = params["messages"]
+        messages = params["messages"]
 
-      messages.each do |message|
-        sender_id = message["from"]
-        message_id = message["id"]
+        messages.each do |message|
+          sender_id = message["from"]
+          message_id = message["id"]
 
-        # determine the id of the user (channel)
-        is_agent = sender_id == package.user_id.to_s
+          # determine the id of the user (channel)
+          is_agent = sender_id == package.user_id.to_s
 
-        channel_id = sender_id
-        dialog_user = sender_id
+          channel_id = sender_id
+          dialog_user = sender_id
 
-        conversation = find_conversation_by_channel(PROVIDER, channel_id)
+          conversation = find_conversation_by_channel(PROVIDER, channel_id)
 
-        next if conversation && conversation.conversation_part_channel_sources
-                                            .find_by(message_source_id: message_id).present?
+          next if conversation && conversation.conversation_part_channel_sources
+                                              .find_by(message_source_id: message_id).present?
 
-        text = message.dig("text", "body")
+          text = message.dig("text", "body")
 
-        serialized_content = serialize_content(message)
+          serialized_content = serialize_content(message)
 
-        participant = add_participant(dialog_user, message, params["contacts"])
+          participant = add_participant(dialog_user, message, params["contacts"])
 
-        if conversation.blank?
-          conversation = app.conversations.create(
-            main_participant: participant,
-            conversation_channels_attributes: [
-              {
-                provider: PROVIDER,
-                provider_channel_id: channel_id
-              }
-            ]
+          if conversation.blank?
+            conversation = app.conversations.create(
+              main_participant: participant,
+              conversation_channels_attributes: [
+                {
+                  provider: PROVIDER,
+                  provider_channel_id: channel_id
+                }
+              ]
+            )
+          end
+
+          # TODO: serialize message
+          conversation.add_message(
+            from: is_agent ? @package.app.agents.first : participant, # agent_required ? Agent.first : participant,
+            message: {
+              html_content: text,
+              serialized_content: serialized_content
+            },
+            provider: PROVIDER,
+            message_source_id: message_id,
+            check_assignment_rules: true
           )
         end
-
-        # TODO: serialize message
-        conversation.add_message(
-          from: is_agent ? @package.app.agents.first : participant, # agent_required ? Agent.first : participant,
-          message: {
-            html_content: text,
-            serialized_content: serialized_content
-          },
-          provider: PROVIDER,
-          message_source_id: message_id,
-          check_assignment_rules: true
-        )
-      end
-    end
-
-    def serialize_content(data)
-      if (text = data.dig("text", "body")) && text
-        text_block(text) if text.present?
-      else
-        attachment_block(data)
-      end
-    end
-
-    def attachment_block(data)
-      {
-        blocks: [media_block(data)],
-        entityMap: {}
-      }.to_json
-    end
-
-    def media_block(data)
-      media_type = data["type"]
-      case media_type
-      when "unsupported" then nil
-      when "image", "sticker"
-        url = data[data["type"]]
-        text = data[data["type"]]["caption"]
-        file = handle_direct_upload(url["id"], url["mime_type"])
-        photo_block(url: file[:url], text: text)
-      when "video"
-        url = data["video"]
-        text = data["video"]["caption"]
-        file = handle_direct_upload(url["id"], url["mime_type"])
-        gif_block(url: file[:url], text: text)
-      when "audio", "voice", "document"
-        url = data[media_type]
-        text = data[media_type]["caption"]
-        file = handle_direct_upload(url["id"], url["mime_type"])
-        file_block(url: file[:url], text: text)
-      end
-    end
-
-    def add_participant(dialog_user, message, contacts = [])
-      app = @package.app
-      profile = contacts.find { |o| o["wa_id"] == dialog_user }
-
-      return unless dialog_user
-
-      profile_data = {
-        name: dialog_user
-      }
-
-      if profile
-        profile_data.merge!({
-                              name: profile.dig("profile", "name")
-                            })
       end
 
-      data = {
-        properties: profile_data
-      }
+      def serialize_content(data)
+        if (text = data.dig("text", "body")) && text
+          text_block(text) if text.present?
+        else
+          attachment_block(data)
+        end
+      end
 
-      external_profile = app.external_profiles.find_by(
-        provider: PROVIDER,
-        profile_id: dialog_user
-      )
+      def attachment_block(data)
+        {
+          blocks: [media_block(data)],
+          entityMap: {}
+        }.to_json
+      end
 
-      participant = external_profile&.app_user
+      def media_block(data)
+        media_type = data["type"]
+        case media_type
+        when "unsupported" then nil
+        when "image", "sticker"
+          url = data[data["type"]]
+          text = data[data["type"]]["caption"]
+          file = handle_direct_upload(url["id"], url["mime_type"])
+          photo_block(url: file[:url], text: text)
+        when "video"
+          url = data["video"]
+          text = data["video"]["caption"]
+          file = handle_direct_upload(url["id"], url["mime_type"])
+          gif_block(url: file[:url], text: text)
+        when "audio", "voice", "document"
+          url = data[media_type]
+          text = data[media_type]["caption"]
+          file = handle_direct_upload(url["id"], url["mime_type"])
+          file_block(url: file[:url], text: text)
+        end
+      end
 
-      ## todo: check user for this & previous conversation
-      ## via twitter with the twitter user id
-      if participant.blank?
-        participant = app.add_anonymous_user(data)
-        participant.external_profiles.create(
+      def add_participant(dialog_user, message, contacts = [])
+        app = @package.app
+        profile = contacts.find { |o| o["wa_id"] == dialog_user }
+
+        return unless dialog_user
+
+        profile_data = {
+          name: dialog_user
+        }
+
+        if profile
+          profile_data.merge!({
+                                name: profile.dig("profile", "name")
+                              })
+        end
+
+        data = {
+          properties: profile_data
+        }
+
+        external_profile = app.external_profiles.find_by(
           provider: PROVIDER,
           profile_id: dialog_user
         )
-        participant.update(phone: dialog_user)
-      end
 
-      participant
+        participant = external_profile&.app_user
+
+        ## todo: check user for this & previous conversation
+        ## via twitter with the twitter user id
+        if participant.blank?
+          participant = app.add_anonymous_user(data)
+          participant.external_profiles.create(
+            provider: PROVIDER,
+            profile_id: dialog_user
+          )
+          participant.update(phone: dialog_user)
+        end
+
+        participant
+      end
     end
   end
 end

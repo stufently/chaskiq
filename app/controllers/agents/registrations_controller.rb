@@ -1,24 +1,26 @@
 # frozen_string_literal: true
 
 # app/controllers/registrations_controller.rb
-class Agents::RegistrationsController < Devise::RegistrationsController
-  before_action :check_registrable
+module Agents
+  class RegistrationsController < Devise::RegistrationsController
+    before_action :check_registrable
 
-  def new
-    super
-  end
+    def new
+      super
+    end
 
-  def create
-    super
-  end
+    def create
+      super
+    end
 
-  def update
-    super
-  end
+    def update
+      super
+    end
 
-  private
+    private
 
-  def check_registrable
-    redirect_to root_url unless enabled_subscriptions?
+    def check_registrable
+      redirect_to root_url unless enabled_subscriptions?
+    end
   end
 end
