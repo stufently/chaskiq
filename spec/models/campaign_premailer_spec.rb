@@ -57,6 +57,16 @@ RSpec.describe Campaign do
     assert_requested(target, times: 1)
   end
 
+  it "follows a same-origin redirect with different host capitalization" do
+    target_url = "http://PREMAILER.Example.COM:3000/apps/sample/premailer/preview"
+    allow(MessageApis::SafeDownload).to receive(:resolve).with("PREMAILER.Example.COM").and_return(["10.0.0.10"])
+    stub_request(:get, url.to_s).to_return(status: 302, headers: { "Location" => target_url })
+    target = stub_request(:get, target_url).to_return(body: "<p>Preview content</p>")
+
+    expect(campaign.clean_inline_css(url)).to include("Preview content")
+    assert_requested(target, times: 1)
+  end
+
   it "raises when the premailer responds with an HTTP error" do
     stub_request(:get, url.to_s).to_return(status: 500)
 

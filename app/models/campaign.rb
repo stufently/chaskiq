@@ -156,7 +156,7 @@ class Campaign < Message
   # within the same origin; no page - PremailerFetchError (the job fails, as with URI.open).
   def fetch_premailer_html(url, trusted_origin: nil)
     origin = URI.parse(url)
-    same_origin = ->(uri) { [uri.scheme, uri.host, uri.port] == [origin.scheme, origin.host, origin.port] }
+    same_origin = ->(uri) { uri.origin.casecmp?(origin.origin) }
     body = MessageApis::SafeDownload.fetch(
       url, allow_own_host: true, url_allowed: same_origin, trusted_origin: trusted_origin
     )
