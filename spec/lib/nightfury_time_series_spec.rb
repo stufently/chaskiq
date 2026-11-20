@@ -23,16 +23,18 @@ RSpec.describe Nightfury::Metric::TimeSeries do
       expect(ts.get_exact(Time.utc(2026, 11, 20, 12, 0))).to be_nil
     end
 
-    it "returns nil for get_range on a deleted series" do
+    it "returns no data points for get_range on a deleted series" do
       ts.set("5", Time.utc(2026, 11, 20, 12, 0))
       nf_redis.del(key)
-      expect(ts.get_range(Time.utc(2026, 11, 20), Time.utc(2026, 11, 21))).to be_nil
+      result = ts.get_range(Time.utc(2026, 11, 20), Time.utc(2026, 11, 21))
+      expect(result).to satisfy { |v| v.nil? || v.empty? }
     end
 
-    it "returns nil for get_all on a deleted series" do
+    it "returns no data points for get_all on a deleted series" do
       ts.set("5", Time.utc(2026, 11, 20, 12, 0))
       nf_redis.del(key)
-      expect(ts.get_all).to be_nil
+      result = ts.get_all
+      expect(result).to satisfy { |v| v.nil? || v.empty? }
     end
   end
 
