@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DigitalOcean::Api
-  API_BASE_URL = "https://api.digitalocean.com/v2".freeze
+  API_BASE_URL = "https://api.digitalocean.com/v2"
 
   attr_accessor :conn
 
