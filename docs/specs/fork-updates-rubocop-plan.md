@@ -128,25 +128,40 @@ RuboCop 1.92.3, rubocop-rails 2.38.0, Ruby 3.3.14, образ `bin/ci-local`, `.
   `.freeze`, ivar, порядок гемов) — с тестом или отказ от автокорректа в пользу ручной правки.
 - Риски: тип, который не виден из кода (динамические значения из JSON/параметров).
 
-## R3 — Rails-автокоррект и `frozen_string_literal`
+## R3 — `frozen_string_literal` (спека готова: `docs/specs/fork-updates-r3.md`)
 
-- Копы: 8, 166 офенсов, 151 файл по замеру BASE, плюс `Rails/Blank` из R2 (+5 офенсов, 4 файла). `Rails/OrderArguments` 19 (u), `Pluck` 9 (u), `Presence` 4,
-  `StrongParametersExpect` 3 (u), `Delegate` 2, `WhereRange` 1 (u), `Present` 1, `Blank` 5 (u, из
-  R2: `return unless x.present?` в `connection.rb`, `types/app_type.rb`, `email_chat_notifier_job.rb`,
-  `action_trigger.rb` ×2); `Style/FrozenStringLiteralComment` 127 файлов (u, +1 строка в каждом).
-- Подход: Rails-копы — по одному с тестом на каждое место, где меняется SQL или ответ:
+Идёт раньше R2b: R2b — ручной разбор каждого места, R3 проверяется механически.
+
+- Коп: `Style/FrozenStringLiteralComment`, 127 файлов (секция todo — 128, `bin/setup` RuboCop не
+  инспектирует), +1 комментарий и пустая строка в каждом; каскад `Style/RedundantFreeze` 2
+  (`"x".freeze` → `"x"`).
+- Подход: коммит на коп, каждый коммит проверяется отдельно. Доказательство: (1) текст = BASE +
+  комментарий наверху, дерево Prism то же без флагов заморозки; (2) статический разбор потоков
+  (`r3_frozen.rb mutate`): ни один литерал этих файлов не доходит до мутатора String, буфера
+  (`StringIO`, `read(n, buf)`, `CSV.generate`), мутирующего параметра или вызывающего, мутирующего
+  возвращённый литерал — 0 находок; (3) eager load и полный сьют с
+  `--enable-frozen-string-literal --debug-frozen-string-literal` (заморожены все литералы, включая
+  гемы) — зелёные, без `FrozenError`; на BASE так же, и chilled-предупреждений нет.
+- Риски: мутация на пути вне сьюта в гемах (статический разбор видит только `app/ lib/ config/
+  spec/`); тела rake-задач проверены только статически.
+
+## R3b — Rails-автокоррект (по тесту на каждое место)
+
+- Копы: 8, 44 офенса (замер BASE прежнего R3 + `Rails/Blank` из R2): `Rails/OrderArguments` 19
+  (u), `Pluck` 9 (u), `Blank` 5 (u, из R2: `return unless x.present?` в `connection.rb`,
+  `types/app_type.rb`, `email_chat_notifier_job.rb`, `action_trigger.rb` ×2), `Presence` 4,
+  `StrongParametersExpect` 3 (u), `Delegate` 2, `WhereRange` 1 (u), `Present` 1.
+- Подход: по одному копу с тестом на каждое место, где меняется SQL или ответ:
   `order("x desc")` → `order(x: :desc)` (сравнить `to_sql`), `pluck` вместо `map` (только для
   отношений без загруженных ассоциаций), `params.expect` вместо `require.permit` (меняет ответ на
   кривые параметры: 400 вместо 500/игнора — сверить контракт API, при сомнении оставить
-  `require.permit` и настроить коп с причиной). `Rails/Blank` (`unless x.present?` → `if x.blank?`)
-  — только после проверки типа получателя в каждом из 5 мест: `blank? == !present?` верно для
-  ActiveSupport `Object`, но не для класса со своим `present?`/`blank?`; тип установить чтением кода,
-  в пробнике — грепом `def present?`/`def blank?` в `app/`, `lib/`, `config/` и гемах по `Gemfile.lock`. `frozen_string_literal: true` — механически; доказательство
-  безопасности: полный сьют на Ruby 4.0 с `RUBYOPT=-W:deprecated` (Ruby 4 предупреждает при
-  мутации «chilled» литерала) без новых warning-строк, плюс грепом места `<<`/`concat`/`gsub!`/
-  `force_encoding` по литералам в этих 127 файлах.
-- Риски: FrozenError в путях, которые сьют не покрывает (плагины `app/services/message_apis/*`,
-  rake-задачи) — для них отдельный пробник загрузки и вызова; SQL-эквивалентность `OrderArguments`.
+  `require.permit` и настроить коп с причиной). `Rails/Blank`/`Present`/`Presence` — только после
+  проверки типа получателя в каждом месте: `blank? == !present?` и `presence` верны для
+  ActiveSupport `Object`, но не для класса со своим `present?`/`blank?`; тип установить чтением
+  кода, в пробнике — грепом `def present?`/`def blank?`/`def presence` в `app/`, `lib/`, `config/` и
+  гемах по `Gemfile.lock`. `Delegate`: `delegate` определяет `def x(...)` и бросает
+  `Module::DelegationError` на `nil` — проверить арность и `nil`-получателя.
+- Риски: SQL-эквивалентность `OrderArguments`/`WhereRange`; контракт API для `expect`.
 
 ## R4 — `Style/ClassAndModuleChildren` (70 файлов)
 
