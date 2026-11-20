@@ -111,7 +111,7 @@ module MessageApis
            (find_response = person(external_profile.profile_id)) &&
            find_response["success"].present?
 
-          id = find_response["data"]["id"]
+          find_response["data"]["id"] # kept: raises on a malformed reply (R5b-1 D2)
           external_profile.update(
             data: find_response["data"]
           )
@@ -155,19 +155,13 @@ module MessageApis
 
       def create_person(params:)
         url = url("/persons")
-        data = {
-          # "name": 'jojoijoji michelson m',
-          # "email": 'miguejoijolmichelson@gmail.com',
-          # "phone": '0992302305',
-          # "visible_to": '3'
-        }
         response = @conn.post do |req|
           req.url url
           req.headers["Content-Type"] = "application/json"
           req.body = params.to_json
         end
 
-        data = JSON.parse(response.body)
+        JSON.parse(response.body)
       end
 
       def update_person(id:, params:)
@@ -195,7 +189,7 @@ module MessageApis
           event_object: "person"
         }
         url = url("/webhooks")
-        response = @conn.post do |req|
+        @conn.post do |req|
           req.url url
           req.headers["Content-Type"] = "application/json"
           req.body = data.to_json
@@ -210,7 +204,7 @@ module MessageApis
 
       def delete_webhook(id)
         url = url("/webhooks/#{id}")
-        response = @conn.delete(url, nil, { "Content-Type" => "application/json" })
+        @conn.delete(url, nil, { "Content-Type" => "application/json" })
       end
 
       def delete_webhooks

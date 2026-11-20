@@ -4,7 +4,6 @@ class ActionTriggerFactory
   attr_accessor :id, :after_delay, :paths
 
   def initialize
-    @id
     @paths = []
   end
 

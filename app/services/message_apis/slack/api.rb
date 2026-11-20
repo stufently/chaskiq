@@ -121,7 +121,7 @@ module MessageApis
         integration_pkg = app_package.app_package_integrations.find_by(
           external_id: team_id
         )
-        response = integration_pkg.process_event(params)
+        integration_pkg.process_event(params)
       end
 
       def after_install
@@ -350,7 +350,7 @@ module MessageApis
 
         return if ts_id.blank?
 
-        response_data = json_body(
+        json_body(
           update_message(
             "New conversation from Chaskiq",
             data.flatten.compact.as_json,
@@ -774,7 +774,7 @@ module MessageApis
         authorize_bot!
         url = url("/api/users.lookupByEmail")
         response = get_data(url, { email: email })
-        user = JSON.parse(response.body)["user"]
+        JSON.parse(response.body)["user"]
       rescue StandardError
         nil
       end
@@ -797,11 +797,6 @@ module MessageApis
 
       def receive_oauth_code(params, package)
         code = params[:code]
-
-        headers = {
-          accept: "application/json",
-          content_type: "application/json"
-        }
 
         token = oauth_client.auth_code.get_token(
           code,
@@ -885,7 +880,6 @@ module MessageApis
 
         if part.messageable.is_a?(ConversationPartEvent)
           data = messageable.data
-          data_label = data["label"]
 
           data_fmt = if data.is_a?(Hash)
                        data.reject { |k, v| v.blank? or ["id"].include?(k) }
@@ -910,8 +904,6 @@ module MessageApis
             }
             # block_id: 'replied-1'
           }]
-
-          user = conversation.main_participant
         end
 
         return if blocks.empty?
@@ -1017,7 +1009,7 @@ module MessageApis
       end
 
       def get_data(url, data)
-        response = @conn.get(url, data)
+        @conn.get(url, data)
       end
 
       def sync_messages_without_channel(conversation)
@@ -1047,10 +1039,9 @@ module MessageApis
       ### serialization to dante format
       def serialize_content(data)
         if data.keys.include?("files")
-          images = data["files"]
-          o = attachment_block(data)
+          attachment_block(data)
         else
-          o = process_blocks(data)
+          process_blocks(data)
         end
       end
 

@@ -70,8 +70,6 @@ module MessageApis::TwilioPhone
         "Content-Type" => "application/json",
         "Accept" => "application/json"
       }
-
-      self
     end
 
     def register_webhook(app_package, integration); end

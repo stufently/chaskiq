@@ -35,7 +35,6 @@ module MessageApis
           params_encoder: Faraday::FlatParamsEncoder
         }
         @token = config["api_secret"]
-        self
       end
 
       def authorize!

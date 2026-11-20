@@ -3,7 +3,7 @@
 module MessageApis::Calendly
   class Presenter
     def self.valid_url?(uri)
-      uri = URI.parse(uri).try(:host)
+      URI.parse(uri).try(:host)
     rescue URI::InvalidURIError
       false
     end
@@ -11,7 +11,6 @@ module MessageApis::Calendly
     # Initialize flow webhook URL
     # Sent when an app has been inserted into a conversation, message or the home screen, so that you can render the app.
     def self.initialize_hook(params)
-      url = params[:ctx][:values][:url]
       text = params[:ctx][:values][:invitation_text]
 
       definitions = [
@@ -160,7 +159,7 @@ module MessageApis::Calendly
 
     # Submit Sheet flow webhook URL (optional)
     # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
-    def self.sheet_hook(params)
+    def self.sheet_hook(_params)
       { a: 11_111 }
     end
 

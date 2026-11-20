@@ -22,7 +22,6 @@ module PaymentServices
         vendor_id: Chaskiq::Config.get("PADDLE_VENDOR_ID"),
         vendor_auth_code: Chaskiq::Config.get("PADDLE_SECRET_TOKEN")
       }
-      self
     end
 
     def get_plans

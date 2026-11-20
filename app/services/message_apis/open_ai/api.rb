@@ -49,7 +49,6 @@ module MessageApis
             params_encoder: Faraday::FlatParamsEncoder
           }
         )
-        self
       end
 
       def authorize!

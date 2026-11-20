@@ -177,27 +177,8 @@ Lint/UnreachableCode:
     - 'app/controllers/api_controller.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods, IgnoreNotImplementedMethods, NotImplementedExceptions.
-# NotImplementedExceptions: NotImplementedError
-Lint/UnusedMethodArgument:
-  Exclude:
-    - 'app/services/message_apis/calendly/presenter.rb'
-    - 'app/services/message_apis/twilio_phone/presenter.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
 Lint/UselessAssignment:
   Exclude:
-    - 'app/jobs/app_user_event_job.rb'
-    - 'app/mailers/campaign_mailer.rb'
-    - 'app/models/audit.rb'
-    - 'app/models/campaign.rb'
-    - 'app/services/message_apis/calendly/presenter.rb'
-    - 'app/services/message_apis/message_bird/api.rb'
-    - 'app/services/message_apis/open_ai/presenter.rb'
-    - 'app/services/message_apis/pipedrive/api.rb'
-    - 'app/services/message_apis/slack/api.rb'
-    - 'app/services/message_apis/telegram/api.rb'
-    - 'app/services/message_apis/twilio_phone/presenter.rb'
     - 'spec/controllers/api/v1/hooks/csat_spec.rb'
     - 'spec/controllers/api/v1/hooks/openai_spec.rb'
     - 'spec/controllers/api/v1/hooks/pipedrive_spec.rb'
@@ -211,28 +192,10 @@ Lint/UselessAssignment:
     - 'spec/models/user_auto_message_spec.rb'
     - 'spec/support/graphql_queries.rb'
 
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Lint/UselessOr:
-  Exclude:
-    - 'app/models/audit.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: CheckForMethodsWithNoSideEffects.
 Lint/Void:
   Exclude:
-    - 'app/services/action_trigger_factory.rb'
-    - 'app/services/message_apis/dialog360/api.rb'
-    - 'app/services/message_apis/full_contact/api.rb'
-    - 'app/services/message_apis/message_bird/api.rb'
-    - 'app/services/message_apis/messenger/api.rb'
-    - 'app/services/message_apis/open_ai/api.rb'
-    - 'app/services/message_apis/telegram/api.rb'
-    - 'app/services/message_apis/telnyx_sms/api.rb'
-    - 'app/services/message_apis/twilio/api.rb'
-    - 'app/services/message_apis/twilio_phone/api.rb'
-    - 'app/services/message_apis/vonage/api.rb'
-    - 'app/services/message_apis/zapier/api.rb'
-    - 'app/services/payment_services/paddle.rb'
     - 'spec/controllers/api/v1/hooks/dialog_360_spec.rb'
     - 'spec/controllers/api/v1/hooks/message_bird_spec.rb'
     - 'spec/controllers/api/v1/hooks/telegram_spec.rb'
@@ -734,12 +697,6 @@ Rails/Pluck:
     - 'spec/controllers/api/v1/hooks/telegram_spec.rb'
     - 'spec/controllers/api/v1/hooks/twilio_spec.rb'
     - 'spec/controllers/api/v1/hooks/twitter_spec.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: NotNilAndNotEmpty, NotBlank, UnlessBlank.
-Rails/Present:
-  Exclude:
-    - 'app/services/message_apis/safe_download.rb'
 
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Rails/StrongParametersExpect:

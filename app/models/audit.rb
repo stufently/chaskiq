@@ -22,7 +22,7 @@ class Audit < ApplicationRecord
   end
 
   def agent_name
-    agent.try(:display_name).to_s || "--"
+    agent.try(:display_name).to_s
   end
 
   def auditable_name
@@ -47,7 +47,7 @@ class Audit < ApplicationRecord
   end
 
   def serialize_properties(app = nil)
-    @app = app ||= auditable.app.key
+    @app = app || auditable.app.key
     as_json(methods: %i[id agent_name auditable_name action created_at sdata])
       .merge(
         auditable_link: auditable_link,

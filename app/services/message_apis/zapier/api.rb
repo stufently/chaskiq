@@ -24,8 +24,6 @@ module MessageApis
           "Content-Type" => "application/json",
           "Accept" => "application/json"
         }
-
-        self
       end
 
       def self.definition_info

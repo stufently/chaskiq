@@ -74,8 +74,6 @@ module MessageApis
         }
 
         @conn.request(:authorization, :basic, @api_key, @api_token)
-
-        self
       end
 
       def trigger(event); end

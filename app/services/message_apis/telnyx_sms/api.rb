@@ -75,8 +75,6 @@ module MessageApis
           "Authorization" => "Bearer #{@api_key}",
           "Accept" => "application/json"
         }
-
-        self
       end
 
       def validate_integration
