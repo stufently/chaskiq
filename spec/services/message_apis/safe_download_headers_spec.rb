@@ -80,4 +80,33 @@ RSpec.describe MessageApis::SafeDownload do
     expect(described_class.fetch(url)&.read).to eq("downloaded")
     assert_requested(download, times: 1)
   end
+
+  it "blocks all loopback addresses in 127.0.0.0/8 not just 127.0.0.0" do
+    allow(described_class).to receive(:resolve).and_return(["127.0.0.1"])
+    stub_request(:get, url).to_return(body: "should not reach")
+
+    expect(described_class.fetch(url)).to be_nil
+  end
+
+  it "allows download from a blocked IP when it is the own host and allow_own_host is true" do
+    allow(Chaskiq::Config).to receive(:get).and_call_original
+    allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://own.example.com")
+    allow(described_class).to receive(:resolve).with("own.example.com").and_return(["10.0.0.5"])
+    download = stub_request(:get, url).to_return(body: "own host data")
+
+    result = described_class.fetch(url, allow_own_host: true)
+    expect(result).not_to be_nil
+    expect(result.read).to eq("own host data")
+    assert_requested(download, times: 1)
+  end
+
+  it "rejects a response whose content_length exceeds max_bytes" do
+    stub_request(:get, url).to_return(
+      body: "x",
+      headers: { "Content-Length" => 20 * 1024 * 1024 }
+    )
+
+    result = described_class.fetch(url, max_bytes: 15 * 1024 * 1024)
+    expect(result).to be_nil
+  end
 end

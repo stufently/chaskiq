@@ -275,4 +275,24 @@ RSpec.describe Api::V1::HooksController, type: :controller do
     expect(response.body).to eq("bad request")
     expect(MessageApis::SafeDownload).not_to have_received(:resolve)
   end
+
+  it "rejects subscription confirmation URLs with non-standard ports" do
+    ENV["SNS_ALLOWED_TOPIC_ARNS"] = topic
+    serve_certificate
+    bad_port_url = "https://sns.us-east-1.amazonaws.com:8443/confirm"
+    subscribe = stub_request(:get, bad_port_url)
+    deliver(signed(confirmation.merge("SubscribeURL" => bad_port_url)))
+
+    assert_not_requested(subscribe)
+  end
+
+  it "rejects subscription confirmation URLs with userinfo" do
+    ENV["SNS_ALLOWED_TOPIC_ARNS"] = topic
+    serve_certificate
+    userinfo_url = "https://user@sns.us-east-1.amazonaws.com/confirm"
+    subscribe = stub_request(:get, userinfo_url)
+    deliver(signed(confirmation.merge("SubscribeURL" => userinfo_url)))
+
+    assert_not_requested(subscribe)
+  end
 end

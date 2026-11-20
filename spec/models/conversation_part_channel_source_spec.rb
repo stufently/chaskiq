@@ -98,4 +98,40 @@ RSpec.describe ConversationPartChannelSource, type: :model do
     release << true if owner&.alive?
     owner&.join(5)
   end
+
+  it "does not block with_delivery_lock when the lock is already held" do
+    part_id = part.id
+    started = Queue.new
+    release = Queue.new
+    owner = Thread.new do
+      described_class.with_delivery_lock(part_id, "twilio") do
+        started << true
+        release.pop
+      end
+    end
+
+    started.pop
+    result = described_class.with_delivery_lock(part_id, "twilio") { :should_not_run }
+    expect(result).to be_nil
+
+    release << true
+    owner.value
+  ensure
+    release << true if owner&.alive?
+    owner&.join(5)
+  end
+
+  it "re-raises the original exception when the session is still usable after unlock error" do
+    part_id = part.id
+    expect do
+      described_class.with_delivery_lock(part_id, "twilio") do
+        described_class.with_connection do |connection|
+          allow(connection).to receive(:select_value)
+            .with(/pg_advisory_unlock/)
+            .and_return(false)
+        end
+        raise "original delivery error"
+      end
+    end.to raise_error("original delivery error")
+  end
 end
