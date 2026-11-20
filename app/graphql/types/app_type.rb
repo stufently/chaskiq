@@ -161,7 +161,9 @@ module Types
     end
 
     def app_packages_capabilities(kind:)
-      raise "not in type" unless %w[home conversations conversation_part bots inbox fixed_sidebar conversations_initiator].include?(kind)
+      unless %w[home conversations conversation_part bots inbox fixed_sidebar conversations_initiator].include?(kind)
+        raise "not in type"
+      end
 
       authorize! object, to: :show?, with: AppPolicy
 
@@ -719,23 +721,23 @@ module Types
     end
 
     def sort_conversations(sort)
-      if sort.present?
-        s = case sort
-            when "updated" then "updated_at desc"
-            when "newest" then "created_at desc"
-            when "oldest" then "updated_at asc"
-            when "priority_first" then "priority asc, updated_at desc"
-            else
-              "id desc"
-            end
+      return unless sort.present?
 
-        if sort != "unfiltered" # && agent_id.blank?
-          @collection = @collection.where
-                                   .not(latest_user_visible_comment_at: nil)
-        end
+      s = case sort
+          when "updated" then "updated_at desc"
+          when "newest" then "created_at desc"
+          when "oldest" then "updated_at asc"
+          when "priority_first" then "priority asc, updated_at desc"
+          else
+            "id desc"
+          end
 
-        @collection = @collection.order(s)
+      if sort != "unfiltered" # && agent_id.blank?
+        @collection = @collection.where
+                                 .not(latest_user_visible_comment_at: nil)
       end
+
+      @collection = @collection.order(s)
     end
 
     def handle_bot_tasks_filters(filters, collection)

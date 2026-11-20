@@ -58,7 +58,7 @@ module MessageApis::MessageBird
         }
       )
 
-      key = "#{config['sandbox'] ? 'test_' : ''}#{@api_key}"
+      key = "#{'test_' if config['sandbox']}#{@api_key}"
 
       @conn.headers = {
         authorization: "AccessKey #{key}",
@@ -224,8 +224,10 @@ module MessageApis::MessageBird
         conversation = app.conversations.create(
           main_participant: participant,
           conversation_channels_attributes: [
-            provider: PROVIDER,
-            provider_channel_id: channel_id
+            {
+              provider: PROVIDER,
+              provider_channel_id: channel_id
+            }
           ]
         )
       end
@@ -292,41 +294,40 @@ module MessageApis::MessageBird
     def add_participant(channel_id, message, contact)
       app = @package.app
 
-      if channel_id
+      return unless channel_id
 
-        profile_data = {
-          name: channel_id
-        }
+      profile_data = {
+        name: channel_id
+      }
 
-        if contact["displayName"]
-          profile_data.merge!({
-                                name: contact["displayName"]
-                              })
-        end
+      if contact["displayName"]
+        profile_data.merge!({
+                              name: contact["displayName"]
+                            })
+      end
 
-        data = {
-          properties: profile_data
-        }
+      data = {
+        properties: profile_data
+      }
 
-        external_profile = app.external_profiles.find_by(
+      external_profile = app.external_profiles.find_by(
+        provider: PROVIDER,
+        profile_id: channel_id
+      )
+
+      participant = external_profile&.app_user
+
+      ## todo: check user for this & previous conversation
+      ## via twitter with the twitter user id
+      if participant.blank?
+        participant = app.add_anonymous_user(data)
+        participant.external_profiles.create(
           provider: PROVIDER,
           profile_id: channel_id
         )
-
-        participant = external_profile&.app_user
-
-        ## todo: check user for this & previous conversation
-        ## via twitter with the twitter user id
-        if participant.blank?
-          participant = app.add_anonymous_user(data)
-          participant.external_profiles.create(
-            provider: PROVIDER,
-            profile_id: channel_id
-          )
-        end
-
-        participant
       end
+
+      participant
     end
   end
 end

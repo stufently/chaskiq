@@ -225,7 +225,9 @@ class App < ApplicationRecord
 
       if options[:initiator_block]
         pkg = find_app_package(options[:initiator_block]["name"])
-        pkg&.message_api_klass&.prepare_block_initiator_channel_for(conversation, pkg, options[:initiator_block]) if pkg.present?
+        if pkg.present?
+          pkg&.message_api_klass&.prepare_block_initiator_channel_for(conversation, pkg, options[:initiator_block])
+        end
         message = nil
       end
 

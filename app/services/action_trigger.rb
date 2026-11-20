@@ -47,14 +47,14 @@ class ActionTrigger
       end
     end
 
-    if next_step["controls"].present?
-      conversation.add_message(
-        step_id: next_step[:step_uid],
-        trigger_id: trigger.id,
-        from: author,
-        controls: next_step["controls"]
-      )
-    end
+    return unless next_step["controls"].present?
+
+    conversation.add_message(
+      step_id: next_step[:step_uid],
+      trigger_id: trigger.id,
+      from: author,
+      controls: next_step["controls"]
+    )
   end
 
   def self.data_submit(data, message)
@@ -113,14 +113,14 @@ class ActionTrigger
       )
     end
 
-    if next_step["controls"].present?
-      message = message.conversation.add_message(
-        step_id: next_step[:step_uid],
-        trigger_id: trigger.id,
-        from: author,
-        controls: next_step["controls"]
-      )
-    end
+    return unless next_step["controls"].present?
+
+    message = message.conversation.add_message(
+      step_id: next_step[:step_uid],
+      trigger_id: trigger.id,
+      from: author,
+      controls: next_step["controls"]
+    )
   end
 
   def self.handle_follow_actions(app, path, message)
@@ -158,17 +158,17 @@ class ActionTrigger
 
     message.read! if message.authorable != current_user
 
-    if message.from_bot?
-      process_next_step(app, message, current_user)
+    return unless message.from_bot?
 
-      #### TODO: to be deprecated in favor of app packages
-      if data["submit"].present? && message.message&.blocks&.dig("type") == "data_retrieval"
-        opts = app.searcheable_fields_list
-        current_user.update(data["submit"].slice(*opts)) # some condition from settings here?
-        data_submit(data["submit"], message)
-      end
+    process_next_step(app, message, current_user)
 
-      data_submit(data["reply"], message) if data["reply"].present?
+    #### TODO: to be deprecated in favor of app packages
+    if data["submit"].present? && message.message&.blocks&.dig("type") == "data_retrieval"
+      opts = app.searcheable_fields_list
+      current_user.update(data["submit"].slice(*opts)) # some condition from settings here?
+      data_submit(data["submit"], message)
     end
+
+    data_submit(data["reply"], message) if data["reply"].present?
   end
 end

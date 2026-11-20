@@ -222,7 +222,9 @@ module MessageApis::Dialog360
                                &.find_by(provider: PROVIDER)
                                &.profile_id
 
-      profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone) if profile_id.blank?
+      if profile_id.blank?
+        profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+      end
 
       raise ActiveRecord::Rollback if profile_id.blank?
 
@@ -231,8 +233,10 @@ module MessageApis::Dialog360
 
       conversation.update(
         conversation_channels_attributes: [
-          provider: PROVIDER,
-          provider_channel_id: profile_id
+          {
+            provider: PROVIDER,
+            provider_channel_id: profile_id
+          }
         ]
       )
     end
@@ -287,7 +291,9 @@ module MessageApis::Dialog360
 
       profile_id = get_profile_for_participant(conversation.main_participant) if profile_id.blank?
 
-      profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone) if profile_id.blank?
+      if profile_id.blank?
+        profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+      end
 
       Rails.logger.debug template
       return if profile_id.blank?
@@ -410,8 +416,10 @@ module MessageApis::Dialog360
           conversation = app.conversations.create(
             main_participant: participant,
             conversation_channels_attributes: [
-              provider: PROVIDER,
-              provider_channel_id: channel_id
+              {
+                provider: PROVIDER,
+                provider_channel_id: channel_id
+              }
             ]
           )
         end
@@ -471,42 +479,41 @@ module MessageApis::Dialog360
       app = @package.app
       profile = contacts.find { |o| o["wa_id"] == dialog_user }
 
-      if dialog_user
+      return unless dialog_user
 
-        profile_data = {
-          name: dialog_user
-        }
+      profile_data = {
+        name: dialog_user
+      }
 
-        if profile
-          profile_data.merge!({
-                                name: profile.dig("profile", "name")
-                              })
-        end
+      if profile
+        profile_data.merge!({
+                              name: profile.dig("profile", "name")
+                            })
+      end
 
-        data = {
-          properties: profile_data
-        }
+      data = {
+        properties: profile_data
+      }
 
-        external_profile = app.external_profiles.find_by(
+      external_profile = app.external_profiles.find_by(
+        provider: PROVIDER,
+        profile_id: dialog_user
+      )
+
+      participant = external_profile&.app_user
+
+      ## todo: check user for this & previous conversation
+      ## via twitter with the twitter user id
+      if participant.blank?
+        participant = app.add_anonymous_user(data)
+        participant.external_profiles.create(
           provider: PROVIDER,
           profile_id: dialog_user
         )
-
-        participant = external_profile&.app_user
-
-        ## todo: check user for this & previous conversation
-        ## via twitter with the twitter user id
-        if participant.blank?
-          participant = app.add_anonymous_user(data)
-          participant.external_profiles.create(
-            provider: PROVIDER,
-            profile_id: dialog_user
-          )
-          participant.update(phone: dialog_user)
-        end
-
-        participant
+        participant.update(phone: dialog_user)
       end
+
+      participant
     end
   end
 end

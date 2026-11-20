@@ -80,7 +80,7 @@ module MessageApis::Dialog360
     # Configure flow webhook URL (optional)
     # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s inserted. Leaving this option blank will skip configuration.
     #
-    # rubocop:disable Metrics/PerceivedComplexity
+    # rubocop:disable-next Metrics/PerceivedComplexity
     def self.configure_hook(kind:, ctx:)
       offset_page = if ctx.dig("field", "name") == "paginate-template"
                       ctx.dig("field", "id").gsub("paginate-template-", "").to_i
@@ -91,7 +91,9 @@ module MessageApis::Dialog360
       # Rails.logger.info "::::: CTX:::::"
       # Rails.logger.info ctx
 
-      return search_participant(ctx: ctx) if ctx[:conversation_key].blank? && ctx.dig("field", "name") != "selected-user" && ctx.dig("values", "selected_user").blank?
+      if ctx[:conversation_key].blank? && ctx.dig("field", "name") != "selected-user" && ctx.dig("values", "selected_user").blank?
+        return search_participant(ctx: ctx)
+      end
 
       api = ctx[:package].message_api_klass
       templates = api.retrieve_templates(offset: offset_page)
@@ -222,7 +224,7 @@ module MessageApis::Dialog360
 
           inputs << {
             type: "text",
-            text: (o["text"]).to_s,
+            text: o["text"].to_s,
             style: "muted"
           }
         end
@@ -347,7 +349,6 @@ module MessageApis::Dialog360
 
       { kind: kind, definitions: definitions }
     end
-    # rubocop:enable Metrics/PerceivedComplexity
 
     # Submit Sheet flow webhook URL (optional)
     # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.

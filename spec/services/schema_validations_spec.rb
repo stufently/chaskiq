@@ -102,35 +102,41 @@ RSpec.describe PluginSchemaValidator do
   it "button validator" do
     expect(
       contract.new([
-                     id: "hello",
-                     name: "bubu",
-                     label: "fuckya",
-                     type: "button",
-                     action: {
-                       type: "submit"
+                     {
+                       id: "hello",
+                       name: "bubu",
+                       label: "fuckya",
+                       type: "button",
+                       action: {
+                         type: "submit"
+                       }
                      }
                    ])
     ).to be_valid
 
     expect(
       contract.new([
-                     id: "hello",
-                     name: "bubu",
-                     label: "fuckya",
-                     type: "button",
-                     action: {
-                       typeeeee: "submit"
+                     {
+                       id: "hello",
+                       name: "bubu",
+                       label: "fuckya",
+                       type: "button",
+                       action: {
+                         typeeeee: "submit"
+                       }
                      }
                    ])
     ).to_not be_valid
 
     expect(
       contract.new([
-                     nononid: "hello",
-                     label: "fuckya",
-                     type: "button",
-                     action: {
-                       typeee: "submit"
+                     {
+                       nononid: "hello",
+                       label: "fuckya",
+                       type: "button",
+                       action: {
+                         typeee: "submit"
+                       }
                      }
                    ])
     ).to_not be_valid

@@ -197,8 +197,10 @@ module MessageApis::Telegram
         conversation = app.conversations.create(
           main_participant: participant,
           conversation_channels_attributes: [
-            provider: PROVIDER,
-            provider_channel_id: channel_id
+            {
+              provider: PROVIDER,
+              provider_channel_id: channel_id
+            }
           ]
         )
       end
@@ -264,34 +266,33 @@ module MessageApis::Telegram
     def add_participant(dialog_user, message)
       app = @package.app
 
-      if dialog_user
+      return unless dialog_user
 
-        profile_data = {
-          name: "#{dialog_user['first_name']} #{dialog_user['last_name']}"
-        }
+      profile_data = {
+        name: "#{dialog_user['first_name']} #{dialog_user['last_name']}"
+      }
 
-        data = {
-          properties: profile_data
-        }
+      data = {
+        properties: profile_data
+      }
 
-        external_profile = app.external_profiles.find_by(
+      external_profile = app.external_profiles.find_by(
+        provider: PROVIDER,
+        profile_id: dialog_user["id"]
+      )
+
+      participant = external_profile&.app_user
+
+      ## todo: check user for this & previous conversation
+      if participant.blank?
+        participant = app.add_anonymous_user(data)
+        participant.external_profiles.create(
           provider: PROVIDER,
           profile_id: dialog_user["id"]
         )
-
-        participant = external_profile&.app_user
-
-        ## todo: check user for this & previous conversation
-        if participant.blank?
-          participant = app.add_anonymous_user(data)
-          participant.external_profiles.create(
-            provider: PROVIDER,
-            profile_id: dialog_user["id"]
-          )
-        end
-
-        participant
       end
+
+      participant
     end
 
     def upload_telegram(channel_id, data, method: "sendPhoto")

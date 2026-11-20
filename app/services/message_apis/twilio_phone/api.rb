@@ -168,7 +168,9 @@ module MessageApis::TwilioPhone
       return process_outbound_call(params, "outbound") if params["Direction"] == "outbound-api"
 
       # call events handler
-      return process_incoming_event(params) if params[:StatusCallbackEvent].present? && params[:Caller] != "client:support_agent"
+      if params[:StatusCallbackEvent].present? && params[:Caller] != "client:support_agent"
+        return process_incoming_event(params)
+      end
 
       app = package.app
       # caller initiators
@@ -201,7 +203,7 @@ module MessageApis::TwilioPhone
       end
 
       # for users
-      return process_inbound_call(params) if params["CallSid"] && params["CallStatus"]
+      process_inbound_call(params) if params["CallSid"] && params["CallStatus"]
     end
 
     def process_incoming_call(payload, direction)
@@ -235,8 +237,10 @@ module MessageApis::TwilioPhone
                        app.conversations.create(
                          main_participant: participant,
                          conversation_channels_attributes: [
-                           provider: PROVIDER,
-                           provider_channel_id: channel_id # phone_number
+                           {
+                             provider: PROVIDER,
+                             provider_channel_id: channel_id
+                           } # phone_number
                          ]
                        )
                      end
@@ -387,8 +391,10 @@ module MessageApis::TwilioPhone
                   .find_each do |block_part|
         # modify block
         block_part.blocks = block_part.blocks.merge({ "schema" => [
-                                                      "type" => "text",
-                                                      "text" => "Call ended"
+                                                      {
+                                                        "type" => "text",
+                                                        "text" => "Call ended"
+                                                      }
                                                     ] })
         block_part.save_replied(nil)
       end
@@ -451,10 +457,10 @@ module MessageApis::TwilioPhone
     end
 
     def conference_object(payload)
-      if payload["StatusCallbackEvent"] == "participant-join"
-        conference = client.conferences(payload["ConferenceSid"]).fetch
-        self.class.conference_json_item(conference, @package)
-      end
+      return unless payload["StatusCallbackEvent"] == "participant-join"
+
+      conference = client.conferences(payload["ConferenceSid"]).fetch
+      self.class.conference_json_item(conference, @package)
     end
 
     def self.conversation_url(app, conf)
@@ -551,8 +557,10 @@ module MessageApis::TwilioPhone
           conversation = conversation.app.conversations.create(
             main_participant: profile.app_user,
             conversation_channels_attributes: [
-              provider: "TwilioPhone",
-              provider_channel_id: profile.profile_id # phone_number
+              {
+                provider: "TwilioPhone",
+                provider_channel_id: profile.profile_id
+              } # phone_number
             ]
           )
           @conversation_key = conversation.key

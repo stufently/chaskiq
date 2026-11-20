@@ -24,7 +24,9 @@ class Dante::Converter
       node[:attrs] = { level: a[block[:type].split("-").last] || 0 }
     end
 
-    node[:attrs] = block[:data] if %w[DividerBlock ImageBlock EmbedBlock VideoBlock VideoRecorderBlock AudioRecorderBlock].include?(node[:type])
+    if %w[DividerBlock ImageBlock EmbedBlock VideoBlock VideoRecorderBlock AudioRecorderBlock].include?(node[:type])
+      node[:attrs] = block[:data]
+    end
 
     node
   end
@@ -93,7 +95,9 @@ class Dante::Converter
     marks << { type: "bold" } if style.include?("BOLD")
     marks << { type: "italic" } if style.include?("ITALIC")
     marks << { type: "code" } if style.include?("CODE")
-    marks << { type: "textStyle", attrs: { color: style.match(/CUSTOM_COLOR_(#[0-9a-fA-F]{6})/)&.captures&.first } } if style.include?("CUSTOM_COLOR")
+    if style.include?("CUSTOM_COLOR")
+      marks << { type: "textStyle", attrs: { color: style.match(/CUSTOM_COLOR_(#[0-9a-fA-F]{6})/)&.captures&.first } }
+    end
 
     marks
   end

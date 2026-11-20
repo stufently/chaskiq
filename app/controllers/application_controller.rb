@@ -62,9 +62,9 @@ class ApplicationController < ActionController::Base
   end
 
   def paddle_subscriptions?
-    (Chaskiq::Config.get("PADDLE_PUBLIC_KEY").present? &&
+    Chaskiq::Config.get("PADDLE_PUBLIC_KEY").present? &&
       Chaskiq::Config.get("PADDLE_VENDOR_ID").present? &&
-      Chaskiq::Config.get("PADDLE_SECRET_TOKEN").present?)
+      Chaskiq::Config.get("PADDLE_SECRET_TOKEN").present?
   end
 
   def auth0_enabled?
@@ -122,11 +122,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_resource_owner
-    if doorkeeper_token && !doorkeeper_token.expired?
-      agent = Agent.find(doorkeeper_token.resource_owner_id)
-      sign_in(agent, scope: "agent")
-      agent
-    end
+    return unless doorkeeper_token && !doorkeeper_token.expired?
+
+    agent = Agent.find(doorkeeper_token.resource_owner_id)
+    sign_in(agent, scope: "agent")
+    agent
   end
 
   def layout_by_resource

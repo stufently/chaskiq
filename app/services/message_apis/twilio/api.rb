@@ -123,7 +123,9 @@ module MessageApis::Twilio
                                &.find_by(provider: PROVIDER)
                                &.profile_id
 
-      profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone) if profile_id.blank?
+      if profile_id.blank?
+        profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+      end
 
       raise ActiveRecord::Rollback if profile_id.blank?
 
@@ -133,8 +135,10 @@ module MessageApis::Twilio
 
       conversation.update(
         conversation_channels_attributes: [
-          provider: "twilio",
-          provider_channel_id: profile_id
+          {
+            provider: "twilio",
+            provider_channel_id: profile_id
+          }
         ]
       )
     end
@@ -272,8 +276,10 @@ module MessageApis::Twilio
         conversation = @package.app.conversations.create(
           main_participant: participant,
           conversation_channels_attributes: [
-            provider: "twilio",
-            provider_channel_id: channel_id
+            {
+              provider: "twilio",
+              provider_channel_id: channel_id
+            }
           ]
         )
       end
@@ -373,32 +379,31 @@ module MessageApis::Twilio
 
     def add_participant(twilio_user)
       app = @package.app
-      if twilio_user
+      return unless twilio_user
 
-        data = {
-          properties: {
-            name: twilio_user,
-            twilio_id: twilio_user
-          }
+      data = {
+        properties: {
+          name: twilio_user,
+          twilio_id: twilio_user
         }
+      }
 
-        external_profile = app.external_profiles.find_by(
+      external_profile = app.external_profiles.find_by(
+        provider: PROVIDER,
+        profile_id: twilio_user
+      )
+
+      participant = external_profile&.app_user
+
+      if participant.blank?
+        participant = app.add_anonymous_user(data)
+        participant.external_profiles.create(
           provider: PROVIDER,
           profile_id: twilio_user
         )
-
-        participant = external_profile&.app_user
-
-        if participant.blank?
-          participant = app.add_anonymous_user(data)
-          participant.external_profiles.create(
-            provider: PROVIDER,
-            profile_id: twilio_user
-          )
-        end
-
-        participant
       end
+
+      participant
     end
   end
 end

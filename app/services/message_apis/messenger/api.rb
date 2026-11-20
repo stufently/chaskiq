@@ -85,7 +85,9 @@ module MessageApis::Messenger
       @package = package
       current = params["current"]
 
-      return create_hook_from_params(params, package) if params["hub.verify_token"].present? && params["hub.mode"] == "subscribe"
+      if params["hub.verify_token"].present? && params["hub.mode"] == "subscribe"
+        return create_hook_from_params(params, package)
+      end
 
       process_message(params, @package) if params["object"] == "page" && params["entry"].present?
     end
@@ -183,8 +185,10 @@ module MessageApis::Messenger
         conversation = @package.app.conversations.create(
           main_participant: participant,
           conversation_channels_attributes: [
-            provider: PROVIDER,
-            provider_channel_id: channel_id
+            {
+              provider: PROVIDER,
+              provider_channel_id: channel_id
+            }
           ]
         )
       end
@@ -257,21 +261,20 @@ module MessageApis::Messenger
     def add_participant(messenger_user)
       app = @package.app
 
-      if messenger_user
+      return unless messenger_user
 
-        external_profile = app.external_profiles.find_by(
-          provider: PROVIDER,
-          profile_id: messenger_user
-        )
+      external_profile = app.external_profiles.find_by(
+        provider: PROVIDER,
+        profile_id: messenger_user
+      )
 
-        participant = external_profile&.app_user
+      participant = external_profile&.app_user
 
-        participant, data = handle_participant(participant, messenger_user)
+      participant, data = handle_participant(participant, messenger_user)
 
-        participant = app.add_anonymous_user(data) if participant.blank?
+      participant = app.add_anonymous_user(data) if participant.blank?
 
-        participant
-      end
+      participant
     end
 
     def handle_participant(participant, messenger_user)

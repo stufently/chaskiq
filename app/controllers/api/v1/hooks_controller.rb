@@ -230,7 +230,7 @@ class Api::V1::HooksController < ActionController::API
       handle_inbound_recipient(mail)
     elsif recipient.starts_with?("campaigns+")
       handle_campaigns_recipient(mail)
-    elsif ((val = json_message["mail"]["headers"].find { |o| o["name"] == "X-Forwarded-To" }&.dig("value"))) && val.present? && val.starts_with?("inbound+")
+    elsif (val = json_message["mail"]["headers"].find { |o| o["name"] == "X-Forwarded-To" }&.dig("value")) && val.present? && val.starts_with?("inbound+")
       handle_inbound_recipient_from_forwarded(mail, val)
     end
   end

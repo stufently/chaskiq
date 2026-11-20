@@ -151,7 +151,7 @@ class Segment < ApplicationRecord
       # otherwise use in JSONB properties column
       Arel::Nodes::InfixOperation.new("->>",
                                       arel_table[:properties],
-                                      Arel::Nodes.build_quoted((predicate["attribute"]).to_s))
+                                      Arel::Nodes.build_quoted(predicate["attribute"].to_s))
     end
   end
 
@@ -198,7 +198,7 @@ class Segment < ApplicationRecord
         check = field.matches(query_string)
         inverse = true
       when "not_eq"
-        query_string = (predicate["value"]).to_s
+        query_string = predicate["value"].to_s
         # will inverse on query
         check = field.eq(query_string)
         inverse = true
@@ -440,10 +440,10 @@ class Segment < ApplicationRecord
       when "in"
         terms_fragment(:filter, pred["attribute"], pred["value"])
       when "eq"
-        term_fragment(:must, (pred["attribute"]).to_s, pred["value"])
+        term_fragment(:must, pred["attribute"].to_s, pred["value"])
       # match_fragment(:must, "#{pred["attribute"]}.analyzed", pred["value"])
       when "not_eq"
-        term_fragment(:must_not, (pred["attribute"]).to_s, pred["value"])
+        term_fragment(:must_not, pred["attribute"].to_s, pred["value"])
       when "contains"
         match_fragment(:must, "#{pred['attribute']}.word_start", pred["value"])
       # filter_fragment(:filter, "#{pred["attribute"]}", "#{pred["value"]}*")
@@ -454,7 +454,7 @@ class Segment < ApplicationRecord
       when "is_not_null"
         exists_fragment(:must_not, pred["attribute"], pred["value"])
       when "contains_ends"
-        filter_regex_fragment(:filter, (pred["attribute"]).to_s, ".*#{pred['value']}")
+        filter_regex_fragment(:filter, pred["attribute"].to_s, ".*#{pred['value']}")
       when "contains_start"
         match_fragment(:filter, "#{pred['attribute']}.word_start", pred["value"])
         # filter_regex_fragment(:filter, "#{pred["attribute"]}", ".#{pred["value"]}*")
