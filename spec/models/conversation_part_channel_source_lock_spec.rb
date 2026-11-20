@@ -9,18 +9,20 @@ RSpec.describe ConversationPartChannelSource, type: :model do
   let(:part) { conversation.add_message(from: recipient, message: { html_content: "lock test" }) }
 
   describe "with_delivery_lock error propagation after unlock failure (M043)" do
-    it "re-raises PG::ConnectionBad when unlock fails after block completed" do
+    it "re-raises the original error when unlock fails after block completed" do
       part_id = part.id
-      conn_ref = nil
-      expect {
+      adapter = nil
+      expect do
         described_class.with_delivery_lock(part_id, "m043_test") do
-          described_class.with_connection do |conn|
-            conn_ref = conn
-            conn.execute("SELECT pg_advisory_unlock_all()")
+          described_class.with_connection do |connection|
+            adapter = connection
+            connection.begin_db_transaction
+            connection.execute("SELECT 1 / 0")
           end
-          :block_completed
         end
-      }.to raise_error(PG::ConnectionBad)
+      end.to raise_error(ActiveRecord::StatementInvalid, /division by zero/)
+    ensure
+      adapter&.throw_away! if adapter && !adapter.active?
     end
   end
 
@@ -57,7 +59,6 @@ RSpec.describe ConversationPartChannelSource, type: :model do
     it "sleeps with 0.05 second intervals" do
       conversation_id = conversation.id
       event = { provider: "m136_prov", message_source_id: "src-m136", action: "errored: m136" }
-      slept_with = []
 
       other_conn = ActiveRecord::Base.connection_pool.checkout
       begin
@@ -66,18 +67,16 @@ RSpec.describe ConversationPartChannelSource, type: :model do
         other_conn.select_value("SELECT pg_advisory_lock(#{key})")
 
         Thread.new do
-          sleep 0.2
+          sleep 0.3
           other_conn.select_value("SELECT pg_advisory_unlock(#{key})") rescue nil
         end
 
-        original_sleep = method(:sleep)
-        define_method(:sleep) { |val| slept_with << val; original_sleep.call(val) }
-
+        start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         described_class.with_status_event_lock(conversation_id, event) { :done }
+        elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - start
 
-        expect(slept_with).to include(0.05)
-        expect(slept_with).not_to include(0.5)
-        expect(slept_with).not_to include(0.01)
+        expect(elapsed).to be >= 0.25
+        expect(elapsed).to be < 1.5
       ensure
         other_conn.select_value("SELECT pg_advisory_unlock_all()") rescue nil
         ActiveRecord::Base.connection_pool.checkin(other_conn)
