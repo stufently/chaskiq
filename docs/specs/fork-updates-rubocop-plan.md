@@ -218,6 +218,12 @@ BASE vs дерево в двух процессах; рост `Layout/LineLength
 
 ## R6 — `Lint/UselessAssignment` и `Lint/UnusedMethodArgument`
 
+**Разбита.** R6a (спека готова: `docs/specs/fork-updates-r6a.md`, исполнитель Qwen `qw2`) —
+`Lint/UselessAssignment` в 64 файлах `app/`+`lib/` автокорректом (119 мест), проверка — побайтный
+повтор команд RuboCop на BASE; 11 файлов `keep` (ERB с `binding`, `audit.rb` без автокоррекции,
+восемь файлов, где автокоррект оставляет `Lint/Void`) — в R5b. R6b — `Lint/UnusedMethodArgument`
+(решение владельца ниже) и `UselessAssignment` в `spec/` после mut-m9-m14.
+
 - Копы: 2, 353 офенса, 115 файлов. `UselessAssignment` 188 (автокоррект убирает присваивание,
   правая часть остаётся), `UnusedMethodArgument` 165 (48 позиционных — `_arg`; 117 keyword-
   аргументов автокоррект не трогает).
