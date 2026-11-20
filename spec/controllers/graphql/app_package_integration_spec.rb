@@ -99,7 +99,7 @@ RSpec.describe GraphqlController, type: :controller do
                            }
                          }
                        ))
-        end.to_not change { app.app_package_integrations.count }
+        end.to_not(change { app.app_package_integrations.count })
 
         expect(graphql_response.errors).to be_nil
         expect(graphql_response.data.integrationsCreate.errors.api_secret).to be_present
@@ -182,7 +182,7 @@ RSpec.describe GraphqlController, type: :controller do
                                                     slack_channel_name_leads: "chan1"
                                                   }
                                                 }))
-        end.to_not change { app.app_package_integrations.count }
+        end.to_not(change { app.app_package_integrations.count })
         expect(graphql_response.errors).to be_present
       end
     end

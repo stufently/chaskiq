@@ -530,7 +530,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
         message_data: image_data
       ))
       perform_enqueued_jobs
-      conversation = app.conversations.first
 
       serialized = '{
         "blocks":
@@ -570,7 +569,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
           "entityMap":{}
         }'
 
-      options = {
+      {
         from: app.agents.first,
         message: {
           html_content: "aa",

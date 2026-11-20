@@ -39,7 +39,7 @@ RSpec.describe Mutations::CreateUrlUpload do
   it "returns a GraphQL error when the download exceeds 100 MB" do
     url = "https://cdn.example.com/too-large"
     allow(MessageApis::SafeDownload).to receive(:resolve).with("cdn.example.com").and_return(["93.184.216.34"])
-    stub_request(:get, url).to_return(headers: { "Content-Length" => (100 * 1024 * 1024 + 1).to_s })
+    stub_request(:get, url).to_return(headers: { "Content-Length" => ((100 * 1024 * 1024) + 1).to_s })
 
     expect { mutation.resolve(input: OpenStruct.new(url: url)) }
       .to raise_error(GraphQL::ExecutionError, "Unable to download the file")

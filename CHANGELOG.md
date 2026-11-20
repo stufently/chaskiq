@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-20 — fork-updates-r6c
+
+- Changed: Lint offenses in spec/ cleaned up in 18 files (useless assignments, void literals, ambiguous
+  block association and operator precedence); the empty spec/controllers/graphql/agent_spec.rb removed;
+  the unprivileged agent invite spec now checks that no agent is added.
+
 ## 2026-11-20 — fork-updates-r5b1
 
 - Fixed: Slack notification of a conversation event no longer raises when the event data is nil or

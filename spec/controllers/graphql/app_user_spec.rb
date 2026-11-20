@@ -88,7 +88,7 @@ RSpec.describe GraphqlController, type: :controller do
       expect(graphql_response.data.createExternalProfile.profile.profileId).to be == "#{profile_id}xxx"
       expect(ExternalProfile.count).to be == 2
 
-      r = graphql_post(
+      graphql_post(
         @graphql_client.data_for(
           type: "CONTACT_SEARCH_BY_PROFILE",
           variables: {

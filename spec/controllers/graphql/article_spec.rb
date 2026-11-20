@@ -140,7 +140,7 @@ RSpec.describe GraphqlController, type: :controller do
 
   context "collections" do
     before :each do
-      article = app.articles.create(
+      app.articles.create(
         title: "hello world",
         author: agent,
         article_content_attributes: {
@@ -223,7 +223,7 @@ RSpec.describe GraphqlController, type: :controller do
 
   context "sections" do
     before :each do
-      article = app.articles.create(
+      app.articles.create(
         title: "hello world",
         author: agent,
         article_content_attributes: {

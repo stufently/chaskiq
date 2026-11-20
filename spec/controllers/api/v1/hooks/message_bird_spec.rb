@@ -186,7 +186,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
   end
 
   let(:app_package) do
-    1
     AppPackage.find_by(name: "MessageBird")
   end
 

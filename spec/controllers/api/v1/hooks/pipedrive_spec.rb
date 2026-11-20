@@ -17,7 +17,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
   def data_for(id:, app:)
     # sent on created
-    data = {
+    {
       "v" => 1,
       "matches_filters" => { "current" => [] },
       "meta" => { "v" => 1, "action" => "updated", "object" => "person", "id" => 11, "company_id" => 7_468_915, "user_id" => 11_379_745, "host" => "michelson.pipedrive.com", "timestamp" => 1_581_613_434, "timestamp_micro" => 1_581_613_434_223_943, "permitted_user_ids" => [11_379_745], "trans_pending" => false, "is_bulk_update" => false, "pipedrive_service_name" => false, "matches_filters" => { "current" => [] }, "webhook_id" => "136435" },
@@ -127,7 +127,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect do
         post(:process_event, params: data_for(id: @pkg.encoded_id, app: app))
         perform_enqueued_jobs
-      end.to_not change { AppUser.count } # .by(1)
+      end.to_not(change { AppUser.count }) # .by(1)
     end
 
     it "update profile" do
@@ -150,7 +150,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
         expect do
           post(:process_event, params: delete_data_for(id: @pkg.encoded_id, app: app))
           perform_enqueued_jobs
-        end.to change { ExternalProfile.count }
+        end.to(change { ExternalProfile.count })
       end
 
       it "will update profile" do

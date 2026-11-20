@@ -413,8 +413,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
                                                     provider_channel_id: "123"
                                                   })
 
-        channel = conversation.conversation_channels.find_by(provider: "slack")
-
         r = { ok: true, ts: "1234", thread_ts: "123" }
         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
           .and_return(OpenStruct.new(body: r.to_json))
@@ -433,8 +431,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
                                                     provider: "slack",
                                                     provider_channel_id: "123"
                                                   })
-
-        channel = conversation.conversation_channels.find_by(provider: "slack")
 
         r = { ok: false, ts: "1234" }
         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
@@ -539,8 +535,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
                                                     provider_channel_id: "123"
                                                   })
 
-        channel = conversation.conversation_channels.find_by(provider: "slack")
-
         r = { ok: true, ts: "1234", thread_ts: "123" }
         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
           .and_return(OpenStruct.new(body: r.to_json))
@@ -559,8 +553,6 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
                                                     provider: "slack",
                                                     provider_channel_id: "123"
                                                   })
-
-        channel = conversation.conversation_channels.find_by(provider: "slack")
 
         r = { ok: false, ts: "1234", thread_ts: "123" }
         allow_any_instance_of(MessageApis::Slack::Api).to receive(:post_message)
