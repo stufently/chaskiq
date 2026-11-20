@@ -135,7 +135,6 @@ class ApiController < ActionController::API
 
   def get_app_user
     valid_origin?
-    # raise EULocationError.new("GDPR consent needed") if eu_location?
     @app_user ||= get_user_by_email || get_user_by_session
   end
 
@@ -192,10 +191,5 @@ class ApiController < ActionController::API
       app: @app.domain_url,
       host: request.env["HTTP_ORIGIN"]
     ).is_valid?
-  end
-
-  def eu_location?
-    return true
-    EuCountries.includes?(request.location&.country_code)
   end
 end
