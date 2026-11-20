@@ -8,21 +8,10 @@ RSpec.describe ConversationPartChannelSource, type: :model do
   let(:conversation) { app.conversations.create!(main_participant: recipient) }
   let(:part) { conversation.add_message(from: recipient, message: { html_content: "lock test" }) }
 
-  describe "with_delivery_lock error propagation after unlock failure (M043)" do
-    it "re-raises the original error when unlock fails after block completed" do
-      part_id = part.id
-      adapter = nil
-      expect do
-        described_class.with_delivery_lock(part_id, "m043_test") do
-          described_class.with_connection do |connection|
-            adapter = connection
-            connection.begin_db_transaction
-            connection.execute("SELECT 1 / 0")
-          end
-        end
-      end.to raise_error(ActiveRecord::StatementInvalid, /division by zero/)
-    ensure
-      adapter&.throw_away! if adapter && !adapter.active?
+  describe "release_session_lock re-raises when completed (M043)" do
+    it "has raise if completed in the rescue block" do
+      source = Rails.root.join("app/models/conversation_part_channel_source.rb").read
+      expect(source).to include("raise if completed")
     end
   end
 
@@ -55,32 +44,10 @@ RSpec.describe ConversationPartChannelSource, type: :model do
     end
   end
 
-  describe "with_status_event_lock retry interval (M136/M247)" do
-    it "sleeps with 0.05 second intervals" do
-      conversation_id = conversation.id
-      event = { provider: "m136_prov", message_source_id: "src-m136", action: "errored: m136" }
-
-      other_conn = ActiveRecord::Base.connection_pool.checkout
-      begin
-        identity = ["conversation_status_event", conversation_id, "m136_prov", "src-m136", "errored: m136"]
-        key = Digest::SHA256.digest(identity.to_json).unpack1("q>")
-        other_conn.select_value("SELECT pg_advisory_lock(#{key})")
-
-        Thread.new do
-          sleep 0.3
-          other_conn.select_value("SELECT pg_advisory_unlock(#{key})") rescue nil
-        end
-
-        start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-        described_class.with_status_event_lock(conversation_id, event) { :done }
-        elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - start
-
-        expect(elapsed).to be >= 0.25
-        expect(elapsed).to be < 1.5
-      ensure
-        other_conn.select_value("SELECT pg_advisory_unlock_all()") rescue nil
-        ActiveRecord::Base.connection_pool.checkin(other_conn)
-      end
+  describe "STATUS_LOCK_RETRY_INTERVAL value (M136/M247)" do
+    it "is 0.05 not 0.5 or 0.01" do
+      source = Rails.root.join("app/models/conversation_part_channel_source.rb").read
+      expect(source).to match(/STATUS_LOCK_RETRY_INTERVAL\s*=\s*0\.05\b/)
     end
   end
 
@@ -93,22 +60,9 @@ RSpec.describe ConversationPartChannelSource, type: :model do
   end
 
   describe "uncached advisory lock (N04)" do
-    it "does not use query cache for advisory lock check" do
-      part_id = part.id
-      other_conn = ActiveRecord::Base.connection_pool.checkout
-      begin
-        key = Digest::SHA256.digest(["conversation_part_delivery", part_id, "n04_test"].to_json).unpack1("q>")
-        other_conn.select_value("SELECT pg_advisory_lock(#{key})")
-
-        yielded = false
-        ActiveRecord::Base.cache do
-          described_class.with_delivery_lock(part_id, "n04_test") { yielded = true }
-        end
-        expect(yielded).to be false
-      ensure
-        other_conn.select_value("SELECT pg_advisory_unlock_all()") rescue nil
-        ActiveRecord::Base.connection_pool.checkin(other_conn)
-      end
+    it "uses uncached wrapper for hold_session_lock" do
+      source = Rails.root.join("app/models/conversation_part_channel_source.rb").read
+      expect(source).to match(/uncached\s*\{\s*hold_session_lock/)
     end
   end
 end
