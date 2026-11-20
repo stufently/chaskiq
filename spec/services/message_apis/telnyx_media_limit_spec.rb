@@ -2,28 +2,61 @@
 
 require "rails_helper"
 
-RSpec.describe "TelnyxSms API" do
-  let(:source) { Rails.root.join("app/services/message_apis/telnyx_sms/api.rb").read }
+RSpec.describe MessageApis::TelnyxSms::Api do
+  let(:app) { FactoryBot.create(:app) }
+  let(:config) do
+    { "api_key" => "test-key", "profile_id" => "test-profile", :package => OpenStruct.new(app: app) }
+  end
+  let(:api) { described_class.new(config: config) }
 
   describe "MAX_MEDIA_BYTES (M146)" do
-    it "is 5MB not 1KB" do
-      expect(source).to match(/MAX_MEDIA_BYTES\s*=\s*5\s*\*\s*1024\s*\*\s*1024/)
+    it "accepts media of 2 KB" do
+      body_2k = "x" * 2048
+      stub_request(:get, "https://media.telnyx.com/test-file")
+        .to_return(status: 200, body: body_2k, headers: { "content-type" => "image/jpeg" })
+
+      result = api.send(:download_media, "https://media.telnyx.com/test-file")
+      expect(result).to be_present
+    end
+
+    it "rejects media of 5 MB + 1 byte" do
+      body_big = "x" * (5 * 1024 * 1024 + 1)
+      stub_request(:get, "https://media.telnyx.com/big-file")
+        .to_return(status: 200, body: body_big, headers: { "content-type" => "image/jpeg" })
+
+      result = api.send(:download_media, "https://media.telnyx.com/big-file")
+      expect(result).to be_nil
     end
   end
 
   describe "inbound_blocks empty line rejection (M155)" do
-    it "rejects empty lines" do
-      expect(source).to match(/split.*reject\(&:empty\?\)/)
+    it "rejects empty lines from text" do
+      blocks = api.send(:inbound_blocks, "a\n\nb", [], "msg-1")
+      text_blocks = blocks.select { |b| b[:type] == "text" }
+      expect(text_blocks.size).to eq(2)
+      expect(text_blocks.map { |b| b[:text] }).to eq(%w[a b])
     end
   end
 
   describe "send_sms_message phone normalization (N05/N06)" do
-    it "strips + with delete('+')" do
-      expect(source).to match(/channel_id\.delete\("\+"\)/)
+    it "strips leading + and re-adds it" do
+      stub_request(:post, described_class::URL)
+        .with(body: hash_including("to" => "+15550001"))
+        .to_return(status: 200, body: '{"data":{}}')
+
+      api.send(:send_sms_message, "15550001", "hi")
+      expect(WebMock).to have_requested(:post, described_class::URL)
+        .with(body: hash_including("to" => "+15550001"))
     end
 
-    it "adds + prefix in the to field" do
-      expect(source).to match(/to:\s*"\+#\{channel_id\}"/)
+    it "does not double the + when input already has one" do
+      stub_request(:post, described_class::URL)
+        .with(body: hash_including("to" => "+15550001"))
+        .to_return(status: 200, body: '{"data":{}}')
+
+      api.send(:send_sms_message, "+15550001", "hi")
+      expect(WebMock).to have_requested(:post, described_class::URL)
+        .with(body: hash_including("to" => "+15550001"))
     end
   end
 end

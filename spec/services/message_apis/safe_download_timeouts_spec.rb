@@ -4,9 +4,24 @@ require "rails_helper"
 
 RSpec.describe MessageApis::SafeDownload do
   describe ".fetch open_timeout" do
-    it "sets open_timeout to 5 on the HTTP connection" do
-      source_file = Rails.root.join("app/services/message_apis/safe_download.rb").read
-      expect(source_file).to match(/http\.open_timeout\s*=\s*5\b/)
+    it "sets open_timeout to 5 on the Net::HTTP instance" do
+      url = "https://example.com/file.txt"
+      stub_request(:get, url).to_return(status: 200, body: "data", headers: { "content-type" => "text/plain" })
+
+      observed_timeouts = []
+      original_new = Net::HTTP.method(:new)
+      allow(Net::HTTP).to receive(:new) do |*args|
+        http = original_new.call(*args)
+        real_method = http.method(:open_timeout=)
+        allow(http).to receive(:open_timeout=) do |val|
+          observed_timeouts << val
+          real_method.call(val)
+        end
+        http
+      end
+
+      described_class.fetch(url)
+      expect(observed_timeouts).to include(5)
     end
   end
 end

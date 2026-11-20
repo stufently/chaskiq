@@ -29,10 +29,8 @@ RSpec.describe "Redis initializer" do
   end
 
   describe "REDIS_URL fallback" do
-    it "defaults to redis://localhost:6379/1" do
-      source = Rails.root.join("config/initializers/redis.rb").read
-      expect(source).to include("redis://localhost:6379/1")
-      expect(source).not_to include("redis://localhost:6379/2")
+    it "defaults to db 1" do
+      expect(REDIS_URL).to end_with("/1")
     end
   end
 end
