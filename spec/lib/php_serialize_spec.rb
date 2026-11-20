@@ -7,6 +7,11 @@ require "json"
 RSpec.describe PHP do
   reference = JSON.parse(Rails.root.join("spec/fixtures/php_serialize_1_2.json").read)
 
+  it "serializes the maximum 32-bit signed integer 2147483647" do
+    expect(described_class.serialize(2_147_483_647)).to eq("i:2147483647;")
+    expect(described_class.unserialize("i:2147483647;")).to eq(2_147_483_647)
+  end
+
   reference.fetch("vectors").each do |vector|
     it "preserves the php_serialize 1.2 format for #{vector.fetch('name')}" do
       wire = Base64.strict_decode64(vector.fetch("serialized_base64"))

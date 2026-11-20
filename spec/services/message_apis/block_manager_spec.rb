@@ -251,6 +251,16 @@ RSpec.describe MessageApis::BlockManager do
         .to eq("https://cdn.example.com/my%20file.png")
     end
 
+    it "returns an empty array for media_blocks when blocks is not an Array" do
+      expect(described_class.media_blocks("not an array")).to eq([])
+      expect(described_class.media_blocks(nil)).to eq([])
+    end
+
+    it "returns nil from get_blocks when document is not a Hash" do
+      expect(described_class.get_blocks("[]")).to be_nil
+      expect(described_class.get_blocks("42")).to be_nil
+    end
+
     it "percent-encodes unicode letters with ASCII case-folding equivalents" do
       allow(Chaskiq::Config).to receive(:get).with("HOST").and_return("https://chat.example.com")
 
