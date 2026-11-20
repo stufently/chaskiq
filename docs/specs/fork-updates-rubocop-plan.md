@@ -204,6 +204,15 @@ RuboCop 1.92.3, rubocop-rails 2.38.0, Ruby 3.3.14, образ `bin/ci-local`, `.
 
 ## R7 — ручные Style и Naming (нужны решения владельца)
 
+**Решения владельца (2026-11-20):**
+- `Style/Documentation` — отключить в `.rubocop.yml` (`Enabled: false`) с причиной: заглушки
+  «# Class for X» пользы не несут.
+- `Naming/AccessorMethodName` и `Naming/MethodParameterName` — отключить в `.rubocop.yml` с
+  причиной (переименование публичных методов ломает плагины и интеграции).
+- Metrics (R8) — реальные лимиты с письменной причиной (ориентир: MethodLength ~25,
+  LineLength ~140, spec/ вне BlockLength), методы сверх лимита — отдельными вехами
+  рефакторинга с тестами.
+
 - Копы: 14, 569 офенсов, 375 файлов.
   - `Style/Documentation` 401 (359 файлов): писать 359 комментариев-заглушек бессмысленно.
     Вариант с причиной: `Exclude` для `spec/**`, `app/graphql/types/**`, `app/graphql/mutations/**`,
