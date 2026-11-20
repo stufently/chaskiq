@@ -87,7 +87,7 @@ module Api
         action = json_message["receipt"]["action"]
 
         mail_body = read_mail_file(action)
-        mail       = Mail.read_from_string(mail_body)
+        mail = Mail.read_from_string(mail_body)
         mail.from
         mail.to
         recipients = mail.recipients # ["messages+aaa@hermessenger.com"] de aqui sale el app y el mensaje!
@@ -156,7 +156,7 @@ module Api
       end
 
       def decode_inbound_address(address)
-        _, _ = App.decode_inbound_address(address)
+        App.decode_inbound_address(address)
       end
 
       def read_mail_file(action)
@@ -200,7 +200,7 @@ module Api
 
       def handle_inbound_recipient(mail)
         recipient = mail.recipients.first
-        app, _ = decode_inbound_address(recipient)
+        app, = decode_inbound_address(recipient)
         return if app.blank?
         return unless app&.plan&.enabled?("InboundEmails")
 
@@ -208,7 +208,7 @@ module Api
       end
 
       def handle_inbound_recipient_from_forwarded(mail, val)
-        app, _ = decode_inbound_address(val)
+        app, = decode_inbound_address(val)
         return if app.blank?
         return unless app&.plan&.enabled?("InboundEmails")
 

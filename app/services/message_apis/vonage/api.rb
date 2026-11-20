@@ -226,14 +226,14 @@ module MessageApis
 
       def find_conversation_by_channel(channel)
         @package
-                       .app
-                       .conversations
-                       .joins(:conversation_channels)
-                       .where(
-                         "conversation_channels.provider =? AND
+          .app
+          .conversations
+          .joins(:conversation_channels)
+          .where(
+            "conversation_channels.provider =? AND
                           conversation_channels.provider_channel_id =?",
-                         PROVIDER, channel
-                       ).first
+            PROVIDER, channel
+          ).first
       end
 
       def serialize_content(data)
@@ -256,20 +256,20 @@ module MessageApis
       def media_block(data)
         media_type = data["type"]
         case media_type
-                when "unsupported" then nil
-                when "image"
-                  url = data["image"]["url"]
-                  text = data["image"]["caption"]
-                  photo_block(url: url, text: text)
-                when "video"
-                  url = data["video"]["url"]
-                  text = data["video"]["caption"]
-                  gif_block(url: url, text: text)
-                when "audio", "file"
-                  url = data[media_type]["url"]
-                  text = data[media_type]["caption"]
-                  file_block(url: url, text: text)
-                end
+        when "unsupported" then nil
+        when "image"
+          url = data["image"]["url"]
+          text = data["image"]["caption"]
+          photo_block(url: url, text: text)
+        when "video"
+          url = data["video"]["url"]
+          text = data["video"]["caption"]
+          gif_block(url: url, text: text)
+        when "audio", "file"
+          url = data[media_type]["url"]
+          text = data[media_type]["caption"]
+          file_block(url: url, text: text)
+        end
       end
 
       def add_participant(vonage_user)

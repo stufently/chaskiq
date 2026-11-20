@@ -140,14 +140,14 @@ module MessageApis
 
       def find_conversation_by_channel(channel)
         @package
-                       .app
-                       .conversations
-                       .joins(:conversation_channels)
-                       .where(
-                         "conversation_channels.provider =? AND
+          .app
+          .conversations
+          .joins(:conversation_channels)
+          .where(
+            "conversation_channels.provider =? AND
         conversation_channels.provider_channel_id =?",
-                         "twitter", channel
-                       ).first
+            "twitter", channel
+          ).first
       end
 
       # incoming events from webhook

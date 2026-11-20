@@ -178,10 +178,8 @@ class Agent < ApplicationRecord
   end
 
   def get_remote_avatar_url
-    begin
-      avatar.variant(resize_to_limit: [100, 100]).processed
-    rescue StandardError
-      nil
-    end
+    avatar.variant(resize_to_limit: [100, 100]).processed
+  rescue StandardError
+    nil
   end
 end

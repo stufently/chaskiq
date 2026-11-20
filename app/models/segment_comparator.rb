@@ -56,20 +56,20 @@ class SegmentComparator
 
   def compare_with(user_input, predicate_value, comparison)
     case comparison
-             when "contains_start" then user_input.start_with?(predicate_value)
-             when "contains_ends" then user_input.end_with?(predicate_value)
-             when "is_null" then user_input.blank?
-             when "is_not_null" then user_input.present?
-             when "contains" then user_input.include?(predicate_value)
-             when "not_contains" then user_input.exclude?(predicate_value)
-             when "not_eq" then user_input != predicate_value
-             when "eq" then user_input == predicate_value
-             when "lt" then user_input < predicate_value
-             when "lteq" then user_input <= predicate_value
-             when "gt" then user_input > predicate_value
-             when "in" then user_input.in?(predicate_value)
-             when "gteq" then user_input >= predicate_value
-             end
+    when "contains_start" then user_input.start_with?(predicate_value)
+    when "contains_ends" then user_input.end_with?(predicate_value)
+    when "is_null" then user_input.blank?
+    when "is_not_null" then user_input.present?
+    when "contains" then user_input.include?(predicate_value)
+    when "not_contains" then user_input.exclude?(predicate_value)
+    when "not_eq" then user_input != predicate_value
+    when "eq" then user_input == predicate_value
+    when "lt" then user_input < predicate_value
+    when "lteq" then user_input <= predicate_value
+    when "gt" then user_input > predicate_value
+    when "in" then user_input.in?(predicate_value)
+    when "gteq" then user_input >= predicate_value
+    end
   end
 
   def handle_comparison(field, predicate)
