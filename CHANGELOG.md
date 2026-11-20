@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-20 — fork-updates-r5b2
+
+- Removed: unused routing constraints `PersonalizedDomain` and `NoSubdomain` and the `DOMAIN` constant
+  (lib/subdomain_routes.rb), and the unused `ApiController#eu_location?` stub.
+- Changed: remaining Lint offenses in app/ and lib/ cleaned up in 18 files without behaviour changes
+  (AssignmentInCondition, BooleanSymbol, SymbolConversion, NonLocalExitFromIterator and others);
+  characterization specs added.
+
 ## 2026-11-20 — fork-updates-r5b1
 
 - Fixed: Slack notification of a conversation event no longer raises when the event data is nil or
