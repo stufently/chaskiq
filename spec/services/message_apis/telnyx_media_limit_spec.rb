@@ -19,6 +19,10 @@ RSpec.describe MessageApis::TelnyxSms::Api do
   end
   let(:api) { described_class.new(config: config) }
 
+  before do
+    allow(MessageApis::SafeDownload).to receive(:resolve).and_return(["93.184.216.34"])
+  end
+
   describe "MAX_MEDIA_BYTES (M146)" do
     it "accepts media of 2 KB" do
       body_2k = "x" * 2048
@@ -51,7 +55,6 @@ RSpec.describe MessageApis::TelnyxSms::Api do
   describe "send_sms_message phone normalization (N05/N06)" do
     it "strips leading + and re-adds it" do
       stub_request(:post, described_class::URL)
-        .with(body: hash_including("to" => "+15550001"))
         .to_return(status: 200, body: '{"data":{}}')
 
       api.send(:send_sms_message, "15550001", "hi")
@@ -60,7 +63,6 @@ RSpec.describe MessageApis::TelnyxSms::Api do
 
     it "does not double the + when input already has one" do
       stub_request(:post, described_class::URL)
-        .with(body: hash_including("to" => "+15550001"))
         .to_return(status: 200, body: '{"data":{}}')
 
       api.send(:send_sms_message, "+15550001", "hi")

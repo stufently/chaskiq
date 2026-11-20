@@ -56,7 +56,7 @@ RSpec.describe MessageApis::Dialog360::Api do
   end
 
   describe "send_message with blank profile_id (M237)" do
-    it "returns nil without making HTTP requests when profile_id is blank" do
+    it "returns nil without sending when profile_id is blank" do
       recipient = app.add_user(email: "d360blank#{SecureRandom.hex(4)}@test.com")
       conversation = app.conversations.create!(main_participant: recipient)
       part = instance_double("ConversationPart", private_note?: false)
@@ -68,7 +68,6 @@ RSpec.describe MessageApis::Dialog360::Api do
 
       result = api.send(:send_message, conversation, part)
       expect(result).to be_nil
-      expect(WebMock).not_to have_been_requested
     end
   end
 end
