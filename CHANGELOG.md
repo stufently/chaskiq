@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-20 — fork-updates-r5b1
+
+- Fixed: Slack notification of a conversation event no longer raises when the event data is nil or
+  an array (unused `data["label"]` read removed).
+- Changed: Lint/UselessAssignment, Lint/Void, Lint/UselessOr, Lint/UnusedMethodArgument and
+  Rails/Present cleaned up in 25 files of app/ without other behaviour changes; characterization specs added.
+
 ## 2026-11-20 — fork-updates-r3b1
 
 - Changed: Rails/Blank and Rails/Presence autocorrected in 7 files of app/ and lib/ (9 places;
