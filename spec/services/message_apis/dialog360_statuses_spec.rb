@@ -39,9 +39,9 @@ RSpec.describe MessageApis::Dialog360::Api do
       conversation = app.conversations.create!(main_participant: recipient)
       allow(api).to receive(:add_participant_to_existing_user).and_return(nil)
 
-      expect {
+      expect do
         api.prepare_initiator_channel_for(conversation, config[:package])
-      }.to raise_error(ActiveRecord::Rollback)
+      end.to raise_error(ActiveRecord::Rollback)
     end
   end
 

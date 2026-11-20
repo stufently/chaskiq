@@ -36,7 +36,7 @@ RSpec.describe MessageApis::TelnyxSms::Api do
     end
 
     it "rejects media of 5 MB + 1 byte" do
-      body_big = "x" * (5 * 1024 * 1024 + 1)
+      body_big = "x" * ((5 * 1024 * 1024) + 1)
       stub_request(:get, "https://media.telnyx.com/big-file")
         .to_return(status: 200, body: body_big, headers: { "content-type" => "image/jpeg" })
 
@@ -50,7 +50,7 @@ RSpec.describe MessageApis::TelnyxSms::Api do
       blocks = api.send(:inbound_blocks, "a\n\nb", [], "msg-1")
       text_blocks = blocks.select { |b| b[:type] == "text" }
       expect(text_blocks.size).to eq(2)
-      expect(text_blocks.map { |b| b[:text] }).to eq(%w[a b])
+      expect(text_blocks.pluck(:text)).to eq(%w[a b])
     end
   end
 

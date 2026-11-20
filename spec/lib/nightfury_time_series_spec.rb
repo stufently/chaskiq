@@ -35,12 +35,12 @@ RSpec.describe Nightfury::Metric::TimeSeries do
   describe "#get_range/#get_all on empty series" do
     it "returns empty or nil for get_all on a fresh series" do
       result = ts.get_all
-      expect(result.nil? || result.empty?).to be true
+      expect(result.blank?).to be true
     end
 
     it "returns empty or nil for get_range on a fresh series" do
       result = ts.get_range(Time.utc(2026, 11, 20), Time.utc(2026, 11, 21))
-      expect(result.nil? || result.empty?).to be true
+      expect(result.blank?).to be true
     end
   end
 
@@ -88,11 +88,11 @@ RSpec.describe Nightfury::Metric::TimeSeries do
 
   describe ".seconds_in_step" do
     it "returns 60 for :minute" do
-      expect(described_class.seconds_in_step(:minute, Time.now)).to eq(60)
+      expect(described_class.seconds_in_step(:minute, Time.zone.now)).to eq(60)
     end
 
     it "returns 3600 for :hour" do
-      expect(described_class.seconds_in_step(:hour, Time.now)).to eq(3600)
+      expect(described_class.seconds_in_step(:hour, Time.zone.now)).to eq(3600)
     end
   end
 

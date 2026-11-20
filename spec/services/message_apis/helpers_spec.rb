@@ -6,7 +6,8 @@ RSpec.describe MessageApis::Helpers do
   let(:helper_class) do
     Class.new do
       include MessageApis::Helpers
-      def self.name; "TestHelper"; end
+
+      def self.name = "TestHelper"
     end
   end
   let(:helper) { helper_class.new }

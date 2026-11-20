@@ -11,14 +11,14 @@ RSpec.describe ConversationPartChannelSource, type: :model do
   describe "with_delivery_lock error propagation (M043)" do
     it "re-raises StandardError from the rescue block when completed" do
       part_id = part.id
-      expect {
+      expect do
         described_class.with_delivery_lock(part_id, "m043_test") do
           described_class.with_connection do |conn|
             conn.begin_db_transaction
             conn.execute("SELECT 1 / 0")
           end
         end
-      }.to raise_error(ActiveRecord::StatementInvalid, /division by zero/)
+      end.to raise_error(ActiveRecord::StatementInvalid, /division by zero/)
     end
   end
 
@@ -37,7 +37,11 @@ RSpec.describe ConversationPartChannelSource, type: :model do
 
         expect(yielded).to be false
       ensure
-        other_conn.select_value("SELECT pg_advisory_unlock_all()") rescue nil
+        begin
+          other_conn.select_value("SELECT pg_advisory_unlock_all()")
+        rescue StandardError
+          nil
+        end
         ActiveRecord::Base.connection_pool.checkin(other_conn)
       end
     end
@@ -64,7 +68,11 @@ RSpec.describe ConversationPartChannelSource, type: :model do
 
         Thread.new do
           sleep 0.25
-          other_conn.select_value("SELECT pg_advisory_unlock(#{key})") rescue nil
+          begin
+            other_conn.select_value("SELECT pg_advisory_unlock(#{key})")
+          rescue StandardError
+            nil
+          end
         end
 
         start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
@@ -74,7 +82,11 @@ RSpec.describe ConversationPartChannelSource, type: :model do
         expect(elapsed).to be >= 0.2
         expect(elapsed).to be < 1.0
       ensure
-        other_conn.select_value("SELECT pg_advisory_unlock_all()") rescue nil
+        begin
+          other_conn.select_value("SELECT pg_advisory_unlock_all()")
+        rescue StandardError
+          nil
+        end
         ActiveRecord::Base.connection_pool.checkin(other_conn)
       end
     end
@@ -102,7 +114,11 @@ RSpec.describe ConversationPartChannelSource, type: :model do
         end
         expect(yielded).to be false
       ensure
-        other_conn.select_value("SELECT pg_advisory_unlock_all()") rescue nil
+        begin
+          other_conn.select_value("SELECT pg_advisory_unlock_all()")
+        rescue StandardError
+          nil
+        end
         ActiveRecord::Base.connection_pool.checkin(other_conn)
       end
     end

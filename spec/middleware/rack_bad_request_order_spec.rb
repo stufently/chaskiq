@@ -4,7 +4,9 @@ require "rails_helper"
 
 RSpec.describe "RackBadRequest middleware order" do
   it "is installed in the middleware stack" do
-    middleware_classes = Rails.application.middleware.map(&:name) || Rails.application.middleware.map { |m| m.respond_to?(:name) ? m.name : m.to_s }
+    middleware_classes = Rails.application.middleware.map(&:name) || Rails.application.middleware.map do |m|
+      m.respond_to?(:name) ? m.name : m.to_s
+    end
     expect(middleware_classes).to include("Middleware::RackBadRequest")
   end
 
