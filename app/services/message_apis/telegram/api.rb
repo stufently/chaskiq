@@ -49,7 +49,6 @@ module MessageApis
           "Content-Type" => "application/json",
           "Accept" => "application/json"
         }
-        self
       end
 
       def register_webhook(_app_package, integration)
@@ -253,10 +252,10 @@ module MessageApis
           when "voice", "document"
             file = handle_direct_upload(f["file_id"], f["mime_type"])
             file_block(url: file[:url], text: f["file_name"])
-          else "photo"
-               f = data[k.first].first
-               file = handle_direct_upload(f["file_id"], f["mime_type"])
-               photo_block(url: file[:url], text: f["file_name"])
+          else # "photo"
+            f = data[k.first].first
+            file = handle_direct_upload(f["file_id"], f["mime_type"])
+            photo_block(url: file[:url], text: f["file_name"])
           end
         end
       end

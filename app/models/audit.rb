@@ -22,7 +22,7 @@ class Audit < ApplicationRecord
   end
 
   def agent_name
-    agent.try(:display_name).to_s || "--"
+    agent.try(:display_name).to_s
   end
 
   def auditable_name

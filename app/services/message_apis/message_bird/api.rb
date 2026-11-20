@@ -66,8 +66,6 @@ module MessageApis
           "Content-Type" => "application/json",
           "Accept" => "application/json"
         }
-
-        self
       end
 
       def register_webhook(_app_package, integration)
