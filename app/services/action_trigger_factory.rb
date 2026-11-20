@@ -309,7 +309,7 @@ class ActionTriggerFactory
         user: user,
         predicates: o["predicates"] || []
       )
-      if comparator.compare && trigger = app.bot_tasks.find(o["trigger"])
+      if comparator.compare && (trigger = app.bot_tasks.find(o["trigger"]))
         return trigger
       end
 

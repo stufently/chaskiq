@@ -45,10 +45,8 @@ class AppUserTriggerJob < ApplicationJob
   def add_message(trigger, conversation)
     author = @app.agent_bots.first
 
-    step = trigger.paths.first&.with_indifferent_access["steps"]
-                  .find do |o|
-      o["messages"].any?
-    end
+    first_path = trigger.paths.first
+    step = first_path.with_indifferent_access["steps"].find { |o| o["messages"].any? } if first_path
 
     message = step[:messages].first
 

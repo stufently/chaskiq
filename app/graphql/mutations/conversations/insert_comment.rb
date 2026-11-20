@@ -20,7 +20,7 @@ module Mutations
           authorize! conversation, to: :can_manage_conversations?, with: AppPolicy, context: {
             app: app
           }
-        elsif app_user = context[:get_app_user].call
+        elsif (app_user = context[:get_app_user].call)
           author = app_user
         end
 

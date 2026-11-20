@@ -13,7 +13,7 @@ module Mutations
 
       if operation.blank? || (operation == "new")
         @app = current_user.apps.new
-      elsif @app = current_user.apps.create(app_params.permit!)
+      elsif (@app = current_user.apps.create(app_params.permit!))
 
         return { app: @app, errors: @app.errors } if @app.errors.any?
 

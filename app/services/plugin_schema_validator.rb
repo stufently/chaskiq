@@ -53,10 +53,10 @@ end
 class TextSchema
   include ActiveModel::Validations
 
-  validates :type, presence: :true
-  validates :text, presence: :true
-  validates :style, presence: :true, inclusion: { in: %w[paragraph muted header notice notice-error notice-success] }
-  validates :align, presence: :true, inclusion: { in: %w[left center right] }
+  validates :type, presence: true
+  validates :text, presence: true
+  validates :style, presence: true, inclusion: { in: %w[paragraph muted header notice notice-error notice-success] }
+  validates :align, presence: true, inclusion: { in: %w[left center right] }
 
   attr_accessor :type, :text, :style, :align
 
@@ -71,7 +71,7 @@ end
 class ButtonSchema
   include ActiveModel::Validations
 
-  validates :id, presence: :true
+  validates :id, presence: true
   validate :action_hash
 
   attr_accessor :id, :name, :label, :type, :action
@@ -94,9 +94,9 @@ class ActionSchema
 
   attr_accessor :type, :content_url, :url, :options
 
-  validates :type, presence: :true, inclusion: { in: %w[frame content submit link url] }
-  validates :content_url, presence: :true, if: -> { type == "content" }
-  validates :url, presence: :true, if: -> { %w[frame link url].include?(type) }
+  validates :type, presence: true, inclusion: { in: %w[frame content submit link url] }
+  validates :content_url, presence: true, if: -> { type == "content" }
+  validates :url, presence: true, if: -> { %w[frame link url].include?(type) }
 
   def initialize(params)
     self.url = params[:url] if params[:url].present?
@@ -111,10 +111,10 @@ class ImageSchema
 
   attr_accessor :type, :url, :width, :height, :align, :rounded
 
-  validates :type, presence: :true, inclusion: { in: %w[image] }
-  validates :height, presence: :true, numericality: { only_integer: true }
-  validates :width, presence: :true, numericality: { only_integer: true }
-  validates :url, presence: :true, format: { with: URI::DEFAULT_PARSER.make_regexp }
+  validates :type, presence: true, inclusion: { in: %w[image] }
+  validates :height, presence: true, numericality: { only_integer: true }
+  validates :width, presence: true, numericality: { only_integer: true }
+  validates :url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp }
   validates :align, inclusion: { in: %w[left center right] }
   validates :rounded, inclusion: { in: [true, false] }
 
@@ -133,7 +133,7 @@ class SpacerSchema
 
   attr_accessor :type, :size
 
-  validates :size, presence: :true, inclusion: { in: %w[xs s sm m l xl] }
+  validates :size, presence: true, inclusion: { in: %w[xs s sm m l xl] }
 
   def initialize(params)
     self.size = params[:size] || "m"
@@ -173,7 +173,7 @@ class DataTableItemSchema
 
   attr_accessor :type, :field, :value
 
-  validates :type, :field, presence: :true
+  validates :type, :field, presence: true
 
   def initialize(params)
     self.type = params[:type]
@@ -188,7 +188,7 @@ class InputSchema
   attr_accessor :id, :name, :label, :type,
                 :placeholder, :value, :save_state, :action, :self_errors
 
-  validates :type, :id, presence: :true
+  validates :type, :id, presence: true
   # validates :name, :label, presence: :true
   validates :save_state, inclusion: { in: %w[saved failed unsaved] }, if: lambda {
     save_state.present?
@@ -219,7 +219,7 @@ class TextAreaSchema
   attr_accessor :id, :name, :label, :type,
                 :placeholder, :value, :self_errors, :save_state
 
-  validates :type, :id, presence: :true
+  validates :type, :id, presence: true
   validates :save_state, inclusion: { in: %w[saved failed unsaved] }, if: lambda {
     save_state.present?
   }
@@ -239,7 +239,7 @@ end
 class ListSchema
   include ActiveModel::Validations
 
-  validates :type, :items, presence: :true
+  validates :type, :items, presence: true
   validate :validate_items
   validates :disabled, inclusion: { in: [true, false] }, if: -> { disabled.present? }
 
@@ -261,7 +261,7 @@ class ListItemSchema
 
   attr_accessor :type, :id, :title, :subtitle, :action, :tertiary_text
 
-  validates :type, :id, :title, presence: :true
+  validates :type, :id, :title, presence: true
   validate :action_hash
 
   def initialize(params)
@@ -281,7 +281,7 @@ end
 class SingleSelectSchema
   include ActiveModel::Validations
 
-  validates :type, :options, presence: :true
+  validates :type, :options, presence: true
   validate :validate_options
 
   attr_accessor :type, :id, :label, :options, :disabled
@@ -302,7 +302,7 @@ class SingleSelectItemSchema
 
   attr_accessor :type, :id, :text, :action
 
-  validates :type, :id, :text, presence: :true
+  validates :type, :id, :text, presence: true
   validate :action_hash
 
   def initialize(params)
@@ -322,7 +322,7 @@ class CheckboxSchema
 
   attr_accessor :type, :id, :label, :value, :options
 
-  validates :type, :id, presence: :true
+  validates :type, :id, presence: true
   validate :validate_options
 
   def initialize(params)
@@ -345,7 +345,7 @@ class CheckboxItemSchema
 
   attr_accessor :type, :id, :text
 
-  validates :type, :id, :text, presence: :true
+  validates :type, :id, :text, presence: true
   def initialize(params)
     self.type = params[:type]
     self.id = params[:id]
@@ -358,7 +358,7 @@ class DropdownSchema
 
   attr_accessor :type, :id, :label, :value, :options
 
-  validates :type, :id, :label, presence: :true
+  validates :type, :id, :label, presence: true
   validate :validate_options
 
   def initialize(params)
@@ -379,7 +379,7 @@ class DropdownItemSchema
 
   attr_accessor :type, :id, :text
 
-  validates :type, :id, :text, presence: :true
+  validates :type, :id, :text, presence: true
   def initialize(params)
     self.type = params[:type]
     self.id = params[:id]
@@ -392,7 +392,7 @@ class FrameSchema
 
   attr_accessor :type, :url
 
-  validates :type, :url, presence: :true
+  validates :type, :url, presence: true
 
   def initialize(params)
     self.type = params[:type]

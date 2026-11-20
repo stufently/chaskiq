@@ -4,7 +4,7 @@ class SnsReceiverJob < ApplicationJob
   queue_as :default
 
   # Receive hook
-  def perform(track_type, m, _referrer)
+  def perform(track_type, m, referrer)
     part = m["mail"]["headers"].find do |o|
       o["name"] == "X-CHASKIQ-PART-ID"
     end
@@ -17,7 +17,7 @@ class SnsReceiverJob < ApplicationJob
     handle_chat_message(track_type, m, part["value"]) if part.present?
 
     # handle campaign
-    handle_campaign_message(track_type, m, _referrer) if campaign.present?
+    handle_campaign_message(track_type, m, referrer) if campaign.present?
 
     unsubscribe_user(track_type, m)
   end
@@ -39,7 +39,7 @@ class SnsReceiverJob < ApplicationJob
 
     return if campaign.blank? || app_user.blank?
 
-    app_user.send("track_#{track_type}".to_sym,
+    app_user.send(:"track_#{track_type}",
                   host: data["ipAddress"],
                   trackable: campaign,
                   # message_id: message_id,

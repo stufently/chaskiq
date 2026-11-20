@@ -33,10 +33,10 @@ class ListImporter < ActiveImporter::Base
 
     data = row.transform_keys { |key| key.to_s.parameterize.underscore.to_sym }
 
-    if user = @app.send(meth.to_sym,
-                        disable_callbacks: true,
-                        email: row.delete("email"),
-                        properties: data)
+    if (user = @app.send(meth.to_sym,
+                         disable_callbacks: true,
+                         email: row.delete("email"),
+                         properties: data))
 
       # add an import tag to contact
       user.tag_list.add(@tag)

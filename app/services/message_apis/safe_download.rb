@@ -76,15 +76,15 @@ module MessageApis
       uri = http_uri(url)
 
       (limits.max_redirects + 1).times do |hop|
-        return unless uri
-        return if url_allowed && !url_allowed.call(uri)
+        return nil unless uri
+        return nil if url_allowed && !url_allowed.call(uri)
 
         addresses = download_addresses(uri, **address_options)
-        return unless addresses
+        return nil unless addresses
 
         body, location = download(uri, addresses, limits.max_bytes, hop.zero? ? headers : {})
         return body unless location
-        return if hop == limits.max_redirects
+        return nil if hop == limits.max_redirects
 
         uri = http_uri(URI.join(uri.to_s, location).to_s)
       end
@@ -154,7 +154,7 @@ module MessageApis
 
       body = String.new(encoding: Encoding::BINARY)
       response.read_body do |chunk|
-        return if body.bytesize + chunk.bytesize > max_bytes
+        return nil if body.bytesize + chunk.bytesize > max_bytes
 
         body << chunk
       end

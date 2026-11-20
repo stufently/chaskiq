@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   end
 
   def cookie_namespace
-    "chaskiq_session_id_#{@app.key.gsub('-', '')}".to_sym
+    :"chaskiq_session_id_#{@app.key.gsub('-', '')}"
   end
 
   def render_empty
