@@ -117,10 +117,9 @@ class FetchLinkCardService < BaseService
     )
   end
 
+  # <meta property="..." content="..."> (OpenGraph), else <meta name="..." content="...">.
   def meta_property(html, property)
-    node = html.at_xpath("//meta[@property=\"#{property}\"]")
-    return if node.blank?
-
-    node.attribute("content").value || node.attribute("content").value
+    html.at_xpath("//meta[@property=\"#{property}\"]")&.attribute("content")&.value ||
+      html.at_xpath("//meta[@name=\"#{property}\"]")&.attribute("content")&.value
   end
 end
