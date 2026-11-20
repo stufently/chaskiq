@@ -14,7 +14,7 @@ class Message < ApplicationRecord
 
   attr_accessor :step
 
-  validates :name, presence: :true
+  validates :name, presence: true
   validates :html_content, presence: true, if: :template_step?
 
   scope :enabled, -> { where(state: "enabled") }
@@ -116,7 +116,7 @@ class Message < ApplicationRecord
   def self.infix(filter)
     Arel::Nodes::InfixOperation.new("@>",
                                     arel_table[:segments],
-                                    Arel::Nodes.build_quoted(BotTask.type_predicate_for(filter).to_json.to_s))
+                                    Arel::Nodes.build_quoted(BotTask.type_predicate_for(filter).to_json))
   end
 
   def step_1?

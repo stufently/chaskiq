@@ -21,7 +21,7 @@ module Mutations
           }
           author = app.agents.where("agents.email =?", current_user.email).first
           participant = app.app_users.find(id)
-        elsif app_user = context[:get_app_user].call
+        elsif (app_user = context[:get_app_user].call)
           app = App.find_by(key: app_key)
           # TODO: check this, when permit multiple emails, check by different id
           author = app_user # app.app_users.where(["email =?", current_user.email ]).first
