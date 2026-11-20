@@ -3,12 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Nightfury::Metric::AvgTimeSeries do
-  let(:redis) { Redis.new(url: ENV.fetch("REDIS_URL")) }
+  let(:nf_redis) { Nightfury.redis }
   let(:ts) { described_class.new(:mutb_avg_test, step: :minute) }
-  let(:key) { "nf-test:mutb_avg_test" }
+  let(:key) { "mutb_avg_test" }
 
-  before { redis.del(key) }
-  after { redis.del(key); redis.close }
+  before { nf_redis.del(key) }
+  after { nf_redis.del(key) }
 
   describe "#get_padded_range" do
     it "pads empty steps with '0.0'" do

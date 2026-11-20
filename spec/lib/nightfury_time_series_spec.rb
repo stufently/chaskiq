@@ -3,35 +3,35 @@
 require "rails_helper"
 
 RSpec.describe Nightfury::Metric::TimeSeries do
-  let(:redis) { Redis.new(url: ENV.fetch("REDIS_URL")) }
+  let(:nf_redis) { Nightfury.redis }
   let(:ts) { described_class.new(:mutb_ts_test, step: :minute) }
-  let(:key) { "nf-test:mutb_ts_test" }
+  let(:key) { "mutb_ts_test" }
 
-  before { redis.del(key) }
-  after { redis.del(key); redis.close }
+  before { nf_redis.del(key) }
+  after { nf_redis.del(key) }
 
   describe "#get/#get_exact/#get_range/#get_all after delete" do
     it "returns nil for get on a deleted series" do
       ts.set("5", Time.utc(2026, 11, 20, 12, 0))
-      redis.del(key)
+      nf_redis.del(key)
       expect(ts.get).to be_nil
     end
 
     it "returns nil for get_exact on a deleted series" do
       ts.set("5", Time.utc(2026, 11, 20, 12, 0))
-      redis.del(key)
+      nf_redis.del(key)
       expect(ts.get_exact(Time.utc(2026, 11, 20, 12, 0))).to be_nil
     end
 
     it "returns nil for get_range on a deleted series" do
       ts.set("5", Time.utc(2026, 11, 20, 12, 0))
-      redis.del(key)
+      nf_redis.del(key)
       expect(ts.get_range(Time.utc(2026, 11, 20), Time.utc(2026, 11, 21))).to be_nil
     end
 
     it "returns nil for get_all on a deleted series" do
       ts.set("5", Time.utc(2026, 11, 20, 12, 0))
-      redis.del(key)
+      nf_redis.del(key)
       expect(ts.get_all).to be_nil
     end
   end
@@ -70,11 +70,11 @@ RSpec.describe Nightfury::Metric::TimeSeries do
 
   describe "fresh series with only meta" do
     it "returns nil for get on a fresh series (meta at score 0)" do
+      nf_redis.del("mutb_ts_fresh")
       fresh = described_class.new(:mutb_ts_fresh, step: :minute)
-      fresh_key = "nf-test:mutb_ts_fresh"
       expect(fresh.get).to be_nil
     ensure
-      redis.del(fresh_key)
+      nf_redis.del("mutb_ts_fresh")
     end
   end
 
@@ -112,12 +112,11 @@ RSpec.describe Nightfury::Metric::TimeSeries do
 
   describe "#get with get_meta on empty series" do
     it "returns [nil, {}] for get(nil, true) on an empty series" do
+      nf_redis.del("mutb_ts_empty")
       empty_ts = described_class.new(:mutb_ts_empty, step: :minute)
-      empty_key = "nf-test:mutb_ts_empty"
-      redis.del(empty_key)
       expect(empty_ts.get(nil, true)).to eq([nil, {}])
     ensure
-      redis.del(empty_key)
+      nf_redis.del("mutb_ts_empty")
     end
   end
 
@@ -126,7 +125,7 @@ RSpec.describe Nightfury::Metric::TimeSeries do
       t = Time.utc(2026, 11, 20, 12, 0, 30)
       ts.set("old", t)
       ts.set("new", t)
-      members = redis.zrangebyscore(key, ts.send(:get_step_time, t).to_i, ts.send(:get_step_time, t).to_i)
+      members = nf_redis.zrangebyscore(key, ts.send(:get_step_time, t).to_i, ts.send(:get_step_time, t).to_i)
       expect(members.size).to eq(1)
       expect(members.first).to include("new")
     end
@@ -135,7 +134,7 @@ RSpec.describe Nightfury::Metric::TimeSeries do
   describe "meta stored as JSON" do
     it "stores meta as JSON parseable string" do
       ts.meta = { "k" => 1 }
-      raw_member = redis.zrangebyscore(key, 0, 0).first
+      raw_member = nf_redis.zrangebyscore(key, 0, 0).first
       parsed = JSON.parse(raw_member)
       expect(parsed).to eq({ "k" => 1 })
     end

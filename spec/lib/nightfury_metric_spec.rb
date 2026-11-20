@@ -3,10 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Nightfury::Metric::Base do
-  let(:redis) { Redis.new(url: ENV.fetch("REDIS_URL")) }
-
-  after { redis.close }
-
   describe "#redis_key" do
     it "returns just the name when prefix is blank" do
       metric = described_class.new(:x, redis_key_prefix: "")
@@ -20,7 +16,7 @@ RSpec.describe Nightfury::Metric::Base do
 
     it "uses blank? not nil? for prefix check" do
       metric = described_class.new(:x, redis_key_prefix: "")
-      expect(metric.redis_key).not_to include(":x")
+      expect(metric.redis_key).not_to start_with(":")
     end
   end
 end

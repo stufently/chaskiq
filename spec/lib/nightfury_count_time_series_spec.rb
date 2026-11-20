@@ -3,12 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Nightfury::Metric::CountTimeSeries do
-  let(:redis) { Redis.new(url: ENV.fetch("REDIS_URL")) }
+  let(:nf_redis) { Nightfury.redis }
   let(:ts) { described_class.new(:mutb_count_test, step: :minute) }
-  let(:key) { "nf-test:mutb_count_test" }
+  let(:key) { "mutb_count_test" }
 
-  before { redis.del(key) }
-  after { redis.del(key); redis.close }
+  before { nf_redis.del(key) }
+  after { nf_redis.del(key) }
 
   describe "#decr" do
     it "subtracts exactly 1 from the current value" do
@@ -48,25 +48,23 @@ RSpec.describe Nightfury::Metric::CountTimeSeries do
 
   describe "#incr with default time" do
     it "stores at the current minute" do
-      now = Time.utc(2026, 11, 20, 12, 0, 17)
-      travel_to now do
-        ts.incr
-        step_time = ts.send(:get_step_time, now)
-        result = ts.get_exact(step_time)
-        expect(result).not_to be_nil
-        expect(result.values.first).to eq("1")
-      end
+      fixed_time = Time.utc(2026, 11, 20, 12, 0, 17)
+      allow(Time).to receive(:now).and_return(fixed_time)
+      ts.incr
+      step_time = ts.send(:get_step_time, fixed_time)
+      result = ts.get_exact(step_time)
+      expect(result).not_to be_nil
+      expect(result.values.first).to eq("1")
     end
 
     it "does not shift time by 1 hour" do
-      now = Time.utc(2026, 11, 20, 12, 0, 17)
-      travel_to now do
-        ts.incr
-        step_now = ts.send(:get_step_time, now)
-        step_hour_ago = ts.send(:get_step_time, now - 3600)
-        expect(ts.get_exact(step_now)).not_to be_nil
-        expect(ts.get_exact(step_hour_ago)).to be_nil
-      end
+      fixed_time = Time.utc(2026, 11, 20, 12, 0, 17)
+      allow(Time).to receive(:now).and_return(fixed_time)
+      ts.incr
+      step_now = ts.send(:get_step_time, fixed_time)
+      step_hour_ago = ts.send(:get_step_time, fixed_time - 3600)
+      expect(ts.get_exact(step_now)).not_to be_nil
+      expect(ts.get_exact(step_hour_ago)).to be_nil
     end
   end
 

@@ -15,13 +15,12 @@ class ModuleA
 end
 
 RSpec.describe Nightfury::Identity::Base do
-  let(:redis) { Redis.new(url: ENV.fetch("REDIS_URL")) }
+  let(:nf_redis) { Nightfury.redis }
   let(:id) { SecureRandom.hex(6) }
 
   after do
-    redis.keys("nf-test:mutb_test_identity.#{id}*").each { |k| redis.del(k) }
-    redis.keys("nf-test:foo_identity.*").each { |k| redis.del(k) }
-    redis.close
+    nf_redis.keys("mutb_test_identity.#{id}*").each { |k| nf_redis.del(k) }
+    nf_redis.keys("foo_identity.*").each { |k| nf_redis.del(k) }
   end
 
   describe "tags in key_prefix" do
