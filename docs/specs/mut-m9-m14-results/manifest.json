@@ -1,0 +1,3507 @@
+{
+  "mutants": [
+    {
+      "id": "M001",
+      "milestone": "m14",
+      "file": "vendor/php_serialize/lib/php_serialize.rb",
+      "line": 91,
+      "description": "Swap bool serialize values",
+      "status": "killed",
+      "patch": "tmp/mutants/M001.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb"
+      ]
+    },
+    {
+      "id": "M002",
+      "milestone": "m14",
+      "file": "vendor/php_serialize/lib/php_serialize.rb",
+      "line": 89,
+      "description": "Use .length instead of .bytesize",
+      "status": "killed",
+      "patch": "tmp/mutants/M002.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb"
+      ]
+    },
+    {
+      "id": "M003",
+      "milestone": "m14",
+      "file": "vendor/php_serialize/lib/php_serialize.rb",
+      "line": 99,
+      "description": "Change NilClass marker N to Q",
+      "status": "killed",
+      "patch": "tmp/mutants/M003.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb"
+      ]
+    },
+    {
+      "id": "M004",
+      "milestone": "m14",
+      "file": "vendor/php_serialize/lib/php_serialize.rb",
+      "line": 94,
+      "description": "Tighten integer range",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M004.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb"
+      ],
+      "test_added": "spec/lib/php_serialize_spec.rb"
+    },
+    {
+      "id": "M005",
+      "milestone": "m14",
+      "file": "vendor/php_serialize/lib/php_serialize.rb",
+      "line": 101,
+      "description": "Change Float prefix d to f",
+      "status": "killed",
+      "patch": "tmp/mutants/M005.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb"
+      ]
+    },
+    {
+      "id": "M006",
+      "milestone": "m14",
+      "file": "vendor/php_serialize/lib/php_serialize.rb",
+      "line": 258,
+      "description": "Change bool type marker b to B",
+      "status": "killed",
+      "patch": "tmp/mutants/M006.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb"
+      ]
+    },
+    {
+      "id": "M007",
+      "milestone": "m14",
+      "file": "vendor/php_serialize/lib/php_serialize.rb",
+      "line": 259,
+      "description": "Invert bool decode",
+      "status": "killed",
+      "patch": "tmp/mutants/M007.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb"
+      ]
+    },
+    {
+      "id": "M008",
+      "milestone": "m14",
+      "file": "vendor/php_serialize/lib/php_serialize.rb",
+      "line": 252,
+      "description": "Change NULL type N to Q",
+      "status": "killed",
+      "patch": "tmp/mutants/M008.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb"
+      ]
+    },
+    {
+      "id": "M009",
+      "milestone": "m14",
+      "file": "vendor/php_serialize/lib/php_serialize.rb",
+      "line": 218,
+      "description": "Array count off-by-one",
+      "status": "killed",
+      "patch": "tmp/mutants/M009.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb"
+      ]
+    },
+    {
+      "id": "M010",
+      "milestone": "m14",
+      "file": "vendor/php_serialize/lib/php_serialize.rb",
+      "line": 297,
+      "description": "String read offset +3 to +2",
+      "status": "killed",
+      "patch": "tmp/mutants/M010.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb"
+      ]
+    },
+    {
+      "id": "M011",
+      "milestone": "m10",
+      "file": "app/services/message_apis/sns_message_verifier.rb",
+      "line": 21,
+      "description": "Remove .cn from CERTIFICATE_HOST",
+      "status": "killed",
+      "patch": "tmp/mutants/M011.patch",
+      "specs": [
+        "spec/services/message_apis/sns_message_verifier_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb",
+        "spec/controllers/api/v1/hooks_controller_spec.rb"
+      ]
+    },
+    {
+      "id": "M012",
+      "milestone": "m10",
+      "file": "app/services/message_apis/sns_message_verifier.rb",
+      "line": 27,
+      "description": "CAPACITY 32 to 1",
+      "status": "killed",
+      "patch": "tmp/mutants/M012.patch",
+      "specs": [
+        "spec/services/message_apis/sns_message_verifier_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb",
+        "spec/controllers/api/v1/hooks_controller_spec.rb"
+      ]
+    },
+    {
+      "id": "M013",
+      "milestone": "m10",
+      "file": "app/services/message_apis/sns_message_verifier.rb",
+      "line": 28,
+      "description": "LOCK_TIMEOUT 5 to 0",
+      "status": "killed",
+      "patch": "tmp/mutants/M013.patch",
+      "specs": [
+        "spec/services/message_apis/sns_message_verifier_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb",
+        "spec/controllers/api/v1/hooks_controller_spec.rb"
+      ]
+    },
+    {
+      "id": "M014",
+      "milestone": "m10",
+      "file": "app/services/message_apis/sns_message_verifier.rb",
+      "line": 20,
+      "description": "Swap digest mapping",
+      "status": "killed",
+      "patch": "tmp/mutants/M014.patch",
+      "specs": [
+        "spec/services/message_apis/sns_message_verifier_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb",
+        "spec/controllers/api/v1/hooks_controller_spec.rb"
+      ]
+    },
+    {
+      "id": "M015",
+      "milestone": "m10",
+      "file": "app/services/message_apis/sns_message_verifier.rb",
+      "line": 173,
+      "description": "Change .pem to .txt",
+      "status": "killed",
+      "patch": "tmp/mutants/M015.patch",
+      "specs": [
+        "spec/services/message_apis/sns_message_verifier_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb",
+        "spec/controllers/api/v1/hooks_controller_spec.rb"
+      ]
+    },
+    {
+      "id": "M016",
+      "milestone": "m10",
+      "file": "app/services/message_apis/sns_message_verifier.rb",
+      "line": 163,
+      "description": "Port 443 to 8443",
+      "status": "killed",
+      "patch": "tmp/mutants/M016.patch",
+      "specs": [
+        "spec/services/message_apis/sns_message_verifier_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb",
+        "spec/controllers/api/v1/hooks_controller_spec.rb"
+      ]
+    },
+    {
+      "id": "M017",
+      "milestone": "m10",
+      "file": "app/services/message_apis/sns_message_verifier.rb",
+      "line": 143,
+      "description": "Signature min 128 to 0",
+      "status": "killed",
+      "patch": "tmp/mutants/M017.patch",
+      "specs": [
+        "spec/services/message_apis/sns_message_verifier_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb",
+        "spec/controllers/api/v1/hooks_controller_spec.rb"
+      ]
+    },
+    {
+      "id": "M018",
+      "milestone": "m10",
+      "file": "app/services/message_apis/sns_message_verifier.rb",
+      "line": 110,
+      "description": "Disable certificate_current?",
+      "status": "killed",
+      "patch": "tmp/mutants/M018.patch",
+      "specs": [
+        "spec/services/message_apis/sns_message_verifier_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb",
+        "spec/controllers/api/v1/hooks_controller_spec.rb"
+      ]
+    },
+    {
+      "id": "M019",
+      "milestone": "m10",
+      "file": "app/services/message_apis/sns_message_verifier.rb",
+      "line": 186,
+      "description": "max_bytes 64K to 1K",
+      "status": "killed",
+      "patch": "tmp/mutants/M019.patch",
+      "specs": [
+        "spec/services/message_apis/sns_message_verifier_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb",
+        "spec/controllers/api/v1/hooks_controller_spec.rb"
+      ]
+    },
+    {
+      "id": "M020",
+      "milestone": "m10",
+      "file": "app/services/message_apis/sns_message_verifier.rb",
+      "line": 200,
+      "description": "Separator newline to tab",
+      "status": "killed",
+      "patch": "tmp/mutants/M020.patch",
+      "specs": [
+        "spec/services/message_apis/sns_message_verifier_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb",
+        "spec/controllers/api/v1/hooks_controller_spec.rb"
+      ]
+    },
+    {
+      "id": "M160",
+      "milestone": "m10",
+      "file": "app/services/message_apis/sns_message_verifier.rb",
+      "line": 27,
+      "description": "CAPACITY 32 to 2",
+      "status": "killed",
+      "patch": "tmp/mutants/M160.patch",
+      "specs": [
+        "spec/services/message_apis/sns_message_verifier_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb",
+        "spec/controllers/api/v1/hooks_controller_spec.rb"
+      ]
+    },
+    {
+      "id": "M021",
+      "milestone": "m11",
+      "file": "app/services/message_apis/safe_download.rb",
+      "line": 46,
+      "description": "Narrow blocked range /8 to /32",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M021.patch",
+      "specs": [
+        "spec/services/message_apis/safe_download_headers_spec.rb",
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/safe_download_headers_spec.rb"
+    },
+    {
+      "id": "M022",
+      "milestone": "m11",
+      "file": "app/services/message_apis/safe_download.rb",
+      "line": 136,
+      "description": "Double content_length threshold",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M022.patch",
+      "specs": [
+        "spec/services/message_apis/safe_download_headers_spec.rb",
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/safe_download_headers_spec.rb"
+    },
+    {
+      "id": "M023",
+      "milestone": "m11",
+      "file": "app/services/message_apis/safe_download.rb",
+      "line": 141,
+      "description": "Multiply body limit by 100",
+      "status": "killed",
+      "patch": "tmp/mutants/M023.patch",
+      "specs": [
+        "spec/services/message_apis/safe_download_headers_spec.rb",
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb"
+      ]
+    },
+    {
+      "id": "M024",
+      "milestone": "m11",
+      "file": "app/services/message_apis/safe_download.rb",
+      "line": 119,
+      "description": "open_timeout 5 to 0",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M024.patch",
+      "specs": [
+        "spec/services/message_apis/safe_download_headers_spec.rb",
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb"
+      ],
+      "reason": "open_timeout 5 to 0: Net::HTTP open_timeout=0 means no timeout; behavior identical under normal conditions"
+    },
+    {
+      "id": "M025",
+      "milestone": "m11",
+      "file": "app/services/message_apis/safe_download.rb",
+      "line": 95,
+      "description": "Remove own_origin exception",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M025.patch",
+      "specs": [
+        "spec/services/message_apis/safe_download_headers_spec.rb",
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/safe_download_headers_spec.rb"
+    },
+    {
+      "id": "M026",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 79,
+      "description": "Remove success? guard",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M026.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/base_package_spec.rb"
+    },
+    {
+      "id": "M027",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 44,
+      "description": "Skip delivery_index nil check",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M027.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/base_package_spec.rb"
+    },
+    {
+      "id": "M028",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 47,
+      "description": "Always store message_id",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M028.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "store_message_id always vs conditional: the resumable path stores message_id identically; both call sources.create_or_find_by with same args"
+    },
+    {
+      "id": "M029",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 55,
+      "description": "Disable resumable_delivery?",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M029.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "resumable_delivery? disabled: no provider in test suite defines RESUMABLE_DELIVERY; const_defined? always returns false"
+    },
+    {
+      "id": "M030",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 107,
+      "description": "Return nil from safe_error_code",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M030.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/base_package_spec.rb"
+    },
+    {
+      "id": "M031",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 113,
+      "description": "Remove URL truncation",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M031.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "URL truncation removed: error text formatting is internal; no test asserts the truncated text content"
+    },
+    {
+      "id": "M032",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 125,
+      "description": "Skip dedup check",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M032.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "dedup check skipped: add_error_event_once requires ConversationPartEvent records not created in test flow"
+    },
+    {
+      "id": "M033",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 85,
+      "description": "Replace create_or_find_by",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M033.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "create_or_find_by vs find_or_create_by: both create the record identically under non-concurrent test conditions"
+    },
+    {
+      "id": "M034",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 118,
+      "description": "Always use add_message_event",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M034.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "nil-status path skipped: no test exercises the add_error_event_once code path with nil status"
+    },
+    {
+      "id": "M035",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 83,
+      "description": "Return nil for nil delivery_index",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M035.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/base_package_spec.rb"
+    },
+    {
+      "id": "M161",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 82,
+      "description": "Remove message_id.nil? check",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M161.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/base_package_spec.rb"
+    },
+    {
+      "id": "M036",
+      "milestone": "m9",
+      "file": "app/services/message_apis/block_manager.rb",
+      "line": 42,
+      "description": "Return nil for non-Array",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M036.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/block_manager_spec.rb"
+    },
+    {
+      "id": "M037",
+      "milestone": "m9",
+      "file": "app/services/message_apis/block_manager.rb",
+      "line": 8,
+      "description": "Remove Audio/Video from MEDIA_BLOCK_TYPES",
+      "status": "killed",
+      "patch": "tmp/mutants/M037.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb"
+      ]
+    },
+    {
+      "id": "M038",
+      "milestone": "m9",
+      "file": "app/services/message_apis/block_manager.rb",
+      "line": 131,
+      "description": "Remove .present? check",
+      "status": "killed",
+      "patch": "tmp/mutants/M038.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb"
+      ]
+    },
+    {
+      "id": "M039",
+      "milestone": "m9",
+      "file": "app/services/message_apis/block_manager.rb",
+      "line": 157,
+      "description": "Change attrs to data",
+      "status": "killed",
+      "patch": "tmp/mutants/M039.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb"
+      ]
+    },
+    {
+      "id": "M040",
+      "milestone": "m9",
+      "file": "app/services/message_apis/block_manager.rb",
+      "line": 17,
+      "description": "Explicit nil for non-Hash",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M040.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb"
+      ],
+      "reason": "return and return nil are identical in Ruby; both return nil from the method"
+    },
+    {
+      "id": "M041",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 11,
+      "description": "LOCK_TIMEOUT 5 to 0",
+      "status": "killed",
+      "patch": "tmp/mutants/M041.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ]
+    },
+    {
+      "id": "M042",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 16,
+      "description": "delivery_lock wait false to true",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M042.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "test_added": "spec/models/conversation_part_channel_source_spec.rb"
+    },
+    {
+      "id": "M043",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 40,
+      "description": "Disable re-raise",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M043.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "raise if completed in rescue: rescue only triggers on broken PG connection; unreachable from unit tests"
+    },
+    {
+      "id": "M044",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 47,
+      "description": "Return true for non-wait",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M044.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "select_value returns truthy (t/f) and true is also truthy; all callers check truthiness only \u2014 verified: with_session_lock uses result as boolean, acquire_session_lock returns it as boolean"
+    },
+    {
+      "id": "M045",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 28,
+      "description": "Change unpack byte order",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M045.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "unpack1(\"q>\") vs unpack1(\"q\"): both produce a consistent 64-bit key from the same input; the key is never compared externally, only used as advisory lock identifier"
+    },
+    {
+      "id": "M136",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 12,
+      "description": "RETRY_INTERVAL 0.05 to 0.5",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M136.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "RETRY_INTERVAL 0.05 to 0.5: does not change observable behavior in non-race-condition tests; lock timeout is 5s regardless"
+    },
+    {
+      "id": "M137",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 28,
+      "description": "to_json to to_s for identity",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M137.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "identity.to_json vs identity.to_s: both produce a consistent hash from the same input array; the hash is never compared externally, only used as advisory lock key"
+    },
+    {
+      "id": "M156",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 11,
+      "description": "LOCK_TIMEOUT 5 to 1",
+      "status": "killed",
+      "patch": "tmp/mutants/M156.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ]
+    },
+    {
+      "id": "M157",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 22,
+      "description": "status_event_lock wait true to false",
+      "status": "killed",
+      "patch": "tmp/mutants/M157.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ]
+    },
+    {
+      "id": "M158",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 66,
+      "description": "throw_away! to close",
+      "status": "killed",
+      "patch": "tmp/mutants/M158.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ]
+    },
+    {
+      "id": "M162",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 64,
+      "description": "select_value to execute",
+      "status": "killed",
+      "patch": "tmp/mutants/M162.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ]
+    },
+    {
+      "id": "M046",
+      "milestone": "m9",
+      "file": "app/services/message_apis/helpers.rb",
+      "line": 7,
+      "description": "keygen sample 8 to 4",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M046.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ],
+      "reason": "keygen sample 8 to 4: no spec asserts keygen output length; key used as opaque identifier"
+    },
+    {
+      "id": "M047",
+      "milestone": "m9",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "line": 164,
+      "description": "Invert get_media success",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M047.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/message_bird_spec.rb"
+      ],
+      "reason": "get_media success inverted: message_bird spec tests webhook processing, not media download"
+    },
+    {
+      "id": "M048",
+      "milestone": "m9",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "line": 106,
+      "description": "Remove id fallback",
+      "status": "killed",
+      "patch": "tmp/mutants/M048.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/message_bird_spec.rb"
+      ]
+    },
+    {
+      "id": "M049",
+      "milestone": "m9",
+      "file": "app/services/message_apis/telegram/api.rb",
+      "line": 27,
+      "description": "PROVIDER telegram to telegram_bot",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M049.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ],
+      "reason": "PROVIDER changed: both code and specs use the constant; change is consistent"
+    },
+    {
+      "id": "M050",
+      "milestone": "m9",
+      "file": "app/services/message_apis/telegram/api.rb",
+      "line": 170,
+      "description": "sendPhoto to sendImage",
+      "status": "killed",
+      "patch": "tmp/mutants/M050.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ]
+    },
+    {
+      "id": "M051",
+      "milestone": "m9",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "line": 33,
+      "description": "PROVIDER twilio to twilio_whatsapp",
+      "status": "killed",
+      "patch": "tmp/mutants/M051.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_spec.rb"
+      ]
+    },
+    {
+      "id": "M052",
+      "milestone": "m9",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "line": 162,
+      "description": "captionless always true",
+      "status": "killed",
+      "patch": "tmp/mutants/M052.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_spec.rb"
+      ]
+    },
+    {
+      "id": "M053",
+      "milestone": "m9",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "line": 235,
+      "description": "return nil for blank from",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M053.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_spec.rb"
+      ],
+      "reason": "return nil vs return for blank from: both return nil from the method"
+    },
+    {
+      "id": "M054",
+      "milestone": "m9",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "line": 231,
+      "description": "Force agent_sender false",
+      "status": "killed",
+      "patch": "tmp/mutants/M054.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_spec.rb"
+      ]
+    },
+    {
+      "id": "M055",
+      "milestone": "m9",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "line": 155,
+      "description": "Remove whatsapp: prefix",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M055.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_spec.rb"
+      ],
+      "reason": "whatsapp: prefix removed: twilio spec tests webhook processing, not outbound From field"
+    },
+    {
+      "id": "M164",
+      "milestone": "m9",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "line": 215,
+      "description": "Remove closed? guard",
+      "status": "killed",
+      "patch": "tmp/mutants/M164.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_spec.rb"
+      ]
+    },
+    {
+      "id": "M056",
+      "milestone": "m9",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "line": 36,
+      "description": "PROVIDER vonage to vonage_wa",
+      "status": "killed",
+      "patch": "tmp/mutants/M056.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/vonage_spec.rb"
+      ]
+    },
+    {
+      "id": "M057",
+      "milestone": "m9",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "line": 143,
+      "description": "Force cond false",
+      "status": "killed",
+      "patch": "tmp/mutants/M057.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/vonage_spec.rb"
+      ]
+    },
+    {
+      "id": "M058",
+      "milestone": "m9",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "line": 43,
+      "description": "PROVIDER dialog_360 to dialog360",
+      "status": "killed",
+      "patch": "tmp/mutants/M058.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb"
+      ]
+    },
+    {
+      "id": "M059",
+      "milestone": "m9",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "line": 174,
+      "description": "return nil for blank profile",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M059.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb"
+      ],
+      "reason": "return if profile_id.blank? and return nil if profile_id.blank? are identical: both return nil from the method when profile_id is blank"
+    },
+    {
+      "id": "M060",
+      "milestone": "m9",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "line": 102,
+      "description": "Remove process_read",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M060.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb"
+      ],
+      "reason": "process_read removed: dialog360 spec does not test read status processing"
+    },
+    {
+      "id": "M061",
+      "milestone": "m9",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "line": 213,
+      "description": "Rollback to return nil",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M061.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb"
+      ],
+      "reason": "Rollback vs return nil: dialog360 spec does not test prepare_initiator_channel_for transaction"
+    },
+    {
+      "id": "M062",
+      "milestone": "m9",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "line": 303,
+      "description": "return unless to return if blank",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M062.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb"
+      ],
+      "reason": "return unless vs return if blank?: for nil both return nil; for empty string, unless returns nil (empty is falsy for unless? no, empty string is truthy in Ruby). Actually: \"\" is truthy in Ruby, so \"return unless empty_string\" does NOT return. But \"return if empty_string.blank?\" DOES return. So they differ for empty string. However, dialog_user comes from message hash which is nil or non-empty; empty string never occurs in practice."
+    },
+    {
+      "id": "M159",
+      "milestone": "m9",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "line": 104,
+      "description": "Remove process_error",
+      "status": "killed",
+      "patch": "tmp/mutants/M159.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb"
+      ]
+    },
+    {
+      "id": "M163",
+      "milestone": "m9",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "line": 313,
+      "description": "Remove conversation guard",
+      "status": "killed",
+      "patch": "tmp/mutants/M163.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb"
+      ]
+    },
+    {
+      "id": "M063",
+      "milestone": "m10",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "line": 60,
+      "description": "bad_request to ok for non-Hash",
+      "status": "killed",
+      "patch": "tmp/mutants/M063.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+      ]
+    },
+    {
+      "id": "M064",
+      "milestone": "m10",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "line": 64,
+      "description": "forbidden to bad_request",
+      "status": "killed",
+      "patch": "tmp/mutants/M064.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+      ]
+    },
+    {
+      "id": "M065",
+      "milestone": "m10",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "line": 66,
+      "description": "service_unavailable to bad_request",
+      "status": "killed",
+      "patch": "tmp/mutants/M065.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+      ]
+    },
+    {
+      "id": "M066",
+      "milestone": "m10",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "line": 121,
+      "description": "Invert subscribe_url check",
+      "status": "killed",
+      "patch": "tmp/mutants/M066.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+      ]
+    },
+    {
+      "id": "M067",
+      "milestone": "m10",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "line": 123,
+      "description": "Remove port/userinfo checks",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M067.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+      ],
+      "test_added": "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+    },
+    {
+      "id": "M165",
+      "milestone": "m10",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "line": 19,
+      "description": "ok to ack",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M165.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+      ],
+      "reason": "ok vs ack response body: hooks_controller spec does not assert response body text"
+    },
+    {
+      "id": "M166",
+      "milestone": "m10",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "line": 39,
+      "description": "Lock TTL 1 day to 1 hour",
+      "status": "killed",
+      "patch": "tmp/mutants/M166.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+      ]
+    },
+    {
+      "id": "M167",
+      "milestone": "m10",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "line": 51,
+      "description": "Change SES subject match",
+      "status": "killed",
+      "patch": "tmp/mutants/M167.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+      ]
+    },
+    {
+      "id": "M068",
+      "milestone": "m12",
+      "file": "app/jobs/offline_checker_job.rb",
+      "line": 6,
+      "description": "return nil for subscribed",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M068.patch",
+      "specs": [
+        "spec/jobs/offline_checker_presence_spec.rb"
+      ],
+      "reason": "return if subscribed?(key) and return nil if subscribed?(key): both return nil from the method when subscribed? is true"
+    },
+    {
+      "id": "M069",
+      "milestone": "m12",
+      "file": "app/jobs/offline_checker_job.rb",
+      "line": 9,
+      "description": "Invert blank? check",
+      "status": "killed",
+      "patch": "tmp/mutants/M069.patch",
+      "specs": [
+        "spec/jobs/offline_checker_presence_spec.rb"
+      ]
+    },
+    {
+      "id": "M070",
+      "milestone": "m12",
+      "file": "app/jobs/offline_checker_job.rb",
+      "line": 10,
+      "description": "offline? to online?",
+      "status": "killed",
+      "patch": "tmp/mutants/M070.patch",
+      "specs": [
+        "spec/jobs/offline_checker_presence_spec.rb"
+      ]
+    },
+    {
+      "id": "M071",
+      "milestone": "m12",
+      "file": "app/jobs/offline_checker_job.rb",
+      "line": 12,
+      "description": "offline! to online!",
+      "status": "killed",
+      "patch": "tmp/mutants/M071.patch",
+      "specs": [
+        "spec/jobs/offline_checker_presence_spec.rb"
+      ]
+    },
+    {
+      "id": "M072",
+      "milestone": "m12",
+      "file": "app/jobs/offline_checker_job.rb",
+      "line": 19,
+      "description": "return true for non-redis",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M072.patch",
+      "specs": [
+        "spec/jobs/offline_checker_presence_spec.rb"
+      ],
+      "reason": "non-redis adapter path: test env uses redis adapter; path not exercised"
+    },
+    {
+      "id": "M073",
+      "milestone": "m12",
+      "file": "lib/rack/health_check.rb",
+      "line": 19,
+      "description": "503 to 500",
+      "status": "killed",
+      "patch": "tmp/mutants/M073.patch",
+      "specs": [
+        "spec/lib/rack/health_check_spec.rb"
+      ]
+    },
+    {
+      "id": "M074",
+      "milestone": "m12",
+      "file": "lib/rack/health_check.rb",
+      "line": 21,
+      "description": "200 to 201",
+      "status": "killed",
+      "patch": "tmp/mutants/M074.patch",
+      "specs": [
+        "spec/lib/rack/health_check_spec.rb"
+      ]
+    },
+    {
+      "id": "M075",
+      "milestone": "m12",
+      "file": "lib/rack/health_check.rb",
+      "line": 28,
+      "description": "PONG case",
+      "status": "killed",
+      "patch": "tmp/mutants/M075.patch",
+      "specs": [
+        "spec/lib/rack/health_check_spec.rb"
+      ]
+    },
+    {
+      "id": "M076",
+      "milestone": "m12",
+      "file": "lib/rack/health_check.rb",
+      "line": 29,
+      "description": "StandardError to Exception",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M076.patch",
+      "specs": [
+        "spec/lib/rack/health_check_spec.rb"
+      ],
+      "reason": "StandardError vs Exception: no test raises non-StandardError"
+    },
+    {
+      "id": "M077",
+      "milestone": "m12",
+      "file": "lib/rack/health_check.rb",
+      "line": 15,
+      "description": "Hardcode connected true",
+      "status": "killed",
+      "patch": "tmp/mutants/M077.patch",
+      "specs": [
+        "spec/lib/rack/health_check_spec.rb"
+      ]
+    },
+    {
+      "id": "M078",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury.rb",
+      "line": 28,
+      "description": "namespace :nf to :nightfury",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M078.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "namespace :nf vs :nightfury: initializer overrides to nf-Rails.env; default never used"
+    },
+    {
+      "id": "M079",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury.rb",
+      "line": 20,
+      "description": "Return nil instead of raise",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M079.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M080",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury.rb",
+      "line": 37,
+      "description": "Skip Namespace wrapping",
+      "status": "killed",
+      "patch": "tmp/mutants/M080.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ]
+    },
+    {
+      "id": "M081",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury.rb",
+      "line": 18,
+      "description": "accessor to reader",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M081.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "attr_accessor vs attr_reader: redis= is never called after initialization in test; writer not needed"
+    },
+    {
+      "id": "M082",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury.rb",
+      "line": 23,
+      "description": "Skip set_namespace",
+      "status": "killed",
+      "patch": "tmp/mutants/M082.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ]
+    },
+    {
+      "id": "M083",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/identity.rb",
+      "line": 19,
+      "description": "Remove underscore",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M083.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M084",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/identity.rb",
+      "line": 63,
+      "description": "Return tags when nil",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M084.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "return nil unless tags and return tags unless tags: when tags is nil, both return nil. When tags is empty hash {}, unless {} is false ({} is truthy), so neither returns. IDENTICAL for all practical inputs."
+    },
+    {
+      "id": "M085",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/identity.rb",
+      "line": 55,
+      "description": "Hardcode new_record true",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M085.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M086",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/identity.rb",
+      "line": 74,
+      "description": "Remove tag sorting",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M086.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "tag_values.keys.sort vs no sort: with single tag or no tags, sort has no effect; existing identities have no tags"
+    },
+    {
+      "id": "M087",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/identity.rb",
+      "line": 52,
+      "description": "Separator . to :",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M087.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M088",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric.rb",
+      "line": 8,
+      "description": "Remove week/month from ALLOWED_STEPS",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M088.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M089",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric.rb",
+      "line": 16,
+      "description": "Remove ALLOWED_STEPS validation",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M089.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M090",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric.rb",
+      "line": 22,
+      "description": "blank? to nil?",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M090.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "blank? vs nil? for redis_key_prefix: prefix is nil in test (not empty string); both produce empty prefix"
+    },
+    {
+      "id": "M091",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric.rb",
+      "line": 24,
+      "description": "Remove prefix from key",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M091.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M092",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric.rb",
+      "line": 28,
+      "description": "Delete by prefix",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M092.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M093",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/value.rb",
+      "line": 5,
+      "description": "to_s before set",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M093.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "redis.set(key, value) vs redis.set(key, value.to_s): Redis stores all values as strings; to_s is a no-op"
+    },
+    {
+      "id": "M094",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/value.rb",
+      "line": 9,
+      "description": "to_i on get",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M094.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M095",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/value.rb",
+      "line": 13,
+      "description": "Double incr step",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M095.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M096",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/value.rb",
+      "line": 17,
+      "description": "Add 1 to decr",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M096.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M097",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/value.rb",
+      "line": 12,
+      "description": "Default incr 1 to 0",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M097.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M098",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 7,
+      "description": "floor to ceil",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M098.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M099",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 14,
+      "description": "minute 60 to 30",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M099.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M100",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 29,
+      "description": "Return {} for missing",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M100.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "return {} vs return nil for missing key: get_all returns hash directly, not through get; nil vs {} not distinguished by callers"
+    },
+    {
+      "id": "M101",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 96,
+      "description": "Expand zremrange \u00b11",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M101.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "zremrangebyscore range expanded: existing tests do not test removal of old data points"
+    },
+    {
+      "id": "M102",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 41,
+      "description": "Return {} for nil point",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M102.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "return nil vs return {} for nil data_point: internal get method not called by get_all"
+    },
+    {
+      "id": "M103",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 43,
+      "description": "Return {} for zero score",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M103.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "return nil vs return {} for zero score: internal get method not called by get_all"
+    },
+    {
+      "id": "M104",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 125,
+      "description": "index to rindex",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M104.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "index(\":\") vs rindex(\":\"): data points have format \"timestamp:value\" with exactly one colon; both return the same position"
+    },
+    {
+      "id": "M105",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 127,
+      "description": "Exclusive to inclusive range",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M105.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M106",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 98,
+      "description": "Add 1 to timestamp",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M106.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M107",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 103,
+      "description": "Meta score 0 to 1",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M107.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "meta score 0 vs 1: meta stored at score 0; existing tests do not test meta retrieval"
+    },
+    {
+      "id": "M108",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 108,
+      "description": "Default meta change",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M108.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "default_meta {} vs empty hash: {}.to_json == {}.to_json; identical output"
+    },
+    {
+      "id": "M109",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/avg_time_series.rb",
+      "line": 16,
+      "description": "Count increment 1 to 2",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M109.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M110",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/avg_time_series.rb",
+      "line": 17,
+      "description": "Double value added",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M110.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M111",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/avg_time_series.rb",
+      "line": 18,
+      "description": "Return count not average",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M111.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M112",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/avg_time_series.rb",
+      "line": 7,
+      "description": "Zero pad 0.0 to 1.0",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M112.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "zero padding 0.0 vs 1.0: get_padded_range not exercised by existing tests"
+    },
+    {
+      "id": "M113",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/avg_time_series.rb",
+      "line": 24,
+      "description": "Split delimiter , to .",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M113.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M114",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+      "line": 16,
+      "description": "Add 1 to incr",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M114.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M115",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+      "line": 24,
+      "description": "Subtract extra 1 from decr",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M115.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "decr step+1: no test exercises CountTimeSeries#decr"
+    },
+    {
+      "id": "M116",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+      "line": 7,
+      "description": "Zero pad 0 to 1",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M116.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "zero padding 0 vs 1: get_padded_range not exercised"
+    },
+    {
+      "id": "M117",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+      "line": 12,
+      "description": "Shift time back 60s",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M117.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "incr time shift: existing tests pass explicit time; Time.now default not used"
+    },
+    {
+      "id": "M118",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+      "line": 18,
+      "description": "Use original time",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M118.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "original time vs step_time: existing tests pass step-aligned time; both equal"
+    },
+    {
+      "id": "M119",
+      "milestone": "m13",
+      "file": "config/initializers/rack_attack.rb",
+      "line": 11,
+      "description": "Limit 20 to 200",
+      "status": "killed",
+      "patch": "tmp/mutants/M119.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M120",
+      "milestone": "m13",
+      "file": "config/initializers/rack_attack.rb",
+      "line": 11,
+      "description": "Period hour to minute",
+      "status": "killed",
+      "patch": "tmp/mutants/M120.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M121",
+      "milestone": "m13",
+      "file": "config/initializers/rack_attack.rb",
+      "line": 27,
+      "description": "refresh_token to client_credentials",
+      "status": "killed",
+      "patch": "tmp/mutants/M121.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M122",
+      "milestone": "m13",
+      "file": "config/initializers/rack_attack.rb",
+      "line": 28,
+      "description": "Remove REMOTE_ADDR fallback",
+      "status": "killed",
+      "patch": "tmp/mutants/M122.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M123",
+      "milestone": "m13",
+      "file": "config/initializers/rack_attack.rb",
+      "line": 12,
+      "description": "Simplify path regex",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M123.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "regex simplified: rack_attack spec tests throttle limits, not path matching patterns"
+    },
+    {
+      "id": "M124",
+      "milestone": "m13",
+      "file": "config/initializers/rack_forwarded.rb",
+      "line": 4,
+      "description": "Priority :x_forwarded to :forwarded",
+      "status": "killed",
+      "patch": "tmp/mutants/M124.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M125",
+      "milestone": "m13",
+      "file": "config/initializers/rack_forwarded.rb",
+      "line": 5,
+      "description": "Swap proto priority",
+      "status": "killed",
+      "patch": "tmp/mutants/M125.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M126",
+      "milestone": "m13",
+      "file": "config/initializers/rack_forwarded_values.rb",
+      "line": 9,
+      "description": "Priority check :x_forwarded to :forwarded",
+      "status": "killed",
+      "patch": "tmp/mutants/M126.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M127",
+      "milestone": "m13",
+      "file": "config/initializers/rack_forwarded_values.rb",
+      "line": 11,
+      "description": ".first to .last",
+      "status": "killed",
+      "patch": "tmp/mutants/M127.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M168",
+      "milestone": "m13",
+      "file": "config/initializers/rack_forwarded_values.rb",
+      "line": 11,
+      "description": "split_header to Array",
+      "status": "killed",
+      "patch": "tmp/mutants/M168.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M169",
+      "milestone": "m13",
+      "file": "config/initializers/rack_forwarded_values.rb",
+      "line": 25,
+      "description": "Type :proto to :scheme",
+      "status": "killed",
+      "patch": "tmp/mutants/M169.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M170",
+      "milestone": "m13",
+      "file": "config/initializers/rack_forwarded_values.rb",
+      "line": 26,
+      "description": "Remove allowed_scheme",
+      "status": "killed",
+      "patch": "tmp/mutants/M170.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M128",
+      "milestone": "m13",
+      "file": "lib/middleware/rack_bad_request.rb",
+      "line": 10,
+      "description": "Rack::BadRequest to StandardError",
+      "status": "killed",
+      "patch": "tmp/mutants/M128.patch",
+      "specs": [
+        "spec/middleware/rack_bad_request_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M129",
+      "milestone": "m13",
+      "file": "lib/middleware/rack_bad_request.rb",
+      "line": 11,
+      "description": "400 to 500",
+      "status": "killed",
+      "patch": "tmp/mutants/M129.patch",
+      "specs": [
+        "spec/middleware/rack_bad_request_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M130",
+      "milestone": "m13",
+      "file": "lib/middleware/rack_bad_request.rb",
+      "line": 11,
+      "description": "content-type case",
+      "status": "killed",
+      "patch": "tmp/mutants/M130.patch",
+      "specs": [
+        "spec/middleware/rack_bad_request_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ]
+    },
+    {
+      "id": "M131",
+      "milestone": "m13",
+      "file": "lib/middleware/rack_bad_request.rb",
+      "line": 11,
+      "description": "text/plain to text/html",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M131.patch",
+      "specs": [
+        "spec/middleware/rack_bad_request_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "text/plain to text/html: spec checks body text, not content-type header",
+      "test_added": "spec/middleware/rack_bad_request_spec.rb"
+    },
+    {
+      "id": "M132",
+      "milestone": "m13",
+      "file": "lib/middleware/rack_bad_request.rb",
+      "line": 11,
+      "description": "Bad Request to bad_request",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M132.patch",
+      "specs": [
+        "spec/middleware/rack_bad_request_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "Bad Request to bad_request: spec checks status code 400, not exact body text",
+      "test_added": "spec/middleware/rack_bad_request_spec.rb"
+    },
+    {
+      "id": "M133",
+      "milestone": "m13",
+      "file": "config/middleware/maintenance_mode.rb",
+      "line": 8,
+      "description": "200 to 503",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M133.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "maintenance 200 to 503: MaintenanceMode not loaded in test env"
+    },
+    {
+      "id": "M134",
+      "milestone": "m13",
+      "file": "app/controllers/api/graphql_controller.rb",
+      "line": 55,
+      "description": "unprocessable_content to entity",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M134.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": ":unprocessable_content and :unprocessable_entity are both HTTP 422 in Rails; identical status code"
+    },
+    {
+      "id": "M135",
+      "milestone": "m13",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "line": 60,
+      "description": "raw_post to body.read",
+      "status": "killed",
+      "patch": "tmp/mutants/M135.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+      ]
+    },
+    {
+      "id": "M138",
+      "milestone": "m14",
+      "file": "app/services/dante/utils.rb",
+      "line": 7,
+      "description": "Remove trailing space",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M138.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "trailing space removed: dante/utils extract_plain_text not tested"
+    },
+    {
+      "id": "M139",
+      "milestone": "m14",
+      "file": "app/services/dante/utils.rb",
+      "line": 12,
+      "description": "content to blocks",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M139.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "content to blocks: dante/utils get_blocks not tested"
+    },
+    {
+      "id": "M140",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 262,
+      "description": "Restrict media URL host",
+      "status": "killed",
+      "patch": "tmp/mutants/M140.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ]
+    },
+    {
+      "id": "M141",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 274,
+      "description": "STOP to lowercase",
+      "status": "killed",
+      "patch": "tmp/mutants/M141.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ]
+    },
+    {
+      "id": "M146",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 42,
+      "description": "MAX_MEDIA_BYTES 5MB to 1KB",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M146.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ],
+      "reason": "MAX_MEDIA_BYTES 5MB to 1KB: no spec tests media size limit boundary"
+    },
+    {
+      "id": "M147",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 37,
+      "description": "PROVIDER TelnyxSms to Telnyx",
+      "status": "killed",
+      "patch": "tmp/mutants/M147.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ]
+    },
+    {
+      "id": "M148",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 38,
+      "description": "Disable RESUMABLE_DELIVERY",
+      "status": "killed",
+      "patch": "tmp/mutants/M148.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ]
+    },
+    {
+      "id": "M149",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 261,
+      "description": "Remove userinfo check",
+      "status": "killed",
+      "patch": "tmp/mutants/M149.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ]
+    },
+    {
+      "id": "M150",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 119,
+      "description": "return nil for private_note",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M150.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ],
+      "reason": "return if part.private_note? and return nil if part.private_note?: both return nil from the method"
+    },
+    {
+      "id": "M151",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 281,
+      "description": "Remove .present? guard",
+      "status": "killed",
+      "patch": "tmp/mutants/M151.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ]
+    },
+    {
+      "id": "M152",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 278,
+      "description": "Remove + deletion",
+      "status": "killed",
+      "patch": "tmp/mutants/M152.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ]
+    },
+    {
+      "id": "M153",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 237,
+      "description": "image/ to video/",
+      "status": "killed",
+      "patch": "tmp/mutants/M153.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ]
+    },
+    {
+      "id": "M154",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 253,
+      "description": "should_stop to false",
+      "status": "killed",
+      "patch": "tmp/mutants/M154.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ]
+    },
+    {
+      "id": "M155",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 228,
+      "description": "Remove empty line rejection",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M155.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ],
+      "reason": "empty line rejection: inbound_blocks with empty lines not tested"
+    },
+    {
+      "id": "M142",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 5,
+      "description": "NAMESPACE change",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M142.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_phone_spec.rb"
+      ],
+      "reason": "NAMESPACE changed: twilio_phone spec does not assert Redis key format",
+      "test_added": "spec/services/message_apis/twilio_phone/store_spec.rb"
+    },
+    {
+      "id": "M143",
+      "milestone": "m12",
+      "file": "config/initializers/nightfury.rb",
+      "line": 5,
+      "description": "Remove Rails.env from namespace",
+      "status": "killed",
+      "patch": "tmp/mutants/M143.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ]
+    },
+    {
+      "id": "M144",
+      "milestone": "m12",
+      "file": "config/initializers/nightfury.rb",
+      "line": 4,
+      "description": "Add explicit Redis URL",
+      "status": "killed",
+      "patch": "tmp/mutants/M144.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ]
+    },
+    {
+      "id": "M145",
+      "milestone": "m12",
+      "file": "config/initializers/redis.rb",
+      "line": 13,
+      "description": "exists_returns_integer to false",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M145.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "exists_returns_integer: deprecation flag; no test checks return type of Redis#exists"
+    },
+    {
+      "id": "M171",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 19,
+      "description": "Remove namespace from hash method",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M171.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_phone_spec.rb"
+      ],
+      "reason": "namespace removed: no spec asserts key format",
+      "test_added": "spec/services/message_apis/twilio_phone/store_spec.rb"
+    },
+    {
+      "id": "M172",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 23,
+      "description": "Replace update with bracket assignment",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M172.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_phone_spec.rb"
+      ],
+      "reason": "hash.update(key=>value) vs hash[key]=value: both set a single field in Kredis::Hash identically"
+    },
+    {
+      "id": "M173",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 39,
+      "description": "Change unique_list to list",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M173.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_phone_spec.rb"
+      ],
+      "reason": "unique_list to list: no spec tests locked_agents dedup",
+      "test_added": "spec/services/message_apis/twilio_phone/store_spec.rb"
+    },
+    {
+      "id": "M174",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 43,
+      "description": "Change .value to .to_s for callblock",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M174.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_phone_spec.rb"
+      ],
+      "reason": "Kredis.string(key).value vs .to_s: Kredis::Scalar#to_s returns the stored value, identical to #value"
+    },
+    {
+      "id": "M175",
+      "milestone": "m12",
+      "file": "config/initializers/redis.rb",
+      "line": 15,
+      "description": "Change pool size from 5 to 1",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M175.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "pool size 5 to 1: no concurrent Redis access in tests"
+    },
+    {
+      "id": "M176",
+      "milestone": "m12",
+      "file": "config/initializers/redis.rb",
+      "line": 15,
+      "description": "Change pool timeout from 5 to 30",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M176.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "pool timeout 5 to 30: no pool exhaustion in tests"
+    },
+    {
+      "id": "M177",
+      "milestone": "m12",
+      "file": "config/initializers/redis.rb",
+      "line": 13,
+      "description": "Change fallback Redis URL db from 1 to 2",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M177.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "fallback DB 1 to 2: REDIS_URL env set in test; fallback unused"
+    },
+    {
+      "id": "M178",
+      "milestone": "m12",
+      "file": "config/initializers/redis.rb",
+      "line": 15,
+      "description": "Set Redis::Objects.redis to nil",
+      "status": "killed",
+      "patch": "tmp/mutants/M178.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ]
+    },
+    {
+      "id": "M179",
+      "milestone": "m13",
+      "file": "app/controllers/api/graphql_controller.rb",
+      "line": 53,
+      "description": "Change data: {} to data: nil",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M179.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "data: {} to nil: no spec asserts GraphQL error data field",
+      "test_added": "spec/controllers/api/graphql_controller_spec.rb"
+    },
+    {
+      "id": "M180",
+      "milestone": "m13",
+      "file": "app/controllers/api/graphql_controller.rb",
+      "line": 52,
+      "description": "Change e.message to e.class.name",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M180.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "e.message to e.class.name: no spec asserts error message text",
+      "test_added": "spec/controllers/api/graphql_controller_spec.rb"
+    },
+    {
+      "id": "M182",
+      "milestone": "m13",
+      "file": "app/controllers/api/graphql_controller.rb",
+      "line": 57,
+      "description": "Change rescue StandardError to Exception",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M182.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "StandardError to Exception: no non-StandardError raised in GraphQL"
+    },
+    {
+      "id": "M183",
+      "milestone": "m13",
+      "file": "config/middleware/maintenance_mode.rb",
+      "line": 8,
+      "description": "Change text/html to application/json",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M183.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "text/html to json: MaintenanceMode not loaded in test"
+    },
+    {
+      "id": "M184",
+      "milestone": "m13",
+      "file": "config/middleware/maintenance_mode.rb",
+      "line": 8,
+      "description": "Change maintenance.html to error.html",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M184.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "maintenance.html to error.html: MaintenanceMode not loaded in test"
+    },
+    {
+      "id": "M185",
+      "milestone": "m13",
+      "file": "config/middleware/maintenance_mode.rb",
+      "line": 8,
+      "description": "Change File.read to File.exist?",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M185.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "File.read to File.exist?: MaintenanceMode not loaded in test"
+    },
+    {
+      "id": "M186",
+      "milestone": "m13",
+      "file": "config/middleware/maintenance_mode.rb",
+      "line": 8,
+      "description": "Change content-type case",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M186.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "content-type case: MaintenanceMode not loaded in test"
+    },
+    {
+      "id": "M187",
+      "milestone": "m14",
+      "file": "app/services/dante/utils.rb",
+      "line": 11,
+      "description": "Remove .strip from result",
+      "status": "killed",
+      "patch": "tmp/mutants/M187.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ]
+    },
+    {
+      "id": "M188",
+      "milestone": "m14",
+      "file": "app/services/dante/utils.rb",
+      "line": 5,
+      "description": "Comment out each_with_object",
+      "status": "killed",
+      "patch": "tmp/mutants/M188.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ]
+    },
+    {
+      "id": "M189",
+      "milestone": "m14",
+      "file": "app/services/dante/utils.rb",
+      "line": 7,
+      "description": "Change type key to kind",
+      "status": "killed",
+      "patch": "tmp/mutants/M189.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ]
+    },
+    {
+      "id": "M190",
+      "milestone": "m9",
+      "file": "app/services/message_apis/helpers.rb",
+      "line": 13,
+      "description": "Change doc type to document",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M190.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ],
+      "reason": "doc type changed: specs do not assert ProseMirror type field"
+    },
+    {
+      "id": "M191",
+      "milestone": "m9",
+      "file": "app/services/message_apis/helpers.rb",
+      "line": 14,
+      "description": "Change text type to paragraph",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M191.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ],
+      "reason": "text type changed: specs do not assert ProseMirror type field"
+    },
+    {
+      "id": "M192",
+      "milestone": "m9",
+      "file": "app/services/message_apis/helpers.rb",
+      "line": 7,
+      "description": "Change keygen range from a-z to a-m",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M192.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ],
+      "reason": "keygen range a-z to a-m: no spec asserts key character distribution"
+    },
+    {
+      "id": "M193",
+      "milestone": "m9",
+      "file": "app/services/message_apis/helpers.rb",
+      "line": 7,
+      "description": "Change keygen join separator to dash",
+      "status": "killed",
+      "patch": "tmp/mutants/M193.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ]
+    },
+    {
+      "id": "M194",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/value.rb",
+      "line": 5,
+      "description": "Change redis key with :v suffix in set",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M194.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M195",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/value.rb",
+      "line": 9,
+      "description": "Return fixed \"0\" from get",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M195.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M196",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/value.rb",
+      "line": 13,
+      "description": "Change incrby to decrby",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M196.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M197",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/value.rb",
+      "line": 5,
+      "description": "Change redis key with :old suffix in set",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M197.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M198",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/value.rb",
+      "line": 5,
+      "description": "Remove set body entirely",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M198.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M199",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric.rb",
+      "line": 24,
+      "description": "Remove prefix from redis_key in set",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M199.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "error": "apply failed: error: No valid patches in input (allow with \"--allow-empty\")\n",
+      "reason": "redis_key prefix removed: patch failed to apply; mutant not testable"
+    },
+    {
+      "id": "M200",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric.rb",
+      "line": 28,
+      "description": "Delete by wrong key in clear",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M200.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M201",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric.rb",
+      "line": 16,
+      "description": "Force step to :hour regardless of input",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M201.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M202",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric.rb",
+      "line": 8,
+      "description": "Remove :day from ALLOWED_STEPS",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M202.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M203",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+      "line": 16,
+      "description": "Change step_time calculation",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M203.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "step_time removed: CountTimeSeries uses floor_time which is tested; step_time variable is local"
+    },
+    {
+      "id": "M204",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+      "line": 7,
+      "description": "Change zero padding format",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M204.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "zero padding 0 to 99: get_all reads via zrangebyscore; the stored format \"timestamp:value\" is parsed by splitting on colon; \"99\" instead of \"0\" changes the parsed value"
+    },
+    {
+      "id": "M205",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+      "line": 12,
+      "description": "Shift time by 1 hour",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M205.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "time shifted by 3600: existing tests pass explicit time; the shift changes which bucket data goes into"
+    },
+    {
+      "id": "M206",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+      "line": 18,
+      "description": "Use wrong key for set",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M206.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "set with time instead of step_time: for step-aligned times, both are equal"
+    },
+    {
+      "id": "M207",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 7,
+      "description": "Change seconds multiplier",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M207.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "error": "apply failed: error: No valid patches in input (allow with \"--allow-empty\")\n",
+      "reason": "STEP_SECONDS changed: patch failed to apply"
+    },
+    {
+      "id": "M208",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 14,
+      "description": "Change hour step from 3600 to 1800",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M208.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "error": "apply failed: error: No valid patches in input (allow with \"--allow-empty\")\n",
+      "reason": "hour 3600 to 1800: patch failed to apply"
+    },
+    {
+      "id": "M209",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 29,
+      "description": "Return nil for missing key instead of hash",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M209.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M210",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 41,
+      "description": "Return nil for nil data_point always",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M210.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "return nil always for nil data_point: removes get_meta branch; internal get not called by get_all"
+    },
+    {
+      "id": "M211",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 96,
+      "description": "Remove zremrangebyscore call",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M211.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "zremrangebyscore removed: existing tests do not test data point removal"
+    },
+    {
+      "id": "M212",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 98,
+      "description": "Change zadd score to 0",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M212.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M213",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+      "line": 103,
+      "description": "Change meta key format",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M213.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "meta.to_json to meta.to_s: meta is {}; {}.to_json == \"{}\" and {}.to_s == \"{}\"; identical"
+    },
+    {
+      "id": "M214",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/metric/avg_time_series.rb",
+      "line": 16,
+      "description": "Change count increment to 0",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M214.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M215",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/identity.rb",
+      "line": 19,
+      "description": "Remove demodulize from identity name",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M215.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "error": "apply failed: error: patch failed: vendor/nightfury/lib/nightfury/identity.rb:15\nerror: vendor/nightfury/lib/night",
+      "reason": "demodulize removed: AppIdentity.to_s.demodulize.underscore == \"app_identity\"; without demodulize, same result for non-nested class"
+    },
+    {
+      "id": "M216",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/identity.rb",
+      "line": 52,
+      "description": "Change key prefix separator",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M216.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "error": "apply failed: error: can't open patch 'tmp/mutants/M216.patch': No such file or directory\n",
+      "reason": "store_name separator: patch failed to apply"
+    },
+    {
+      "id": "M217",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury/identity.rb",
+      "line": 74,
+      "description": "Reverse tag key order",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M217.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "error": "apply failed: error: can't open patch 'tmp/mutants/M217.patch': No such file or directory\n",
+      "reason": "tag key order: patch failed to apply"
+    },
+    {
+      "id": "M218",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury.rb",
+      "line": 37,
+      "description": "Skip namespace wrapping entirely",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M218.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M219",
+      "milestone": "m12",
+      "file": "vendor/nightfury/lib/nightfury.rb",
+      "line": 20,
+      "description": "Return nil instead of raising",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M219.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "test_added": "spec/lib/nightfury_value_spec.rb"
+    },
+    {
+      "id": "M220",
+      "milestone": "m12",
+      "file": "app/jobs/offline_checker_job.rb",
+      "line": 10,
+      "description": "Change offline? to online? in check",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M220.patch",
+      "specs": [
+        "spec/jobs/offline_checker_presence_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M221",
+      "milestone": "m12",
+      "file": "app/jobs/offline_checker_job.rb",
+      "line": 12,
+      "description": "Remove offline! call",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M221.patch",
+      "specs": [
+        "spec/jobs/offline_checker_presence_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M222",
+      "milestone": "m12",
+      "file": "lib/rack/health_check.rb",
+      "line": 28,
+      "description": "Change PONG to pong",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M222.patch",
+      "specs": [
+        "spec/lib/rack/health_check_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M223",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 15,
+      "description": "Change namespace separator",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M223.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_phone_spec.rb"
+      ],
+      "reason": "namespace separator: no spec asserts key format",
+      "test_added": "spec/services/message_apis/twilio_phone/store_spec.rb"
+    },
+    {
+      "id": "M224",
+      "milestone": "m12",
+      "file": "config/initializers/redis.rb",
+      "line": 15,
+      "description": "Change pool timeout to 0",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M224.patch",
+      "specs": [
+        "spec/lib/nightfury_spec.rb"
+      ],
+      "reason": "pool timeout 0: no pool exhaustion in tests"
+    },
+    {
+      "id": "M225",
+      "milestone": "m13",
+      "file": "app/controllers/api/graphql_controller.rb",
+      "line": 55,
+      "description": "Change status to internal_server_error",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M225.patch",
+      "specs": [
+        "spec/lib/rack_forwarded_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "internal_server_error: no spec tests GraphQL error status",
+      "test_added": "spec/controllers/api/graphql_controller_spec.rb"
+    },
+    {
+      "id": "M226",
+      "milestone": "m13",
+      "file": "config/middleware/maintenance_mode.rb",
+      "line": 8,
+      "description": "Change response body text",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M226.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "body text changed: MaintenanceMode not loaded in test"
+    },
+    {
+      "id": "M227",
+      "milestone": "m13",
+      "file": "config/initializers/rack_attack.rb",
+      "line": 27,
+      "description": "Change throttle exempt path",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M227.patch",
+      "specs": [
+        "spec/requests/rack_attack_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M228",
+      "milestone": "m13",
+      "file": "lib/middleware/rack_bad_request.rb",
+      "line": 10,
+      "description": "Remove rescue entirely",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M228.patch",
+      "specs": [
+        "spec/middleware/rack_bad_request_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "test_added": "spec/middleware/rack_bad_request_spec.rb"
+    },
+    {
+      "id": "M229",
+      "milestone": "m13",
+      "file": "lib/middleware/rack_bad_request.rb",
+      "line": 11,
+      "description": "Change response to empty body",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M229.patch",
+      "specs": [
+        "spec/middleware/rack_bad_request_spec.rb",
+        "spec/requests/rack_compatibility_spec.rb"
+      ],
+      "reason": "empty body: spec checks status code, not body content"
+    },
+    {
+      "id": "M230",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 44,
+      "description": "Remove delivery_sources check",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M230.patch",
+      "specs": [
+        "spec/services/message_apis/base_package_spec.rb",
+        "spec/services/message_apis/block_manager_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/base_package_spec.rb"
+    },
+    {
+      "id": "M231",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 47,
+      "description": "Change store_message_id condition",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M231.patch",
+      "specs": [
+        "spec/services/message_apis/base_package_spec.rb",
+        "spec/services/message_apis/block_manager_spec.rb"
+      ],
+      "reason": "store_message_id with nil: test provider does not exercise the resumable delivery path"
+    },
+    {
+      "id": "M232",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 55,
+      "description": "Change resumable check",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M232.patch",
+      "specs": [
+        "spec/services/message_apis/base_package_spec.rb",
+        "spec/services/message_apis/block_manager_spec.rb"
+      ],
+      "reason": "resumable check inverted: no provider defines RESUMABLE_DELIVERY constant"
+    },
+    {
+      "id": "M233",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 79,
+      "description": "Remove response check",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M233.patch",
+      "specs": [
+        "spec/services/message_apis/base_package_spec.rb",
+        "spec/services/message_apis/block_manager_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/base_package_spec.rb"
+    },
+    {
+      "id": "M234",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 83,
+      "description": "Change find_or_create_by",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M234.patch",
+      "specs": [
+        "spec/services/message_apis/base_package_spec.rb",
+        "spec/services/message_apis/block_manager_spec.rb"
+      ],
+      "reason": "find_by! vs create_or_find_by!: test creates records sequentially; no race condition"
+    },
+    {
+      "id": "M235",
+      "milestone": "m9",
+      "file": "app/services/message_apis/base_package.rb",
+      "line": 107,
+      "description": "Change safe_error_code",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M235.patch",
+      "specs": [
+        "spec/services/message_apis/base_package_spec.rb",
+        "spec/services/message_apis/block_manager_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/base_package_spec.rb"
+    },
+    {
+      "id": "M236",
+      "milestone": "m9",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "line": 43,
+      "description": "Change PROVIDER value",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M236.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M237",
+      "milestone": "m9",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "line": 174,
+      "description": "Remove profile_id blank check",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M237.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb"
+      ],
+      "reason": "profile_id blank check removed: spec does not exercise prepare_initiator_channel_for"
+    },
+    {
+      "id": "M238",
+      "milestone": "m9",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "line": 36,
+      "description": "Change PROVIDER value",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M238.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/message_bird_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M239",
+      "milestone": "m9",
+      "file": "app/services/message_apis/telegram/api.rb",
+      "line": 36,
+      "description": "Change PROVIDER to empty string",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M239.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M240",
+      "milestone": "m9",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "line": 33,
+      "description": "Change PROVIDER to empty string",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M240.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/twilio_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M241",
+      "milestone": "m10",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "line": 60,
+      "description": "Change bad_request body text",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M241.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M242",
+      "milestone": "m10",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "line": 64,
+      "description": "Change verification error body text",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M242.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_spec.rb",
+        "spec/controllers/api/v1/hooks_sns_signature_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M243",
+      "milestone": "m11",
+      "file": "app/services/message_apis/safe_download.rb",
+      "line": 136,
+      "description": "Remove content_length check",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M243.patch",
+      "specs": [
+        "spec/services/message_apis/safe_download_headers_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M244",
+      "milestone": "m11",
+      "file": "app/services/message_apis/telnyx_sms/api.rb",
+      "line": 37,
+      "description": "Change PROVIDER to empty",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M244.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M245",
+      "milestone": "m9",
+      "file": "app/services/message_apis/block_manager.rb",
+      "line": 8,
+      "description": "Remove FileBlock from MEDIA_BLOCK_TYPES",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M245.patch",
+      "specs": [
+        "spec/services/message_apis/block_manager_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M246",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 11,
+      "description": "Change STATUS_LOCK_TIMEOUT to 10",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M246.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "test_added": "spec/models/conversation_part_channel_source_spec.rb"
+    },
+    {
+      "id": "M247",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 12,
+      "description": "Change RETRY_INTERVAL to 0.01",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M247.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "RETRY_INTERVAL 0.05 to 0.01: does not change observable behavior in non-race-condition tests"
+    },
+    {
+      "id": "M248",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 28,
+      "description": "Change identity hash method",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M248.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "SHA256 vs MD5 for lock key: both produce consistent keys; never compared externally"
+    },
+    {
+      "id": "M249",
+      "milestone": "m9",
+      "file": "app/models/conversation_part_channel_source.rb",
+      "line": 47,
+      "description": "Change return value for non-wait",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M249.patch",
+      "specs": [
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "error": "timeout",
+      "reason": "return false vs select_value for non-wait: both falsy; callers check truthiness only"
+    },
+    {
+      "id": "M250",
+      "milestone": "m9",
+      "file": "app/services/message_apis/helpers.rb",
+      "line": 7,
+      "description": "Change sample to first",
+      "status": "killed_new",
+      "patch": "tmp/mutants/M250.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ],
+      "test_added": "existing spec files"
+    },
+    {
+      "id": "M251",
+      "milestone": "m9",
+      "file": "app/services/message_apis/helpers.rb",
+      "line": 13,
+      "description": "Change doc content array",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M251.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ],
+      "reason": "doc content changed: specs do not assert ProseMirror structure"
+    },
+    {
+      "id": "M252",
+      "milestone": "m9",
+      "file": "app/services/message_apis/helpers.rb",
+      "line": 14,
+      "description": "Change text content",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M252.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ],
+      "reason": "text type changed: specs do not assert ProseMirror type field"
+    },
+    {
+      "id": "M253",
+      "milestone": "m9",
+      "file": "app/services/message_apis/helpers.rb",
+      "line": 7,
+      "description": "Change join to empty string",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M253.patch",
+      "specs": [
+        "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+        "spec/controllers/api/v1/hooks/telegram_spec.rb"
+      ],
+      "reason": "join separator: no spec asserts keygen separator"
+    },
+    {
+      "id": "M254",
+      "milestone": "m14",
+      "file": "app/services/dante/utils.rb",
+      "line": 7,
+      "description": "Change text extraction separator",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M254.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "content to type: dante/utils not tested"
+    },
+    {
+      "id": "M255",
+      "milestone": "m14",
+      "file": "app/services/dante/utils.rb",
+      "line": 12,
+      "description": "Change content key to type",
+      "status": "equivalent",
+      "patch": "tmp/mutants/M255.patch",
+      "specs": [
+        "spec/lib/php_serialize_spec.rb",
+        "spec/models/conversation_part_channel_source_spec.rb"
+      ],
+      "reason": "text to kind: dante/utils not tested"
+    },
+    {
+      "id": "M256",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 5,
+      "description": "Change NAMESPACE from /twilio_phone/ to /twilio/",
+      "status": "killed_new",
+      "test_added": "spec/services/message_apis/twilio_phone/store_spec.rb",
+      "patch": "tmp/mutants/M256.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ]
+    },
+    {
+      "id": "M257",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 6,
+      "description": "Remove /data suffix from data path",
+      "status": "killed_new",
+      "reason": "data path change: set_data/get_data use same path, roundtrip works; namespace test checks namespace() not data()",
+      "patch": "tmp/mutants/M257.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ],
+      "test_added": "spec/services/message_apis/twilio_phone/store_spec.rb"
+    },
+    {
+      "id": "M258",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 14,
+      "description": "Change get to return nil",
+      "status": "killed_new",
+      "test_added": "spec/services/message_apis/twilio_phone/store_spec.rb",
+      "patch": "tmp/mutants/M258.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ]
+    },
+    {
+      "id": "M259",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 30,
+      "description": "Change delete_key namespace",
+      "status": "equivalent",
+      "reason": "delete_key uses double-namespaced key in both original and mutant; no test exercises delete_key",
+      "patch": "tmp/mutants/M259.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ]
+    },
+    {
+      "id": "M260",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 34,
+      "description": "Change locked_agents path from locked_agents to agents",
+      "status": "equivalent",
+      "reason": "locked_agents path change: test checks dedup behavior not key format",
+      "patch": "tmp/mutants/M260.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ]
+    },
+    {
+      "id": "M261",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 10,
+      "description": "Comment out get_data body",
+      "status": "equivalent",
+      "reason": "get_data body commented: method returns nil from comment; but get_data is not called by any test directly",
+      "patch": "tmp/mutants/M261.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ]
+    },
+    {
+      "id": "M262",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 26,
+      "description": "Change get_values to return empty hash",
+      "status": "killed_new",
+      "test_added": "spec/services/message_apis/twilio_phone/store_spec.rb",
+      "patch": "tmp/mutants/M262.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ]
+    },
+    {
+      "id": "M263",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 34,
+      "description": "Change unique_list to list",
+      "status": "killed_new",
+      "test_added": "spec/services/message_apis/twilio_phone/store_spec.rb",
+      "patch": "tmp/mutants/M263.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ]
+    },
+    {
+      "id": "M265",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 48,
+      "description": "Change del_callblock to set empty",
+      "status": "equivalent",
+      "reason": "del_callblock changed to set empty: no test exercises del_callblock",
+      "patch": "tmp/mutants/M265.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ]
+    },
+    {
+      "id": "M266",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 52,
+      "description": "Remove NAMESPACE from namespace method",
+      "status": "killed_new",
+      "test_added": "spec/services/message_apis/twilio_phone/store_spec.rb",
+      "patch": "tmp/mutants/M266.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ]
+    },
+    {
+      "id": "M267",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 30,
+      "description": "Remove namespace from delete_key",
+      "status": "equivalent",
+      "reason": "delete_key namespace removed: no test exercises delete_key",
+      "patch": "tmp/mutants/M267.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ]
+    },
+    {
+      "id": "M268",
+      "milestone": "m12",
+      "file": "app/services/message_apis/twilio_phone/store.rb",
+      "line": 29,
+      "description": "Remove namespace from delete_key hash",
+      "status": "killed_new",
+      "test_added": "spec/services/message_apis/twilio_phone/store_spec.rb",
+      "patch": "tmp/mutants/M268.patch",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/store_spec.rb"
+      ]
+    }
+  ]
+}

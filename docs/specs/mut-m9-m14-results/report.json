@@ -1,0 +1,56 @@
+{
+  "schema_version": 2,
+  "policy_id": "cross-review-v1",
+  "spec_sha256": "3a591b6cac86f58195e4bec4a2a3bbc4f5beda2332a487b408ddb48f3d1b93ba",
+  "base_sha": "7553575ce9ab1cc73ba9facc9a98ef1b8702cd47",
+  "reviewed_sha": "b2ad85f0045a1bb703c9a990d5a805e2dcf8407e",
+  "final_sha": "b2ad85f0045a1bb703c9a990d5a805e2dcf8407e",
+  "executor": {
+    "backend": "qwen",
+    "model": "qwen"
+  },
+  "review": {
+    "initial_receipts": [],
+    "verification_receipts": [],
+    "resolutions": []
+  },
+  "handoff_status": "ready",
+  "criteria": [
+    {
+      "id": "AC-001",
+      "status": "pass",
+      "rc": 0,
+      "note": "738 examples, 0 failures, 30 pending"
+    },
+    {
+      "id": "AC-002",
+      "status": "pass",
+      "rc": 0,
+      "note": "10 spec files changed, MUT SCOPE PASS"
+    },
+    {
+      "id": "AC-003",
+      "status": "fail",
+      "rc": 1,
+      "note": "266 mutants: {'killed': 86, 'killed_new': 81, 'equivalent': 99}. 19 targets exceed 20% eq or miss min_mutants. Root cause: nightfury internal methods (Value#get/incr/decr, TimeSeries internal get) not exercised by existing spec; maintenance_mode not loaded in test env."
+    },
+    {
+      "id": "AC-004",
+      "status": "pass",
+      "rc": 0,
+      "note": "rubocop clean"
+    },
+    {
+      "id": "AC-005",
+      "status": "pass",
+      "rc": 0,
+      "note": "docs/specs unchanged, sha256 verified"
+    },
+    {
+      "id": "AC-006",
+      "status": "pass",
+      "rc": 0,
+      "note": "tree clean"
+    }
+  ]
+}
