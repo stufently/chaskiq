@@ -219,7 +219,8 @@ RuboCop 1.92.3, rubocop-rails 2.38.0, Ruby 3.3.14, образ `bin/ci-local`, `.
 
 ## R7 — ручные Style и Naming (нужны решения владельца)
 
-**Решения владельца (2026-11-20):**
+**Решения владельца (2026-11-20):** конфигурационная часть — веха R7a (спека
+`docs/specs/fork-updates-r7a.md`, после R3: обе правят todo).
 - `Style/Documentation` — отключить в `.rubocop.yml` (`Enabled: false`) с причиной: заглушки
   «# Class for X» пользы не несут.
 - `Naming/AccessorMethodName` и `Naming/MethodParameterName` — отключить в `.rubocop.yml` с
