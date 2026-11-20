@@ -187,6 +187,11 @@ BASE vs дерево в двух процессах; рост `Layout/LineLength
 
 ## R5 — Lint: кандидаты в баги + `Security/Open` (ручной разбор)
 
+**Разбита на две вехи.** R5 (спека готова: `docs/specs/fork-updates-r5.md`) — `Lint/DuplicateMethods`,
+`Lint/BinaryOperatorWithIdenticalOperands`, `Security/Open`: решение по каждому месту в спеке, код
+задан патчами, исполнитель пишет характеризационные спеки (зелёные на BASE) и спеки правок (красные
+на BASE), 14 мутантов постановщика должны быть убиты. R5b — остальные копы списка ниже, тот же формат.
+
 - Копы: 19, 87 офенсов, 45 файлов. Каждое место — разбор «баг или намерение»; баг чинится с
   тестом и строкой в CHANGELOG, намерение — переписать явно (без `rubocop:disable`).
   - `Lint/DuplicateMethods` 3: `Plan#features=` (plan.rb:3 и :24), `Role#avatar_url`

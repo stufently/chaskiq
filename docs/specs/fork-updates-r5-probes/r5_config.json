@@ -1,0 +1,203 @@
+{
+ "cops": [
+  "Lint/DuplicateMethods",
+  "Lint/BinaryOperatorWithIdenticalOperands",
+  "Security/Open"
+ ],
+ "app_files": [
+  "app/models/plan.rb",
+  "app/models/role.rb",
+  "app/services/app_user_dashboard.rb",
+  "app/services/fetch_link_card_service.rb",
+  "app/models/campaign.rb"
+ ],
+ "char_specs": [
+  "spec/models/plan_features_spec.rb",
+  "spec/models/role_delegation_spec.rb",
+  "spec/services/app_user_dashboard_spec.rb",
+  "spec/models/campaign_premailer_spec.rb"
+ ],
+ "fix_specs": [
+  "spec/models/plan_limit_spec.rb",
+  "spec/services/fetch_link_card_meta_spec.rb",
+  "spec/models/campaign_premailer_fetch_spec.rb"
+ ],
+ "commits": [
+  {
+   "subject": "Add R5 characterization specs",
+   "patch": null,
+   "added": [
+    "spec/models/plan_features_spec.rb",
+    "spec/models/role_delegation_spec.rb",
+    "spec/services/app_user_dashboard_spec.rb",
+    "spec/models/campaign_premailer_spec.rb"
+   ]
+  },
+  {
+   "subject": "Remove duplicate method definitions",
+   "patch": "r5_dedupe.patch",
+   "added": []
+  },
+  {
+   "subject": "Fix Plan#limit_reached? comparison",
+   "patch": "r5_limit.patch",
+   "added": [
+    "spec/models/plan_limit_spec.rb"
+   ]
+  },
+  {
+   "subject": "Fall back to meta name in link cards",
+   "patch": "r5_meta.patch",
+   "added": [
+    "spec/services/fetch_link_card_meta_spec.rb"
+   ]
+  },
+  {
+   "subject": "Fetch premailer HTML via SafeDownload",
+   "patch": "r5_premailer.patch",
+   "added": [
+    "spec/models/campaign_premailer_fetch_spec.rb"
+   ]
+  },
+  {
+   "subject": "Drop R5 cops from RuboCop todo",
+   "patch": null,
+   "added": [],
+   "todo": true
+  },
+  {
+   "subject": "Note fork-updates-r5 in changelog",
+   "patch": null,
+   "added": [],
+   "changelog": true
+  }
+ ],
+ "mutants": [
+  {
+   "id": "M01",
+   "file": "app/models/plan.rb",
+   "old": "@features = f.map { |o| Feature.new(o) }",
+   "new": "@features = f",
+   "specs": [
+    "spec/models/plan_features_spec.rb"
+   ]
+  },
+  {
+   "id": "M02",
+   "file": "app/models/plan.rb",
+   "old": "count >= limit",
+   "new": "count > limit",
+   "specs": [
+    "spec/models/plan_limit_spec.rb"
+   ]
+  },
+  {
+   "id": "M03",
+   "file": "app/models/plan.rb",
+   "old": "count >= limit",
+   "new": "count >= count",
+   "specs": [
+    "spec/models/plan_limit_spec.rb"
+   ]
+  },
+  {
+   "id": "M04",
+   "file": "app/models/plan.rb",
+   "old": "return false if limit.nil? || limit == \"unlimited\"",
+   "new": "return false if limit == \"unlimited\"",
+   "specs": [
+    "spec/models/plan_limit_spec.rb"
+   ]
+  },
+  {
+   "id": "M05",
+   "file": "app/models/plan.rb",
+   "old": "limit.nil? || limit == \"unlimited\"",
+   "new": "limit.nil?",
+   "specs": [
+    "spec/models/plan_limit_spec.rb"
+   ]
+  },
+  {
+   "id": "M06",
+   "file": "app/models/role.rb",
+   "old": "  delegate :avatar_url, to: :agent\n",
+   "new": "",
+   "specs": [
+    "spec/models/role_delegation_spec.rb"
+   ]
+  },
+  {
+   "id": "M07",
+   "file": "app/services/app_user_dashboard.rb",
+   "old": "id: k || \"unknown\",",
+   "new": "id: k,",
+   "specs": [
+    "spec/services/app_user_dashboard_spec.rb"
+   ]
+  },
+  {
+   "id": "M08",
+   "file": "app/services/app_user_dashboard.rb",
+   "old": "value: v,",
+   "new": "value: 1,",
+   "specs": [
+    "spec/services/app_user_dashboard_spec.rb"
+   ]
+  },
+  {
+   "id": "M09",
+   "file": "app/services/fetch_link_card_service.rb",
+   "old": "&.value ||\n      html.at_xpath(\"//meta[@name=\\\"#{property}\\\"]\")&.attribute(\"content\")&.value",
+   "new": "&.value",
+   "specs": [
+    "spec/services/fetch_link_card_meta_spec.rb"
+   ]
+  },
+  {
+   "id": "M10",
+   "file": "app/services/fetch_link_card_service.rb",
+   "old": "html.at_xpath(\"//meta[@property=",
+   "new": "html.at_xpath(\"//meta[@name=",
+   "specs": [
+    "spec/services/fetch_link_card_meta_spec.rb"
+   ]
+  },
+  {
+   "id": "M11",
+   "file": "app/services/fetch_link_card_service.rb",
+   "old": "[@property=\\\"#{property}\\\"]\")&.attribute(\"content\")&.value",
+   "new": "[@property=\\\"#{property}\\\"]\")&.attribute(\"content\").value",
+   "specs": [
+    "spec/services/fetch_link_card_meta_spec.rb"
+   ]
+  },
+  {
+   "id": "M12",
+   "file": "app/models/campaign.rb",
+   "old": "url_allowed: same_origin",
+   "new": "url_allowed: nil",
+   "specs": [
+    "spec/models/campaign_premailer_fetch_spec.rb"
+   ]
+  },
+  {
+   "id": "M13",
+   "file": "app/models/campaign.rb",
+   "old": "allow_own_host: true",
+   "new": "allow_own_host: false",
+   "specs": [
+    "spec/models/campaign_premailer_spec.rb"
+   ]
+  },
+  {
+   "id": "M14",
+   "file": "app/models/campaign.rb",
+   "old": "    raise PremailerFetchError, \"premailer page not fetched: #{url}\" unless body\n",
+   "new": "",
+   "specs": [
+    "spec/models/campaign_premailer_fetch_spec.rb"
+   ]
+  }
+ ]
+}

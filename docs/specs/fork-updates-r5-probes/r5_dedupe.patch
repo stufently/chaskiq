@@ -1,0 +1,49 @@
+diff --git a/app/models/plan.rb b/app/models/plan.rb
+index 20382abf..757c9449 100644
+--- a/app/models/plan.rb
++++ b/app/models/plan.rb
+@@ -3,7 +3,8 @@
+ class Plan
+   include ActiveModel::Model
+ 
+-  attr_accessor :name, :stripe_id, :id, :features, :description
++  attr_accessor :name, :stripe_id, :id, :description
++  attr_reader :features
+ 
+   def self.all
+     path = Rails.root.join("config/subscriptions.yml")
+diff --git a/app/models/role.rb b/app/models/role.rb
+index bf053b0d..77f8041f 100644
+--- a/app/models/role.rb
++++ b/app/models/role.rb
+@@ -22,7 +22,6 @@ class Role < ApplicationRecord
+   delegate :country_code, to: :agent
+   delegate :region, to: :agent
+   delegate :region_code, to: :agent
+-  delegate :avatar_url, to: :agent
+   delegate :lang, to: :agent
+   delegate :available, to: :agent
+   delegate :sign_in_count, to: :agent
+diff --git a/app/services/app_user_dashboard.rb b/app/services/app_user_dashboard.rb
+index b1e386f0..9e5049c2 100644
+--- a/app/services/app_user_dashboard.rb
++++ b/app/services/app_user_dashboard.rb
+@@ -25,18 +25,6 @@ class AppUserDashboard
+     end
+   end
+ 
+-  def conversations
+-    resource.conversations.group(:state).count
+-            .map do |k, v|
+-      {
+-        id: k || "unknown",
+-        label: k || "unknown",
+-        value: v,
+-        color: "hsl(#{colors}, 70%, 50%)"
+-      }
+-    end
+-  end
+-
+   def visits
+     resource.visits
+             .all.group_by_day(:created_at)
