@@ -1,0 +1,12 @@
+diff --git a/app/services/message_apis/slack/api.rb b/app/services/message_apis/slack/api.rb
+index 2329c16c..ac9ceda1 100644
+--- a/app/services/message_apis/slack/api.rb
++++ b/app/services/message_apis/slack/api.rb
+@@ -911,7 +911,6 @@ module MessageApis
+         provider_channel_id = conversation.conversation_channels
+                                           .find_by(provider: "slack")&.provider_channel_id
+ 
+-        return if provider_channel_id.blank?
+ 
+         response = post_message(
+           "new message",

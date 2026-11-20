@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/slack/api.rb b/app/services/message_apis/slack/api.rb
+index 2329c16c..bbae4cdc 100644
+--- a/app/services/message_apis/slack/api.rb
++++ b/app/services/message_apis/slack/api.rb
+@@ -773,7 +773,7 @@ module MessageApis
+       def get_slack_user_by_email(email)
+         authorize_bot!
+         url = url("/api/users.lookupByEmail")
+-        response = get_data(url, { email: email })
++        response = get_data(url, { user: email })
+         JSON.parse(response.body)["user"]
+       rescue StandardError
+         nil

@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index a88f01d8..8d289fbc 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -158,7 +158,7 @@ module MessageApis
+ 
+         body << chunk
+       end
+-      [Body.new(body, content_type: response["content-type"]), nil]
++      [Body.new(body, content_type: nil), nil]
+     end
+ 
+     private_class_method :follow_redirects, :download_addresses, :http_uri, :same_origin?,

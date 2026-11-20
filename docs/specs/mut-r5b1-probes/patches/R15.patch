@@ -1,0 +1,13 @@
+diff --git a/app/jobs/app_user_event_job.rb b/app/jobs/app_user_event_job.rb
+index bdedbe0f..d5daa162 100644
+--- a/app/jobs/app_user_event_job.rb
++++ b/app/jobs/app_user_event_job.rb
+@@ -9,7 +9,7 @@ class AppUserEventJob < ApplicationJob
+     app_user = @app.app_users.find(user_id)
+ 
+     # Banner.broadcast_banner_to_user(app_user) ||
+-    Tour.broadcast_tour_to_user(app_user) ||
++    Tour.broadcast_tour_to_user(nil) ||
+       BotTask.broadcast_task_to_user(app_user) ||
+       UserAutoMessage.broadcast_message_to_user(app_user)
+   end

@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/pipedrive/api.rb b/app/services/message_apis/pipedrive/api.rb
+index fa788835..6401d25c 100644
+--- a/app/services/message_apis/pipedrive/api.rb
++++ b/app/services/message_apis/pipedrive/api.rb
+@@ -120,7 +120,7 @@ module MessageApis
+ 
+           response = create_person(params: {
+                                      email: user.email,
+-                                     name: user.name
++                                     name: user.email
+                                    })
+ 
+           if response["success"]

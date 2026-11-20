@@ -1,0 +1,12 @@
+diff --git a/app/models/audit.rb b/app/models/audit.rb
+index 5692829e..6ae3b978 100644
+--- a/app/models/audit.rb
++++ b/app/models/audit.rb
+@@ -56,6 +56,6 @@ class Audit < ApplicationRecord
+   end
+ 
+   def sdata
+-    data&.except(:updated_at)&.to_json
++    data&.except(:updated_at)&.to_s
+   end
+ end

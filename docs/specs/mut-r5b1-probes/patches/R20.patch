@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/calendly/presenter.rb b/app/services/message_apis/calendly/presenter.rb
+index 49e72ba7..53a4b526 100644
+--- a/app/services/message_apis/calendly/presenter.rb
++++ b/app/services/message_apis/calendly/presenter.rb
+@@ -22,7 +22,7 @@ module MessageApis::Calendly
+         },
+         {
+           name: "book-meeting",
+-          label: params[:ctx][:values][:label],
++          label: params[:ctx][:values][:invitation_text],
+           type: "button",
+           align: "center",
+           width: "full",

@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index a88f01d8..9aca1efd 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -143,7 +143,7 @@ module MessageApis
+     end
+ 
+     def self.read_response(response, max_bytes)
+-      if response.is_a?(Net::HTTPRedirection)
++      if response.is_a?(Net::HTTPMovedPermanently)
+         location = response["location"]
+         return [nil, location] unless location.to_s.empty?
+       end

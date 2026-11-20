@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/calendly/presenter.rb b/app/services/message_apis/calendly/presenter.rb
+index 49e72ba7..e8a6da15 100644
+--- a/app/services/message_apis/calendly/presenter.rb
++++ b/app/services/message_apis/calendly/presenter.rb
+@@ -28,7 +28,7 @@ module MessageApis::Calendly
+           width: "full",
+           action: {
+             type: "frame",
+-            url: "/package_iframe_internal/Calendly"
++            url: "/package_iframe/Calendly"
+           }
+         }
+       ]

@@ -1,0 +1,13 @@
+diff --git a/app/models/audit.rb b/app/models/audit.rb
+index 5692829e..5d5f6153 100644
+--- a/app/models/audit.rb
++++ b/app/models/audit.rb
+@@ -36,7 +36,7 @@ class Audit < ApplicationRecord
+                  when "Conversation"
+                    [auditable.key, "/conversations/#{auditable.key}"]
+                  when "Agent"
+-                   [auditable.display_name, "/agents/#{auditable.id}"]
++                   [auditable.display_name, "/users/#{auditable.id}"]
+                  end
+     "[#{name}](/apps/#{@app.key}#{path})"
+   end

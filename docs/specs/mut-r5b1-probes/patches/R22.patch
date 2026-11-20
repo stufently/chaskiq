@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/calendly/presenter.rb b/app/services/message_apis/calendly/presenter.rb
+index 49e72ba7..8e9a9538 100644
+--- a/app/services/message_apis/calendly/presenter.rb
++++ b/app/services/message_apis/calendly/presenter.rb
+@@ -36,7 +36,7 @@ module MessageApis::Calendly
+       {
+         kind: "initialize",
+         definitions: definitions,
+-        values: params[:ctx][:values]
++        values: {}
+       }
+     end
+ 

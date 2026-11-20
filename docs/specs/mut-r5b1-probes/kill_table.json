@@ -1,0 +1,443 @@
+[
+  {
+    "id": "R01",
+    "file": "app/models/audit.rb",
+    "patch": "patches/R01.patch",
+    "description": "agent_name without .to_s",
+    "suggested_spec": "spec/models/audit_mutants_spec.rb",
+    "approach": "Audit.new without an agent: agent_name == \"\" (not nil)",
+    "base_killed": false
+  },
+  {
+    "id": "R02",
+    "file": "app/models/audit.rb",
+    "patch": "patches/R02.patch",
+    "description": "Agent auditable link path /agents/ to /users/",
+    "suggested_spec": "spec/models/audit_mutants_spec.rb",
+    "approach": "serialize_properties(app) of an Agent auditable: auditable_link ends with /agents/<id>)",
+    "base_killed": true
+  },
+  {
+    "id": "R03",
+    "file": "app/models/audit.rb",
+    "patch": "patches/R03.patch",
+    "description": "AppUser auditable link name display_name to email",
+    "suggested_spec": "spec/models/audit_mutants_spec.rb",
+    "approach": "AppUser auditable with a name: auditable_link == \"[<display_name>](/apps/<key>/users/<id>)\"",
+    "base_killed": false
+  },
+  {
+    "id": "R04",
+    "file": "app/models/audit.rb",
+    "patch": "patches/R04.patch",
+    "description": "serialize_properties drops agent_name",
+    "suggested_spec": "spec/models/audit_mutants_spec.rb",
+    "approach": "serialize_properties(app)[\"agent_name\"] == agent display name",
+    "base_killed": false
+  },
+  {
+    "id": "R05",
+    "file": "app/models/audit.rb",
+    "patch": "patches/R05.patch",
+    "description": "serialize_properties drops sdata",
+    "suggested_spec": "spec/models/audit_mutants_spec.rb",
+    "approach": "audit with data {\"a\" => 1}: serialize_properties(app)[\"sdata\"] parses to {\"a\" => 1}",
+    "base_killed": false
+  },
+  {
+    "id": "R06",
+    "file": "app/models/audit.rb",
+    "patch": "patches/R06.patch",
+    "description": "attach_app does nothing",
+    "suggested_spec": "spec/models/audit_mutants_spec.rb",
+    "approach": "Audit.create! with a Conversation auditable: the saved row has app_id == conversation.app_id",
+    "base_killed": false
+  },
+  {
+    "id": "R07",
+    "file": "app/models/audit.rb",
+    "patch": "patches/R07.patch",
+    "description": "sdata to_json to to_s",
+    "suggested_spec": "spec/models/audit_mutants_spec.rb",
+    "approach": "audit with data {\"a\" => 1}: sdata == {\"a\" => 1}.to_json (JSON.parse round-trips)",
+    "base_killed": false
+  },
+  {
+    "id": "R08",
+    "file": "app/models/campaign.rb",
+    "patch": "patches/R08.patch",
+    "description": "campaign_url /campaigns/ to /campaign/",
+    "suggested_spec": "spec/models/campaign_mutants_spec.rb",
+    "approach": "campaign_url == \"<host>/campaigns/<id>\"",
+    "base_killed": true
+  },
+  {
+    "id": "R09",
+    "file": "app/models/campaign.rb",
+    "patch": "patches/R09.patch",
+    "description": "decode_email looks up App.first instead of the key",
+    "suggested_spec": "spec/models/campaign_mutants_spec.rb",
+    "approach": "two apps, the campaign belongs to the one created second: decode_email returns that campaign",
+    "base_killed": false
+  },
+  {
+    "id": "R10",
+    "file": "app/models/campaign.rb",
+    "patch": "patches/R10.patch",
+    "description": "decode_email splits on _ instead of -",
+    "suggested_spec": "spec/models/campaign_mutants_spec.rb",
+    "approach": "decode_email of a valid address returns the campaign",
+    "base_killed": true
+  },
+  {
+    "id": "R11",
+    "file": "app/models/campaign.rb",
+    "patch": "patches/R11.patch",
+    "description": "mustache_template_for drops subscriber properties",
+    "suggested_spec": "spec/models/campaign_mutants_spec.rb",
+    "approach": "subscriber with properties {\"plan\" => \"pro\"}, html \"{{plan}}\": rendered \"pro\"",
+    "base_killed": false
+  },
+  {
+    "id": "R12",
+    "file": "app/models/campaign.rb",
+    "patch": "patches/R12.patch",
+    "description": "mustache_template_for prefers premailer over html:",
+    "suggested_spec": "spec/models/campaign_mutants_spec.rb",
+    "approach": "campaign with premailer column \"P\" (update_column) and html: \"H\": rendered \"H\"",
+    "base_killed": false
+  },
+  {
+    "id": "R13",
+    "file": "app/models/campaign.rb",
+    "patch": "patches/R13.patch",
+    "description": "campaign_unsubscribe /delete to /destroy",
+    "suggested_spec": "spec/models/campaign_mutants_spec.rb",
+    "approach": "html \"{{campaign_unsubscribe}}\": \"<campaign_url>/subscribers/<encoded_id>/delete\"",
+    "base_killed": false
+  },
+  {
+    "id": "R14",
+    "file": "app/jobs/app_user_event_job.rb",
+    "patch": "patches/R14.patch",
+    "description": "perform looks up App.first instead of the key",
+    "suggested_spec": "spec/jobs/app_user_event_job_mutants_spec.rb",
+    "approach": "another app created first; perform for a user of the second app: Tour receives that user, no RecordNotFound",
+    "base_killed": true
+  },
+  {
+    "id": "R15",
+    "file": "app/jobs/app_user_event_job.rb",
+    "patch": "patches/R15.patch",
+    "description": "Tour gets nil instead of the user",
+    "suggested_spec": "spec/jobs/app_user_event_job_mutants_spec.rb",
+    "approach": "Tour.broadcast_tour_to_user received with(the app user)",
+    "base_killed": false
+  },
+  {
+    "id": "R16",
+    "file": "app/jobs/app_user_event_job.rb",
+    "patch": "patches/R16.patch",
+    "description": "BotTask gets nil instead of the user",
+    "suggested_spec": "spec/jobs/app_user_event_job_mutants_spec.rb",
+    "approach": "Tour returns nil: BotTask.broadcast_task_to_user received with(the app user)",
+    "base_killed": false
+  },
+  {
+    "id": "R17",
+    "file": "app/jobs/app_user_event_job.rb",
+    "patch": "patches/R17.patch",
+    "description": "Tour || BotTask to &&",
+    "suggested_spec": "spec/jobs/app_user_event_job_mutants_spec.rb",
+    "approach": "Tour returns true: result true, BotTask not called",
+    "base_killed": true
+  },
+  {
+    "id": "R18",
+    "file": "app/jobs/app_user_event_job.rb",
+    "patch": "patches/R18.patch",
+    "description": "UserAutoMessage fallback removed",
+    "suggested_spec": "spec/jobs/app_user_event_job_mutants_spec.rb",
+    "approach": "Tour and BotTask nil: UserAutoMessage result returned",
+    "base_killed": true
+  },
+  {
+    "id": "R19",
+    "file": "app/services/message_apis/calendly/presenter.rb",
+    "patch": "patches/R19.patch",
+    "description": "valid_url? returns scheme instead of host",
+    "suggested_spec": "spec/services/message_apis/calendly_presenter_mutants_spec.rb",
+    "approach": "valid_url?(\"https://calendly.com/x\") == \"calendly.com\"",
+    "base_killed": true
+  },
+  {
+    "id": "R20",
+    "file": "app/services/message_apis/calendly/presenter.rb",
+    "patch": "patches/R20.patch",
+    "description": "initialize_hook button label from invitation_text",
+    "suggested_spec": "spec/services/message_apis/calendly_presenter_mutants_spec.rb",
+    "approach": "initialize_hook with values label \"Go\": second definition label \"Go\"",
+    "base_killed": false
+  },
+  {
+    "id": "R21",
+    "file": "app/services/message_apis/calendly/presenter.rb",
+    "patch": "patches/R21.patch",
+    "description": "initialize_hook kind initialize to submit",
+    "suggested_spec": "spec/services/message_apis/calendly_presenter_mutants_spec.rb",
+    "approach": "initialize_hook result kind == \"initialize\"",
+    "base_killed": false
+  },
+  {
+    "id": "R22",
+    "file": "app/services/message_apis/calendly/presenter.rb",
+    "patch": "patches/R22.patch",
+    "description": "initialize_hook values dropped",
+    "suggested_spec": "spec/services/message_apis/calendly_presenter_mutants_spec.rb",
+    "approach": "initialize_hook result values == the ctx values",
+    "base_killed": false
+  },
+  {
+    "id": "R23",
+    "file": "app/services/message_apis/calendly/presenter.rb",
+    "patch": "patches/R23.patch",
+    "description": "initialize_hook frame url changed",
+    "suggested_spec": "spec/services/message_apis/calendly_presenter_mutants_spec.rb",
+    "approach": "second definition action == {type: \"frame\", url: \"/package_iframe_internal/Calendly\"}",
+    "base_killed": false
+  },
+  {
+    "id": "R24",
+    "file": "app/services/message_apis/pipedrive/api.rb",
+    "patch": "patches/R24.patch",
+    "description": "url api_token param renamed",
+    "suggested_spec": "spec/services/message_apis/pipedrive_api_mutants_spec.rb",
+    "approach": "WebMock stub on ...?api_token=tok answers",
+    "base_killed": true
+  },
+  {
+    "id": "R25",
+    "file": "app/services/message_apis/pipedrive/api.rb",
+    "patch": "patches/R25.patch",
+    "description": "create_person sends an empty body",
+    "suggested_spec": "spec/services/message_apis/pipedrive_api_mutants_spec.rb",
+    "approach": "create_person: WebMock request body JSON == the params",
+    "base_killed": false
+  },
+  {
+    "id": "R26",
+    "file": "app/services/message_apis/pipedrive/api.rb",
+    "patch": "patches/R26.patch",
+    "description": "create_person drops the Content-Type header",
+    "suggested_spec": "spec/services/message_apis/pipedrive_api_mutants_spec.rb",
+    "approach": "create_person: WebMock stub with headers Content-Type application/json is the request made",
+    "base_killed": false
+  },
+  {
+    "id": "R27",
+    "file": "app/services/message_apis/pipedrive/api.rb",
+    "patch": "patches/R27.patch",
+    "description": "register_contact ignores success of the find reply",
+    "suggested_spec": "spec/services/message_apis/pipedrive_api_mutants_spec.rb",
+    "approach": "profile_id set, find reply {success: false}: create_person called (POST), profile updated from it, no error",
+    "base_killed": false
+  },
+  {
+    "id": "R28",
+    "file": "app/services/message_apis/pipedrive/api.rb",
+    "patch": "patches/R28.patch",
+    "description": "register_contact ignores success of the create reply",
+    "suggested_spec": "spec/services/message_apis/pipedrive_api_mutants_spec.rb",
+    "approach": "no profile_id, create reply {success: false, data: nil}: no error, profile_id stays nil",
+    "base_killed": false
+  },
+  {
+    "id": "R29",
+    "file": "app/services/message_apis/pipedrive/api.rb",
+    "patch": "patches/R29.patch",
+    "description": "register_contact does not store the created profile_id",
+    "suggested_spec": "spec/services/message_apis/pipedrive_api_mutants_spec.rb",
+    "approach": "no profile_id, create reply {success: true, data: {id: 5}}: profile_id == \"5\"",
+    "base_killed": false
+  },
+  {
+    "id": "R30",
+    "file": "app/services/message_apis/pipedrive/api.rb",
+    "patch": "patches/R30.patch",
+    "description": "create params name from email",
+    "suggested_spec": "spec/services/message_apis/pipedrive_api_mutants_spec.rb",
+    "approach": "user with name \"Ann\": POST body name \"Ann\"",
+    "base_killed": false
+  },
+  {
+    "id": "R31",
+    "file": "app/services/message_apis/safe_download.rb",
+    "patch": "patches/R31.patch",
+    "description": "redirect check limited to 301",
+    "suggested_spec": "spec/services/message_apis/safe_download_read_response_spec.rb",
+    "approach": "302 with location: [nil, location]",
+    "base_killed": true
+  },
+  {
+    "id": "R32",
+    "file": "app/services/message_apis/safe_download.rb",
+    "patch": "patches/R32.patch",
+    "description": "non-success responses are read",
+    "suggested_spec": "spec/services/message_apis/safe_download_read_response_spec.rb",
+    "approach": "404 response (read_body stubbed to yield bytes): nil",
+    "base_killed": true
+  },
+  {
+    "id": "R33",
+    "file": "app/services/message_apis/safe_download.rb",
+    "patch": "patches/R33.patch",
+    "description": "content-length limit > to >=",
+    "suggested_spec": "spec/services/message_apis/safe_download_read_response_spec.rb",
+    "approach": "200 with content-length == max_bytes and that many bytes: body returned",
+    "base_killed": false
+  },
+  {
+    "id": "R34",
+    "file": "app/services/message_apis/safe_download.rb",
+    "patch": "patches/R34.patch",
+    "description": "content-length check removed",
+    "suggested_spec": "spec/services/message_apis/safe_download_read_response_spec.rb",
+    "approach": "200 with content-length > max_bytes, read_body yields fewer bytes: nil",
+    "base_killed": false
+  },
+  {
+    "id": "R35",
+    "file": "app/services/message_apis/safe_download.rb",
+    "patch": "patches/R35.patch",
+    "description": "chunk limit > to >=",
+    "suggested_spec": "spec/services/message_apis/safe_download_read_response_spec.rb",
+    "approach": "200 without content-length, chunks totalling exactly max_bytes: body returned",
+    "base_killed": false
+  },
+  {
+    "id": "R36",
+    "file": "app/services/message_apis/safe_download.rb",
+    "patch": "patches/R36.patch",
+    "description": "chunks not appended",
+    "suggested_spec": "spec/services/message_apis/safe_download_read_response_spec.rb",
+    "approach": "200 body chunks \"ab\", \"cd\": result body reads \"abcd\"",
+    "base_killed": false
+  },
+  {
+    "id": "R37",
+    "file": "app/services/message_apis/safe_download.rb",
+    "patch": "patches/R37.patch",
+    "description": "body content_type dropped",
+    "suggested_spec": "spec/services/message_apis/safe_download_read_response_spec.rb",
+    "approach": "200 with content-type \"image/png; x=y\": body.content_type and mime_type \"image/png\"",
+    "base_killed": false
+  },
+  {
+    "id": "R38",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R38.patch",
+    "description": "lookupByEmail query email to user",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "WebMock stub on ...?email=... answers",
+    "base_killed": true
+  },
+  {
+    "id": "R39",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R39.patch",
+    "description": "notify_message posts again for an already sent part",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "part with a slack ConversationPartChannelSource: post_message not called",
+    "base_killed": false
+  },
+  {
+    "id": "R40",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R40.patch",
+    "description": "event data keeps blank values",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "event data {\"label\" => \"Done\", \"status\" => \"\"}: text \"*event*: closed \\n *LABEL*: Done\"",
+    "base_killed": false
+  },
+  {
+    "id": "R41",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R41.patch",
+    "description": "event data Hash check to truthiness",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "event data a JSON string \"abc\" (or [[\"k\", \"v\"]]): no error, text \"*event*: closed \\n \"",
+    "base_killed": false
+  },
+  {
+    "id": "R42",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R42.patch",
+    "description": "assigned && email to ||",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "closed event with nil data: no error",
+    "base_killed": true
+  },
+  {
+    "id": "R43",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R43.patch",
+    "description": "assigned lookup without the email check",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "assigned event without email: get_slack_user_by_email not called, no <@ in text",
+    "base_killed": false
+  },
+  {
+    "id": "R44",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R44.patch",
+    "description": "assigned mention uses name instead of id",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "assigned event with email, lookup stubbed {\"id\" => \"U1\", \"name\" => \"bob\"}: text ends \"\\n <@U1>\"",
+    "base_killed": false
+  },
+  {
+    "id": "R45",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R45.patch",
+    "description": "notify_message posts without a slack channel",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "conversation without a slack conversation_channel: post_message not called",
+    "base_killed": false
+  },
+  {
+    "id": "R46",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R46.patch",
+    "description": "thread_ts dropped",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "post_message options thread_ts == the channel's provider_channel_id",
+    "base_killed": false
+  },
+  {
+    "id": "R47",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R47.patch",
+    "description": "channel option dropped",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "config channel_id \"C1\": post_message options channel == \"C1\"",
+    "base_killed": false
+  },
+  {
+    "id": "R48",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R48.patch",
+    "description": "source row stored even when slack says not ok",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "post_message reply {ok: false}: no slack ConversationPartChannelSource for the part",
+    "base_killed": false
+  },
+  {
+    "id": "R49",
+    "file": "app/services/message_apis/slack/api.rb",
+    "patch": "patches/R49.patch",
+    "description": "message_source_id not stored",
+    "suggested_spec": "spec/services/message_apis/slack_notify_event_spec.rb",
+    "approach": "post_message reply {ok: true, ts: \"9.9\"}: source row message_source_id \"9.9\"",
+    "base_killed": false
+  }
+]

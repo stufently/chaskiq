@@ -1,0 +1,13 @@
+diff --git a/app/models/campaign.rb b/app/models/campaign.rb
+index 2fa1793d..bda10e90 100644
+--- a/app/models/campaign.rb
++++ b/app/models/campaign.rb
+@@ -203,7 +203,7 @@ class Campaign < Message
+     addr, = address.split("@")
+     _, encoded = addr.split("+")
+     app_key, campaign_id = decoded_email(encoded).split("-")
+-    app = App.find_by(key: app_key)
++    app = App.first
+     app.campaigns.find(campaign_id)
+   rescue StandardError => e
+     Rails.logger.error("error on decoding campaign email #{e}")

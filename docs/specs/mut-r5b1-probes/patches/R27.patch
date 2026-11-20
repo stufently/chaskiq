@@ -1,0 +1,14 @@
+diff --git a/app/services/message_apis/pipedrive/api.rb b/app/services/message_apis/pipedrive/api.rb
+index fa788835..10e83fae 100644
+--- a/app/services/message_apis/pipedrive/api.rb
++++ b/app/services/message_apis/pipedrive/api.rb
+@@ -108,8 +108,7 @@ module MessageApis
+ 
+         if external_profile &&
+            external_profile.profile_id.present? &&
+-           (find_response = person(external_profile.profile_id)) &&
+-           find_response["success"].present?
++           (find_response = person(external_profile.profile_id))
+ 
+           find_response["data"]["id"] # kept: raises on a malformed reply (R5b-1 D2)
+           external_profile.update(

@@ -1,0 +1,13 @@
+diff --git a/app/jobs/app_user_event_job.rb b/app/jobs/app_user_event_job.rb
+index bdedbe0f..c45878ff 100644
+--- a/app/jobs/app_user_event_job.rb
++++ b/app/jobs/app_user_event_job.rb
+@@ -10,7 +10,6 @@ class AppUserEventJob < ApplicationJob
+ 
+     # Banner.broadcast_banner_to_user(app_user) ||
+     Tour.broadcast_tour_to_user(app_user) ||
+-      BotTask.broadcast_task_to_user(app_user) ||
+-      UserAutoMessage.broadcast_message_to_user(app_user)
++      BotTask.broadcast_task_to_user(app_user)
+   end
+ end

@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/slack/api.rb b/app/services/message_apis/slack/api.rb
+index 2329c16c..dc37fbcf 100644
+--- a/app/services/message_apis/slack/api.rb
++++ b/app/services/message_apis/slack/api.rb
+@@ -928,7 +928,7 @@ module MessageApis
+ 
+         part.conversation_part_channel_sources.create(
+           provider: "slack",
+-          message_source_id: response_data["ts"]
++          message_source_id: nil
+         )
+       end
+ 

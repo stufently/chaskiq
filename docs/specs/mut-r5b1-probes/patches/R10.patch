@@ -1,0 +1,13 @@
+diff --git a/app/models/campaign.rb b/app/models/campaign.rb
+index 2fa1793d..ad566f40 100644
+--- a/app/models/campaign.rb
++++ b/app/models/campaign.rb
+@@ -202,7 +202,7 @@ class Campaign < Message
+ 
+     addr, = address.split("@")
+     _, encoded = addr.split("+")
+-    app_key, campaign_id = decoded_email(encoded).split("-")
++    app_key, campaign_id = decoded_email(encoded).split("_")
+     app = App.find_by(key: app_key)
+     app.campaigns.find(campaign_id)
+   rescue StandardError => e

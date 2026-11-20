@@ -1,0 +1,13 @@
+diff --git a/app/models/campaign.rb b/app/models/campaign.rb
+index 2fa1793d..2924d618 100644
+--- a/app/models/campaign.rb
++++ b/app/models/campaign.rb
+@@ -117,7 +117,7 @@ class Campaign < Message
+ 
+   def campaign_url
+     host = Rails.application.routes.default_url_options[:host]
+-    "#{host}/campaigns/#{id}"
++    "#{host}/campaign/#{id}"
+   end
+ 
+   def campaign_api_url

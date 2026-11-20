@@ -1,0 +1,12 @@
+diff --git a/app/services/message_apis/slack/api.rb b/app/services/message_apis/slack/api.rb
+index 2329c16c..e5420397 100644
+--- a/app/services/message_apis/slack/api.rb
++++ b/app/services/message_apis/slack/api.rb
+@@ -837,7 +837,6 @@ module MessageApis
+       # will triggered just after the ws notification
+       def notify_message(conversation:, part:, channel:)
+         # TODO: ? redis cache here for provider / channel id / part
+-        return if part.conversation_part_channel_sources.find_by(provider: "slack").present?
+ 
+         blocks = blocks_transform(part)
+ 

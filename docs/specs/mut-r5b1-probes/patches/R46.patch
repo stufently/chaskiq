@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/slack/api.rb b/app/services/message_apis/slack/api.rb
+index 2329c16c..fe507711 100644
+--- a/app/services/message_apis/slack/api.rb
++++ b/app/services/message_apis/slack/api.rb
+@@ -918,7 +918,7 @@ module MessageApis
+           blocks.as_json,
+           user_options.merge!({
+                                 channel: resolve_channel_id(conversation.main_participant), # @keys["channel"],
+-                                thread_ts: provider_channel_id
++                                thread_ts: nil
+                               })
+         )
+ 

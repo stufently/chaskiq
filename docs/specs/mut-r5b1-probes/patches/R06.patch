@@ -1,0 +1,12 @@
+diff --git a/app/models/audit.rb b/app/models/audit.rb
+index 5692829e..fa0c2d0d 100644
+--- a/app/models/audit.rb
++++ b/app/models/audit.rb
+@@ -18,7 +18,6 @@ class Audit < ApplicationRecord
+   before_validation :attach_app
+ 
+   def attach_app
+-    self.app_id = auditable.app_id if auditable.respond_to?(:app_id)
+   end
+ 
+   def agent_name

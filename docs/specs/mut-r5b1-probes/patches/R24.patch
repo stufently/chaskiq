@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/pipedrive/api.rb b/app/services/message_apis/pipedrive/api.rb
+index fa788835..c21aa1d0 100644
+--- a/app/services/message_apis/pipedrive/api.rb
++++ b/app/services/message_apis/pipedrive/api.rb
+@@ -37,7 +37,7 @@ module MessageApis
+       end
+ 
+       def url(url)
+-        "#{BASE_URL}#{url}?api_token=#{@api_token}"
++        "#{BASE_URL}#{url}?token=#{@api_token}"
+       end
+ 
+       def trigger(event)

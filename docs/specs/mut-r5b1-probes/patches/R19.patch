@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/calendly/presenter.rb b/app/services/message_apis/calendly/presenter.rb
+index 49e72ba7..5cab796d 100644
+--- a/app/services/message_apis/calendly/presenter.rb
++++ b/app/services/message_apis/calendly/presenter.rb
+@@ -3,7 +3,7 @@
+ module MessageApis::Calendly
+   class Presenter
+     def self.valid_url?(uri)
+-      URI.parse(uri).try(:host)
++      URI.parse(uri).try(:scheme)
+     rescue URI::InvalidURIError
+       false
+     end

@@ -1,0 +1,13 @@
+diff --git a/app/models/campaign.rb b/app/models/campaign.rb
+index 2fa1793d..76870a85 100644
+--- a/app/models/campaign.rb
++++ b/app/models/campaign.rb
+@@ -170,7 +170,7 @@ class Campaign < Message
+     {
+       email: subscriber.email,
+       campaign_url: campaign_url,
+-      campaign_unsubscribe: "#{subscriber_url}/delete",
++      campaign_unsubscribe: "#{subscriber_url}/destroy",
+       campaign_subscribe: "#{campaign_url}/subscribers/new",
+       campaign_description: description.to_s,
+       track_image_url: track_image

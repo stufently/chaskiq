@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index a88f01d8..911c103b 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -154,7 +154,7 @@ module MessageApis
+ 
+       body = String.new(encoding: Encoding::BINARY)
+       response.read_body do |chunk|
+-        return if body.bytesize + chunk.bytesize > max_bytes
++        return if body.bytesize + chunk.bytesize >= max_bytes
+ 
+         body << chunk
+       end

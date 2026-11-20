@@ -1,0 +1,12 @@
+diff --git a/app/models/campaign.rb b/app/models/campaign.rb
+index 2fa1793d..4b207462 100644
+--- a/app/models/campaign.rb
++++ b/app/models/campaign.rb
+@@ -106,7 +106,6 @@ class Campaign < Message
+     # html = LinkRenamer.convert(premailer, link_prefix)
+     subscriber_options = subscriber.attributes
+                                    .merge(attributes_for_template(subscriber))
+-                                   .merge(subscriber.properties)
+ 
+     compiled_premailer = (html || premailer).gsub("%7B%7B", "{{").gsub("%7D%7D", "}}")
+     Mustache.render(compiled_premailer, subscriber_options)

@@ -1,0 +1,22 @@
+{
+ "equivalent": [
+  {"id": "E1", "file": "app/services/message_apis/safe_download.rb",
+   "old": "location = response[\"location\"]", "new": "location = response[\"Location\"]",
+   "reason": "Net::HTTPHeader#[] looks the field up by key.downcase, so both spellings return the same header value."},
+  {"id": "E2", "file": "app/services/message_apis/safe_download.rb",
+   "old": "body = String.new(encoding: Encoding::BINARY)", "new": "body = String.new",
+   "reason": "String.new without arguments already returns an empty ASCII-8BIT (BINARY) string: same object state."},
+  {"id": "E3", "file": "app/services/message_apis/slack/api.rb",
+   "old": "data.reject { |k, v| v.blank? or [\"id\"].include?(k) }", "new": "data.reject { |k, v| v.blank? || [\"id\"].include?(k) }",
+   "reason": "The block body is the single expression; or and || differ only in precedence against assignment, and there is none, so the block value is identical."},
+  {"id": "E4", "file": "app/models/audit.rb",
+   "old": "agent.try(:display_name).to_s", "new": "agent&.display_name.to_s",
+   "reason": "Agent#display_name is always defined, so try only differs from &. on nil receivers, where both give nil."},
+  {"id": "E5", "file": "app/models/campaign.rb",
+   "old": "host = Rails.application.routes.default_url_options[:host]", "new": "host = Rails.application.routes.default_url_options.fetch(:host, nil)",
+   "reason": "Hash#[] and fetch(key, nil) return the same value for present and missing keys (no default proc on default_url_options)."},
+  {"id": "E6", "file": "app/services/message_apis/calendly/presenter.rb",
+   "old": "URI.parse(uri).try(:host)", "new": "URI.parse(uri).host",
+   "reason": "URI.parse returns a URI::Generic (or subclass), which always defines host, so try(:host) is a plain call."}
+ ]
+}

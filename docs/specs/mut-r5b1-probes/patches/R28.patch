@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/pipedrive/api.rb b/app/services/message_apis/pipedrive/api.rb
+index fa788835..1b6ac40c 100644
+--- a/app/services/message_apis/pipedrive/api.rb
++++ b/app/services/message_apis/pipedrive/api.rb
+@@ -123,7 +123,7 @@ module MessageApis
+                                      name: user.name
+                                    })
+ 
+-          if response["success"]
++          if true
+             external_profile.update(
+               profile_id: response["data"]["id"],
+               data: response["data"]

@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/slack/api.rb b/app/services/message_apis/slack/api.rb
+index 2329c16c..f4d9027e 100644
+--- a/app/services/message_apis/slack/api.rb
++++ b/app/services/message_apis/slack/api.rb
+@@ -881,7 +881,7 @@ module MessageApis
+         if part.messageable.is_a?(ConversationPartEvent)
+           data = messageable.data
+ 
+-          data_fmt = if data.is_a?(Hash)
++          data_fmt = if data
+                        data.reject { |k, v| v.blank? or ["id"].include?(k) }
+                            .map do |k, v|
+                          "*#{k.upcase}*: #{v}"

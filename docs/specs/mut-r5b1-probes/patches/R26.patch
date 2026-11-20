@@ -1,0 +1,12 @@
+diff --git a/app/services/message_apis/pipedrive/api.rb b/app/services/message_apis/pipedrive/api.rb
+index fa788835..a06dd4ce 100644
+--- a/app/services/message_apis/pipedrive/api.rb
++++ b/app/services/message_apis/pipedrive/api.rb
+@@ -157,7 +157,6 @@ module MessageApis
+         url = url("/persons")
+         response = @conn.post do |req|
+           req.url url
+-          req.headers["Content-Type"] = "application/json"
+           req.body = params.to_json
+         end
+ 

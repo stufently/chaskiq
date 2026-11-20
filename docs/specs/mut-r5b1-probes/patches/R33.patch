@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index a88f01d8..db1b61d7 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -150,7 +150,7 @@ module MessageApis
+       return unless response.is_a?(Net::HTTPSuccess)
+ 
+       content_length = response.content_length
+-      return if content_length && content_length > max_bytes
++      return if content_length && content_length >= max_bytes
+ 
+       body = String.new(encoding: Encoding::BINARY)
+       response.read_body do |chunk|

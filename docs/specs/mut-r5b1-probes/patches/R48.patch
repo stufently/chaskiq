@@ -1,0 +1,12 @@
+diff --git a/app/services/message_apis/slack/api.rb b/app/services/message_apis/slack/api.rb
+index 2329c16c..3e6ad194 100644
+--- a/app/services/message_apis/slack/api.rb
++++ b/app/services/message_apis/slack/api.rb
+@@ -924,7 +924,6 @@ module MessageApis
+ 
+         response_data = json_body(response)
+ 
+-        return unless response_data["ok"]
+ 
+         part.conversation_part_channel_sources.create(
+           provider: "slack",

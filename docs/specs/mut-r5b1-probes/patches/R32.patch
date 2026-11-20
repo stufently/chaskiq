@@ -1,0 +1,12 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index a88f01d8..85153f1f 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -147,7 +147,6 @@ module MessageApis
+         location = response["location"]
+         return [nil, location] unless location.to_s.empty?
+       end
+-      return unless response.is_a?(Net::HTTPSuccess)
+ 
+       content_length = response.content_length
+       return if content_length && content_length > max_bytes

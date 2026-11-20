@@ -1,0 +1,13 @@
+diff --git a/app/models/audit.rb b/app/models/audit.rb
+index 5692829e..9c640b18 100644
+--- a/app/models/audit.rb
++++ b/app/models/audit.rb
+@@ -48,7 +48,7 @@ class Audit < ApplicationRecord
+ 
+   def serialize_properties(app = nil)
+     @app = app || auditable.app.key
+-    as_json(methods: %i[id agent_name auditable_name action created_at sdata])
++    as_json(methods: %i[id auditable_name action created_at sdata])
+       .merge(
+         auditable_link: auditable_link,
+         agent_email: agent_email
