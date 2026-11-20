@@ -1,0 +1,118 @@
+{
+ "cops": [
+  "Rails/Blank",
+  "Rails/Presence"
+ ],
+ "files": [
+  "app/channels/application_cable/connection.rb",
+  "app/controllers/agents/sessions_controller.rb",
+  "app/graphql/mutations/articles/article_settings_delete_lang.rb",
+  "app/graphql/types/app_type.rb",
+  "app/jobs/email_chat_notifier_job.rb",
+  "app/services/action_trigger.rb",
+  "lib/app_packages_catalog.rb"
+ ],
+ "steps": [
+  [
+   "-A",
+   "Rails/Blank,Rails/Presence"
+  ],
+  [
+   "-a",
+   "Layout"
+  ]
+ ],
+ "commits": [
+  "Drop R3b1 cops from RuboCop todo",
+  "Autocorrect Rails/Blank and Rails/Presence",
+  "Fix layout after Rails/Presence",
+  "Note fork-updates-r3b1 in changelog"
+ ],
+ "sites": [
+  {
+   "site": "app/channels/application_cable/connection.rb `return unless app.present?`",
+   "receiver": "App or nil (`App.find_by` in #connect)",
+   "classes": [
+    "App",
+    "NilClass"
+   ]
+  },
+  {
+   "site": "app/graphql/types/app_type.rb `if conversation.present?`",
+   "receiver": "Conversation or nil (`find_by`)",
+   "classes": [
+    "Conversation",
+    "NilClass"
+   ]
+  },
+  {
+   "site": "app/graphql/types/app_type.rb `return unless sort.present?`",
+   "receiver": "String or nil (GraphQL `argument :sort, String`)",
+   "classes": [
+    "String",
+    "NilClass"
+   ]
+  },
+  {
+   "site": "app/jobs/email_chat_notifier_job.rb `return unless response.present?`",
+   "receiver": "Mail::Message or nil (`deliver_now`)",
+   "classes": [
+    "Mail::Message",
+    "NilClass"
+   ]
+  },
+  {
+   "site": "app/services/action_trigger.rb:52 `next_step[\"controls\"].present?`",
+   "receiver": "JSON value: Hash, Array, String or nil",
+   "classes": [
+    "Hash",
+    "ActiveSupport::HashWithIndifferentAccess",
+    "Array",
+    "String",
+    "Integer",
+    "Float",
+    "TrueClass",
+    "FalseClass",
+    "NilClass"
+   ]
+  },
+  {
+   "site": "app/services/action_trigger.rb:118 `next_step[\"controls\"].present?`",
+   "receiver": "JSON value: Hash, Array, String or nil",
+   "classes": [
+    "Hash",
+    "ActiveSupport::HashWithIndifferentAccess",
+    "Array",
+    "String",
+    "Integer",
+    "Float",
+    "TrueClass",
+    "FalseClass",
+    "NilClass"
+   ]
+  },
+  {
+   "site": "app/controllers/agents/sessions_controller.rb `token.destroy if token.present?`",
+   "receiver": "Doorkeeper::AccessToken or nil (`find_by`)",
+   "classes": [
+    "Doorkeeper::AccessToken",
+    "NilClass"
+   ]
+  },
+  {
+   "site": "app/graphql/mutations/articles/article_settings_delete_lang.rb `translation.destroy if translation.present?`",
+   "receiver": "ArticleSetting::Translation or nil (`find_by`)",
+   "classes": [
+    "ArticleSetting::Translation",
+    "NilClass"
+   ]
+  },
+  {
+   "site": "lib/app_packages_catalog.rb `pkg.update(data) if pkg.present?`",
+   "receiver": "AppPackage (`find_or_create_by`)",
+   "classes": [
+    "AppPackage"
+   ]
+  }
+ ]
+}

@@ -147,6 +147,13 @@ RuboCop 1.92.3, rubocop-rails 2.38.0, Ruby 3.3.14, образ `bin/ci-local`, `.
 
 ## R3b — Rails-автокоррект (по тесту на каждое место)
 
+**Разбита.** R3b-1 (спека готова: `docs/specs/fork-updates-r3b1.md`, исполнитель Qwen `qw2`) —
+`Rails/Blank` (5) и `Rails/Presence` (4) автокорректом в 7 файлах (`Rails/Present` — не трогаем, R5b);
+проверка — побайтный повтор команд RuboCop на BASE и guard типа получателя: у классов каждого места
+(таблица в спеке) и их наследников `present?`/`presence` — из ActiveSupport/ActiveRecord::Core
+(глобально это неверно: свои есть у ActionText::RichText, roo, scout_apm, rspec-mocks, snaky_hash).
+R3b-2 — `OrderArguments`, `Pluck`, `WhereRange`, `StrongParametersExpect`, `Delegate`.
+
 - Копы: 8, 44 офенса (замер BASE прежнего R3 + `Rails/Blank` из R2): `Rails/OrderArguments` 19
   (u), `Pluck` 9 (u), `Blank` 5 (u, из R2: `return unless x.present?` в `connection.rb`,
   `types/app_type.rb`, `email_chat_notifier_job.rb`, `action_trigger.rb` ×2), `Presence` 4,
