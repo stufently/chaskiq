@@ -1,0 +1,13 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/avg_time_series.rb b/vendor/nightfury/lib/nightfury/metric/avg_time_series.rb
+index ad9d332c..5d35a8a4 100644
+--- a/vendor/nightfury/lib/nightfury/metric/avg_time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/avg_time_series.rb
+@@ -7,7 +7,7 @@ module Nightfury
+           current_step_time = current_step_time.to_s
+           last_step_time = last_step_time.to_s
+           next if data_points[current_step_time]
+-          data_points[current_step_time] = '0.0'
++          data_points[current_step_time] = "1.0"
+         end
+         Hash[data_points.sort]
+       end

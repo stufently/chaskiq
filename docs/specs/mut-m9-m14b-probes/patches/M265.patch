@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/twilio_phone/store.rb b/app/services/message_apis/twilio_phone/store.rb
+index bc4e863b..eecea0a7 100644
+--- a/app/services/message_apis/twilio_phone/store.rb
++++ b/app/services/message_apis/twilio_phone/store.rb
+@@ -52,7 +52,7 @@ module MessageApis
+       end
+ 
+       def self.del_callblock(key)
+-        Kredis.string(key).del
++        Kredis.string(key).value = ""
+       end
+ 
+       def self.namespace(conversation_key)

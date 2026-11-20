@@ -1,0 +1,13 @@
+diff --git a/vendor/nightfury/lib/nightfury/identity.rb b/vendor/nightfury/lib/nightfury/identity.rb
+index fcb1c151..43157043 100644
+--- a/vendor/nightfury/lib/nightfury/identity.rb
++++ b/vendor/nightfury/lib/nightfury/identity.rb
+@@ -15,7 +15,7 @@ module Nightfury
+         attr_accessor :store_as
+ 
+         def name
+-          self.to_s.demodulize.underscore
++          self.to_s.underscore
+         end
+ 
+         def metric(name, type = :value, options={})

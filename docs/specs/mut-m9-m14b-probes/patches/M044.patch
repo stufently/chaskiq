@@ -1,0 +1,13 @@
+diff --git a/app/models/conversation_part_channel_source.rb b/app/models/conversation_part_channel_source.rb
+index bbd170b4..645bb33b 100644
+--- a/app/models/conversation_part_channel_source.rb
++++ b/app/models/conversation_part_channel_source.rb
+@@ -38,7 +38,7 @@ class ConversationPartChannelSource < ApplicationRecord
+ 
+   def self.acquire_session_lock(connection, key, wait)
+     sql = "SELECT pg_try_advisory_lock(#{key})"
+-    return connection.select_value(sql) unless wait
++    return true unless wait
+ 
+     acquire_status_lock(connection, sql)
+   end

@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/twilio/api.rb b/app/services/message_apis/twilio/api.rb
+index 618f2ebc..48dcb9ec 100644
+--- a/app/services/message_apis/twilio/api.rb
++++ b/app/services/message_apis/twilio/api.rb
+@@ -161,7 +161,7 @@ module MessageApis
+         # TODO: maybe handle an error here ?
+         return if profile_id.blank?
+ 
+-        message_params = { From: "whatsapp:#{@phone}", To: profile_id }
++        message_params = { From: @phone, To: profile_id }
+         send_text = ->(text) { @conn.post(@url, message_params.merge(Body: text)) }
+         plain_message = MessageApis::BlockManager.plain_text(blocks)
+         attachments = MessageApis::BlockManager.media_blocks(blocks)

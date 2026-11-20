@@ -1,0 +1,13 @@
+diff --git a/app/models/conversation_part_channel_source.rb b/app/models/conversation_part_channel_source.rb
+index bbd170b4..38558121 100644
+--- a/app/models/conversation_part_channel_source.rb
++++ b/app/models/conversation_part_channel_source.rb
+@@ -8,7 +8,7 @@ class ConversationPartChannelSource < ApplicationRecord
+   class StatusEventLockTimeout < StandardError; end
+ 
+   STATUS_LOCK_TIMEOUT = 5
+-  STATUS_LOCK_RETRY_INTERVAL = 0.05
++  STATUS_LOCK_RETRY_INTERVAL = 0.01
+   private_constant :STATUS_LOCK_TIMEOUT, :STATUS_LOCK_RETRY_INTERVAL
+ 
+   def self.with_delivery_lock(part_id, provider, &)

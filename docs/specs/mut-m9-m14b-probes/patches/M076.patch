@@ -1,0 +1,13 @@
+diff --git a/lib/rack/health_check.rb b/lib/rack/health_check.rb
+index e628d850..c494abae 100644
+--- a/lib/rack/health_check.rb
++++ b/lib/rack/health_check.rb
+@@ -28,7 +28,7 @@ module Rack
+ 
+     def redis_connected
+       @redis.ping == "PONG"
+-    rescue StandardError
++    rescue Exception
+       false
+     end
+   end

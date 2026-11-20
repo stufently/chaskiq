@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/base_package.rb b/app/services/message_apis/base_package.rb
+index 67d029c9..bcfeda1b 100644
+--- a/app/services/message_apis/base_package.rb
++++ b/app/services/message_apis/base_package.rb
+@@ -35,7 +35,7 @@ module MessageApis
+ 
+       resumable = resumable_delivery?(part)
+       response = send_message(conversation, part)
+-      store_message_id(part, response) if response && !resumable
++      store_message_id(part, response)
+     end
+ 
+     def delivery_sources(part)

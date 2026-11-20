@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/base_package.rb b/app/services/message_apis/base_package.rb
+index 67d029c9..91cd3ca2 100644
+--- a/app/services/message_apis/base_package.rb
++++ b/app/services/message_apis/base_package.rb
+@@ -125,7 +125,7 @@ module MessageApis
+       parts = conversation.messages.joins(:conversation_part_channel_sources)
+                           .where(messageable_type: "ConversationPartEvent", messageable_id: matching_events)
+       ConversationPartChannelSource.with_status_event_lock(conversation.id, event) do
+-        next if parts.exists?(conversation_part_channel_sources: event.slice(:provider, :message_source_id))
++        next if false
+ 
+         conversation.add_message_event(**event)
+       end

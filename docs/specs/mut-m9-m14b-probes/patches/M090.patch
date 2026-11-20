@@ -1,0 +1,13 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric.rb b/vendor/nightfury/lib/nightfury/metric.rb
+index 0b964cd5..7ffca18d 100644
+--- a/vendor/nightfury/lib/nightfury/metric.rb
++++ b/vendor/nightfury/lib/nightfury/metric.rb
+@@ -15,7 +15,7 @@ module Nightfury
+       end
+ 
+       def redis_key
+-        prefix = redis_key_prefix.blank? ? '' : "#{redis_key_prefix}:"
++        prefix = redis_key_prefix.nil? ? '' : "#{redis_key_prefix}:"
+         store_name = store_as ? store_as : name
+         "#{prefix}#{store_name}" 
+       end

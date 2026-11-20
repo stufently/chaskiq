@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/helpers.rb b/app/services/message_apis/helpers.rb
+index 40d5e395..684eb0ce 100644
+--- a/app/services/message_apis/helpers.rb
++++ b/app/services/message_apis/helpers.rb
+@@ -10,7 +10,7 @@ module MessageApis
+ 
+     def main_doc(blocks)
+       {
+-        type: "doc",
++        type: "document",
+         content: blocks
+       }
+     end

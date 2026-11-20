@@ -1,0 +1,22 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index ba034e5d..e81532d9 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -42,7 +42,7 @@ module Nightfury
+           data_point = data_points.last
+         end
+ 
+-        return get_meta ? [nil, {}] : nil if data_point.nil?
++        return get_meta ? [nil, {}] : {} if data_point.nil?
+         return get_meta ? [nil, {}] : nil if data_point[1].zero?
+ 
+         time, data, meta_value = decode_data_point(data_point)
+@@ -54,7 +54,7 @@ module Nightfury
+         timestamp = get_step_time(timestamp).to_i
+         data_points = redis.zrangebyscore(redis_key, timestamp, timestamp, withscores: true)
+         data_point = data_points.last
+-        return get_meta ? [nil, {}] : nil if data_point.nil?
++        return get_meta ? [nil, {}] : {} if data_point.nil?
+         time, data, meta_value = decode_data_point(data_point)
+         result = get_meta ? [{time => data}, meta_value] : {time => data}
+       end

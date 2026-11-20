@@ -1,0 +1,13 @@
+diff --git a/config/initializers/rack_attack.rb b/config/initializers/rack_attack.rb
+index cea19709..527c7673 100644
+--- a/config/initializers/rack_attack.rb
++++ b/config/initializers/rack_attack.rb
+@@ -10,7 +10,7 @@ if Rails.env.production? || Rails.env.staging?
+ end
+ 
+ Rack::Attack.throttle("logins/ip", limit: 20, period: 1.hour) do |req|
+-  next unless req.post? && %r{\A/+oauth/+token(?:\.[^/.?]+)?/*\z}.match?(req.path)
++  next unless req.post? && %r{\A/+oauth/+token}.match?(req.path)
+ 
+   grant_type = begin
+     body_params = if req.media_type == "application/json"

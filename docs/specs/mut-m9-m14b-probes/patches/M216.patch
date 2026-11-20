@@ -1,0 +1,13 @@
+diff --git a/vendor/nightfury/lib/nightfury/identity.rb b/vendor/nightfury/lib/nightfury/identity.rb
+index fcb1c151..a046ccc6 100644
+--- a/vendor/nightfury/lib/nightfury/identity.rb
++++ b/vendor/nightfury/lib/nightfury/identity.rb
+@@ -54,7 +54,7 @@ module Nightfury
+         store_name = self.class.store_as ? self.class.store_as : self.class.name
+         tag_ids = generate_tag_ids
+         tag_ids = tag_ids.nil? ? '' : ":#{tag_ids}"
+-        "#{store_name}.#{id}#{tag_ids}"
++        "#{store_name}:#{id}#{tag_ids}"
+       end
+ 
+       def new_record?

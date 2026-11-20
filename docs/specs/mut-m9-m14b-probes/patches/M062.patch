@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/dialog360/api.rb b/app/services/message_apis/dialog360/api.rb
+index a6ea6435..f464f2d4 100644
+--- a/app/services/message_apis/dialog360/api.rb
++++ b/app/services/message_apis/dialog360/api.rb
+@@ -480,7 +480,7 @@ module MessageApis
+         app = @package.app
+         profile = contacts.find { |o| o["wa_id"] == dialog_user }
+ 
+-        return unless dialog_user
++        return if dialog_user.blank?
+ 
+         profile_data = {
+           name: dialog_user

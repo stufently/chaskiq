@@ -1,0 +1,13 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index ba034e5d..1be40350 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -134,7 +134,7 @@ module Nightfury
+ 
+       def add_value_to_timeline(value, time)
+         timestamp = get_step_time(time).to_i
+-        redis.zremrangebyscore redis_key, timestamp, timestamp
++        # removed zremrangebyscore
+         value = "#{timestamp}:#{value}"
+         redis.zadd redis_key, timestamp, value
+       end

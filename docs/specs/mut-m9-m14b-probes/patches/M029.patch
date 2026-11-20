@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/base_package.rb b/app/services/message_apis/base_package.rb
+index 67d029c9..378cc083 100644
+--- a/app/services/message_apis/base_package.rb
++++ b/app/services/message_apis/base_package.rb
+@@ -44,7 +44,7 @@ module MessageApis
+ 
+     def resumable_delivery?(part)
+       plugin = self.class
+-      return false unless plugin.const_defined?(:RESUMABLE_DELIVERY, false) && plugin::RESUMABLE_DELIVERY == true
++      return false
+ 
+       blocks = BlockManager.get_blocks(part.message.as_json["serialized_content"])
+       BlockManager.media_blocks(blocks).any?

@@ -1,0 +1,13 @@
+diff --git a/app/services/dante/utils.rb b/app/services/dante/utils.rb
+index cfd44d11..f4a83b62 100644
+--- a/app/services/dante/utils.rb
++++ b/app/services/dante/utils.rb
+@@ -2,7 +2,7 @@
+ 
+ module Dante
+   class Utils
+-    def self.extract_plain_text(nodes)
++    def self.extract_plain_kind(nodes)
+       nodes.each_with_object(+"") do |node, text|
+         case node["type"]
+         when "text"

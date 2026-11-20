@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/message_bird/api.rb b/app/services/message_apis/message_bird/api.rb
+index 821ac71e..51e9062c 100644
+--- a/app/services/message_apis/message_bird/api.rb
++++ b/app/services/message_apis/message_bird/api.rb
+@@ -178,7 +178,7 @@ module MessageApis
+         response = @conn.get(
+           "#{@url}/media/#{id}"
+         )
+-        return nil if response.success?
++        return nil unless response.success?
+ 
+         response.body
+       end

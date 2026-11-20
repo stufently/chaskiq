@@ -1,0 +1,13 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index ba034e5d..db4ae94a 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -9,7 +9,7 @@ module Nightfury
+       def self.seconds_in_step(step_name, time)
+         {
+           minute: 60,
+-          hour: 1.hour,
++          hour: 30.minutes,
+           day: 1.day,
+           week: 1.week,
+           month: Time.days_in_month(time.month, time.year).days

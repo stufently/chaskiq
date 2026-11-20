@@ -1,0 +1,12 @@
+diff --git a/config/initializers/redis.rb b/config/initializers/redis.rb
+index 9bf1dc5b..7b359b63 100644
+--- a/config/initializers/redis.rb
++++ b/config/initializers/redis.rb
+@@ -15,6 +15,6 @@ Redis.exists_returns_integer = true
+ REDIS_URL = Chaskiq::Config.fetch('REDIS_URL', 'redis://localhost:6379/1')
+ 
+ require 'connection_pool'
+-Redis::Objects.redis = ConnectionPool.new(size: 5, timeout: 5) do
++Redis::Objects.redis = ConnectionPool.new(size: 5, timeout: 0) do
+   Redis.new(url: REDIS_URL)
+ end

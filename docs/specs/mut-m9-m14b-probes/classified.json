@@ -1,0 +1,84 @@
+{
+ "equivalent": [
+  {
+   "id": "M040",
+   "reason": "`return unless x` and `return nil unless x` compile to the same value: nil"
+  },
+  {
+   "id": "M053",
+   "reason": "`return if x` and `return nil if x` both return nil"
+  },
+  {
+   "id": "M059",
+   "reason": "`return if x` and `return nil if x` both return nil (two identical sites)"
+  },
+  {
+   "id": "M068",
+   "reason": "`return if x` and `return nil if x` both return nil"
+  },
+  {
+   "id": "M150",
+   "reason": "`return if x` and `return nil if x` both return nil"
+  },
+  {
+   "id": "M081",
+   "reason": "nightfury.rb defines redis=, namespace= and both readers explicitly right after attr_accessor, so attr_reader yields the same methods"
+  },
+  {
+   "id": "M093",
+   "reason": "redis 4.8.1 command_helper.rb build_command calls to_s on every argument; set(key, v) and set(key, v.to_s) send the same bytes"
+  },
+  {
+   "id": "M108",
+   "reason": "default_meta is defined once (TimeSeries#default_meta returns {}) and no class in app/, lib/, vendor/ overrides it"
+  },
+  {
+   "id": "M134",
+   "reason": "rack 3.2.8 utils.rb maps the obsolete :unprocessable_entity to 422 (OBSOLETE_SYMBOLS_TO_STATUS_CODES); same status, only a deprecation warning"
+  },
+  {
+   "id": "M172",
+   "reason": "kredis 1.5.0 types/hash.rb: Hash#[]=(key, value) is `update key => value`"
+  },
+  {
+   "id": "M174",
+   "reason": "kredis 1.5.0 scalar.rb: for Kredis.string (typed :string, default nil) #value and #to_s both return get, or nil"
+  },
+  {
+   "id": "M045",
+   "reason": "the advisory lock key is derived only in with_session_lock; every holder uses the same derivation, so byte order does not change which callers exclude each other"
+  },
+  {
+   "id": "M137",
+   "reason": "same: the key is derived only in with_session_lock from the identity array; to_s and to_json are both injective for these arrays of strings/integers"
+  },
+  {
+   "id": "M248",
+   "reason": "same: single derivation site; MD5 and SHA256 both give a stable 64-bit key per identity"
+  },
+  {
+   "id": "M253",
+   "reason": "Array#join without an argument uses the separator $, - nil unless reassigned, and nothing in app/, lib/, config/, vendor/ assigns it - so join and join(\"\") give the same string"
+  }
+ ],
+ "invalid": [
+  {
+   "id": "M226",
+   "reason": "the patch changes only the first-line comment: the syntax tree is unchanged, not a mutant"
+  },
+  {
+   "id": "M261",
+   "reason": "the patch only appends a comment to the def line: the syntax tree is unchanged, not a mutant"
+  }
+ ],
+ "defect": [
+  {
+   "id": "M259",
+   "reason": "delete_key deletes from hash(namespace(k)) = a double-namespaced key, so it never removes data written by set; the mutant fixes that. Killing it would pin the defect - Codex fix milestone"
+  },
+  {
+   "id": "M267",
+   "reason": "same defect as M259 (delete_key double namespace)"
+  }
+ ]
+}

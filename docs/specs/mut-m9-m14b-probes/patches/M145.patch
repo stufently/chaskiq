@@ -1,0 +1,13 @@
+diff --git a/config/initializers/redis.rb b/config/initializers/redis.rb
+index 9bf1dc5b..523e9467 100644
+--- a/config/initializers/redis.rb
++++ b/config/initializers/redis.rb
+@@ -11,7 +11,7 @@
+ # To disable this message and keep the current (boolean) behaviour of 'exists'
+ # you can set `Redis.exists_returns_integer = false`,
+ # but this option will be removed in 5.0. (gems/redis-namespace-1.6.0/lib/redis/namespace.rb:442:in `call_with_namespace')
+-Redis.exists_returns_integer = true
++Redis.exists_returns_integer = false
+ REDIS_URL = Chaskiq::Config.fetch('REDIS_URL', 'redis://localhost:6379/1')
+ 
+ require 'connection_pool'

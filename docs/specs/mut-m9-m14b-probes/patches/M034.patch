@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/base_package.rb b/app/services/message_apis/base_package.rb
+index 67d029c9..c7abe2f7 100644
+--- a/app/services/message_apis/base_package.rb
++++ b/app/services/message_apis/base_package.rb
+@@ -113,7 +113,7 @@ module MessageApis
+         data: { status: status, code: safe_error_code(code), message: text }
+       }
+ 
+-      status.nil? ? add_error_event_once(conversation, event) : conversation.add_message_event(**event)
++      conversation.add_message_event(**event)
+     end
+ 
+     def safe_error_code(code)

@@ -1,0 +1,13 @@
+diff --git a/vendor/nightfury/lib/nightfury.rb b/vendor/nightfury/lib/nightfury.rb
+index b969075b..92dc5820 100644
+--- a/vendor/nightfury/lib/nightfury.rb
++++ b/vendor/nightfury/lib/nightfury.rb
+@@ -25,7 +25,7 @@ module Nightfury
+     end
+ 
+     def namespace
+-      @namespace ||= :nf
++      @namespace ||= :nightfury
+     end
+ 
+     def namespace=(namespace_symbol)

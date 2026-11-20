@@ -1,0 +1,13 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/count_time_series.rb b/vendor/nightfury/lib/nightfury/metric/count_time_series.rb
+index 8f977a98..2b528124 100644
+--- a/vendor/nightfury/lib/nightfury/metric/count_time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/count_time_series.rb
+@@ -12,7 +12,7 @@ module Nightfury
+         Hash[data_points.sort]
+       end
+ 
+-      def incr(step=1, time = Time.now)
++      def incr(step=1, time = Time.now - 3600)
+         value = 0
+         step_time = get_step_time(time)
+         data_point = get_exact(step_time)

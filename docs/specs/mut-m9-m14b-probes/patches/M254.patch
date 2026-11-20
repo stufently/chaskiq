@@ -1,0 +1,13 @@
+diff --git a/app/services/dante/utils.rb b/app/services/dante/utils.rb
+index cfd44d11..600133f5 100644
+--- a/app/services/dante/utils.rb
++++ b/app/services/dante/utils.rb
+@@ -8,7 +8,7 @@ module Dante
+         when "text"
+           text << "#{node['text']} "
+         else
+-          node_content = node["content"]
++          node_content = node["type"]
+           text << extract_plain_text(node_content) if node_content
+         end
+       end.strip

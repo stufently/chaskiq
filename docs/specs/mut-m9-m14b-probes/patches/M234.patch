@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/base_package.rb b/app/services/message_apis/base_package.rb
+index 67d029c9..e10b7e5b 100644
+--- a/app/services/message_apis/base_package.rb
++++ b/app/services/message_apis/base_package.rb
+@@ -78,7 +78,7 @@ module MessageApis
+       sources = delivery_sources(part)
+       return sources.find_or_create_by(message_source_id: message_id, delivery_index: nil) if delivery_index.nil?
+ 
+-      sources.create_or_find_by!(delivery_index: delivery_index) { |source| source.message_source_id = message_id }
++      sources.find_by!(delivery_index: delivery_index) { |source| source.message_source_id = message_id }
+     end
+ 
+     def response_json(response)

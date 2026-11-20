@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/base_package.rb b/app/services/message_apis/base_package.rb
+index 67d029c9..94bdebf6 100644
+--- a/app/services/message_apis/base_package.rb
++++ b/app/services/message_apis/base_package.rb
+@@ -105,7 +105,7 @@ module MessageApis
+     end
+ 
+     def add_error_event(conversation, source_id, status:, code:, text:)
+-      text = text.to_s.gsub(%r{[A-Za-z][A-Za-z0-9+.-]*://[^[:space:]]+}, "[url]").squish.truncate(200)
++      text = text.to_s
+       event = {
+         action: "errored: #{text}",
+         provider: self.class::PROVIDER,

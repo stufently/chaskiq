@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/twilio_phone/store.rb b/app/services/message_apis/twilio_phone/store.rb
+index bc4e863b..b08e5fda 100644
+--- a/app/services/message_apis/twilio_phone/store.rb
++++ b/app/services/message_apis/twilio_phone/store.rb
+@@ -39,7 +39,7 @@ module MessageApis
+ 
+       # locked agents at app key
+       def self.locked_agents(key)
+-        Kredis.unique_list "#{NAMESPACE}/locked_agents/#{key}"
++        Kredis.unique_list "#{NAMESPACE}/agents/#{key}"
+       end
+ 
+       def self.callblock(key)

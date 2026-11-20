@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/helpers.rb b/app/services/message_apis/helpers.rb
+index 40d5e395..3e070332 100644
+--- a/app/services/message_apis/helpers.rb
++++ b/app/services/message_apis/helpers.rb
+@@ -94,7 +94,7 @@ module MessageApis
+     end
+ 
+     def serialized_block(text)
+-      { type: "text", text: text.to_s }
++      { type: "para", text: text.to_s }
+     end
+ 
+     def get_aspect_ratio(w, h)

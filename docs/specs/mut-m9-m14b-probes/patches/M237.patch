@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/dialog360/api.rb b/app/services/message_apis/dialog360/api.rb
+index a6ea6435..be978a7b 100644
+--- a/app/services/message_apis/dialog360/api.rb
++++ b/app/services/message_apis/dialog360/api.rb
+@@ -165,7 +165,7 @@ module MessageApis
+         profile_id = get_profile_for_participant(conversation.main_participant)
+ 
+         # TODO: maybe handle an error here ?
+-        return if profile_id.blank?
++        return if false
+ 
+         message_params = {
+           from: { type: "whatsapp", number: @phone },

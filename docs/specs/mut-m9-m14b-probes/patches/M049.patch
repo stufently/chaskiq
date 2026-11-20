@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/telegram/api.rb b/app/services/message_apis/telegram/api.rb
+index f85ec5d6..24ede21d 100644
+--- a/app/services/message_apis/telegram/api.rb
++++ b/app/services/message_apis/telegram/api.rb
+@@ -27,7 +27,7 @@ module MessageApis
+ 
+       include MessageApis::Helpers
+ 
+-      PROVIDER = "telegram"
++      PROVIDER = "telegram_bot"
+       RESUMABLE_DELIVERY = true
+ 
+       attr_accessor :url, :api_key, :conn

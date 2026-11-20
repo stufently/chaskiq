@@ -1,0 +1,13 @@
+diff --git a/vendor/nightfury/lib/nightfury/identity.rb b/vendor/nightfury/lib/nightfury/identity.rb
+index fcb1c151..37f1ed3c 100644
+--- a/vendor/nightfury/lib/nightfury/identity.rb
++++ b/vendor/nightfury/lib/nightfury/identity.rb
+@@ -70,7 +70,7 @@ module Nightfury
+       private 
+ 
+       def generate_tag_ids
+-        return nil unless tags
++        return tags
+         tag_values = {}
+         tags.each do |key, value|
+           store_name = self.class.tags[key]

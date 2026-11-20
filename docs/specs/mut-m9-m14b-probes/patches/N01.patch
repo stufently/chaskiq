@@ -1,0 +1,10 @@
+diff --git a/config/initializers/rack_bad_request.rb b/config/initializers/rack_bad_request.rb
+index 85040722..d33c1eec 100644
+--- a/config/initializers/rack_bad_request.rb
++++ b/config/initializers/rack_bad_request.rb
+@@ -2,4 +2,4 @@
+ 
+ require_relative "../../lib/middleware/rack_bad_request"
+ 
+-Rails.application.config.middleware.insert_before Rack::MethodOverride, Middleware::RackBadRequest
++Rails.application.config.middleware.insert_after Rack::MethodOverride, Middleware::RackBadRequest

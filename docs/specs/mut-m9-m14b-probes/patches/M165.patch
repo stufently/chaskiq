@@ -1,0 +1,40 @@
+diff --git a/app/controllers/api/v1/hooks_controller.rb b/app/controllers/api/v1/hooks_controller.rb
+index ff50d41e..119e4425 100644
+--- a/app/controllers/api/v1/hooks_controller.rb
++++ b/app/controllers/api/v1/hooks_controller.rb
+@@ -13,7 +13,7 @@ module Api
+       before_action :handle_notification, if: :is_notification_message?
+ 
+       def create
+-        render(plain: "ok")
++        render(plain: "ack")
+       end
+ 
+       private
+@@ -21,7 +21,7 @@ module Api
+       def handle_notification
+         key = "sns:notification:#{@request_body.fetch('MessageId')}"
+         token = SecureRandom.uuid
+-        return render(plain: "ok") unless reserve_notification(key, token)
++        return render(plain: "ack") unless reserve_notification(key, token)
+ 
+         begin
+           process_notification
+@@ -29,7 +29,7 @@ module Api
+           release_notification(key, token)
+           raise
+         end
+-        render(plain: "ok")
++        render(plain: "ack")
+       end
+ 
+       def reserve_notification(key, token)
+@@ -71,7 +71,7 @@ module Api
+         return unless @request_body["Type"] == "SubscriptionConfirmation"
+ 
+         send_subscription_confirmation
+-        render(plain: "ok") unless performed?
++        render(plain: "ack") unless performed?
+       end
+ 
+       def is_notification_message?

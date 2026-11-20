@@ -1,0 +1,22 @@
+diff --git a/app/services/message_apis/helpers.rb b/app/services/message_apis/helpers.rb
+index 40d5e395..7fa8c20f 100644
+--- a/app/services/message_apis/helpers.rb
++++ b/app/services/message_apis/helpers.rb
+@@ -94,7 +94,7 @@ module MessageApis
+     end
+ 
+     def serialized_block(text)
+-      { type: "text", text: text.to_s }
++      { type: "paragraph", text: text.to_s }
+     end
+ 
+     def get_aspect_ratio(w, h)
+@@ -225,7 +225,7 @@ module MessageApis
+       lines = doc.css("body").inner_html.gsub(%r{<p>|</p>}, "")
+       lines = lines.split("\n").delete_if(&:empty?)
+ 
+-      # [{ type: "paragraph", content: [{ type: "text", text: "foobar" }] }]
++      # [{ type: "paragraph", content: [{ type: "paragraph", text: "foobar" }] }]
+ 
+       blocks = lines.map do |o|
+         if o.include?("<img src=")

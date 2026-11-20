@@ -1,0 +1,236 @@
+{
+ "cops_whole": [
+  "Lint/UnusedMethodArgument",
+  "Lint/UselessOr",
+  "Rails/Present"
+ ],
+ "cops_partial": [
+  "Lint/UselessAssignment",
+  "Lint/Void"
+ ],
+ "app_files": [
+  "app/controllers/api/v1/hooks_controller.rb",
+  "app/jobs/app_user_event_job.rb",
+  "app/mailers/campaign_mailer.rb",
+  "app/models/audit.rb",
+  "app/models/campaign.rb",
+  "app/services/action_trigger_factory.rb",
+  "app/services/message_apis/calendly/presenter.rb",
+  "app/services/message_apis/dialog360/api.rb",
+  "app/services/message_apis/dialog360/presenter.rb",
+  "app/services/message_apis/full_contact/api.rb",
+  "app/services/message_apis/message_bird/api.rb",
+  "app/services/message_apis/messenger/api.rb",
+  "app/services/message_apis/open_ai/api.rb",
+  "app/services/message_apis/open_ai/presenter.rb",
+  "app/services/message_apis/pipedrive/api.rb",
+  "app/services/message_apis/safe_download.rb",
+  "app/services/message_apis/slack/api.rb",
+  "app/services/message_apis/telegram/api.rb",
+  "app/services/message_apis/telnyx_sms/api.rb",
+  "app/services/message_apis/twilio/api.rb",
+  "app/services/message_apis/twilio_phone/api.rb",
+  "app/services/message_apis/twilio_phone/presenter.rb",
+  "app/services/message_apis/vonage/api.rb",
+  "app/services/message_apis/zapier/api.rb",
+  "app/services/payment_services/paddle.rb"
+ ],
+ "char_specs": [
+  "spec/models/audit_serialize_spec.rb",
+  "spec/models/campaign_urls_spec.rb",
+  "spec/services/message_apis/pipedrive_api_spec.rb",
+  "spec/services/message_apis/slack_api_helpers_spec.rb",
+  "spec/services/message_apis/safe_download_location_spec.rb",
+  "spec/jobs/app_user_event_job_spec.rb",
+  "spec/services/message_apis/calendly_presenter_spec.rb"
+ ],
+ "fix_specs": [
+  "spec/services/message_apis/slack_event_data_spec.rb"
+ ],
+ "commits": [
+  {
+   "subject": "Add R5b-1 characterization specs",
+   "patch": null,
+   "added": [
+    "spec/models/audit_serialize_spec.rb",
+    "spec/models/campaign_urls_spec.rb",
+    "spec/services/message_apis/pipedrive_api_spec.rb",
+    "spec/services/message_apis/slack_api_helpers_spec.rb",
+    "spec/services/message_apis/safe_download_location_spec.rb",
+    "spec/jobs/app_user_event_job_spec.rb",
+    "spec/services/message_apis/calendly_presenter_spec.rb"
+   ]
+  },
+  {
+   "subject": "Remove useless assignments",
+   "patch": "r5b1_assign.patch",
+   "added": []
+  },
+  {
+   "subject": "Remove void statements",
+   "patch": "r5b1_void.patch",
+   "added": []
+  },
+  {
+   "subject": "Drop dead reads, keep redirect check",
+   "patch": "r5b1_leftovers.patch",
+   "added": []
+  },
+  {
+   "subject": "Fix Slack event crash on nil data",
+   "patch": "r5b1_slack.patch",
+   "added": [
+    "spec/services/message_apis/slack_event_data_spec.rb"
+   ]
+  },
+  {
+   "subject": "Drop R5b-1 entries from RuboCop todo",
+   "patch": null,
+   "added": [],
+   "todo": true
+  },
+  {
+   "subject": "Note fork-updates-r5b1 in changelog",
+   "patch": null,
+   "added": [],
+   "changelog": true
+  }
+ ],
+ "mutants": [
+  {
+   "id": "M01",
+   "file": "app/models/audit.rb",
+   "old": "    agent.try(:display_name).to_s\n",
+   "new": "    agent.try(:display_name).presence || \"--\"\n",
+   "specs": [
+    "spec/models/audit_serialize_spec.rb"
+   ]
+  },
+  {
+   "id": "M02",
+   "file": "app/models/audit.rb",
+   "old": "@app = app || auditable.app.key",
+   "new": "@app = auditable.app.key",
+   "specs": [
+    "spec/models/audit_serialize_spec.rb"
+   ]
+  },
+  {
+   "id": "M03",
+   "file": "app/models/campaign.rb",
+   "old": "    \"#{host}/campaigns/#{id}\"\n",
+   "new": "    \"#{host}/campaigns/#{id}\"\n    nil\n",
+   "specs": [
+    "spec/models/campaign_urls_spec.rb"
+   ]
+  },
+  {
+   "id": "M04",
+   "file": "app/models/campaign.rb",
+   "old": "    \"#{host}/api/v1/apps/#{app.key}/messages/#{id}\"\n",
+   "new": "    \"#{host}/api/v1/apps/#{app.key}/messages/#{id}\"\n    nil\n",
+   "specs": [
+    "spec/models/campaign_urls_spec.rb"
+   ]
+  },
+  {
+   "id": "M05",
+   "file": "app/models/campaign.rb",
+   "old": "    _, encoded = addr.split(\"+\")\n",
+   "new": "    encoded, = addr.split(\"+\")\n",
+   "specs": [
+    "spec/models/campaign_urls_spec.rb"
+   ]
+  },
+  {
+   "id": "M06",
+   "file": "app/models/campaign.rb",
+   "old": "    app.campaigns.find(campaign_id)\n",
+   "new": "    app.campaigns.find(campaign_id)\n    app\n",
+   "specs": [
+    "spec/models/campaign_urls_spec.rb"
+   ]
+  },
+  {
+   "id": "M07",
+   "file": "app/services/message_apis/pipedrive/api.rb",
+   "old": "          req.body = params.to_json\n        end\n\n        JSON.parse(response.body)\n      end\n\n      def update_person",
+   "new": "          req.body = params.to_json\n        end\n\n        response.body\n      end\n\n      def update_person",
+   "specs": [
+    "spec/services/message_apis/pipedrive_api_spec.rb"
+   ]
+  },
+  {
+   "id": "M08",
+   "file": "app/services/message_apis/pipedrive/api.rb",
+   "old": "        @conn.delete(url, nil, { \"Content-Type\" => \"application/json\" })\n",
+   "new": "        @conn.delete(url, nil, { \"Content-Type\" => \"application/json\" })\n        nil\n",
+   "specs": [
+    "spec/services/message_apis/pipedrive_api_spec.rb"
+   ]
+  },
+  {
+   "id": "M09",
+   "file": "app/services/message_apis/pipedrive/api.rb",
+   "old": "          find_response[\"data\"][\"id\"] # kept: raises on a malformed reply (R5b-1 D2)\n",
+   "new": "",
+   "specs": [
+    "spec/services/message_apis/pipedrive_api_spec.rb"
+   ]
+  },
+  {
+   "id": "M10",
+   "file": "app/services/message_apis/slack/api.rb",
+   "old": "        JSON.parse(response.body)[\"user\"]\n",
+   "new": "        JSON.parse(response.body)\n",
+   "specs": [
+    "spec/services/message_apis/slack_api_helpers_spec.rb"
+   ]
+  },
+  {
+   "id": "M11",
+   "file": "app/services/message_apis/slack/api.rb",
+   "old": "          attachment_block(data)\n        else\n",
+   "new": "          attachment_block(data)\n          nil\n        else\n",
+   "specs": [
+    "spec/services/message_apis/slack_api_helpers_spec.rb"
+   ]
+  },
+  {
+   "id": "M12",
+   "file": "app/services/message_apis/safe_download.rb",
+   "old": "return [nil, location] unless location.to_s.empty?",
+   "new": "return [nil, location] if location.present?",
+   "specs": [
+    "spec/services/message_apis/safe_download_location_spec.rb"
+   ]
+  },
+  {
+   "id": "M13",
+   "file": "app/jobs/app_user_event_job.rb",
+   "old": "@app.app_users.find(user_id)",
+   "new": "@app.app_users.find_by(id: user_id)",
+   "specs": [
+    "spec/jobs/app_user_event_job_spec.rb"
+   ]
+  },
+  {
+   "id": "M14",
+   "file": "app/services/message_apis/calendly/presenter.rb",
+   "old": "      URI.parse(uri).try(:host)\n",
+   "new": "      URI.parse(uri).try(:host).present?\n",
+   "specs": [
+    "spec/services/message_apis/calendly_presenter_spec.rb"
+   ]
+  },
+  {
+   "id": "M15",
+   "file": "app/services/message_apis/slack/api.rb",
+   "old": "          data = messageable.data\n\n          data_fmt = if data.is_a?(Hash)\n                       data.reject",
+   "new": "          data = messageable.data\n          data[\"label\"]\n\n          data_fmt = if data.is_a?(Hash)\n                       data.reject",
+   "specs": [
+    "spec/services/message_apis/slack_event_data_spec.rb"
+   ]
+  }
+ ]
+}

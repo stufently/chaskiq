@@ -1,0 +1,13 @@
+diff --git a/lib/middleware/rack_bad_request.rb b/lib/middleware/rack_bad_request.rb
+index cb45172d..5a778f5f 100644
+--- a/lib/middleware/rack_bad_request.rb
++++ b/lib/middleware/rack_bad_request.rb
+@@ -12,7 +12,7 @@ module Middleware
+     def call(env)
+       @app.call(env)
+     rescue Rack::BadRequest
+-      [400, { "content-type" => "text/plain" }, ["Bad Request"]]
++      [400, { "content-type" => "text/plain" }, []]
+     end
+   end
+ end

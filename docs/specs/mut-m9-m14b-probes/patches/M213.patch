@@ -1,0 +1,13 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index ba034e5d..55e1fa03 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -150,7 +150,7 @@ module Nightfury
+ 
+       def save_meta
+         redis.zremrangebyscore redis_key, 0, 0
+-        redis.zadd redis_key, 0, meta.to_json
++        redis.zadd redis_key, 0, meta.to_s
+       end
+ 
+       def init_time_series

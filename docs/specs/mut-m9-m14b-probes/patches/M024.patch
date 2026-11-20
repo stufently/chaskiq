@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index 734b4c70..bbbe4919 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -133,7 +133,7 @@ module MessageApis
+       http = Net::HTTP.new(uri.hostname, uri.port, nil)
+       http.ipaddr = address
+       http.use_ssl = uri.scheme == "https"
+-      http.open_timeout = 5
++      http.open_timeout = 0
+       http.read_timeout = 10
+       http.max_retries = 0
+       request_headers = headers.reject { |name, _| name.to_s.casecmp?("Accept-Encoding") }

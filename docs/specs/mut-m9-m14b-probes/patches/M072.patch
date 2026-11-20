@@ -1,0 +1,13 @@
+diff --git a/app/jobs/offline_checker_job.rb b/app/jobs/offline_checker_job.rb
+index c12be066..2c43bd21 100644
+--- a/app/jobs/offline_checker_job.rb
++++ b/app/jobs/offline_checker_job.rb
+@@ -17,7 +17,7 @@ class OfflineCheckerJob < ApplicationJob
+ 
+   def subscribed?(key)
+     cable = ActionCable.server.config.cable.symbolize_keys
+-    return false unless cable[:adapter] == "redis"
++    return true unless cable[:adapter] == "redis"
+ 
+     channel = [cable[:channel_prefix], key].compact.join(":")
+     redis = Redis.new(url: cable[:url])

@@ -1,0 +1,776 @@
+[
+ {
+  "id": "M024",
+  "milestone": "m11",
+  "file": "app/services/message_apis/safe_download.rb",
+  "patch": "patches/M024.patch",
+  "description": "open_timeout 5 to 0",
+  "suggested_spec": "spec/services/message_apis/safe_download_timeouts_spec.rb",
+  "approach": "WebMock-stubbed SafeDownload.fetch; spy on Net::HTTP#open_timeout= (and_call_original) - set to 5"
+ },
+ {
+  "id": "M028",
+  "milestone": "m9",
+  "file": "app/services/message_apis/base_package.rb",
+  "patch": "patches/M028.patch",
+  "description": "Always store message_id",
+  "suggested_spec": "spec/services/message_apis/base_package_resumable_spec.rb",
+  "approach": "plugin_class < BasePackage with PROVIDER and RESUMABLE_DELIVERY = true, part with media blocks: notify_message with on_success storing per delivery_index - no extra source row with delivery_index nil"
+ },
+ {
+  "id": "M029",
+  "milestone": "m9",
+  "file": "app/services/message_apis/base_package.rb",
+  "patch": "patches/M029.patch",
+  "description": "Disable resumable_delivery?",
+  "suggested_spec": "spec/services/message_apis/base_package_resumable_spec.rb",
+  "approach": "same plugin_class: delivery_hooks(conversation, part) has :already_sent and :on_success keys"
+ },
+ {
+  "id": "M031",
+  "milestone": "m9",
+  "file": "app/services/message_apis/base_package.rb",
+  "patch": "patches/M031.patch",
+  "description": "Remove URL truncation",
+  "suggested_spec": "spec/services/message_apis/base_package_errors_spec.rb",
+  "approach": "add_error_event via report_delivery_failure with a 300-char text holding https://x.y/z: event action/message have [url], squished, <= 200 chars"
+ },
+ {
+  "id": "M032",
+  "milestone": "m9",
+  "file": "app/services/message_apis/base_package.rb",
+  "patch": "patches/M032.patch",
+  "description": "Skip dedup check",
+  "suggested_spec": "spec/services/message_apis/base_package_errors_spec.rb",
+  "approach": "status nil failure reported twice for the same part: exactly one ConversationPartEvent errored part (dedup)"
+ },
+ {
+  "id": "M033",
+  "milestone": "m9",
+  "file": "app/services/message_apis/base_package.rb",
+  "patch": "patches/M033.patch",
+  "description": "Replace create_or_find_by",
+  "suggested_spec": "spec/services/message_apis/base_package_resumable_spec.rb",
+  "approach": "store_message_id(part, response, delivery_index: 1) twice with different ids: one row for index 1, message_source_id of the first call"
+ },
+ {
+  "id": "M034",
+  "milestone": "m9",
+  "file": "app/services/message_apis/base_package.rb",
+  "patch": "patches/M034.patch",
+  "description": "Always use add_message_event",
+  "suggested_spec": "spec/services/message_apis/base_package_errors_spec.rb",
+  "approach": "status nil: add_error_event goes through add_error_event_once (second identical call adds no part)"
+ },
+ {
+  "id": "M043",
+  "milestone": "m9",
+  "file": "app/models/conversation_part_channel_source.rb",
+  "patch": "patches/M043.patch",
+  "description": "Disable re-raise",
+  "suggested_spec": "spec/models/conversation_part_channel_source_lock_spec.rb",
+  "approach": "with_delivery_lock: stub connection select_value for pg_advisory_unlock to raise PG::ConnectionBad after the block completed - error propagates, throw_away! called"
+ },
+ {
+  "id": "M044",
+  "milestone": "m9",
+  "file": "app/models/conversation_part_channel_source.rb",
+  "patch": "patches/M044.patch",
+  "description": "Return true for non-wait",
+  "suggested_spec": "spec/models/conversation_part_channel_source_lock_spec.rb",
+  "approach": "hold the advisory lock key from a second connection (pg_advisory_lock on a separate checkout): with_delivery_lock does not yield"
+ },
+ {
+  "id": "M136",
+  "milestone": "m9",
+  "file": "app/models/conversation_part_channel_source.rb",
+  "patch": "patches/M136.patch",
+  "description": "RETRY_INTERVAL 0.05 to 0.5",
+  "suggested_spec": "spec/models/conversation_part_channel_source_lock_spec.rb",
+  "approach": "with_status_event_lock: select_value false then true, stub sleep - slept with 0.05"
+ },
+ {
+  "id": "M046",
+  "milestone": "m9",
+  "file": "app/services/message_apis/helpers.rb",
+  "patch": "patches/M046.patch",
+  "description": "keygen sample 8 to 4",
+  "suggested_spec": "spec/services/message_apis/helpers_spec.rb",
+  "approach": "keygen: 8 lowercase letters (/\\A[a-z]{8}\\z/)"
+ },
+ {
+  "id": "M047",
+  "milestone": "m9",
+  "file": "app/services/message_apis/message_bird/api.rb",
+  "patch": "patches/M047.patch",
+  "description": "Invert get_media success",
+  "suggested_spec": "spec/services/message_apis/message_bird_media_spec.rb",
+  "approach": "get_media: successful download returns the file data, failed response returns nil (WebMock)"
+ },
+ {
+  "id": "M049",
+  "milestone": "m9",
+  "file": "app/services/message_apis/telegram/api.rb",
+  "patch": "patches/M049.patch",
+  "description": "PROVIDER telegram to telegram_bot",
+  "suggested_spec": "spec/services/message_apis/telegram_provider_spec.rb",
+  "approach": "MessageApis::Telegram::Api::PROVIDER is \"telegram\" - conversation_channels/external_profiles created with provider \"telegram\" are found by the API lookups"
+ },
+ {
+  "id": "M055",
+  "milestone": "m9",
+  "file": "app/services/message_apis/twilio/api.rb",
+  "patch": "patches/M055.patch",
+  "description": "Remove whatsapp: prefix",
+  "suggested_spec": "spec/services/message_apis/twilio_whatsapp_spec.rb",
+  "approach": "send_message for a WhatsApp profile posts From=whatsapp:<phone> (WebMock request body)"
+ },
+ {
+  "id": "M060",
+  "milestone": "m9",
+  "file": "app/services/message_apis/dialog360/api.rb",
+  "patch": "patches/M060.patch",
+  "description": "Remove process_read",
+  "suggested_spec": "spec/services/message_apis/dialog360_statuses_spec.rb",
+  "approach": "process_event with statuses [{status: read, id: X}] for a stored source: read handling runs (process_read effect visible)"
+ },
+ {
+  "id": "M061",
+  "milestone": "m9",
+  "file": "app/services/message_apis/dialog360/api.rb",
+  "patch": "patches/M061.patch",
+  "description": "Rollback to return nil",
+  "suggested_spec": "spec/services/message_apis/dialog360_statuses_spec.rb",
+  "approach": "prepare_initiator_channel_for with blank profile_id: no ConversationChannel/ExternalProfile rows left (transaction rolled back)"
+ },
+ {
+  "id": "M062",
+  "milestone": "m9",
+  "file": "app/services/message_apis/dialog360/api.rb",
+  "patch": "patches/M062.patch",
+  "description": "return unless to return if blank",
+  "suggested_spec": "spec/services/message_apis/dialog360_statuses_spec.rb",
+  "approach": "add_participant(\"\", message, contacts) with empty-string sender: participant created (\"\" is truthy)"
+ },
+ {
+  "id": "M165",
+  "milestone": "m10",
+  "file": "app/controllers/api/v1/hooks_controller.rb",
+  "patch": "patches/M165.patch",
+  "description": "ok to ack",
+  "suggested_spec": "spec/controllers/api/v1/hooks_body_spec.rb",
+  "approach": "SNS notification and subscription paths answer body \"ok\""
+ },
+ {
+  "id": "M072",
+  "milestone": "m12",
+  "file": "app/jobs/offline_checker_job.rb",
+  "patch": "patches/M072.patch",
+  "description": "return true for non-redis",
+  "suggested_spec": "spec/jobs/offline_checker_adapter_spec.rb",
+  "approach": "cable adapter async (stub ActionCable.server.config.cable): perform marks the user offline (subscribed? false)"
+ },
+ {
+  "id": "M076",
+  "milestone": "m12",
+  "file": "lib/rack/health_check.rb",
+  "patch": "patches/M076.patch",
+  "description": "StandardError to Exception",
+  "suggested_spec": "spec/lib/rack_health_check_errors_spec.rb",
+  "approach": "redis.ping raises a non-StandardError (Class.new(Exception)): call raises it, not 503"
+ },
+ {
+  "id": "M078",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury.rb",
+  "patch": "patches/M078.patch",
+  "description": "namespace :nf to :nightfury",
+  "suggested_spec": "spec/lib/nightfury_module_spec.rb",
+  "approach": "Nightfury.namespace default is :nf (save/restore @namespace in ensure)"
+ },
+ {
+  "id": "M084",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/identity.rb",
+  "patch": "patches/M084.patch",
+  "description": "Return tags when nil",
+  "suggested_spec": "spec/lib/nightfury_identity_spec.rb",
+  "approach": "identity with tags {tag: v} declared via tag: key_prefix ends with :<tag>.<v>"
+ },
+ {
+  "id": "M086",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/identity.rb",
+  "patch": "patches/M086.patch",
+  "description": "Remove tag sorting",
+  "suggested_spec": "spec/lib/nightfury_identity_spec.rb",
+  "approach": "two tags given in reverse order: key_prefix lists them sorted"
+ },
+ {
+  "id": "M090",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric.rb",
+  "patch": "patches/M090.patch",
+  "description": "blank? to nil?",
+  "suggested_spec": "spec/lib/nightfury_metric_spec.rb",
+  "approach": "Metric::Base.new(:x, redis_key_prefix: \"\").redis_key == \"x\""
+ },
+ {
+  "id": "M100",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+  "patch": "patches/M100.patch",
+  "description": "Return {} for missing",
+  "suggested_spec": "spec/lib/nightfury_time_series_spec.rb",
+  "approach": "after delete: get/get_exact/get_range/get_all return nil (not {})"
+ },
+ {
+  "id": "M101",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+  "patch": "patches/M101.patch",
+  "description": "Expand zremrange \u00b11",
+  "suggested_spec": "spec/lib/nightfury_time_series_spec.rb",
+  "approach": "set at t and at t+1 step: both points kept; set twice at t: only the last value"
+ },
+ {
+  "id": "M102",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+  "patch": "patches/M102.patch",
+  "description": "Return {} for nil point",
+  "suggested_spec": "spec/lib/nightfury_time_series_spec.rb",
+  "approach": "get(timestamp before the first point) returns nil; get_exact of an empty step returns nil"
+ },
+ {
+  "id": "M103",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+  "patch": "patches/M103.patch",
+  "description": "Return {} for zero score",
+  "suggested_spec": "spec/lib/nightfury_time_series_spec.rb",
+  "approach": "fresh series (only the meta at score 0): get returns nil"
+ },
+ {
+  "id": "M104",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+  "patch": "patches/M104.patch",
+  "description": "index to rindex",
+  "suggested_spec": "spec/lib/nightfury_time_series_spec.rb",
+  "approach": "set(\"a:b\"): get_all value is \"a:b\""
+ },
+ {
+  "id": "M107",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+  "patch": "patches/M107.patch",
+  "description": "Meta score 0 to 1",
+  "suggested_spec": "spec/lib/nightfury_time_series_spec.rb",
+  "approach": "meta = {\"k\" => 1}: a new instance reads meta {\"k\" => 1}; get_all does not contain it"
+ },
+ {
+  "id": "M112",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/avg_time_series.rb",
+  "patch": "patches/M112.patch",
+  "description": "Zero pad 0.0 to 1.0",
+  "suggested_spec": "spec/lib/nightfury_avg_time_series_spec.rb",
+  "approach": "get_padded_range over an empty step returns \"0.0\" for it"
+ },
+ {
+  "id": "M115",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+  "patch": "patches/M115.patch",
+  "description": "Subtract extra 1 from decr",
+  "suggested_spec": "spec/lib/nightfury_count_time_series_spec.rb",
+  "approach": "incr(3, t) then decr(1, t): value \"2\""
+ },
+ {
+  "id": "M116",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+  "patch": "patches/M116.patch",
+  "description": "Zero pad 0 to 1",
+  "suggested_spec": "spec/lib/nightfury_count_time_series_spec.rb",
+  "approach": "get_padded_range over an empty step returns \"0\""
+ },
+ {
+  "id": "M117",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+  "patch": "patches/M117.patch",
+  "description": "Shift time back 60s",
+  "suggested_spec": "spec/lib/nightfury_count_time_series_spec.rb",
+  "approach": "incr with default time (travel_to a fixed time): point at the current minute"
+ },
+ {
+  "id": "M118",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+  "patch": "patches/M118.patch",
+  "description": "Use original time",
+  "suggested_spec": "spec/lib/nightfury_count_time_series_spec.rb",
+  "approach": "incr at t = step + 17 s: stored under the step start (get_exact(step) hit, get_all key is the step)"
+ },
+ {
+  "id": "M123",
+  "milestone": "m13",
+  "file": "config/initializers/rack_attack.rb",
+  "patch": "patches/M123.patch",
+  "description": "Simplify path regex",
+  "suggested_spec": "spec/requests/rack_attack_oauth_path_spec.rb",
+  "approach": "POST /oauth/tokenX and /oauth/token/extra are not throttled by the oauth rule; /oauth/token and /oauth/token.json are"
+ },
+ {
+  "id": "M133",
+  "milestone": "m13",
+  "file": "config/middleware/maintenance_mode.rb",
+  "patch": "patches/M133.patch",
+  "description": "200 to 503",
+  "suggested_spec": "spec/middleware/maintenance_mode_spec.rb (exists)",
+  "approach": "Rack middleware instantiated directly with a lambda app: status 200 (existing spec may already kill)"
+ },
+ {
+  "id": "M138",
+  "milestone": "m14",
+  "file": "app/services/dante/utils.rb",
+  "patch": "patches/M138.patch",
+  "description": "Remove trailing space",
+  "suggested_spec": "spec/services/dante/utils_spec.rb",
+  "approach": "extract_plain_text of two text nodes: words separated by a space"
+ },
+ {
+  "id": "M139",
+  "milestone": "m14",
+  "file": "app/services/dante/utils.rb",
+  "patch": "patches/M139.patch",
+  "description": "content to blocks",
+  "suggested_spec": "spec/services/dante/utils_spec.rb",
+  "approach": "get_blocks of serialized content {content: [...]}: returns the content array"
+ },
+ {
+  "id": "M146",
+  "milestone": "m11",
+  "file": "app/services/message_apis/telnyx_sms/api.rb",
+  "patch": "patches/M146.patch",
+  "description": "MAX_MEDIA_BYTES 5MB to 1KB",
+  "suggested_spec": "spec/services/message_apis/telnyx_media_limit_spec.rb",
+  "approach": "media of 2 KB is accepted, of 5 MB + 1 byte rejected (SafeDownload limit / content-length)"
+ },
+ {
+  "id": "M155",
+  "milestone": "m11",
+  "file": "app/services/message_apis/telnyx_sms/api.rb",
+  "patch": "patches/M155.patch",
+  "description": "Remove empty line rejection",
+  "suggested_spec": "spec/services/message_apis/telnyx_media_limit_spec.rb",
+  "approach": "inbound text \"a\\n\\nb\": two blocks, no empty paragraph"
+ },
+ {
+  "id": "M145",
+  "milestone": "m12",
+  "file": "config/initializers/redis.rb",
+  "patch": "patches/M145.patch",
+  "description": "exists_returns_integer to false",
+  "suggested_spec": "spec/initializers/redis_initializer_spec.rb",
+  "approach": "Redis.new(url: ENV.fetch(\"REDIS_URL\")).exists(\"absent\") returns 0 (Integer)"
+ },
+ {
+  "id": "M175",
+  "milestone": "m12",
+  "file": "config/initializers/redis.rb",
+  "patch": "patches/M175.patch",
+  "description": "Change pool size from 5 to 1",
+  "suggested_spec": "spec/initializers/redis_initializer_spec.rb",
+  "approach": "the ConnectionPool behind Redis::Objects.redis (ConnectionPoolProxy, @pool) has size 5"
+ },
+ {
+  "id": "M176",
+  "milestone": "m12",
+  "file": "config/initializers/redis.rb",
+  "patch": "patches/M176.patch",
+  "description": "Change pool timeout from 5 to 30",
+  "suggested_spec": "spec/initializers/redis_initializer_spec.rb",
+  "approach": "that pool's timeout is 5 (@timeout of the ConnectionPool in the proxy's @pool)"
+ },
+ {
+  "id": "M177",
+  "milestone": "m12",
+  "file": "config/initializers/redis.rb",
+  "patch": "patches/M177.patch",
+  "description": "Change fallback Redis URL db from 1 to 2",
+  "suggested_spec": "spec/initializers/redis_initializer_spec.rb",
+  "approach": "load the initializer in isolation (remove_const REDIS_URL, Chaskiq::Config.fetch returns its default; restore constants and Redis::Objects.redis in ensure): REDIS_URL == redis://localhost:6379/1"
+ },
+ {
+  "id": "M182",
+  "milestone": "m13",
+  "file": "app/controllers/api/graphql_controller.rb",
+  "patch": "patches/M182.patch",
+  "description": "Change rescue StandardError to Exception",
+  "suggested_spec": "spec/controllers/api/graphql_errors_spec.rb",
+  "approach": "schema execute raises a non-StandardError: it propagates (not rendered as 422)"
+ },
+ {
+  "id": "M183",
+  "milestone": "m13",
+  "file": "config/middleware/maintenance_mode.rb",
+  "patch": "patches/M183.patch",
+  "description": "Change text/html to application/json",
+  "suggested_spec": "spec/middleware/maintenance_mode_spec.rb (exists)",
+  "approach": "content-type text/html"
+ },
+ {
+  "id": "M184",
+  "milestone": "m13",
+  "file": "config/middleware/maintenance_mode.rb",
+  "patch": "patches/M184.patch",
+  "description": "Change maintenance.html to error.html",
+  "suggested_spec": "spec/middleware/maintenance_mode_spec.rb (exists)",
+  "approach": "body is public/maintenance.html"
+ },
+ {
+  "id": "M185",
+  "milestone": "m13",
+  "file": "config/middleware/maintenance_mode.rb",
+  "patch": "patches/M185.patch",
+  "description": "Change File.read to File.exist?",
+  "suggested_spec": "spec/middleware/maintenance_mode_spec.rb (exists)",
+  "approach": "body is the file content, not true"
+ },
+ {
+  "id": "M186",
+  "milestone": "m13",
+  "file": "config/middleware/maintenance_mode.rb",
+  "patch": "patches/M186.patch",
+  "description": "Change content-type case",
+  "suggested_spec": "spec/middleware/maintenance_mode_spec.rb (exists)",
+  "approach": "header key is lowercase content-type (Rack::Lint)"
+ },
+ {
+  "id": "M190",
+  "milestone": "m9",
+  "file": "app/services/message_apis/helpers.rb",
+  "patch": "patches/M190.patch",
+  "description": "Change doc type to document",
+  "suggested_spec": "spec/services/message_apis/helpers_spec.rb",
+  "approach": "ProseMirror helper output: root type \"doc\""
+ },
+ {
+  "id": "M191",
+  "milestone": "m9",
+  "file": "app/services/message_apis/helpers.rb",
+  "patch": "patches/M191.patch",
+  "description": "Change text type to paragraph",
+  "suggested_spec": "spec/services/message_apis/helpers_spec.rb",
+  "approach": "inner node type \"text\" with the text"
+ },
+ {
+  "id": "M192",
+  "milestone": "m9",
+  "file": "app/services/message_apis/helpers.rb",
+  "patch": "patches/M192.patch",
+  "description": "Change keygen range from a-z to a-m",
+  "suggested_spec": "spec/services/message_apis/helpers_spec.rb",
+  "approach": "keygen over many calls uses letters beyond m (srand fixed or 200 samples include n..z)"
+ },
+ {
+  "id": "M199",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric.rb",
+  "patch": "patches/M199.patch",
+  "description": "Remove prefix from redis_key in set",
+  "suggested_spec": "spec/lib/nightfury_metric_spec.rb",
+  "approach": "redis_key with prefix \"p\" is \"p:x\""
+ },
+ {
+  "id": "M203",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+  "patch": "patches/M203.patch",
+  "description": "Change step_time calculation",
+  "suggested_spec": "spec/lib/nightfury_count_time_series_spec.rb",
+  "approach": "get_padded_range runs and returns one entry per step"
+ },
+ {
+  "id": "M204",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+  "patch": "patches/M204.patch",
+  "description": "Change zero padding format",
+  "suggested_spec": "spec/lib/nightfury_count_time_series_spec.rb",
+  "approach": "padding value is \"0\""
+ },
+ {
+  "id": "M205",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+  "patch": "patches/M205.patch",
+  "description": "Shift time by 1 hour",
+  "suggested_spec": "spec/lib/nightfury_count_time_series_spec.rb",
+  "approach": "incr with default time lands in the current minute (travel_to)"
+ },
+ {
+  "id": "M206",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/count_time_series.rb",
+  "patch": "patches/M206.patch",
+  "description": "Use wrong key for set",
+  "suggested_spec": "spec/lib/nightfury_count_time_series_spec.rb",
+  "approach": "incr at a non-aligned time stores at the step start"
+ },
+ {
+  "id": "M207",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+  "patch": "patches/M207.patch",
+  "description": "Change seconds multiplier",
+  "suggested_spec": "spec/lib/nightfury_time_series_spec.rb",
+  "approach": "TimeSeries.seconds_in_step(:minute, t) == 60"
+ },
+ {
+  "id": "M208",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+  "patch": "patches/M208.patch",
+  "description": "Change hour step from 3600 to 1800",
+  "suggested_spec": "spec/lib/nightfury_time_series_spec.rb",
+  "approach": "seconds_in_step(:hour, t) == 3600"
+ },
+ {
+  "id": "M210",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+  "patch": "patches/M210.patch",
+  "description": "Return nil for nil data_point always",
+  "suggested_spec": "spec/lib/nightfury_time_series_spec.rb",
+  "approach": "get(nil, true) on an empty series returns [nil, {}]"
+ },
+ {
+  "id": "M211",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+  "patch": "patches/M211.patch",
+  "description": "Remove zremrangebyscore call",
+  "suggested_spec": "spec/lib/nightfury_time_series_spec.rb",
+  "approach": "set twice in the same step: one point with the last value"
+ },
+ {
+  "id": "M213",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+  "patch": "patches/M213.patch",
+  "description": "Change meta key format",
+  "suggested_spec": "spec/lib/nightfury_time_series_spec.rb",
+  "approach": "meta = {\"k\" => 1} round-trips as JSON (JSON.parse of the stored member)"
+ },
+ {
+  "id": "M215",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/identity.rb",
+  "patch": "patches/M215.patch",
+  "description": "Remove demodulize from identity name",
+  "suggested_spec": "spec/lib/nightfury_identity_spec.rb",
+  "approach": "a nested identity class (Module::FooIdentity): name == \"foo_identity\""
+ },
+ {
+  "id": "M216",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/identity.rb",
+  "patch": "patches/M216.patch",
+  "description": "Change key prefix separator",
+  "suggested_spec": "spec/lib/nightfury_identity_spec.rb",
+  "approach": "key_prefix is \"<name>.<id>\""
+ },
+ {
+  "id": "M217",
+  "milestone": "m12",
+  "file": "vendor/nightfury/lib/nightfury/identity.rb",
+  "patch": "patches/M217.patch",
+  "description": "Reverse tag key order",
+  "suggested_spec": "spec/lib/nightfury_identity_spec.rb",
+  "approach": "tags a and b: key_prefix ends with \":a.1:b.2\""
+ },
+ {
+  "id": "M224",
+  "milestone": "m12",
+  "file": "config/initializers/redis.rb",
+  "patch": "patches/M224.patch",
+  "description": "Change pool timeout to 0",
+  "suggested_spec": "spec/initializers/redis_initializer_spec.rb",
+  "approach": "that pool's timeout is 5, not 0"
+ },
+ {
+  "id": "M229",
+  "milestone": "m13",
+  "file": "lib/middleware/rack_bad_request.rb",
+  "patch": "patches/M229.patch",
+  "description": "Change response to empty body",
+  "suggested_spec": "spec/middleware/rack_bad_request_spec.rb (exists)",
+  "approach": "body is \"Bad Request\""
+ },
+ {
+  "id": "M231",
+  "milestone": "m9",
+  "file": "app/services/message_apis/base_package.rb",
+  "patch": "patches/M231.patch",
+  "description": "Change store_message_id condition",
+  "suggested_spec": "spec/services/message_apis/base_package_resumable_spec.rb",
+  "approach": "non-resumable plugin: successful notify stores the message id source (delivery_index nil)"
+ },
+ {
+  "id": "M232",
+  "milestone": "m9",
+  "file": "app/services/message_apis/base_package.rb",
+  "patch": "patches/M232.patch",
+  "description": "Change resumable check",
+  "suggested_spec": "spec/services/message_apis/base_package_resumable_spec.rb",
+  "approach": "plugin without RESUMABLE_DELIVERY: delivery_hooks has only :on_failure"
+ },
+ {
+  "id": "M234",
+  "milestone": "m9",
+  "file": "app/services/message_apis/base_package.rb",
+  "patch": "patches/M234.patch",
+  "description": "Change find_or_create_by",
+  "suggested_spec": "spec/services/message_apis/base_package_resumable_spec.rb",
+  "approach": "store_message_id with a new delivery_index creates the row (no RecordNotFound)"
+ },
+ {
+  "id": "M237",
+  "milestone": "m9",
+  "file": "app/services/message_apis/dialog360/api.rb",
+  "patch": "patches/M237.patch",
+  "description": "Remove profile_id blank check",
+  "suggested_spec": "spec/services/message_apis/dialog360_statuses_spec.rb",
+  "approach": "prepare_initiator_channel_for with blank profile_id returns nil and creates nothing"
+ },
+ {
+  "id": "M247",
+  "milestone": "m9",
+  "file": "app/models/conversation_part_channel_source.rb",
+  "patch": "patches/M247.patch",
+  "description": "Change RETRY_INTERVAL to 0.01",
+  "suggested_spec": "spec/models/conversation_part_channel_source_lock_spec.rb",
+  "approach": "retry sleep is 0.05 (stubbed sleep)"
+ },
+ {
+  "id": "M249",
+  "milestone": "m9",
+  "file": "app/models/conversation_part_channel_source.rb",
+  "patch": "patches/M249.patch",
+  "description": "Change return value for non-wait",
+  "suggested_spec": "spec/models/conversation_part_channel_source_lock_spec.rb",
+  "approach": "free lock: with_delivery_lock yields and returns the block value (in a NEW file: with this mutant the existing conversation_part_channel_source_spec.rb hangs past the 300 s limit)"
+ },
+ {
+  "id": "M251",
+  "milestone": "m9",
+  "file": "app/services/message_apis/helpers.rb",
+  "patch": "patches/M251.patch",
+  "description": "Change doc content array",
+  "suggested_spec": "spec/services/message_apis/helpers_spec.rb",
+  "approach": "root type \"doc\""
+ },
+ {
+  "id": "M252",
+  "milestone": "m9",
+  "file": "app/services/message_apis/helpers.rb",
+  "patch": "patches/M252.patch",
+  "description": "Change text content",
+  "suggested_spec": "spec/services/message_apis/helpers_spec.rb",
+  "approach": "inner node type \"text\""
+ },
+ {
+  "id": "M254",
+  "milestone": "m14",
+  "file": "app/services/dante/utils.rb",
+  "patch": "patches/M254.patch",
+  "description": "Change text extraction separator",
+  "suggested_spec": "spec/services/dante/utils_spec.rb",
+  "approach": "nested node content is walked (text of children extracted)"
+ },
+ {
+  "id": "M255",
+  "milestone": "m14",
+  "file": "app/services/dante/utils.rb",
+  "patch": "patches/M255.patch",
+  "description": "Change content key to type",
+  "suggested_spec": "spec/services/dante/utils_spec.rb",
+  "approach": "Dante::Utils.extract_plain_text exists and returns the text"
+ },
+ {
+  "id": "M260",
+  "milestone": "m12",
+  "file": "app/services/message_apis/twilio_phone/store.rb",
+  "patch": "patches/M260.patch",
+  "description": "Change locked_agents path from locked_agents to agents",
+  "suggested_spec": "spec/services/message_apis/twilio_phone/store_spec.rb (exists)",
+  "approach": "locked_agents(key).key ends with /locked_agents/<key>; data written via a raw Kredis.unique_list at that key is visible"
+ },
+ {
+  "id": "M265",
+  "milestone": "m12",
+  "file": "app/services/message_apis/twilio_phone/store.rb",
+  "patch": "patches/M265.patch",
+  "description": "Change del_callblock to set empty",
+  "suggested_spec": "spec/services/message_apis/twilio_phone/store_spec.rb (exists)",
+  "approach": "del_callblock: key no longer exists (Kredis.string(key).assigned? false)"
+ },
+ {
+  "id": "N01",
+  "milestone": "m13",
+  "file": "config/initializers/rack_bad_request.rb",
+  "patch": "patches/N01.patch",
+  "description": "insert_after Rack::MethodOverride instead of insert_before",
+  "suggested_spec": "spec/middleware/rack_bad_request_order_spec.rb",
+  "approach": "Rails.application.middleware: RackBadRequest sits before Rack::MethodOverride"
+ },
+ {
+  "id": "N02",
+  "milestone": "m13",
+  "file": "config/initializers/rack_bad_request.rb",
+  "patch": "patches/N02.patch",
+  "description": "middleware not installed (use Rack::Head instead)",
+  "suggested_spec": "spec/middleware/rack_bad_request_order_spec.rb",
+  "approach": "Rails.application.middleware includes Middleware::RackBadRequest"
+ },
+ {
+  "id": "N03",
+  "milestone": "m14",
+  "file": "app/models/conversation_part_channel_source.rb",
+  "patch": "patches/N03.patch",
+  "description": "block not forwarded to hold_session_lock",
+  "suggested_spec": "spec/models/conversation_part_channel_source_lock_spec.rb",
+  "approach": "with_delivery_lock(part_id, provider) { :done } returns :done (the block runs inside the lock)"
+ },
+ {
+  "id": "N04",
+  "milestone": "m14",
+  "file": "app/models/conversation_part_channel_source.rb",
+  "patch": "patches/N04.patch",
+  "description": "lock taken outside uncached (query cache can answer pg_try_advisory_lock)",
+  "suggested_spec": "spec/models/conversation_part_channel_source_lock_spec.rb",
+  "approach": "inside ActiveRecord::Base.cache: take and release the delivery lock once, then hold the same key from a second connection - a second with_delivery_lock must not yield (no cached true)"
+ },
+ {
+  "id": "N05",
+  "milestone": "m14",
+  "file": "app/services/message_apis/telnyx_sms/api.rb",
+  "patch": "patches/N05.patch",
+  "description": "to without the leading +",
+  "suggested_spec": "spec/services/message_apis/telnyx_media_limit_spec.rb",
+  "approach": "send_sms_message(\"15550001\", \"hi\") posts to: \"+15550001\" (WebMock request body)"
+ },
+ {
+  "id": "N06",
+  "milestone": "m14",
+  "file": "app/services/message_apis/telnyx_sms/api.rb",
+  "patch": "patches/N06.patch",
+  "description": "leading + not stripped (delete(\"-\"))",
+  "suggested_spec": "spec/services/message_apis/telnyx_media_limit_spec.rb",
+  "approach": "send_sms_message(\"+15550001\", \"hi\") posts to: \"+15550001\", not \"++15550001\""
+ }
+]

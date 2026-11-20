@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/telnyx_sms/api.rb b/app/services/message_apis/telnyx_sms/api.rb
+index 06e6acbc..c63e4deb 100644
+--- a/app/services/message_apis/telnyx_sms/api.rb
++++ b/app/services/message_apis/telnyx_sms/api.rb
+@@ -236,7 +236,7 @@ module MessageApis
+       end
+ 
+       def inbound_blocks(text, media, message_id)
+-        blocks = text.split("\n").reject(&:empty?).map { |line| serialized_block(line) }
++        blocks = text.split("\n").map { |line| serialized_block(line) }
+         Array(media).grep(Hash).each_with_index { |item, index| blocks << media_block(item, message_id, index) }
+         blocks
+       end

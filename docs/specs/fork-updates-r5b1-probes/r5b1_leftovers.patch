@@ -1,0 +1,38 @@
+diff --git a/app/controllers/api/v1/hooks_controller.rb b/app/controllers/api/v1/hooks_controller.rb
+index ff50d41e..2adf895f 100644
+--- a/app/controllers/api/v1/hooks_controller.rb
++++ b/app/controllers/api/v1/hooks_controller.rb
+@@ -105,7 +105,6 @@ module Api
+ 
+         _, conversation, from = handle_conversation_part(mail, json_message)
+ 
+-        json_message["mail"]["messageId"]
+         # for now just skip the message
+         return if from.blank?
+ 
+diff --git a/app/services/message_apis/dialog360/presenter.rb b/app/services/message_apis/dialog360/presenter.rb
+index c9d1776e..68d9293e 100644
+--- a/app/services/message_apis/dialog360/presenter.rb
++++ b/app/services/message_apis/dialog360/presenter.rb
+@@ -109,8 +109,6 @@ module MessageApis
+           ] }
+         end
+ 
+-        templates["offset"]
+-        nil
+         # Rails.logger.debug templates
+         # Rails.logger.debug ctx
+ 
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index 734b4c70..a88f01d8 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -145,7 +145,7 @@ module MessageApis
+     def self.read_response(response, max_bytes)
+       if response.is_a?(Net::HTTPRedirection)
+         location = response["location"]
+-        return [nil, location] if location && !location.empty?
++        return [nil, location] unless location.to_s.empty?
+       end
+       return unless response.is_a?(Net::HTTPSuccess)
+ 

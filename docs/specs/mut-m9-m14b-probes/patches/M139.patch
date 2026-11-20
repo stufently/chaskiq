@@ -1,0 +1,13 @@
+diff --git a/app/services/dante/utils.rb b/app/services/dante/utils.rb
+index cfd44d11..666eb41b 100644
+--- a/app/services/dante/utils.rb
++++ b/app/services/dante/utils.rb
+@@ -15,7 +15,7 @@ module Dante
+     end
+ 
+     def self.get_blocks(serialized_content)
+-      JSON.parse(serialized_content)["content"]
++      JSON.parse(serialized_content)["blocks"]
+     end
+   end
+ end

@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/helpers.rb b/app/services/message_apis/helpers.rb
+index 40d5e395..057e4cbd 100644
+--- a/app/services/message_apis/helpers.rb
++++ b/app/services/message_apis/helpers.rb
+@@ -5,7 +5,7 @@ module MessageApis
+     extend ActiveSupport::Concern
+ 
+     def keygen
+-      ("a".."z").to_a.sample(8).join
++      ("a".."z").to_a.sample(4).join
+     end
+ 
+     def main_doc(blocks)

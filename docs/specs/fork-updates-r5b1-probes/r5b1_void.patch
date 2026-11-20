@@ -1,0 +1,192 @@
+diff --git a/app/models/audit.rb b/app/models/audit.rb
+index d9a4c2d6..5692829e 100644
+--- a/app/models/audit.rb
++++ b/app/models/audit.rb
+@@ -22,7 +22,7 @@ class Audit < ApplicationRecord
+   end
+ 
+   def agent_name
+-    agent.try(:display_name).to_s || "--"
++    agent.try(:display_name).to_s
+   end
+ 
+   def auditable_name
+diff --git a/app/services/action_trigger_factory.rb b/app/services/action_trigger_factory.rb
+index 4aafa810..24b85b02 100644
+--- a/app/services/action_trigger_factory.rb
++++ b/app/services/action_trigger_factory.rb
+@@ -4,7 +4,6 @@ class ActionTriggerFactory
+   attr_accessor :id, :after_delay, :paths
+ 
+   def initialize
+-    @id
+     @paths = []
+   end
+ 
+diff --git a/app/services/message_apis/dialog360/api.rb b/app/services/message_apis/dialog360/api.rb
+index a6ea6435..d5bf6646 100644
+--- a/app/services/message_apis/dialog360/api.rb
++++ b/app/services/message_apis/dialog360/api.rb
+@@ -74,8 +74,6 @@ module MessageApis
+           "Content-Type" => "application/json",
+           "Accept" => "application/json"
+         }
+-
+-        self
+       end
+ 
+       def register_webhook(_app_package, integration)
+diff --git a/app/services/message_apis/full_contact/api.rb b/app/services/message_apis/full_contact/api.rb
+index f6d3f7ba..4206cfe5 100644
+--- a/app/services/message_apis/full_contact/api.rb
++++ b/app/services/message_apis/full_contact/api.rb
+@@ -35,7 +35,6 @@ module MessageApis
+           params_encoder: Faraday::FlatParamsEncoder
+         }
+         @token = config["api_secret"]
+-        self
+       end
+ 
+       def authorize!
+diff --git a/app/services/message_apis/message_bird/api.rb b/app/services/message_apis/message_bird/api.rb
+index 48224192..66e58ed7 100644
+--- a/app/services/message_apis/message_bird/api.rb
++++ b/app/services/message_apis/message_bird/api.rb
+@@ -66,8 +66,6 @@ module MessageApis
+           "Content-Type" => "application/json",
+           "Accept" => "application/json"
+         }
+-
+-        self
+       end
+ 
+       def register_webhook(_app_package, integration)
+diff --git a/app/services/message_apis/messenger/api.rb b/app/services/message_apis/messenger/api.rb
+index 352b2a2f..52bb69fa 100644
+--- a/app/services/message_apis/messenger/api.rb
++++ b/app/services/message_apis/messenger/api.rb
+@@ -43,8 +43,6 @@ module MessageApis
+             params_encoder: Faraday::FlatParamsEncoder
+           }
+         )
+-
+-        self
+       end
+ 
+       def trigger(event)
+diff --git a/app/services/message_apis/open_ai/api.rb b/app/services/message_apis/open_ai/api.rb
+index 5b9f804c..b4a71402 100644
+--- a/app/services/message_apis/open_ai/api.rb
++++ b/app/services/message_apis/open_ai/api.rb
+@@ -49,7 +49,6 @@ module MessageApis
+             params_encoder: Faraday::FlatParamsEncoder
+           }
+         )
+-        self
+       end
+ 
+       def authorize!
+diff --git a/app/services/message_apis/telegram/api.rb b/app/services/message_apis/telegram/api.rb
+index dcb9c43a..702b63ff 100644
+--- a/app/services/message_apis/telegram/api.rb
++++ b/app/services/message_apis/telegram/api.rb
+@@ -49,7 +49,6 @@ module MessageApis
+           "Content-Type" => "application/json",
+           "Accept" => "application/json"
+         }
+-        self
+       end
+ 
+       def register_webhook(_app_package, integration)
+@@ -253,10 +252,10 @@ module MessageApis
+           when "voice", "document"
+             file = handle_direct_upload(f["file_id"], f["mime_type"])
+             file_block(url: file[:url], text: f["file_name"])
+-          else "photo"
+-               f = data[k.first].first
+-               file = handle_direct_upload(f["file_id"], f["mime_type"])
+-               photo_block(url: file[:url], text: f["file_name"])
++          else # "photo"
++            f = data[k.first].first
++            file = handle_direct_upload(f["file_id"], f["mime_type"])
++            photo_block(url: file[:url], text: f["file_name"])
+           end
+         end
+       end
+diff --git a/app/services/message_apis/telnyx_sms/api.rb b/app/services/message_apis/telnyx_sms/api.rb
+index 06e6acbc..51e03985 100644
+--- a/app/services/message_apis/telnyx_sms/api.rb
++++ b/app/services/message_apis/telnyx_sms/api.rb
+@@ -75,8 +75,6 @@ module MessageApis
+           "Authorization" => "Bearer #{@api_key}",
+           "Accept" => "application/json"
+         }
+-
+-        self
+       end
+ 
+       def validate_integration
+diff --git a/app/services/message_apis/twilio/api.rb b/app/services/message_apis/twilio/api.rb
+index 618f2ebc..26444aac 100644
+--- a/app/services/message_apis/twilio/api.rb
++++ b/app/services/message_apis/twilio/api.rb
+@@ -68,8 +68,6 @@ module MessageApis
+         )
+ 
+         @conn.request(:authorization, :basic, @api_key, @api_token)
+-
+-        self
+       end
+ 
+       def trigger(event)
+diff --git a/app/services/message_apis/twilio_phone/api.rb b/app/services/message_apis/twilio_phone/api.rb
+index 86139b71..7c2245d0 100644
+--- a/app/services/message_apis/twilio_phone/api.rb
++++ b/app/services/message_apis/twilio_phone/api.rb
+@@ -70,8 +70,6 @@ module MessageApis::TwilioPhone
+         "Content-Type" => "application/json",
+         "Accept" => "application/json"
+       }
+-
+-      self
+     end
+ 
+     def register_webhook(app_package, integration); end
+diff --git a/app/services/message_apis/vonage/api.rb b/app/services/message_apis/vonage/api.rb
+index c8d9c17f..6877e402 100644
+--- a/app/services/message_apis/vonage/api.rb
++++ b/app/services/message_apis/vonage/api.rb
+@@ -74,8 +74,6 @@ module MessageApis
+         }
+ 
+         @conn.request(:authorization, :basic, @api_key, @api_token)
+-
+-        self
+       end
+ 
+       def trigger(event); end
+diff --git a/app/services/message_apis/zapier/api.rb b/app/services/message_apis/zapier/api.rb
+index 0581fecd..0f45b40e 100644
+--- a/app/services/message_apis/zapier/api.rb
++++ b/app/services/message_apis/zapier/api.rb
+@@ -24,8 +24,6 @@ module MessageApis
+           "Content-Type" => "application/json",
+           "Accept" => "application/json"
+         }
+-
+-        self
+       end
+ 
+       def self.definition_info
+diff --git a/app/services/payment_services/paddle.rb b/app/services/payment_services/paddle.rb
+index 9d706e58..db1006cb 100644
+--- a/app/services/payment_services/paddle.rb
++++ b/app/services/payment_services/paddle.rb
+@@ -22,7 +22,6 @@ module PaymentServices
+         vendor_id: Chaskiq::Config.get("PADDLE_VENDOR_ID"),
+         vendor_auth_code: Chaskiq::Config.get("PADDLE_SECRET_TOKEN")
+       }
+-      self
+     end
+ 
+     def get_plans

@@ -1,0 +1,13 @@
+diff --git a/app/models/conversation_part_channel_source.rb b/app/models/conversation_part_channel_source.rb
+index bbd170b4..7ee84962 100644
+--- a/app/models/conversation_part_channel_source.rb
++++ b/app/models/conversation_part_channel_source.rb
+@@ -64,7 +64,7 @@ class ConversationPartChannelSource < ApplicationRecord
+   rescue StandardError => e
+     # Closing an aborted PostgreSQL session releases its advisory locks.
+     connection.throw_away!
+-    raise if completed
++    raise if false
+ 
+     Rails.logger.error("Session advisory unlock failed with #{e.class}")
+   end

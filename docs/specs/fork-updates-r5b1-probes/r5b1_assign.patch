@@ -1,0 +1,415 @@
+diff --git a/app/jobs/app_user_event_job.rb b/app/jobs/app_user_event_job.rb
+index c224a7db..bdedbe0f 100644
+--- a/app/jobs/app_user_event_job.rb
++++ b/app/jobs/app_user_event_job.rb
+@@ -8,8 +8,6 @@ class AppUserEventJob < ApplicationJob
+     @app = App.find_by(key: app_key)
+     app_user = @app.app_users.find(user_id)
+ 
+-    key = "#{@app.key}-#{app_user.session_id}"
+-
+     # Banner.broadcast_banner_to_user(app_user) ||
+     Tour.broadcast_tour_to_user(app_user) ||
+       BotTask.broadcast_task_to_user(app_user) ||
+diff --git a/app/mailers/campaign_mailer.rb b/app/mailers/campaign_mailer.rb
+index 2e82700c..ccc9e204 100644
+--- a/app/mailers/campaign_mailer.rb
++++ b/app/mailers/campaign_mailer.rb
+@@ -13,8 +13,6 @@ class CampaignMailer < ApplicationMailer
+     headers "X-CHASKIQ-CAMPAIGN-ID" => campaign.id
+     headers "X-CHASKIQ-CAMPAIGN-TO" => subscriber.id
+ 
+-    attrs = subscriber.attributes
+-
+     @campaign = campaign
+ 
+     @subscriber = subscriber
+@@ -31,8 +29,6 @@ class CampaignMailer < ApplicationMailer
+   end
+ 
+   def test(campaign)
+-    content_type = "text/html"
+-
+     @campaign = campaign
+ 
+     @subscriber = {
+diff --git a/app/models/audit.rb b/app/models/audit.rb
+index 0a02e818..d9a4c2d6 100644
+--- a/app/models/audit.rb
++++ b/app/models/audit.rb
+@@ -47,7 +47,7 @@ class Audit < ApplicationRecord
+   end
+ 
+   def serialize_properties(app = nil)
+-    @app = app ||= auditable.app.key
++    @app = app || auditable.app.key
+     as_json(methods: %i[id agent_name auditable_name action created_at sdata])
+       .merge(
+         auditable_link: auditable_link,
+diff --git a/app/models/campaign.rb b/app/models/campaign.rb
+index 7f6ebc6f..2fa1793d 100644
+--- a/app/models/campaign.rb
++++ b/app/models/campaign.rb
+@@ -103,8 +103,6 @@ class Campaign < Message
+   end
+ 
+   def mustache_template_for(subscriber, html: nil)
+-    link_prefix = host + "/campaigns/#{id}/tracks/#{subscriber.encoded_id}/click?r="
+-
+     # html = LinkRenamer.convert(premailer, link_prefix)
+     subscriber_options = subscriber.attributes
+                                    .merge(attributes_for_template(subscriber))
+@@ -119,12 +117,12 @@ class Campaign < Message
+ 
+   def campaign_url
+     host = Rails.application.routes.default_url_options[:host]
+-    campaign_url = "#{host}/campaigns/#{id}"
++    "#{host}/campaigns/#{id}"
+   end
+ 
+   def campaign_api_url
+     host = Rails.application.routes.default_url_options[:host]
+-    campaign_url = "#{host}/api/v1/apps/#{app.key}/messages/#{id}"
++    "#{host}/api/v1/apps/#{app.key}/messages/#{id}"
+   end
+ 
+   def apply_premailer(opts = {})
+@@ -202,11 +200,11 @@ class Campaign < Message
+   def self.decode_email(address)
+     # "campaigns-#{app.key}-#{id}@#{app.outgoing_email_domain}"
+ 
+-    addr, domain = address.split("@")
+-    camp, encoded = addr.split("+")
++    addr, = address.split("@")
++    _, encoded = addr.split("+")
+     app_key, campaign_id = decoded_email(encoded).split("-")
+     app = App.find_by(key: app_key)
+-    campaign = app.campaigns.find(campaign_id)
++    app.campaigns.find(campaign_id)
+   rescue StandardError => e
+     Rails.logger.error("error on decoding campaign email #{e}")
+     nil
+diff --git a/app/services/message_apis/calendly/presenter.rb b/app/services/message_apis/calendly/presenter.rb
+index 3a61e354..49e72ba7 100644
+--- a/app/services/message_apis/calendly/presenter.rb
++++ b/app/services/message_apis/calendly/presenter.rb
+@@ -3,7 +3,7 @@
+ module MessageApis::Calendly
+   class Presenter
+     def self.valid_url?(uri)
+-      uri = URI.parse(uri).try(:host)
++      URI.parse(uri).try(:host)
+     rescue URI::InvalidURIError
+       false
+     end
+@@ -11,7 +11,6 @@ module MessageApis::Calendly
+     # Initialize flow webhook URL
+     # Sent when an app has been inserted into a conversation, message or the home screen, so that you can render the app.
+     def self.initialize_hook(params)
+-      url = params[:ctx][:values][:url]
+       text = params[:ctx][:values][:invitation_text]
+ 
+       definitions = [
+@@ -160,7 +159,7 @@ module MessageApis::Calendly
+ 
+     # Submit Sheet flow webhook URL (optional)
+     # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
+-    def self.sheet_hook(params)
++    def self.sheet_hook(_params)
+       { a: 11_111 }
+     end
+ 
+diff --git a/app/services/message_apis/message_bird/api.rb b/app/services/message_apis/message_bird/api.rb
+index 821ac71e..48224192 100644
+--- a/app/services/message_apis/message_bird/api.rb
++++ b/app/services/message_apis/message_bird/api.rb
+@@ -93,7 +93,6 @@ module MessageApis
+ 
+       def process_event(params, package)
+         @package = package
+-        current = params["current"]
+ 
+         process_statuses(params["statuses"]) if params["statuses"].present?
+ 
+@@ -201,15 +200,12 @@ module MessageApis
+         message = params["message"]
+ 
+         sender_id = message["from"]
+-        to = message["to"]
+         message_id = message["id"]
+ 
+         # determine the id of the user (channel)
+         is_agent = sender_id == package.user_id.to_s
+ 
+         channel_id = is_agent ? message["to"] : message["from"]
+-        dialog_user = sender_id
+-
+         conversation = find_conversation_by_channel(channel_id)
+ 
+         return if conversation && conversation.conversation_part_channel_sources
+@@ -247,15 +243,15 @@ module MessageApis
+       end
+ 
+       def find_conversation_by_channel(channel)
+-        conversation = @package
+-                       .app
+-                       .conversations
+-                       .joins(:conversation_channels)
+-                       .where(
+-                         "conversation_channels.provider =? AND
++        @package
++          .app
++          .conversations
++          .joins(:conversation_channels)
++          .where(
++            "conversation_channels.provider =? AND
+                           conversation_channels.provider_channel_id =?",
+-                         PROVIDER, channel
+-                       ).first
++            PROVIDER, channel
++          ).first
+       end
+ 
+       def serialize_content(data)
+diff --git a/app/services/message_apis/open_ai/presenter.rb b/app/services/message_apis/open_ai/presenter.rb
+index ebf966b3..eb5cc1e0 100644
+--- a/app/services/message_apis/open_ai/presenter.rb
++++ b/app/services/message_apis/open_ai/presenter.rb
+@@ -61,9 +61,6 @@ module MessageApis
+       # them configuration options before it’s inserted. Leaving this option
+       # blank will skip configuration.
+       def self.configure_hook(kind:, ctx:)
+-        label = "epa"
+-        app = ctx[:package].app
+-
+         default_prompt = ctx[:package].settings["main_prompt"]
+ 
+         value = ctx.dig(:values, :prompt)
+diff --git a/app/services/message_apis/pipedrive/api.rb b/app/services/message_apis/pipedrive/api.rb
+index e2b9345a..fa788835 100644
+--- a/app/services/message_apis/pipedrive/api.rb
++++ b/app/services/message_apis/pipedrive/api.rb
+@@ -111,7 +111,7 @@ module MessageApis
+            (find_response = person(external_profile.profile_id)) &&
+            find_response["success"].present?
+ 
+-          id = find_response["data"]["id"]
++          find_response["data"]["id"] # kept: raises on a malformed reply (R5b-1 D2)
+           external_profile.update(
+             data: find_response["data"]
+           )
+@@ -155,19 +155,13 @@ module MessageApis
+ 
+       def create_person(params:)
+         url = url("/persons")
+-        data = {
+-          # "name": 'jojoijoji michelson m',
+-          # "email": 'miguejoijolmichelson@gmail.com',
+-          # "phone": '0992302305',
+-          # "visible_to": '3'
+-        }
+         response = @conn.post do |req|
+           req.url url
+           req.headers["Content-Type"] = "application/json"
+           req.body = params.to_json
+         end
+ 
+-        data = JSON.parse(response.body)
++        JSON.parse(response.body)
+       end
+ 
+       def update_person(id:, params:)
+@@ -195,7 +189,7 @@ module MessageApis
+           event_object: "person"
+         }
+         url = url("/webhooks")
+-        response = @conn.post do |req|
++        @conn.post do |req|
+           req.url url
+           req.headers["Content-Type"] = "application/json"
+           req.body = data.to_json
+@@ -210,7 +204,7 @@ module MessageApis
+ 
+       def delete_webhook(id)
+         url = url("/webhooks/#{id}")
+-        response = @conn.delete(url, nil, { "Content-Type" => "application/json" })
++        @conn.delete(url, nil, { "Content-Type" => "application/json" })
+       end
+ 
+       def delete_webhooks
+diff --git a/app/services/message_apis/slack/api.rb b/app/services/message_apis/slack/api.rb
+index ac53b920..dfc97e48 100644
+--- a/app/services/message_apis/slack/api.rb
++++ b/app/services/message_apis/slack/api.rb
+@@ -121,7 +121,7 @@ module MessageApis
+         integration_pkg = app_package.app_package_integrations.find_by(
+           external_id: team_id
+         )
+-        response = integration_pkg.process_event(params)
++        integration_pkg.process_event(params)
+       end
+ 
+       def after_install
+@@ -350,7 +350,7 @@ module MessageApis
+ 
+         return if ts_id.blank?
+ 
+-        response_data = json_body(
++        json_body(
+           update_message(
+             "New conversation from Chaskiq",
+             data.flatten.compact.as_json,
+@@ -774,7 +774,7 @@ module MessageApis
+         authorize_bot!
+         url = url("/api/users.lookupByEmail")
+         response = get_data(url, { email: email })
+-        user = JSON.parse(response.body)["user"]
++        JSON.parse(response.body)["user"]
+       rescue StandardError
+         nil
+       end
+@@ -798,11 +798,6 @@ module MessageApis
+       def receive_oauth_code(params, package)
+         code = params[:code]
+ 
+-        headers = {
+-          accept: "application/json",
+-          content_type: "application/json"
+-        }
+-
+         token = oauth_client.auth_code.get_token(
+           code,
+           redirect_uri: package.oauth_url,
+@@ -910,8 +905,6 @@ module MessageApis
+             }
+             # block_id: 'replied-1'
+           }]
+-
+-          user = conversation.main_participant
+         end
+ 
+         return if blocks.empty?
+@@ -1017,7 +1010,7 @@ module MessageApis
+       end
+ 
+       def get_data(url, data)
+-        response = @conn.get(url, data)
++        @conn.get(url, data)
+       end
+ 
+       def sync_messages_without_channel(conversation)
+@@ -1047,10 +1040,9 @@ module MessageApis
+       ### serialization to dante format
+       def serialize_content(data)
+         if data.keys.include?("files")
+-          images = data["files"]
+-          o = attachment_block(data)
++          attachment_block(data)
+         else
+-          o = process_blocks(data)
++          process_blocks(data)
+         end
+       end
+ 
+diff --git a/app/services/message_apis/telegram/api.rb b/app/services/message_apis/telegram/api.rb
+index f85ec5d6..dcb9c43a 100644
+--- a/app/services/message_apis/telegram/api.rb
++++ b/app/services/message_apis/telegram/api.rb
+@@ -76,7 +76,6 @@ module MessageApis
+ 
+       def process_event(params, package)
+         @package = package
+-        current = params["current"]
+         process_message(params, @package) if params.dig("message", "chat").present?
+       end
+ 
+@@ -181,8 +180,6 @@ module MessageApis
+         is_agent = sender_id == package.user_id.to_s
+ 
+         channel_id = message["chat"]["id"] # sender_id
+-        dialog_user = sender_id
+-
+         conversation = find_conversation_by_channel(channel_id.to_s)
+ 
+         return if conversation && conversation.conversation_part_channel_sources
+@@ -220,15 +217,15 @@ module MessageApis
+       end
+ 
+       def find_conversation_by_channel(channel)
+-        conversation = @package
+-                       .app
+-                       .conversations
+-                       .joins(:conversation_channels)
+-                       .where(
+-                         "conversation_channels.provider = ? AND
++        @package
++          .app
++          .conversations
++          .joins(:conversation_channels)
++          .where(
++            "conversation_channels.provider = ? AND
+                           conversation_channels.provider_channel_id = ?",
+-                         PROVIDER, channel
+-                       ).first
++            PROVIDER, channel
++          ).first
+       end
+ 
+       def serialize_content(data)
+diff --git a/app/services/message_apis/twilio_phone/presenter.rb b/app/services/message_apis/twilio_phone/presenter.rb
+index dd308054..953b6f71 100644
+--- a/app/services/message_apis/twilio_phone/presenter.rb
++++ b/app/services/message_apis/twilio_phone/presenter.rb
+@@ -4,7 +4,7 @@ module MessageApis::TwilioPhone
+   class Presenter
+     # Initialize flow webhook URL
+     # Sent when an app has been inserted into a conversation, message or the home screen, so that you can render the app.
+-    def self.initialize_hook(params)
++    def self.initialize_hook(_params)
+       {
+         # ctx: ctx,
+         # values: { block_type: "block_type" },
+@@ -132,7 +132,7 @@ module MessageApis::TwilioPhone
+ 
+     # Submit Sheet flow webhook URL (optional)
+     # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
+-    def self.sheet_hook(params)
++    def self.sheet_hook(_params)
+       {}
+     end
+ 
+@@ -173,7 +173,7 @@ module MessageApis::TwilioPhone
+         on_hold: MessageApis::TwilioPhone::Store.get_data(@conversation.key, :holdStatus)
+       }.to_json
+ 
+-      template = ERB.new <<~SHEET_VIEW
++      ERB.new <<~SHEET_VIEW
+         <html lang="en">
+           <head>
+             <meta charset="UTF-8">
+@@ -232,7 +232,7 @@ module MessageApis::TwilioPhone
+         agent_in_call: @agent_in_call
+       }.to_json
+ 
+-      template = ERB.new <<~SHEET_VIEW
++      ERB.new <<~SHEET_VIEW
+         <html lang="en">
+           <head>
+             <meta charset="UTF-8">
+@@ -321,7 +321,6 @@ module MessageApis::TwilioPhone
+ 
+     def self.definitions_for_content(kind:, ctx:)
+       conversation = Conversation.find_by(key: ctx[:conversation_key])
+-      user = conversation&.main_participant
+ 
+       data = {
+         app_id: ctx[:package].app.id,
+@@ -372,7 +371,7 @@ module MessageApis::TwilioPhone
+                       } })
+       end
+ 
+-      definitions = [
++      [
+         {
+           text: "New phonecall",
+           type: "text",

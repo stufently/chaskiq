@@ -1,0 +1,14 @@
+diff --git a/config/middleware/maintenance_mode.rb b/config/middleware/maintenance_mode.rb
+index 273bd60b..d145f374 100644
+--- a/config/middleware/maintenance_mode.rb
++++ b/config/middleware/maintenance_mode.rb
+@@ -7,7 +7,7 @@ module Middleware
+     end
+ 
+     def call(env)
+-      [200, { 'content-type' => 'text/html' }, [File.read(Rails.root.join('public', 'maintenance.html'))]]
++      [200, { 'content-type' => 'application/json' }, [File.read(Rails.root.join('public', 'maintenance.html'))]]
+     end
+   end
+ end
+\ No newline at end of file

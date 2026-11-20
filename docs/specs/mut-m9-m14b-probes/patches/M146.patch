@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/telnyx_sms/api.rb b/app/services/message_apis/telnyx_sms/api.rb
+index 06e6acbc..4d0e2ec8 100644
+--- a/app/services/message_apis/telnyx_sms/api.rb
++++ b/app/services/message_apis/telnyx_sms/api.rb
+@@ -56,7 +56,7 @@ module MessageApis
+         ".vcf" => "text/vcard",
+         ".vcard" => "text/vcard"
+       }.freeze
+-      MAX_MEDIA_BYTES = 5 * 1024 * 1024
++      MAX_MEDIA_BYTES = 1024
+       private_constant :MMS_TYPES, :MAX_MEDIA_BYTES
+ 
+       def initialize(config:)

@@ -1,0 +1,13 @@
+diff --git a/vendor/nightfury/lib/nightfury/identity.rb b/vendor/nightfury/lib/nightfury/identity.rb
+index fcb1c151..f10c43dd 100644
+--- a/vendor/nightfury/lib/nightfury/identity.rb
++++ b/vendor/nightfury/lib/nightfury/identity.rb
+@@ -79,7 +79,7 @@ module Nightfury
+         end
+ 
+         tag_ids = nil
+-        tag_values_sorted = tag_values.keys.sort
++        tag_values_sorted = tag_values.keys
+         tag_values_sorted.each do |store_name|
+           tag = "#{store_name}.#{tag_values[store_name]}"
+           if tag_ids.nil?
