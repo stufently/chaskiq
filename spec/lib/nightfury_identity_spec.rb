@@ -28,13 +28,13 @@ RSpec.describe Nightfury::Identity::Base do
       identity = MutbTestIdentity.new(id, tags: { region: "us" })
       expect(identity.key_prefix).to include("region.us")
     end
+  end
 
-    it "sorts tags alphabetically" do
-      identity = MutbTestIdentity.new(id, tags: { plan: "pro", region: "us" })
+  describe "tag sorting" do
+    it "sorts tags alphabetically regardless of insertion order" do
+      identity = MutbTestIdentity.new(id, tags: { region: "us", plan: "pro" })
       prefix = identity.key_prefix
-      plan_pos = prefix.index("plan.pro")
-      region_pos = prefix.index("region.us")
-      expect(plan_pos).to be < region_pos
+      expect(prefix).to end_with(":plan.pro:region.us")
     end
   end
 
@@ -55,14 +55,6 @@ RSpec.describe Nightfury::Identity::Base do
     it "uses dot separator between name and id" do
       identity = MutbTestIdentity.new(id)
       expect(identity.key_prefix).to eq("mutb_test_identity.#{id}")
-    end
-  end
-
-  describe "tag key order" do
-    it "orders tags alphabetically in the key" do
-      identity = MutbTestIdentity.new(id, tags: { plan: "pro", region: "us" })
-      prefix = identity.key_prefix
-      expect(prefix).to end_with(":plan.pro:region.us")
     end
   end
 end

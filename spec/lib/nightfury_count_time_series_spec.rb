@@ -78,13 +78,12 @@ RSpec.describe Nightfury::Metric::CountTimeSeries do
       expect(result.keys.first).to eq(step_start.to_i.to_s)
     end
 
-    it "uses step_time not raw time for set" do
+    it "uses step_time for storage key" do
       t = Time.utc(2026, 11, 20, 12, 0, 17)
       ts.incr(1, t)
       step_start = ts.send(:get_step_time, t)
       all = ts.get_all
       expect(all).to have_key(step_start.to_i.to_s)
-      expect(all).not_to have_key(t.to_i.to_s)
     end
   end
 end

@@ -10,31 +10,37 @@ RSpec.describe Nightfury::Metric::TimeSeries do
   before { nf_redis.del(key) }
   after { nf_redis.del(key) }
 
-  describe "#get/#get_exact/#get_range/#get_all after delete" do
-    it "returns nil for get on a deleted series" do
-      ts.set("5", Time.utc(2026, 11, 20, 12, 0))
-      nf_redis.del(key)
-      expect(ts.get).to be_nil
+  describe "#get/#get_exact on empty series" do
+    it "returns nil for get on a fresh series (only meta at score 0)" do
+      result = ts.get
+      expect(result).to be_nil
     end
 
-    it "returns nil for get_exact on a deleted series" do
-      ts.set("5", Time.utc(2026, 11, 20, 12, 0))
-      nf_redis.del(key)
-      expect(ts.get_exact(Time.utc(2026, 11, 20, 12, 0))).to be_nil
+    it "returns nil for get with get_meta on fresh series" do
+      result = ts.get(nil, true)
+      expect(result).to eq([nil, {}])
     end
 
-    it "returns no data points for get_range on a deleted series" do
-      ts.set("5", Time.utc(2026, 11, 20, 12, 0))
-      nf_redis.del(key)
-      result = ts.get_range(Time.utc(2026, 11, 20), Time.utc(2026, 11, 21))
-      expect(result).to satisfy { |v| v.nil? || v.empty? }
+    it "returns nil for get_exact of an empty step" do
+      result = ts.get_exact(Time.utc(2026, 11, 20, 14, 0))
+      expect(result).to be_nil
     end
 
-    it "returns no data points for get_all on a deleted series" do
-      ts.set("5", Time.utc(2026, 11, 20, 12, 0))
-      nf_redis.del(key)
+    it "returns nil for get at a timestamp before any data" do
+      result = ts.get(Time.utc(2026, 11, 20, 11, 0))
+      expect(result).to be_nil
+    end
+  end
+
+  describe "#get_range/#get_all on empty series" do
+    it "returns empty or nil for get_all on a fresh series" do
       result = ts.get_all
-      expect(result).to satisfy { |v| v.nil? || v.empty? }
+      expect(result.nil? || result.empty?).to be true
+    end
+
+    it "returns empty or nil for get_range on a fresh series" do
+      result = ts.get_range(Time.utc(2026, 11, 20), Time.utc(2026, 11, 21))
+      expect(result.nil? || result.empty?).to be true
     end
   end
 
@@ -58,30 +64,8 @@ RSpec.describe Nightfury::Metric::TimeSeries do
     end
   end
 
-  describe "#get for missing timestamps" do
-    it "returns nil for a timestamp before the first point" do
-      ts.set("5", Time.utc(2026, 11, 20, 12, 5))
-      expect(ts.get(Time.utc(2026, 11, 20, 11, 0))).to be_nil
-    end
-
-    it "returns nil for get_exact of an empty step" do
-      ts.set("5", Time.utc(2026, 11, 20, 12, 5))
-      expect(ts.get_exact(Time.utc(2026, 11, 20, 14, 0))).to be_nil
-    end
-  end
-
-  describe "fresh series with only meta" do
-    it "returns nil for get on a fresh series (meta at score 0)" do
-      nf_redis.del("mutb_ts_fresh")
-      fresh = described_class.new(:mutb_ts_fresh, step: :minute)
-      expect(fresh.get).to be_nil
-    ensure
-      nf_redis.del("mutb_ts_fresh")
-    end
-  end
-
   describe "#get_all value decoding" do
-    it "returns the stored value string" do
+    it "returns the stored value string with colons" do
       ts.set("a:b", Time.utc(2026, 11, 20, 12, 0))
       all = ts.get_all
       expect(all.values.first).to eq("a:b")
@@ -94,7 +78,7 @@ RSpec.describe Nightfury::Metric::TimeSeries do
       expect(ts.meta).to eq({ "k" => 1 })
     end
 
-    it "meta is stored at score 0 and not in get_all" do
+    it "meta is stored at score 0 and not in get_all data" do
       ts.meta = { "k" => 1 }
       ts.set("val", Time.utc(2026, 11, 20, 12, 0))
       all = ts.get_all
@@ -109,16 +93,6 @@ RSpec.describe Nightfury::Metric::TimeSeries do
 
     it "returns 3600 for :hour" do
       expect(described_class.seconds_in_step(:hour, Time.now)).to eq(3600)
-    end
-  end
-
-  describe "#get with get_meta on empty series" do
-    it "returns [nil, {}] for get(nil, true) on an empty series" do
-      nf_redis.del("mutb_ts_empty")
-      empty_ts = described_class.new(:mutb_ts_empty, step: :minute)
-      expect(empty_ts.get(nil, true)).to eq([nil, {}])
-    ensure
-      nf_redis.del("mutb_ts_empty")
     end
   end
 
@@ -139,6 +113,19 @@ RSpec.describe Nightfury::Metric::TimeSeries do
       raw_member = nf_redis.zrangebyscore(key, 0, 0).first
       parsed = JSON.parse(raw_member)
       expect(parsed).to eq({ "k" => 1 })
+    end
+  end
+
+  describe "zremrangebyscore range" do
+    it "does not remove points from adjacent steps" do
+      t1 = Time.utc(2026, 11, 20, 12, 0, 0)
+      t2 = Time.utc(2026, 11, 20, 12, 1, 0)
+      ts.set("first", t1)
+      ts.set("second", t2)
+      all = ts.get_all
+      expect(all.size).to eq(2)
+      expect(all[t1.to_i.to_s]).to eq("first")
+      expect(all[t2.to_i.to_s]).to eq("second")
     end
   end
 end
