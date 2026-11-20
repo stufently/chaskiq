@@ -3,8 +3,8 @@
 require "rails_helper"
 
 class MutbTestIdentity < Nightfury::Identity::Base
-  tag.region
-  tag.plan
+  tag :region # rubocop:disable Rails/ContentTag
+  tag :plan # rubocop:disable Rails/ContentTag
   metric :visits, :count_time_series, step: :minute
 end
 
