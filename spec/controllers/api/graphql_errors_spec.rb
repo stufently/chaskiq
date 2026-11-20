@@ -2,24 +2,30 @@
 
 require "rails_helper"
 
-RSpec.describe Api::GraphqlController, type: :controller do
+RSpec.describe "GraphQL error handling", type: :request do
   let(:app_record) { FactoryBot.create(:app) }
 
-  before do
-    request.headers["HTTP_APP"] = app_record.key
-  end
-
-  describe "error handling" do
-    it "rescues StandardError and renders a response" do
+  describe "M182: rescue StandardError vs Exception" do
+    it "rescues StandardError and returns a response" do
       allow(ChaskiqSchema).to receive(:execute).and_raise(ArgumentError, "test error")
-      post :execute, params: { query: "{ app { key } }" }, as: :json
+      post "/api/graphql", params: { query: "{ app { key } }" },
+                           headers: { "HTTP_APP" => app_record.key, "Content-Type" => "application/json" }
       expect(response).to have_http_status(:ok).or have_http_status(:internal_server_error)
     end
 
-    it "handles Exception differently from StandardError" do
-      allow(ChaskiqSchema).to receive(:execute).and_raise(Exception.new("non-standard"))
-      post :execute, params: { query: "{ app { key } }" }, as: :json
-      expect(response.status).to eq(200).or eq(422).or eq(500)
+    it "does not rescue non-StandardError exceptions" do
+      fatal_class = Class.new(Exception) do
+        def self.name
+          "TestFatalError"
+        end
+      end
+      stub_const("TestFatalError", fatal_class)
+      allow(ChaskiqSchema).to receive(:execute).and_raise(fatal_class, "fatal")
+
+      expect {
+        post "/api/graphql", params: { query: "{ app { key } }" },
+                             headers: { "HTTP_APP" => app_record.key, "Content-Type" => "application/json" }
+      }.to raise_error(fatal_class)
     end
   end
 end
