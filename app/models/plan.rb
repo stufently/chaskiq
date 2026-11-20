@@ -36,11 +36,13 @@ class Plan
     f&.active?
   end
 
+  # Usage `count` reached the plan's limit of `feature`; "unlimited" and a feature the plan does
+  # not list have no limit.
   def limit_reached?(feature, count)
-    c = get_feature(feature)&.count
-    return false if c === "unlimited"
+    limit = get_feature(feature)&.count
+    return false if limit.nil? || limit == "unlimited"
 
-    count >= count
+    count >= limit
   end
 
   def get_feature(feature)
