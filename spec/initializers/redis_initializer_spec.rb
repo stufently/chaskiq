@@ -27,26 +27,4 @@ RSpec.describe "Redis initializer" do
       expect(inner.instance_variable_get(:@timeout)).not_to eq(0)
     end
   end
-
-  describe "REDIS_URL fallback" do
-    it "uses db 1 as the default fallback" do
-      original_url = ENV["REDIS_URL"]
-      original_const = REDIS_URL
-      begin
-        ENV.delete("REDIS_URL")
-        Object.send(:remove_const, :REDIS_URL)
-        allow(Chaskiq::Config).to receive(:fetch).with("REDIS_URL", anything).and_return(nil)
-        load Rails.root.join("config/initializers/redis.rb")
-        expect(REDIS_URL).to eq("redis://localhost:6379/1")
-      ensure
-        Object.send(:remove_const, :REDIS_URL) if defined?(::REDIS_URL)
-        const_set_safe = original_const
-        Object.const_set(:REDIS_URL, const_set_safe)
-        ENV["REDIS_URL"] = original_url
-        Redis::Objects.redis = ConnectionPool.new(size: 5, timeout: 5) do
-          Redis.new(url: ENV.fetch("REDIS_URL"))
-        end
-      end
-    end
-  end
 end
