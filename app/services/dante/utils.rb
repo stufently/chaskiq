@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Dante::Utils
   def self.extract_plain_text(nodes)
     nodes.each_with_object(+"") do |node, text|

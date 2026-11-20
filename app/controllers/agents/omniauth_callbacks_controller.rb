@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Agents::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def doorkeeper
     @user = Agent.from_omniauth(request.env["omniauth.auth"])

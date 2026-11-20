@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ConversationChannel < ApplicationRecord
   belongs_to :conversation
 

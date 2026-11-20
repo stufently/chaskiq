@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OriginValidator
   attr_accessor :app, :host
 

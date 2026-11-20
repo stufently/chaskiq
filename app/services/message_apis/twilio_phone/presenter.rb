@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessageApis::TwilioPhone
   class Presenter
     # Initialize flow webhook URL

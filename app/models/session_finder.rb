@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SessionFinder
   def self.get_by_cookie_session(value)
     return if value.blank?

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessageApis::Dialog360
   class Presenter
     # Initialize flow webhook URL

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc "Generates a default admin"
 task admin_generator: :environment do
   app = App.first

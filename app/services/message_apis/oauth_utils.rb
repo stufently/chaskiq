@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessageApis
   module OauthUtils
     extend ActiveSupport::Concern

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthIdentity < ApplicationRecord
   require "auth0_web_token"
 

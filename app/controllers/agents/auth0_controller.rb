@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "auth0_web_token"
 
 class Agents::Auth0Controller < ApplicationController

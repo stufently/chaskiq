@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "app_packages_catalog"
 
 class Hammer < Thor

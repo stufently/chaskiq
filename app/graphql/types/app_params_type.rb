@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class AppParamsType < Types::BaseInputObject
     argument :domain_url, String, required: true

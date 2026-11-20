@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessageApis::FullContact
   class Presenter
     # Initialize flow webhook URL

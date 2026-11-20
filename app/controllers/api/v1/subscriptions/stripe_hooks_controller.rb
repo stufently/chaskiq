@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::Subscriptions::StripeHooksController < ApplicationController
   def create
     payload = request.body.read

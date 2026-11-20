@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # from https://stackoverflow.com/questions/26828107/how-to-generate-a-random-name-in-ruby
 class DummyName
   class Name < String

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def stub_current_user(user)
   allow(controller).to receive(:current_user).and_return(user.agent)
   allow(controller).to receive(:api_authorize!).and_return(user.agent)

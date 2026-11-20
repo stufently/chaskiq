@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AppPolicy < ActionPolicy::Base
   authorize :user
   authorize :role, optional: true

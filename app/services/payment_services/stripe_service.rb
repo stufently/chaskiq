@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaymentServices
   class StripeService
     def self.sync_subscription(app)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Agents::PasswordsController < Devise::PasswordsController
   def after_resetting_password_path_for(resource)
     # remove expirable tokens,

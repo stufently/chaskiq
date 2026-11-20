@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SanitizeHelpers
   def sanitize_field(input)
     full_sanitizer = Rails::Html::FullSanitizer.new

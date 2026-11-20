@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessageApis::ArticleSearch
   class Presenter
     include ActionView::Helpers::AssetUrlHelper
