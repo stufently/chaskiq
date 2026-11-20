@@ -1,0 +1,91 @@
+diff --git a/app/jobs/app_user_trigger_job.rb b/app/jobs/app_user_trigger_job.rb
+index 4bd954d8..59906345 100644
+--- a/app/jobs/app_user_trigger_job.rb
++++ b/app/jobs/app_user_trigger_job.rb
+@@ -45,10 +45,8 @@ class AppUserTriggerJob < ApplicationJob
+   def add_message(trigger, conversation)
+     author = @app.agent_bots.first
+ 
+-    step = trigger.paths.first&.with_indifferent_access["steps"]
+-                  .find do |o|
+-      o["messages"].any?
+-    end
++    first_path = trigger.paths.first
++    step = first_path.with_indifferent_access["steps"].find { |o| o["messages"].any? } if first_path
+ 
+     message = step[:messages].first
+ 
+diff --git a/app/jobs/sns_receiver_job.rb b/app/jobs/sns_receiver_job.rb
+index f8969e7f..acc91a4b 100644
+--- a/app/jobs/sns_receiver_job.rb
++++ b/app/jobs/sns_receiver_job.rb
+@@ -4,7 +4,7 @@ class SnsReceiverJob < ApplicationJob
+   queue_as :default
+ 
+   # Receive hook
+-  def perform(track_type, m, _referrer)
++  def perform(track_type, m, referrer)
+     part = m["mail"]["headers"].find do |o|
+       o["name"] == "X-CHASKIQ-PART-ID"
+     end
+@@ -17,7 +17,7 @@ class SnsReceiverJob < ApplicationJob
+     handle_chat_message(track_type, m, part["value"]) if part.present?
+ 
+     # handle campaign
+-    handle_campaign_message(track_type, m, _referrer) if campaign.present?
++    handle_campaign_message(track_type, m, referrer) if campaign.present?
+ 
+     unsubscribe_user(track_type, m)
+   end
+@@ -39,7 +39,7 @@ class SnsReceiverJob < ApplicationJob
+ 
+     return if campaign.blank? || app_user.blank?
+ 
+-    app_user.send("track_#{track_type}".to_sym,
++    app_user.send(:"track_#{track_type}",
+                   host: data["ipAddress"],
+                   trackable: campaign,
+                   # message_id: message_id,
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index 734b4c70..c2405018 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -76,15 +76,15 @@ module MessageApis
+       uri = http_uri(url)
+ 
+       (limits.max_redirects + 1).times do |hop|
+-        return unless uri
+-        return if url_allowed && !url_allowed.call(uri)
++        return nil unless uri
++        return nil if url_allowed && !url_allowed.call(uri)
+ 
+         addresses = download_addresses(uri, **address_options)
+-        return unless addresses
++        return nil unless addresses
+ 
+         body, location = download(uri, addresses, limits.max_bytes, hop.zero? ? headers : {})
+         return body unless location
+-        return if hop == limits.max_redirects
++        return nil if hop == limits.max_redirects
+ 
+         uri = http_uri(URI.join(uri.to_s, location).to_s)
+       end
+@@ -154,7 +154,7 @@ module MessageApis
+ 
+       body = String.new(encoding: Encoding::BINARY)
+       response.read_body do |chunk|
+-        return if body.bytesize + chunk.bytesize > max_bytes
++        return nil if body.bytesize + chunk.bytesize > max_bytes
+ 
+         body << chunk
+       end
+diff --git a/app/services/payment_services/paddle.rb b/app/services/payment_services/paddle.rb
+index 9d706e58..d6a9176d 100644
+--- a/app/services/payment_services/paddle.rb
++++ b/app/services/payment_services/paddle.rb
+@@ -93,5 +93,3 @@ module PaymentServices
+     end
+   end
+ end
+-
+-# frozen_string_literal: true

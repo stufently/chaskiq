@@ -1,0 +1,334 @@
+diff --git a/app/controllers/application_controller.rb b/app/controllers/application_controller.rb
+index cc856b09..2ef4a573 100644
+--- a/app/controllers/application_controller.rb
++++ b/app/controllers/application_controller.rb
+@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
+   end
+ 
+   def cookie_namespace
+-    "chaskiq_session_id_#{@app.key.gsub('-', '')}".to_sym
++    :"chaskiq_session_id_#{@app.key.gsub('-', '')}"
+   end
+ 
+   def render_empty
+diff --git a/app/graphql/mutations/apps/create_app.rb b/app/graphql/mutations/apps/create_app.rb
+index 6fa2c52c..fcfb6f5a 100644
+--- a/app/graphql/mutations/apps/create_app.rb
++++ b/app/graphql/mutations/apps/create_app.rb
+@@ -13,7 +13,7 @@ module Mutations
+ 
+       if operation.blank? || (operation == "new")
+         @app = current_user.apps.new
+-      elsif @app = current_user.apps.create(app_params.permit!)
++      elsif (@app = current_user.apps.create(app_params.permit!))
+ 
+         return { app: @app, errors: @app.errors } if @app.errors.any?
+ 
+diff --git a/app/graphql/mutations/conversations/insert_comment.rb b/app/graphql/mutations/conversations/insert_comment.rb
+index 0911e375..a8fc051a 100644
+--- a/app/graphql/mutations/conversations/insert_comment.rb
++++ b/app/graphql/mutations/conversations/insert_comment.rb
+@@ -20,7 +20,7 @@ module Mutations
+           authorize! conversation, to: :can_manage_conversations?, with: AppPolicy, context: {
+             app: app
+           }
+-        elsif app_user = context[:get_app_user].call
++        elsif (app_user = context[:get_app_user].call)
+           author = app_user
+         end
+ 
+diff --git a/app/graphql/mutations/conversations/start_conversation.rb b/app/graphql/mutations/conversations/start_conversation.rb
+index aad714e8..18ee43bb 100644
+--- a/app/graphql/mutations/conversations/start_conversation.rb
++++ b/app/graphql/mutations/conversations/start_conversation.rb
+@@ -21,7 +21,7 @@ module Mutations
+           }
+           author = app.agents.where("agents.email =?", current_user.email).first
+           participant = app.app_users.find(id)
+-        elsif app_user = context[:get_app_user].call
++        elsif (app_user = context[:get_app_user].call)
+           app = App.find_by(key: app_key)
+           # TODO: check this, when permit multiple emails, check by different id
+           author = app_user # app.app_users.where(["email =?", current_user.email ]).first
+diff --git a/app/graphql/mutations/conversations/update_state.rb b/app/graphql/mutations/conversations/update_state.rb
+index 410d47ed..255abe7b 100644
+--- a/app/graphql/mutations/conversations/update_state.rb
++++ b/app/graphql/mutations/conversations/update_state.rb
+@@ -19,7 +19,7 @@ module Mutations
+         }
+ 
+         if %w[reopen close].include?(state)
+-          @conversation.send("#{state}!".to_sym)
++          @conversation.send(:"#{state}!")
+           track_event(state)
+         end
+ 
+diff --git a/app/importers/list_importer.rb b/app/importers/list_importer.rb
+index e63fe588..a8fa2daf 100644
+--- a/app/importers/list_importer.rb
++++ b/app/importers/list_importer.rb
+@@ -33,10 +33,10 @@ class ListImporter < ActiveImporter::Base
+ 
+     data = row.transform_keys { |key| key.to_s.parameterize.underscore.to_sym }
+ 
+-    if user = @app.send(meth.to_sym,
+-                        disable_callbacks: true,
+-                        email: row.delete("email"),
+-                        properties: data)
++    if (user = @app.send(meth.to_sym,
++                         disable_callbacks: true,
++                         email: row.delete("email"),
++                         properties: data))
+ 
+       # add an import tag to contact
+       user.tag_list.add(@tag)
+diff --git a/app/models/app_package_integration.rb b/app/models/app_package_integration.rb
+index b3ade05a..e1fcea41 100644
+--- a/app/models/app_package_integration.rb
++++ b/app/models/app_package_integration.rb
+@@ -184,7 +184,7 @@ class AppPackageIntegration < ApplicationRecord
+   end
+ 
+   def get_presenter_manager
+-    "MessageApis::#{app_package.name}::Presenter"&.constantize
++    "MessageApis::#{app_package.name}::Presenter".constantize
+   rescue StandardError
+     ExternalPresenterManager
+   end
+diff --git a/app/models/concerns/subscribable.rb b/app/models/concerns/subscribable.rb
+index 823ac404..caaa510c 100644
+--- a/app/models/concerns/subscribable.rb
++++ b/app/models/concerns/subscribable.rb
+@@ -31,9 +31,9 @@ module Subscribable
+ 
+   def payment_attribute(key)
+     if payment_service == PaymentServices::StripeService
+-      send("stripe_#{key}".to_sym)
++      send(:"stripe_#{key}")
+     elsif payment_service == PaymentServices::Paddle
+-      send("paddle_#{key}".to_sym)
++      send(:"paddle_#{key}")
+     end
+   end
+ 
+diff --git a/app/models/lead.rb b/app/models/lead.rb
+index 003e1fed..15d2bf6f 100644
+--- a/app/models/lead.rb
++++ b/app/models/lead.rb
+@@ -3,7 +3,7 @@
+ class Lead < AppUser
+   def verify!
+     if email.present? &&
+-       app_users = app.app_users.where(type: "AppUser", email: email)
++       (app_users = app.app_users.where(type: "AppUser", email: email))
+       app_users.any?
+       clone_records_and_discard(app_users.first)
+     else
+diff --git a/app/models/message.rb b/app/models/message.rb
+index a3618ad0..c4dcb7f1 100644
+--- a/app/models/message.rb
++++ b/app/models/message.rb
+@@ -14,7 +14,7 @@ class Message < ApplicationRecord
+ 
+   attr_accessor :step
+ 
+-  validates :name, presence: :true
++  validates :name, presence: true
+   validates :html_content, presence: true, if: :template_step?
+ 
+   scope :enabled, -> { where(state: "enabled") }
+@@ -116,7 +116,7 @@ class Message < ApplicationRecord
+   def self.infix(filter)
+     Arel::Nodes::InfixOperation.new("@>",
+                                     arel_table[:segments],
+-                                    Arel::Nodes.build_quoted(BotTask.type_predicate_for(filter).to_json.to_s))
++                                    Arel::Nodes.build_quoted(BotTask.type_predicate_for(filter).to_json))
+   end
+ 
+   def step_1?
+diff --git a/app/services/action_trigger_factory.rb b/app/services/action_trigger_factory.rb
+index 4aafa810..cbaa9004 100644
+--- a/app/services/action_trigger_factory.rb
++++ b/app/services/action_trigger_factory.rb
+@@ -310,7 +310,7 @@ class ActionTriggerFactory
+         user: user,
+         predicates: o["predicates"] || []
+       )
+-      if comparator.compare && trigger = app.bot_tasks.find(o["trigger"])
++      if comparator.compare && (trigger = app.bot_tasks.find(o["trigger"]))
+         return trigger
+       end
+ 
+diff --git a/app/services/plugin_schema_validator.rb b/app/services/plugin_schema_validator.rb
+index b80b7f79..76981096 100644
+--- a/app/services/plugin_schema_validator.rb
++++ b/app/services/plugin_schema_validator.rb
+@@ -53,10 +53,10 @@ end
+ class TextSchema
+   include ActiveModel::Validations
+ 
+-  validates :type, presence: :true
+-  validates :text, presence: :true
+-  validates :style, presence: :true, inclusion: { in: %w[paragraph muted header notice notice-error notice-success] }
+-  validates :align, presence: :true, inclusion: { in: %w[left center right] }
++  validates :type, presence: true
++  validates :text, presence: true
++  validates :style, presence: true, inclusion: { in: %w[paragraph muted header notice notice-error notice-success] }
++  validates :align, presence: true, inclusion: { in: %w[left center right] }
+ 
+   attr_accessor :type, :text, :style, :align
+ 
+@@ -71,7 +71,7 @@ end
+ class ButtonSchema
+   include ActiveModel::Validations
+ 
+-  validates :id, presence: :true
++  validates :id, presence: true
+   validate :action_hash
+ 
+   attr_accessor :id, :name, :label, :type, :action
+@@ -94,9 +94,9 @@ class ActionSchema
+ 
+   attr_accessor :type, :content_url, :url, :options
+ 
+-  validates :type, presence: :true, inclusion: { in: %w[frame content submit link url] }
+-  validates :content_url, presence: :true, if: -> { type == "content" }
+-  validates :url, presence: :true, if: -> { %w[frame link url].include?(type) }
++  validates :type, presence: true, inclusion: { in: %w[frame content submit link url] }
++  validates :content_url, presence: true, if: -> { type == "content" }
++  validates :url, presence: true, if: -> { %w[frame link url].include?(type) }
+ 
+   def initialize(params)
+     self.url = params[:url] if params[:url].present?
+@@ -111,10 +111,10 @@ class ImageSchema
+ 
+   attr_accessor :type, :url, :width, :height, :align, :rounded
+ 
+-  validates :type, presence: :true, inclusion: { in: %w[image] }
+-  validates :height, presence: :true, numericality: { only_integer: true }
+-  validates :width, presence: :true, numericality: { only_integer: true }
+-  validates :url, presence: :true, format: { with: URI::DEFAULT_PARSER.make_regexp }
++  validates :type, presence: true, inclusion: { in: %w[image] }
++  validates :height, presence: true, numericality: { only_integer: true }
++  validates :width, presence: true, numericality: { only_integer: true }
++  validates :url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp }
+   validates :align, inclusion: { in: %w[left center right] }
+   validates :rounded, inclusion: { in: [true, false] }
+ 
+@@ -133,7 +133,7 @@ class SpacerSchema
+ 
+   attr_accessor :type, :size
+ 
+-  validates :size, presence: :true, inclusion: { in: %w[xs s sm m l xl] }
++  validates :size, presence: true, inclusion: { in: %w[xs s sm m l xl] }
+ 
+   def initialize(params)
+     self.size = params[:size] || "m"
+@@ -173,7 +173,7 @@ class DataTableItemSchema
+ 
+   attr_accessor :type, :field, :value
+ 
+-  validates :type, :field, presence: :true
++  validates :type, :field, presence: true
+ 
+   def initialize(params)
+     self.type = params[:type]
+@@ -188,7 +188,7 @@ class InputSchema
+   attr_accessor :id, :name, :label, :type,
+                 :placeholder, :value, :save_state, :action, :self_errors
+ 
+-  validates :type, :id, presence: :true
++  validates :type, :id, presence: true
+   # validates :name, :label, presence: :true
+   validates :save_state, inclusion: { in: %w[saved failed unsaved] }, if: lambda {
+     save_state.present?
+@@ -219,7 +219,7 @@ class TextAreaSchema
+   attr_accessor :id, :name, :label, :type,
+                 :placeholder, :value, :self_errors, :save_state
+ 
+-  validates :type, :id, presence: :true
++  validates :type, :id, presence: true
+   validates :save_state, inclusion: { in: %w[saved failed unsaved] }, if: lambda {
+     save_state.present?
+   }
+@@ -239,7 +239,7 @@ end
+ class ListSchema
+   include ActiveModel::Validations
+ 
+-  validates :type, :items, presence: :true
++  validates :type, :items, presence: true
+   validate :validate_items
+   validates :disabled, inclusion: { in: [true, false] }, if: -> { disabled.present? }
+ 
+@@ -261,7 +261,7 @@ class ListItemSchema
+ 
+   attr_accessor :type, :id, :title, :subtitle, :action, :tertiary_text
+ 
+-  validates :type, :id, :title, presence: :true
++  validates :type, :id, :title, presence: true
+   validate :action_hash
+ 
+   def initialize(params)
+@@ -281,7 +281,7 @@ end
+ class SingleSelectSchema
+   include ActiveModel::Validations
+ 
+-  validates :type, :options, presence: :true
++  validates :type, :options, presence: true
+   validate :validate_options
+ 
+   attr_accessor :type, :id, :label, :options, :disabled
+@@ -302,7 +302,7 @@ class SingleSelectItemSchema
+ 
+   attr_accessor :type, :id, :text, :action
+ 
+-  validates :type, :id, :text, presence: :true
++  validates :type, :id, :text, presence: true
+   validate :action_hash
+ 
+   def initialize(params)
+@@ -322,7 +322,7 @@ class CheckboxSchema
+ 
+   attr_accessor :type, :id, :label, :value, :options
+ 
+-  validates :type, :id, presence: :true
++  validates :type, :id, presence: true
+   validate :validate_options
+ 
+   def initialize(params)
+@@ -345,7 +345,7 @@ class CheckboxItemSchema
+ 
+   attr_accessor :type, :id, :text
+ 
+-  validates :type, :id, :text, presence: :true
++  validates :type, :id, :text, presence: true
+   def initialize(params)
+     self.type = params[:type]
+     self.id = params[:id]
+@@ -358,7 +358,7 @@ class DropdownSchema
+ 
+   attr_accessor :type, :id, :label, :value, :options
+ 
+-  validates :type, :id, :label, presence: :true
++  validates :type, :id, :label, presence: true
+   validate :validate_options
+ 
+   def initialize(params)
+@@ -379,7 +379,7 @@ class DropdownItemSchema
+ 
+   attr_accessor :type, :id, :text
+ 
+-  validates :type, :id, :text, presence: :true
++  validates :type, :id, :text, presence: true
+   def initialize(params)
+     self.type = params[:type]
+     self.id = params[:id]
+@@ -392,7 +392,7 @@ class FrameSchema
+ 
+   attr_accessor :type, :url
+ 
+-  validates :type, :url, presence: :true
++  validates :type, :url, presence: true
+ 
+   def initialize(params)
+     self.type = params[:type]

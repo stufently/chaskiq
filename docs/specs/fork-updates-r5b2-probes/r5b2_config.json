@@ -1,0 +1,285 @@
+{
+ "cops_whole": [
+  "Lint/AssignmentInCondition",
+  "Lint/BooleanSymbol",
+  "Lint/InterpolationCheck",
+  "Lint/MisplacedMagicComment",
+  "Lint/NonLocalExitFromIterator",
+  "Lint/RedundantSafeNavigation",
+  "Lint/RedundantTypeConversion",
+  "Lint/SafeNavigationChain",
+  "Lint/SymbolConversion",
+  "Lint/UnderscorePrefixedVariableName",
+  "Lint/UnreachableCode"
+ ],
+ "cops_partial": [],
+ "app_files": [
+  "app/controllers/api_controller.rb",
+  "app/controllers/application_controller.rb",
+  "app/graphql/mutations/apps/create_app.rb",
+  "app/graphql/mutations/conversations/insert_comment.rb",
+  "app/graphql/mutations/conversations/start_conversation.rb",
+  "app/graphql/mutations/conversations/update_state.rb",
+  "app/importers/list_importer.rb",
+  "app/jobs/app_user_trigger_job.rb",
+  "app/jobs/sns_receiver_job.rb",
+  "app/models/app_package_integration.rb",
+  "app/models/concerns/subscribable.rb",
+  "app/models/lead.rb",
+  "app/models/message.rb",
+  "app/services/action_trigger_factory.rb",
+  "app/services/message_apis/safe_download.rb",
+  "app/services/payment_services/paddle.rb",
+  "app/services/plugin_schema_validator.rb",
+  "lib/subdomain_routes.rb"
+ ],
+ "char_specs": [
+  "spec/lib/subdomain_or_domain_spec.rb",
+  "spec/importers/list_importer_leads_spec.rb",
+  "spec/services/action_trigger_factory_segment_spec.rb",
+  "spec/models/bot_task_infix_spec.rb",
+  "spec/models/app_package_integration_presenter_spec.rb",
+  "spec/controllers/application_controller_cookie_spec.rb",
+  "spec/graphql/mutations/update_conversation_state_spec.rb",
+  "spec/jobs/sns_receiver_job_campaign_spec.rb",
+  "spec/models/concerns/subscribable_payment_attribute_spec.rb",
+  "spec/services/message_apis/safe_download_limits_spec.rb",
+  "spec/jobs/app_user_trigger_job_spec.rb",
+  "spec/graphql/mutations/conversation_authors_spec.rb"
+ ],
+ "mutants": [
+  {
+   "id": "M01",
+   "file": "lib/subdomain_routes.rb",
+   "old": "APP_SUBDOMAINS.exclude?(subdomain)",
+   "new": "APP_SUBDOMAINS.include?(subdomain)",
+   "specs": [
+    "spec/lib/subdomain_or_domain_spec.rb"
+   ]
+  },
+  {
+   "id": "M02",
+   "file": "lib/subdomain_routes.rb",
+   "old": "subdomain = subdomains.join(\".\")",
+   "new": "subdomain = subdomains.first",
+   "specs": [
+    "spec/lib/subdomain_or_domain_spec.rb"
+   ]
+  },
+  {
+   "id": "M03",
+   "file": "app/graphql/mutations/apps/create_app.rb",
+   "old": "elsif (@app = current_user.apps.create(app_params.permit!))",
+   "new": "elsif (@app = current_user.apps.new(app_params.permit!))",
+   "specs": [
+    "spec/graphql/mutations/conversation_authors_spec.rb"
+   ]
+  },
+  {
+   "id": "M04",
+   "file": "app/graphql/mutations/conversations/insert_comment.rb",
+   "old": "elsif (app_user = context[:get_app_user].call)",
+   "new": "elsif (app_user = nil)",
+   "specs": [
+    "spec/graphql/mutations/conversation_authors_spec.rb"
+   ]
+  },
+  {
+   "id": "M05",
+   "file": "app/graphql/mutations/conversations/start_conversation.rb",
+   "old": "elsif (app_user = context[:get_app_user].call)",
+   "new": "elsif (app_user = nil)",
+   "specs": [
+    "spec/graphql/mutations/conversation_authors_spec.rb"
+   ]
+  },
+  {
+   "id": "M06",
+   "file": "app/importers/list_importer.rb",
+   "old": "if (user = @app.send(meth.to_sym,",
+   "new": "if (user = @app.send(:add_user,",
+   "specs": [
+    "spec/importers/list_importer_leads_spec.rb"
+   ]
+  },
+  {
+   "id": "M07",
+   "file": "app/models/lead.rb",
+   "old": "(app_users = app.app_users.where(type: \"AppUser\", email: email))",
+   "new": "(app_users = app.app_users.where(type: \"Lead\", email: email))",
+   "specs": [
+    "spec/models/app_user_spec.rb"
+   ]
+  },
+  {
+   "id": "M08",
+   "file": "app/services/action_trigger_factory.rb",
+   "old": "if comparator.compare && (trigger = app.bot_tasks.find(o[\"trigger\"]))",
+   "new": "if (trigger = app.bot_tasks.find(o[\"trigger\"]))",
+   "specs": [
+    "spec/services/action_trigger_factory_segment_spec.rb"
+   ]
+  },
+  {
+   "id": "M09",
+   "file": "app/models/message.rb",
+   "old": "validates :name, presence: true",
+   "new": "validates :name, presence: false",
+   "specs": [
+    "spec/models/bot_task_infix_spec.rb"
+   ]
+  },
+  {
+   "id": "M10",
+   "file": "app/models/message.rb",
+   "old": "InfixOperation.new(\"@>\",",
+   "new": "InfixOperation.new(\"<@\",",
+   "specs": [
+    "spec/models/bot_task_infix_spec.rb"
+   ]
+  },
+  {
+   "id": "M11",
+   "file": "app/services/plugin_schema_validator.rb",
+   "old": "validates :text, presence: true\n  validates :style",
+   "new": "validates :text, presence: false\n  validates :style",
+   "specs": [
+    "spec/services/schema_validations_spec.rb"
+   ]
+  },
+  {
+   "id": "M12",
+   "file": "app/models/app_package_integration.rb",
+   "old": "\"MessageApis::#{app_package.name}::Presenter\".constantize",
+   "new": "\"MessageApis::#{app_package.name}::Api\".constantize",
+   "specs": [
+    "spec/models/app_package_integration_presenter_spec.rb"
+   ]
+  },
+  {
+   "id": "M13",
+   "file": "app/controllers/application_controller.rb",
+   "old": ":\"chaskiq_session_id_#{@app.key.gsub('-', '')}\"",
+   "new": ":\"chaskiq_session_id_#{@app.key}\"",
+   "specs": [
+    "spec/controllers/application_controller_cookie_spec.rb"
+   ]
+  },
+  {
+   "id": "M14",
+   "file": "app/graphql/mutations/conversations/update_state.rb",
+   "old": "@conversation.send(:\"#{state}!\")",
+   "new": "@conversation.send(:\"#{state}\")",
+   "specs": [
+    "spec/graphql/mutations/update_conversation_state_spec.rb"
+   ]
+  },
+  {
+   "id": "M15",
+   "file": "app/jobs/sns_receiver_job.rb",
+   "old": "app_user.send(:\"track_#{track_type}\",",
+   "new": "app_user.send(:track_open,",
+   "specs": [
+    "spec/jobs/sns_receiver_job_campaign_spec.rb"
+   ]
+  },
+  {
+   "id": "M16",
+   "file": "app/models/concerns/subscribable.rb",
+   "old": "send(:\"stripe_#{key}\")",
+   "new": "send(:\"paddle_#{key}\")",
+   "specs": [
+    "spec/models/concerns/subscribable_payment_attribute_spec.rb"
+   ]
+  },
+  {
+   "id": "M17",
+   "file": "app/models/concerns/subscribable.rb",
+   "old": "send(:\"paddle_#{key}\")",
+   "new": "send(:\"stripe_#{key}\")",
+   "specs": [
+    "spec/models/concerns/subscribable_payment_attribute_spec.rb"
+   ]
+  },
+  {
+   "id": "M18",
+   "file": "app/services/message_apis/safe_download.rb",
+   "old": "        return nil if body.bytesize + chunk.bytesize > max_bytes\n",
+   "new": "",
+   "specs": [
+    "spec/services/message_apis/safe_download_spec.rb"
+   ]
+  },
+  {
+   "id": "M19",
+   "file": "app/services/message_apis/safe_download.rb",
+   "old": "        return nil if url_allowed && !url_allowed.call(uri)\n",
+   "new": "",
+   "specs": [
+    "spec/services/message_apis/safe_download_limits_spec.rb"
+   ]
+  },
+  {
+   "id": "M20",
+   "file": "app/jobs/app_user_trigger_job.rb",
+   "old": "[\"steps\"].find { |o| o[\"messages\"].any? }",
+   "new": "[\"steps\"].first",
+   "specs": [
+    "spec/jobs/app_user_trigger_job_spec.rb"
+   ]
+  }
+ ],
+ "fix_specs": [],
+ "commits": [
+  {
+   "subject": "Add R5b-2 characterization specs",
+   "patch": null,
+   "added": [
+    "spec/lib/subdomain_or_domain_spec.rb",
+    "spec/importers/list_importer_leads_spec.rb",
+    "spec/services/action_trigger_factory_segment_spec.rb",
+    "spec/models/bot_task_infix_spec.rb",
+    "spec/models/app_package_integration_presenter_spec.rb",
+    "spec/controllers/application_controller_cookie_spec.rb",
+    "spec/graphql/mutations/update_conversation_state_spec.rb",
+    "spec/jobs/sns_receiver_job_campaign_spec.rb",
+    "spec/models/concerns/subscribable_payment_attribute_spec.rb",
+    "spec/services/message_apis/safe_download_limits_spec.rb",
+    "spec/jobs/app_user_trigger_job_spec.rb",
+    "spec/graphql/mutations/conversation_authors_spec.rb"
+   ]
+  },
+  {
+   "subject": "Remove unused subdomain constraints",
+   "patch": "r5b2_routes.patch",
+   "added": []
+  },
+  {
+   "subject": "Remove eu_location? stub",
+   "patch": "r5b2_eu.patch",
+   "added": []
+  },
+  {
+   "subject": "Apply safe Lint autocorrections",
+   "patch": "r5b2_autocorrect.patch",
+   "added": []
+  },
+  {
+   "subject": "Fix remaining Lint offenses by hand",
+   "patch": "r5b2_manual.patch",
+   "added": []
+  },
+  {
+   "subject": "Drop R5b-2 entries from RuboCop todo",
+   "patch": null,
+   "added": [],
+   "todo": true
+  },
+  {
+   "subject": "Note fork-updates-r5b2 in changelog",
+   "patch": null,
+   "added": [],
+   "changelog": true
+  }
+ ]
+}

@@ -1,0 +1,22 @@
+diff --git a/app/controllers/api_controller.rb b/app/controllers/api_controller.rb
+index f34a6ed3..c4e2b4aa 100644
+--- a/app/controllers/api_controller.rb
++++ b/app/controllers/api_controller.rb
+@@ -135,7 +135,6 @@ class ApiController < ActionController::API
+ 
+   def get_app_user
+     valid_origin?
+-    # raise EULocationError.new("GDPR consent needed") if eu_location?
+     @app_user ||= get_user_by_email || get_user_by_session
+   end
+ 
+@@ -193,9 +192,4 @@ class ApiController < ActionController::API
+       host: request.env["HTTP_ORIGIN"]
+     ).is_valid?
+   end
+-
+-  def eu_location?
+-    return true
+-    EuCountries.includes?(request.location&.country_code)
+-  end
+ end
