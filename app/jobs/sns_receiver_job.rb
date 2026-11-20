@@ -51,7 +51,7 @@ class SnsReceiverJob < ApplicationJob
 
     recipient = m["mail"]["headers"].find { |o| o["name"] == "Return-Path" }["value"]
     recipient_parts = URLcrypt.decode(recipient.split("@").first.split("+").last)
-    app_id, conversation_id = recipient_parts.split("+")
+    _, conversation_id = recipient_parts.split("+")
 
     conversation = Conversation.find_by(id: conversation_id)
     return if conversation.blank?

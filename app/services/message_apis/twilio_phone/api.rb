@@ -138,7 +138,7 @@ module MessageApis::TwilioPhone
     def send_message(conversation, part)
       return if part.private_note?
 
-      message = part.message.as_json
+      part.message.as_json
       nil # nil does not send anything
     end
 
@@ -159,7 +159,7 @@ module MessageApis::TwilioPhone
     def process_message(params, package)
       if params["chaskiq_action"] == "new"
         conversation = Conversation.find_by(key: params["name"])
-        profile_id = conversation.main_participant.external_profiles.find_by(provider: "TwilioPhone")&.profile_id
+        conversation.main_participant.external_profiles.find_by(provider: "TwilioPhone")&.profile_id
         # new_call(profile_id, conversation)
         return conference_call(params, conversation, {})
       end
@@ -217,11 +217,11 @@ module MessageApis::TwilioPhone
         phone_number = payload[:Called]
       end
 
-      conversation = nil
+      nil
 
       text = "new conversation!"
 
-      serialized_content = text_block(text)
+      text_block(text)
       user_data = {
         "id" => phone_number,
         "first_name" => "twilio:#{phone_number}"
@@ -248,7 +248,7 @@ module MessageApis::TwilioPhone
       author = app.agents.first
 
       if direction != "outbound" || payload[:c].blank?
-        message = conversation.add_message(
+        conversation.add_message(
           from: author,
           controls: {
             app_package: "TwilioPhone",

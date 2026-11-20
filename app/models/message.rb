@@ -128,7 +128,7 @@ class Message < ApplicationRecord
   end
 
   def compiled_template_for(subscriber)
-    html = mustache_template_for(subscriber)
+    mustache_template_for(subscriber)
   end
 
   def available_segments

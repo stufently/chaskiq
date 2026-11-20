@@ -84,7 +84,7 @@ module MessageApis
 
       def process_event(params, package)
         @package = package
-        current = params["current"]
+        params["current"]
 
         if params["hub.verify_token"].present? && params["hub.mode"] == "subscribe"
           return create_hook_from_params(params, package)
@@ -207,15 +207,15 @@ module MessageApis
       end
 
       def find_conversation_by_channel(channel)
-        conversation = @package
-                       .app
-                       .conversations
-                       .joins(:conversation_channels)
-                       .where(
-                         "conversation_channels.provider =? AND
+        @package
+          .app
+          .conversations
+          .joins(:conversation_channels)
+          .where(
+            "conversation_channels.provider =? AND
                           conversation_channels.provider_channel_id =?",
-                         "messenger", channel
-                       ).first
+            "messenger", channel
+          ).first
       end
 
       def serialize_content(data)

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-20 — fork-updates-r6a
+
+- Changed: Lint/UselessAssignment autocorrected in 64 files of app/ and lib/ (119 unused local
+  assignments removed, right-hand sides kept), layout re-aligned; eleven files stay in the todo.
+
 ## 2026-11-20 — fork-updates-r5
 
 Fixed

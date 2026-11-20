@@ -34,8 +34,8 @@ class AppPackageDashboard
 
   def self.app_package(app, package)
     dashboard_tags = app.app_packages.tagged_with("dashboard").find_by(name: package)
-    integration = app.app_package_integrations.includes(:app_package)
-                     .find_by(app_package: dashboard_tags)
+    app.app_package_integrations.includes(:app_package)
+       .find_by(app_package: dashboard_tags)
   end
 
   def app_packages

@@ -36,7 +36,7 @@ module Api
       # max_depth: 5
 
       render json: result
-    rescue ActiveRecord::RecordNotFound => e
+    rescue ActiveRecord::RecordNotFound
       render json: {
         errors: [{
           message: "Data not found",
@@ -44,7 +44,7 @@ module Api
         }]
       }, status: :ok
     rescue ActiveRecord::RecordInvalid => e
-      error_messages = e.record.errors.full_messages.join("\n")
+      e.record.errors.full_messages.join("\n")
       json_error e.record
     rescue EULocationError,
            OriginValidator::NonAcceptedOrigin => e

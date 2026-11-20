@@ -4,7 +4,7 @@ module Events
   class ConversationsPrioritized
     def self.perform(event)
       conversation = event.eventable
-      app = conversation.app
+      conversation.app
 
       EventTriggerProcessorJob.perform_later(
         id: conversation.app_id,

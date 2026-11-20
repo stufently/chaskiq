@@ -6,7 +6,7 @@ module InboundAddress
   def inbound_email_address
     part = URLcrypt.encode(key.to_s)
     domain = outgoing_email_domain
-    url = "inbound+app-#{part}@#{domain}"
+    "inbound+app-#{part}@#{domain}"
   end
 
   class_methods do

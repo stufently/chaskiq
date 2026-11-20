@@ -47,7 +47,7 @@ class UserAutoMessage < Message
 
   def campaign_url
     host = Rails.application.routes.default_url_options[:host]
-    campaign_url = "#{host}/api/v1/apps/#{app.id}/messages/#{id}"
+    "#{host}/api/v1/apps/#{app.id}/messages/#{id}"
   end
 
   def attributes_for_template(subscriber)

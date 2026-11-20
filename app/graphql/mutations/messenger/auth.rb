@@ -19,7 +19,7 @@ module Mutations
       end
 
       def conversation(conversation_id)
-        conversation = @app.conversations.find(conversation_id)
+        @app.conversations.find(conversation_id)
       end
 
       def find_app(app_id)

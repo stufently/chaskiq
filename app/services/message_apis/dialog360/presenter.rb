@@ -109,8 +109,8 @@ module MessageApis
           ] }
         end
 
-        offset = templates["offset"]
-        paginate_button = nil
+        templates["offset"]
+        nil
         # Rails.logger.debug templates
         # Rails.logger.debug ctx
 

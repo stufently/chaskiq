@@ -98,7 +98,7 @@ class BotTask < Message
   def available_segments
     segment = app.segments.new
     segment.assign_attributes(predicates: segments)
-    app_users = segment.execute_query.availables
+    segment.execute_query.availables
   end
 
   # consumed

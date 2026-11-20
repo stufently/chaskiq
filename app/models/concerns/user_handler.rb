@@ -31,7 +31,7 @@ module UserHandler
     ap.additional_validations = true if additional_validations
     ap = handle_app_user_params(ap, attrs)
     ap.disable_callbacks = true if callbacks.present?
-    data = attrs.deep_merge!(properties: ap.properties)
+    attrs.deep_merge!(properties: ap.properties)
     ap.generate_token
     ap.save
     ap

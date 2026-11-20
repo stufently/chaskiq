@@ -128,7 +128,7 @@ class ApiController < ActionController::API
   def add_vistor
     options = {} # {app_id: @app.key}
     # options.merge!({session_id: request.headers["HTTP_SESSION_ID"]})
-    u = @app.add_anonymous_user(options)
+    @app.add_anonymous_user(options)
   end
 
   class EULocationError < StandardError; end
@@ -196,6 +196,6 @@ class ApiController < ActionController::API
 
   def eu_location?
     return true
-    eu_countries = EuCountries.includes?(request.location&.country_code)
+    EuCountries.includes?(request.location&.country_code)
   end
 end

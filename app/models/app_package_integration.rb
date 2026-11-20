@@ -132,12 +132,12 @@ class AppPackageIntegration < ApplicationRecord
 
   def get_webhooks
     klass = message_api_klass
-    response = klass.get_webhooks
+    klass.get_webhooks
   end
 
   def delete_webhooks
     klass = message_api_klass
-    response = klass.delete_webhooks
+    klass.delete_webhooks
   end
 
   def create_hook_from_params(params)
@@ -180,7 +180,7 @@ class AppPackageIntegration < ApplicationRecord
   end
 
   def receive_oauth_code(params)
-    klass = message_api_klass.receive_oauth_code(params, self)
+    message_api_klass.receive_oauth_code(params, self)
   end
 
   def get_presenter_manager
@@ -223,7 +223,7 @@ class AppPackageIntegration < ApplicationRecord
         key: message_key
       )
 
-      values = params[:ctx][:values]
+      params[:ctx][:values]
       m = message.message
       blocks = m.blocks.merge("schema" => response[:definitions])
       m.blocks = blocks
@@ -260,7 +260,7 @@ class ExternalApiClient
   end
 
   def trigger(event)
-    data = event.as_json
+    event.as_json
 
     payload = {
       action: event.action,

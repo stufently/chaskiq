@@ -139,7 +139,7 @@ module MessageApis
 
       def process_event(params, package)
         @package = package
-        current = params["current"]
+        params["current"]
         process_message(params, @package)
       end
 
@@ -179,7 +179,7 @@ module MessageApis
         )
         app_user.save
 
-        conversation = app.start_conversation(
+        app.start_conversation(
           message: {
             html_content: text,
             text_content: text

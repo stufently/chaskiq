@@ -128,7 +128,7 @@ module Types
 
       browser_params.merge!(location_params) if request.location.present?
 
-      data = user_data.slice(:name, :email, :properties).deep_merge(browser_params)
+      user_data.slice(:name, :email, :properties).deep_merge(browser_params)
       # #ap = object.add_visit(data)
     end
 

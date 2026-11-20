@@ -47,7 +47,7 @@ module PaymentServices
     end
 
     def get_user_transactions(id)
-      res = get_data(
+      get_data(
         url: "https://vendors.paddle.com/api/2.0/user/#{id}/transactions",
         params: auth
       )
@@ -57,7 +57,7 @@ module PaymentServices
       id = app.payment_attribute("user_id")
       return [] if id.blank?
 
-      res = get_data(
+      get_data(
         url: "https://vendors.paddle.com/api/2.0/subscription/#{id}/transactions",
         params: auth
       )
@@ -66,7 +66,7 @@ module PaymentServices
     def get_subscription(id)
       return [] if id.nil?
 
-      res = get_data(
+      get_data(
         url: "https://vendors.paddle.com/api/2.0/subscription/users",
         params: auth.merge({
                              subscription_id: id
@@ -75,7 +75,7 @@ module PaymentServices
     end
 
     def update_subscription(id, plan_id:, passthrough: nil)
-      res = get_data(
+      get_data(
         url: "https://vendors.paddle.com/api/2.0/subscription/users/update",
         params: auth.merge({
                              subscription_id: id,

@@ -42,13 +42,13 @@ class GraphqlController < ApplicationController
     #              data: {}
     #            }]
     #  }, status: 200
-  rescue OauthExeption => e
+  rescue OauthExeption
     render json: {
       error: {
         message: "token not valid"
       }, data: {}
     }, status: :unauthorized
-  rescue ActiveRecord::RecordNotFound => e
+  rescue ActiveRecord::RecordNotFound
     render json: {
       errors: [{
         message: "Data not found",
@@ -56,7 +56,7 @@ class GraphqlController < ApplicationController
       }]
     }, status: :ok
   rescue ActiveRecord::RecordInvalid => e
-    error_messages = e.record.errors.full_messages.join("\n")
+    e.record.errors.full_messages.join("\n")
     json_error e.record
   rescue Plan::PlanError => e
     render json: {

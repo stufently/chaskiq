@@ -216,7 +216,7 @@ class ConversationPart < ApplicationRecord
     app = conversation.app
 
     app.assignment_rules.each do |rule|
-      next unless cond = rule.check_rule_for(text, self)
+      next unless rule.check_rule_for(text, self)
 
       conversation.assign_user(rule.agent)
       break

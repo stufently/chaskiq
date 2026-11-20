@@ -14,7 +14,7 @@ module Dante
           new_content = Dante::Converter.draftjs_to_prosemirror(draft_content)
           record.update_column(:serialized_content, new_content.to_json)
           Rails.logger.info("OK content #{record.id}")
-        rescue StandardError => e
+        rescue StandardError
           Rails.logger.error("Error converting part content #{record.id}")
           # Rails.logger.error(e)
         end

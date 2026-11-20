@@ -321,7 +321,7 @@ class ActionTriggerFactory
   def self.find_factory_template(app:, app_user:, data:)
     case data["trigger"]
     when "infer"
-      trigger = ActionTriggerFactory.infer_for(app: app, user: app_user)
+      ActionTriggerFactory.infer_for(app: app, user: app_user)
       # trigger = ActionTriggerFactory.find_configured_bot_for_user(app: app, user: app_user) ||
       #          ActionTriggerFactory.infer_for(app: app, user: app_user)
     when "request_for_email"

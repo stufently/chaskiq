@@ -2,7 +2,7 @@
 
 class AppPackagesCatalog
   def self.default_packages
-    collection = %w[
+    %w[
       InboxSections
       ContentShowcase
       ArticleSearch

@@ -7,7 +7,7 @@ module MessageApis
       # Sent when an app has been inserted into a conversation, message or
       # the home screen, so that you can render the app.
       def self.initialize_hook(kind:, ctx:)
-        type_value = ctx.dig(:values, :type)
+        ctx.dig(:values, :type)
         block_type = ctx.dig(:values, :block_type)
         {
           # ctx: ctx,
@@ -21,7 +21,7 @@ module MessageApis
       end
 
       def self.user_attrs
-        items_attrs = [
+        [
           { label: I18n.t("full_contact.inbox.name"), call: ->(user) { user.name } },
           { label: I18n.t("full_contact.inbox.first_name"), call: ->(user) { user.first_name } },
           { label: I18n.t("full_contact.inbox.last_name"), call: ->(user) { user.last_name } },
@@ -42,8 +42,8 @@ module MessageApis
           key: ctx[:conversation_key]
         )
         user = conversation.main_participant
-        app = ctx[:package].app
-        res = ctx[:package].message_api_klass.enrich_user(user)
+        ctx[:package].app
+        ctx[:package].message_api_klass.enrich_user(user)
 
         definitions = [
           {

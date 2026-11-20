@@ -7,7 +7,7 @@ module Agents
     include Trackeable
 
     def create
-      json = Auth0WebToken.verify(params[:access_token])
+      Auth0WebToken.verify(params[:access_token])
       # id_token =  JWT.decode(params[:id_token], nil, false)
 
       # TODO: check the json.sub === id_token.sub

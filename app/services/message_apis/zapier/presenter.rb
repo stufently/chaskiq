@@ -59,7 +59,7 @@ module MessageApis
 
       def self.definitions_for_button(kind, ctx)
         conversation = Conversation.find_by(key: ctx[:conversation_key])
-        user = conversation.main_participant
+        conversation.main_participant
 
         channel = conversation.conversation_channels.find_by(provider: "zapier")
 

@@ -82,7 +82,7 @@ module MessageApis
 
       def process_event(params, package)
         @package = package
-        current = params["current"]
+        params["current"]
 
         if params["status"].present?
           case params["status"]
@@ -151,7 +151,7 @@ module MessageApis
       def process_message(params, package)
         @package = package
 
-        app = package.app
+        package.app
 
         message_id = params["message_uuid"]
 
@@ -225,15 +225,15 @@ module MessageApis
       end
 
       def find_conversation_by_channel(channel)
-        conversation = @package
-                       .app
-                       .conversations
-                       .joins(:conversation_channels)
-                       .where(
-                         "conversation_channels.provider =? AND
+        @package
+          .app
+          .conversations
+          .joins(:conversation_channels)
+          .where(
+            "conversation_channels.provider =? AND
                           conversation_channels.provider_channel_id =?",
-                         PROVIDER, channel
-                       ).first
+            PROVIDER, channel
+          ).first
       end
 
       def serialize_content(data)
@@ -255,21 +255,21 @@ module MessageApis
 
       def media_block(data)
         media_type = data["type"]
-        media = case media_type
-                when "unsupported" then nil
-                when "image"
-                  url = data["image"]["url"]
-                  text = data["image"]["caption"]
-                  photo_block(url: url, text: text)
-                when "video"
-                  url = data["video"]["url"]
-                  text = data["video"]["caption"]
-                  gif_block(url: url, text: text)
-                when "audio", "file"
-                  url = data[media_type]["url"]
-                  text = data[media_type]["caption"]
-                  file_block(url: url, text: text)
-                end
+        case media_type
+        when "unsupported" then nil
+        when "image"
+          url = data["image"]["url"]
+          text = data["image"]["caption"]
+          photo_block(url: url, text: text)
+        when "video"
+          url = data["video"]["url"]
+          text = data["video"]["caption"]
+          gif_block(url: url, text: text)
+        when "audio", "file"
+          url = data[media_type]["url"]
+          text = data[media_type]["caption"]
+          file_block(url: url, text: text)
+        end
       end
 
       def add_participant(vonage_user)

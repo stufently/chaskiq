@@ -6,7 +6,7 @@ module MessageApis
       # Initialize flow webhook URL
       # Sent when an app has been inserted into a conversation, message or the home screen, so that you can render the app.
       def self.initialize_hook(params)
-        url = params[:ctx][:values][:email]
+        params[:ctx][:values][:email]
         {
           kind: "initialize",
           definitions: definitions_for_initialize(params),

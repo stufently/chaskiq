@@ -165,15 +165,15 @@ module MessageApis
     end
 
     def find_conversation_by_channel(provider, channel)
-      conversation = @package
-                     .app
-                     .conversations
-                     .joins(:conversation_channels)
-                     .where(
-                       "conversation_channels.provider =? AND
+      @package
+        .app
+        .conversations
+        .joins(:conversation_channels)
+        .where(
+          "conversation_channels.provider =? AND
         conversation_channels.provider_channel_id =?",
-                       provider, channel
-                     ).first
+          provider, channel
+        ).first
     end
 
     def add_participant(user_data, provider)
