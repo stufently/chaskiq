@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActionTrigger
   def self.trigger_step(data, app, current_user)
     conversation = app.conversations.find_by(key: data["conversation_key"])

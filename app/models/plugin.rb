@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Plugin < ApplicationRecord
   # plugin = Plugin.find_by(name: 'your_plugin_name')
   # Plugin.save_plugin_files_to_folder(plugin) if plugin

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::Hooks::ProviderController < ApplicationController
   before_action :find_application_package, except: [:global_process_event]
 

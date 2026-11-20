@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessageApis::TwilioPhone
   class Store
     NAMESPACE = "/twilio_phone/".freeze

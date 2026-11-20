@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "base64"
 require "php_serialize"
 require "openssl"

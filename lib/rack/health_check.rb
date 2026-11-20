@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Your Ruby Rack App that returns your Rails App's Health
 # Create the file
 # "lib/rack/health_check.rb"

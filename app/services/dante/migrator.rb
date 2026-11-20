@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Dante::Migrator
   def self.migrate_conversation_parts(id: nil)
     parts = ConversationPartContent.joins("INNER JOIN conversation_parts ON conversation_parts.messageable_id = conversation_part_contents.id AND conversation_parts.messageable_type = 'ConversationPartContent'")

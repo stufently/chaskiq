@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PermissionsService
   def self.get(name)
     PERMISSION_MANIFEST[name]

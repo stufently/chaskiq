@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SegmentComparator
   attr_accessor :user, :predicates, :additional_fields
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class MessageInputType < Types::BaseInputObject
     argument :conversation_key, String, required: false

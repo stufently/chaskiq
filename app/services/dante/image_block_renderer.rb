@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Dante::ImageBlockRenderer
   def initialize(block_key:, data:, domain: nil)
     @block_key = block_key

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/controllers/registrations_controller.rb
 class Agents::RegistrationsController < Devise::RegistrationsController
   before_action :check_registrable

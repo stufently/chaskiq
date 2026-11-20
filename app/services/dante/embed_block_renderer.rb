@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Dante::EmbedBlockRenderer
   def initialize(block_key:, data:)
     @block_key = block_key

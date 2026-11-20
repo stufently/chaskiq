@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EuCountries
   def includes?(country_code)
     %w[

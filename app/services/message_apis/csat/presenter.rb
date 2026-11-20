@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessageApis::Csat
   class Presenter
     # Initialize flow webhook URL

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RtcChannel < ApplicationCable::Channel
   def subscribed
     stream_from "rtc_channel_#{params[:room]}"

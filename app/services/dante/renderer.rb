@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This Ruby code provides a Renderer class that can be used to convert ProseMirror JSON into HTML.
 # The implementation closely follows the original JavaScript code,
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ContactMergerJob < ApplicationJob
   queue_as :default
 

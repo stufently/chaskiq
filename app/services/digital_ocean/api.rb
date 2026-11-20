@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DigitalOcean::Api
   API_BASE_URL = "https://api.digitalocean.com/v2".freeze
 

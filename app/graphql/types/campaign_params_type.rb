@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class CampaignParamsType < Types::BaseInputObject
     argument :from_name, String, required: false

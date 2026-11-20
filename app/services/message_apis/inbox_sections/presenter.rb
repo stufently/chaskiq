@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessageApis::InboxSections
   class Presenter
     def self.user_data

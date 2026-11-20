@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AgentTeam < ApplicationRecord
   belongs_to :team
   belongs_to :role

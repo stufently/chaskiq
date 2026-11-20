@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PluginSchemaValidator
   attr_accessor :schema
 

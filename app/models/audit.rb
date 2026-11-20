@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Audit < ApplicationRecord
   belongs_to :agent
   belongs_to :app, optional: true

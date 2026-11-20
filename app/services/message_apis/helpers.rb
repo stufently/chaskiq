@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessageApis
   module Helpers
     extend ActiveSupport::Concern

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessageApis::Calendly
   class Presenter
     def self.valid_url?(uri)
