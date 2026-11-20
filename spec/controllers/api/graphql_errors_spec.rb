@@ -13,7 +13,7 @@ RSpec.describe "GraphQL error handling", type: :request do
       expect(response).to have_http_status(:ok).or have_http_status(:internal_server_error)
     end
 
-    it "does not rescue non-StandardError exceptions" do
+    it "propagates non-StandardError when rescue clause is StandardError" do
       fatal_class = Class.new(Exception) do
         def self.name
           "TestFatalError"

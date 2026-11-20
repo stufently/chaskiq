@@ -31,10 +31,17 @@ RSpec.describe MessageApis::BasePackage do
 
   describe "M028: resumable plugin does not store with nil delivery_index" do
     it "notify_part does not create a source row with delivery_index nil" do
+      media_part = conversation.add_message(
+        from: recipient,
+        message: {
+          html_content: "test",
+          serialized_content: { content: [{ type: "ImageBlock", url: "http://x.com/i.jpg" }] }.to_json
+        }
+      )
       klass = build_resumable_plugin("resumable_m028")
       pkg = klass.new(config: {})
-      pkg.send(:notify_part, conversation, part)
-      nil_sources = part.conversation_part_channel_sources.where(provider: "resumable_m028", delivery_index: nil)
+      pkg.send(:notify_part, conversation, media_part)
+      nil_sources = media_part.conversation_part_channel_sources.where(provider: "resumable_m028", delivery_index: nil)
       expect(nil_sources.count).to eq(0)
     end
   end
