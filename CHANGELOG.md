@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-20 — fork-updates-r7a
+
+Changed
+- Disable `Style/Documentation`, `Naming/AccessorMethodName`, and
+  `Naming/MethodParameterName` by owner decision. Record the reasons in
+  `.rubocop.yml` and remove the corresponding entries from `.rubocop_todo.yml`.
+  This change affects RuboCop configuration only.
+
 ## 2026-11-20 — fork-updates-r3
 
 Changed
