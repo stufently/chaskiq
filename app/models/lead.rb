@@ -2,7 +2,7 @@
 
 class Lead < AppUser
   def verify!
-    if email.present? && (app_user = app.app_users.find_by(type: "AppUser", email: email))
+    if email.present? && (app_user = app.app_users.where(type: "AppUser", email: email).order(:id).first)
       clone_records_and_discard(app_user)
     else
       becomes!(AppUser)
@@ -12,7 +12,7 @@ class Lead < AppUser
   end
 
   def clone_records_and_discard(app_user)
-    attributes = deep_clone.attributes.except("id", "created_at", "updated_at", "session_id")
+    attributes = deep_clone.attributes.except("id", "created_at", "updated_at", "session_id", "type")
 
     verify_event(app_user) if app_user.update(attributes)
 
