@@ -1,0 +1,13 @@
+diff --git a/app/models/lead.rb b/app/models/lead.rb
+index d0c0606b..c28e2b21 100644
+--- a/app/models/lead.rb
++++ b/app/models/lead.rb
+@@ -2,7 +2,7 @@
+ 
+ class Lead < AppUser
+   def verify!
+-    if email.present? && (app_user = app.app_users.find_by(type: "AppUser", email: email))
++    if email.present? && (app_user = app.app_users.where(type: "AppUser", email: email).order(:id).first)
+       clone_records_and_discard(app_user)
+     else
+       becomes!(AppUser)

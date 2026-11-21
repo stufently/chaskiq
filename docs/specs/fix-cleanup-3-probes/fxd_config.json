@@ -1,0 +1,116 @@
+{
+ "app_files": [
+  "app/models/lead.rb"
+ ],
+ "fix_specs": [
+  {
+   "file": "spec/models/lead_merge_type_spec.rb",
+   "base_reason": "got: \"Lead\""
+  },
+  {
+   "file": "spec/models/lead_verify_duplicate_spec.rb",
+   "base_reason": "expected: \"peru\""
+  }
+ ],
+ "mutants": [
+  {
+   "id": "D01",
+   "file": "app/models/lead.rb",
+   "old": "\"session_id\", \"type\")",
+   "new": "\"session_id\")",
+   "specs": [
+    "spec/models/lead_merge_type_spec.rb"
+   ]
+  },
+  {
+   "id": "D02",
+   "file": "app/models/lead.rb",
+   "old": "email: email).order(:id).first)",
+   "new": "email: email).take)",
+   "specs": [
+    "spec/models/lead_verify_duplicate_spec.rb"
+   ]
+  },
+  {
+   "id": "D03",
+   "file": "app/models/lead.rb",
+   "old": "email: email).order(:id).first)",
+   "new": "email: email).order(id: :desc).first)",
+   "specs": [
+    "spec/models/lead_verify_duplicate_spec.rb"
+   ]
+  },
+  {
+   "id": "D04",
+   "file": "app/models/lead.rb",
+   "old": "email: email).order(:id).first)",
+   "new": "email: email).order(:id).last)",
+   "specs": [
+    "spec/models/lead_verify_duplicate_spec.rb"
+   ]
+  },
+  {
+   "id": "D05",
+   "file": "app/models/lead.rb",
+   "old": "where(type: \"AppUser\", email: email)",
+   "new": "where(email: email)",
+   "specs": [
+    "spec/models/lead_merge_type_spec.rb",
+    "spec/models/lead_verify_duplicate_spec.rb"
+   ]
+  },
+  {
+   "id": "D06",
+   "file": "app/models/lead.rb",
+   "old": "where(type: \"AppUser\", email: email)",
+   "new": "where(type: \"Lead\", email: email)",
+   "specs": [
+    "spec/models/lead_merge_type_spec.rb",
+    "spec/models/lead_verify_duplicate_spec.rb"
+   ]
+  },
+  {
+   "id": "D07",
+   "file": "app/models/lead.rb",
+   "old": "if email.present? && (app_user =",
+   "new": "if (app_user =",
+   "specs": [
+    "spec/models/lead_merge_type_spec.rb",
+    "spec/models/lead_verify_duplicate_spec.rb",
+    "spec/models/lead_verify_spec.rb"
+   ]
+  }
+ ],
+ "commits": [
+  {
+   "subject": "Pin the lead merge target type",
+   "patch": null,
+   "added": [
+    "spec/models/lead_merge_type_spec.rb"
+   ]
+  },
+  {
+   "subject": "Keep the user type on lead merge",
+   "patch": "fxd_type.patch",
+   "added": []
+  },
+  {
+   "subject": "Pin the duplicate user choice",
+   "patch": null,
+   "added": [
+    "spec/models/lead_verify_duplicate_spec.rb"
+   ]
+  },
+  {
+   "subject": "Merge a lead into the oldest user",
+   "patch": "fxd_order.patch",
+   "added": []
+  },
+  {
+   "subject": "Note fix-cleanup-3 in changelog",
+   "patch": null,
+   "added": [],
+   "changelog": true
+  }
+ ]
+}
