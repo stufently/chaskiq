@@ -18,7 +18,7 @@ module Nightfury
 
       def initialize(name, options={})
         super(name, options)
-        init_time_series unless redis.exists(redis_key)
+        init_time_series unless redis.exists?(redis_key)
       end
 
       def set(value, time=Time.now, options={})
@@ -26,12 +26,12 @@ module Nightfury
         # make sure the time_series is initialized.
         # It will not if the metric is removed and
         # set is called on the smae object
-        init_time_series unless redis.exists(redis_key)
+        init_time_series unless redis.exists?(redis_key)
         add_value_to_timeline(value, time)
       end
 
       def get(timestamp=nil, get_meta=false)
-        return nil unless redis.exists(redis_key)
+        return nil unless redis.exists?(redis_key)
         data_point = ''
         if timestamp
           timestamp = get_step_time(timestamp).to_i
@@ -50,7 +50,7 @@ module Nightfury
       end
 
       def get_exact(timestamp, get_meta=false)
-        return nil unless redis.exists(redis_key)
+        return nil unless redis.exists?(redis_key)
         timestamp = get_step_time(timestamp).to_i
         data_points = redis.zrangebyscore(redis_key, timestamp, timestamp, withscores: true)
         data_point = data_points.last
@@ -60,7 +60,7 @@ module Nightfury
       end
 
       def get_range(start_time, end_time)
-        return nil unless redis.exists(redis_key)
+        return nil unless redis.exists?(redis_key)
         start_time = get_step_time(start_time)
         end_time   = get_step_time(end_time)
         data_points = redis.zrangebyscore(redis_key, start_time.to_i, end_time.to_i, withscores: true)
@@ -68,7 +68,7 @@ module Nightfury
       end
 
       def get_all
-        return nil unless redis.exists(redis_key)
+        return nil unless redis.exists?(redis_key)
         data_points = redis.zrange(redis_key, 0, -1, withscores: true)
         data_points.reject! { |member, _score| member.start_with?('{') }
         decode_many_data_points(data_points)
