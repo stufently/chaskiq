@@ -46,8 +46,7 @@ module Api
     rescue ActiveRecord::RecordInvalid => e
       e.record.errors.full_messages.join("\n")
       json_error e.record
-    rescue EULocationError,
-           OriginValidator::NonAcceptedOrigin => e
+    rescue OriginValidator::NonAcceptedOrigin => e
       # GraphQL::ExecutionError.new e.message
       render json: {
         errors: [{
