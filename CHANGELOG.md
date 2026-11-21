@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-21 — fork-updates-r8a
+
+- Changed: RuboCop metric limits by owner decision (R8), each with its reason in `.rubocop.yml`:
+  MethodLength and AbcSize 30, Cyclomatic/PerceivedComplexity 13, ParameterLists 7, ClassLength 300
+  (integration adapters under `app/services/message_apis/**` excluded), ModuleLength 123 (the length of
+  `user_handler.rb`, until its refactor), BlockLength excludes `lib/tasks/**` and `config/routes.rb`,
+  LineLength 140 with AllowedPatterns for a URL or base64 blob running to the end of the line.
+- Changed: `.rubocop_todo.yml` keeps only the files still above the new limits (outliers, listed for
+  refactor milestones) and five Style/IfUnlessModifier entries that Max 140 created; no code changed.
+
 ## 2026-11-21 — fork-updates-r7c
 
 - Changed: predicate methods renamed for Naming/PredicatePrefix and Naming/PredicateMethod, each old
