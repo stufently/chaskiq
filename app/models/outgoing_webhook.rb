@@ -14,9 +14,10 @@ class OutgoingWebhook < ApplicationRecord
     service.send_post(data)
   end
 
-  def is_enabled
+  def enabled?
     state == "enabled"
   end
+  alias is_enabled enabled?
 
   def as_json(*)
     super.tap do |hash|

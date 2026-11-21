@@ -14,7 +14,7 @@ class OriginValidator
     end
   end
 
-  def is_valid?
+  def valid?
     return true if @app.blank?
     return true if @app == "*"
 
@@ -26,8 +26,9 @@ class OriginValidator
 
     true
   end
+  alias is_valid? valid?
 
-  def validate_domain(domain)
+  def validate_domain?(domain)
     env_domain = Addressable::URI.parse(
       host
     )
@@ -39,4 +40,5 @@ class OriginValidator
 
     true
   end
+  alias validate_domain validate_domain?
 end

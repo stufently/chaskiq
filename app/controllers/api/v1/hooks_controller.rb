@@ -74,9 +74,10 @@ module Api
         render(plain: "ok") unless performed?
       end
 
-      def is_notification_message?
+      def notification_message?
         @request_body["Type"] == "Notification"
       end
+      alias is_notification_message? notification_message?
 
       # TODO: add some tests mdfk!
       def process_email_notification(message)
