@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-21 — fork-updates-r7b
+
+- Changed: RuboCop settings by owner decision, each with its reason in `.rubocop.yml`:
+  Style/FormatStringToken keeps `unannotated`; Style/ClassAndModuleChildren excludes the five plugin
+  files left compact by R4; Naming/PredicateMethod excludes `app/graphql/types/**` (resolvers named
+  after schema fields); Style/OneClassPerFile excludes `plugin_schema_validator.rb`. Their entries
+  (and the stale `lib/subdomain_routes.rb` one) left `.rubocop_todo.yml`.
+- Changed: `ActiveJob::TestHelper` is included once in the RSpec configuration instead of at the top
+  level of 13 spec files (Style/MixinUsage); the suite runs the same examples.
+
 ## 2026-11-21 — fork-updates-r2b
 
 - Changed: `MessageApis::OpenAi::Api#locked_for_channel?` and `MessageApis::Twilio::Api#new_conversation_thread?`
