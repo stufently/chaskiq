@@ -385,6 +385,25 @@ BASE», фикс, запись Fixed в CHANGELOG; после неё M259/M267 �
 (cx) с тестом на `clone_records_and_discard(nil)` — сначала характеризующий тест, затем
 `if email.present? && (app_user = app.app_users.find_by(type: "AppUser", email: email))`.
 
+## Вне бэклога: находки Codex на приёмке fix-cleanup-bugs (2026-11-21, решения делегированы)
+
+- **Режим согласия ЕС не работал никогда.** `MessengerSettings.tsx` сохраняет `privacy_consent_required`
+  как `ue`, а `Types::MessengerType#needs_privacy_consent` проверяет `eu`, поэтому `TypeError` у
+  `EuCountries.include?` ни разу не всплыл в проде. Решение: в той же вехе фиксов, что и `Lead#verify!`,
+  резолвер принимает оба значения (`%w[eu ue]`), с тестом на `ue`. Фронтенд и сохранённые данные не
+  трогаем: в базах уже лежит `ue`. Заодно в UI радиокнопка «none» отмечается по `=== ''`, хотя сохраняется
+  `none`: отдельной строкой в той же вехе.
+- **`Dashboard#visits`** (`app/services/dashboard.rb:31`) зовёт `.map` на `get_all`, который теперь
+  отдаёт nil для удалённого ряда (раньше nil был недостижим из-за `exists` → 0). Решение: `get_all || {}`,
+  с тестом, в той же вехе.
+- **`GB` в `EuCountries`.** Оставляем: для согласия на cookie UK GDPR / PECR требуют того же, исключение
+  только ухудшило бы приватность.
+- **Мета Nightfury со score 0** попадает в `get_range`/`get_exact` только для диапазона, включающего
+  Unix-эпоху. Недостижимо на реальных данных: не чиним.
+- **`get_padded_range` после `delete` на том же объекте** падает на nil. Вызывающих в `app/` нет: не чиним.
+- **Слабый тест** `nightfury_time_series_exists_spec.rb` (`get`/`get_exact` без `get_meta`). Закрывается
+  мутационным прогоном по тестам fix-cleanup-bugs (исполнитель qw2, раз код писал cx).
+
 ## R9 — удалить `.rubocop_todo.yml`
 
 - Проверка, что todo пуст (или содержит только то, что R8 сознательно перенёс в `.rubocop.yml` с
