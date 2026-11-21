@@ -2,10 +2,8 @@
 
 class Lead < AppUser
   def verify!
-    if email.present? &&
-       (app_users = app.app_users.where(type: "AppUser", email: email))
-      app_users.any?
-      clone_records_and_discard(app_users.first)
+    if email.present? && (app_user = app.app_users.find_by(type: "AppUser", email: email))
+      clone_records_and_discard(app_user)
     else
       becomes!(AppUser)
       self.type = "AppUser"

@@ -28,7 +28,7 @@ class Dashboard
     #  "value": o.last
     # }
 
-    AppIdentity.new(app.key).visits.get_all.map do |k, v|
+    (AppIdentity.new(app.key).visits.get_all || {}).map do |k, v|
       {
         day: Time.zone.at(k.to_i).to_date.strftime("%F"),
         value: v.to_i

@@ -150,7 +150,9 @@ class AppSettingsContainer extends Component<
         hint: I18n.t('definitions.settings.privacy_consent_required_none.hint'),
         type: 'radio',
         value: 'none',
-        defaultChecked: this.props.app.privacyConsentRequired === '',
+        defaultChecked:
+          !this.props.app.privacyConsentRequired ||
+          this.props.app.privacyConsentRequired === 'none',
         grid: { xs: 'w-full', sm: 'w-full' },
       },
     ];
