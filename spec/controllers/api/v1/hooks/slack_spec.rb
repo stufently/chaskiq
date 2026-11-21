@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-include ActiveJob::TestHelper
 
 RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
   let(:slack_owner) do

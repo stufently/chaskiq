@@ -3,7 +3,6 @@
 require "rails_helper"
 
 require "app_packages_catalog"
-include ActiveJob::TestHelper
 
 RSpec.describe Conversation, type: :model do
   # it{ should have_many :messages}
