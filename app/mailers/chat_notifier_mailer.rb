@@ -49,7 +49,7 @@ class ChatNotifierMailer < ApplicationMailer
 
     # get previous 2 message ids
     reference_ids = conversation.messages
-                                .order("id desc")
+                                .order(id: :desc)
                                 .where
                                 .not(email_message_id: nil)
                                 .limit(2)

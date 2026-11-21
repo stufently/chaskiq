@@ -35,7 +35,7 @@ module Types
     def metrics(page: 1, per: 20)
       @metrics = object.metrics
                        .includes(:app_user)
-                       .order("id desc")
+                       .order(id: :desc)
                        .page(page)
                        .per(per)
       # render :index

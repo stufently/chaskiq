@@ -52,7 +52,7 @@ module Types
     def messages(per:, page:)
       @collection = object.messages
                           .includes(:message_block, :message_event, :message_content, authorable: { avatar_attachment: :blob })
-                          .order("id desc")
+                          .order(id: :desc)
                           .page(page)
                           .per(per)
                           .fast_page

@@ -41,7 +41,7 @@ module MessageApis
             integration.app.audits,
             Audit.where(auditable_type: "Agent", auditable_id: ids)
           )
-                            .order("id desc")
+                            .order(id: :desc)
                             .page(options[:page])
                             .per(10)
           {

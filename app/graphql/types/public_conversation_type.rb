@@ -15,7 +15,7 @@ module Types
     def messages(per:, page:)
       @collection = object.messages
                           .visibles
-                          .order("id desc")
+                          .order(id: :desc)
                           .page(page)
                           .per(per)
     end

@@ -155,7 +155,7 @@ module MessageApis
           messages = conversation.messages.where(
             messageable_type: "ConversationPartContent"
           ).where.not(id: part.id)
-                                 .order("id")
+                                 .order(:id)
 
           messages.map do |m|
             {
