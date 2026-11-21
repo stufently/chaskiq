@@ -1,0 +1,13 @@
+diff --git a/app/controllers/concerns/package_iframe_behavior.rb b/app/controllers/concerns/package_iframe_behavior.rb
+index a9d9d4de..8926e05e 100644
+--- a/app/controllers/concerns/package_iframe_behavior.rb
++++ b/app/controllers/concerns/package_iframe_behavior.rb
+@@ -68,7 +68,7 @@ module PackageIframeBehavior
+     #  app = conversation.app
+     # else
+ 
+-    app = AppUser.find(params[:user]["id"]).app
++    app = AppUser.find(params.expect(user: [:id])[:id]).app
+     # end
+ 
+     presenter = app.app_package_integrations

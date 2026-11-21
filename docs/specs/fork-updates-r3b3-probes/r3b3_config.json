@@ -1,0 +1,146 @@
+{
+ "cops_whole": [
+  "Rails/StrongParametersExpect"
+ ],
+ "cops_partial": [],
+ "app_files": [
+  "app/controllers/api/v1/hooks/provider_controller.rb",
+  "app/controllers/application_controller.rb",
+  "app/controllers/concerns/package_iframe_behavior.rb"
+ ],
+ "char_specs": [
+  "spec/requests/global_hook_provider_spec.rb",
+  "spec/controllers/premailer_preview_spec.rb",
+  "spec/requests/package_iframe_internal_spec.rb"
+ ],
+ "fix_specs": [
+  "spec/requests/package_iframe_internal_params_spec.rb"
+ ],
+ "mutants": [
+  {
+   "id": "M01",
+   "file": "app/controllers/api/v1/hooks/provider_controller.rb",
+   "old": "params.expect(\"provider\").capitalize",
+   "new": "params.expect(\"provider\")",
+   "specs": [
+    "spec/requests/global_hook_provider_spec.rb"
+   ]
+  },
+  {
+   "id": "M02",
+   "file": "app/controllers/api/v1/hooks/provider_controller.rb",
+   "old": "params.expect(\"provider\").capitalize",
+   "new": "request.request_parameters.fetch(\"provider\", \"none\").capitalize",
+   "specs": [
+    "spec/requests/global_hook_provider_spec.rb"
+   ]
+  },
+  {
+   "id": "M03",
+   "file": "app/controllers/api/v1/hooks/provider_controller.rb",
+   "old": ").process_global_hook(params)\n",
+   "new": ").process_global_hook(params.except(\"provider\"))\n",
+   "specs": [
+    "spec/requests/global_hook_provider_spec.rb"
+   ]
+  },
+  {
+   "id": "M04",
+   "file": "app/controllers/application_controller.rb",
+   "old": "@app.campaigns.find(params.expect(:id))",
+   "new": "Campaign.find(params.expect(:id))",
+   "specs": [
+    "spec/controllers/premailer_preview_spec.rb"
+   ]
+  },
+  {
+   "id": "M05",
+   "file": "app/controllers/application_controller.rb",
+   "old": "@app.campaigns.find(params.expect(:id))",
+   "new": "@app.campaigns.find_by(id: params.expect(:id))",
+   "specs": [
+    "spec/controllers/premailer_preview_spec.rb"
+   ]
+  },
+  {
+   "id": "M06",
+   "file": "app/controllers/application_controller.rb",
+   "old": "@app.campaigns.find(params.expect(:id))",
+   "new": "@app.campaigns.find(params.expect(:app))",
+   "specs": [
+    "spec/controllers/premailer_preview_spec.rb"
+   ]
+  },
+  {
+   "id": "M07",
+   "file": "app/controllers/concerns/package_iframe_behavior.rb",
+   "old": "AppUser.find(params.expect(user: [:id])[:id]).app",
+   "new": "AppUser.find(params[:user][\"id\"]).app",
+   "specs": [
+    "spec/requests/package_iframe_internal_params_spec.rb"
+   ]
+  },
+  {
+   "id": "M08",
+   "file": "app/controllers/concerns/package_iframe_behavior.rb",
+   "old": "AppUser.find(params.expect(user: [:id])[:id]).app",
+   "new": "AppUser.find(params.dig(:user, :id)).app",
+   "specs": [
+    "spec/requests/package_iframe_internal_params_spec.rb"
+   ]
+  },
+  {
+   "id": "M09",
+   "file": "app/controllers/concerns/package_iframe_behavior.rb",
+   "old": "      user: params[:user],\n",
+   "new": "      user: params.expect(user: [:id]),\n",
+   "specs": [
+    "spec/requests/package_iframe_internal_spec.rb"
+   ]
+  },
+  {
+   "id": "M10",
+   "file": "app/controllers/concerns/package_iframe_behavior.rb",
+   "old": "AppUser.find(params.expect(user: [:id])[:id]).app",
+   "new": "AppUser.find(params.permit(user: [:id]).dig(:user, :id)).app",
+   "specs": [
+    "spec/requests/package_iframe_internal_params_spec.rb"
+   ]
+  }
+ ],
+ "commits": [
+  {
+   "subject": "Add R3b-3 characterization specs",
+   "patch": null,
+   "added": [
+    "spec/requests/global_hook_provider_spec.rb",
+    "spec/controllers/premailer_preview_spec.rb",
+    "spec/requests/package_iframe_internal_spec.rb"
+   ]
+  },
+  {
+   "subject": "Use params.expect for path params",
+   "patch": "r3b3_path.patch",
+   "added": []
+  },
+  {
+   "subject": "Require user id in package iframe",
+   "patch": "r3b3_iframe.patch",
+   "added": [
+    "spec/requests/package_iframe_internal_params_spec.rb"
+   ]
+  },
+  {
+   "subject": "Drop R3b-3 entries from RuboCop todo",
+   "patch": null,
+   "added": [],
+   "todo": true
+  },
+  {
+   "subject": "Note fork-updates-r3b3 in changelog",
+   "patch": null,
+   "added": [],
+   "changelog": true
+  }
+ ]
+}

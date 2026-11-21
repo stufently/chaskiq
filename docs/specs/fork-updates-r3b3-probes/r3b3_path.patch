@@ -1,0 +1,26 @@
+diff --git a/app/controllers/api/v1/hooks/provider_controller.rb b/app/controllers/api/v1/hooks/provider_controller.rb
+index 8ec7b5c1..6d76ee55 100644
+--- a/app/controllers/api/v1/hooks/provider_controller.rb
++++ b/app/controllers/api/v1/hooks/provider_controller.rb
+@@ -19,7 +19,7 @@ module Api
+ 
+         def global_process_event
+           response = AppPackage.find_by(
+-            name: params["provider"].capitalize
++            name: params.expect("provider").capitalize
+           ).process_global_hook(params)
+ 
+           response_handler(response)
+diff --git a/app/controllers/application_controller.rb b/app/controllers/application_controller.rb
+index cc856b09..496145a9 100644
+--- a/app/controllers/application_controller.rb
++++ b/app/controllers/application_controller.rb
+@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
+ 
+   def preview
+     @app = App.find_by(key: params[:app])
+-    @campaign = @app.campaigns.find(params[:id])
++    @campaign = @app.campaigns.find(params.expect(:id))
+     # render plain: "hello"
+     render "campaigns/iframe", layout: false
+   end
