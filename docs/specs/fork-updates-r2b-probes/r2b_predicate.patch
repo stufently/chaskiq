@@ -1,0 +1,28 @@
+diff --git a/app/services/message_apis/open_ai/api.rb b/app/services/message_apis/open_ai/api.rb
+index 1cc96ad8..f4ddb2f2 100644
+--- a/app/services/message_apis/open_ai/api.rb
++++ b/app/services/message_apis/open_ai/api.rb
+@@ -87,7 +87,7 @@ module MessageApis
+       end
+ 
+       def locked_for_channel?(conversation, part)
+-        return unless part.authorable.is_a?(Agent) && !part.authorable.bot?
++        return false unless part.authorable.is_a?(Agent) && !part.authorable.bot?
+ 
+         conversation.conversation_channels.find_by({
+                                                      provider: "open_ai",
+diff --git a/app/services/message_apis/twilio/api.rb b/app/services/message_apis/twilio/api.rb
+index 26444aac..ad8420b2 100644
+--- a/app/services/message_apis/twilio/api.rb
++++ b/app/services/message_apis/twilio/api.rb
+@@ -244,8 +244,8 @@ module MessageApis
+       end
+ 
+       def new_conversation_thread?(from)
+-        return if from.blank?
+-        return if new_thread_in_hours.blank?
++        return false if from.blank?
++        return false if new_thread_in_hours.blank?
+ 
+         from < new_thread_in_hours
+       end

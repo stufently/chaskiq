@@ -1,0 +1,31 @@
+diff --git a/.rubocop.yml b/.rubocop.yml
+index b032ac0e..e186c177 100644
+--- a/.rubocop.yml
++++ b/.rubocop.yml
+@@ -61,6 +61,13 @@ Naming/MethodParameterName:
+ # unused positional arguments get a `_` prefix instead.
+ Lint/UnusedMethodArgument:
+   AllowUnusedKeywordArguments: true
++# R2b (same plan, owner decisions 2026-11-20): in ApiController the memoized ivars of get_user_data
++# (@user_data) and get_app_user (@app_user) are state that other methods and subclasses also set and
++# read (get_user_data_from_auth, set_locale, Api::GraphqlController#auth and attr_reader :user_data);
++# naming them after the methods would split that state. App#availability is renamed instead.
++Naming/MemoizedInstanceVariableName:
++  Exclude:
++    - 'app/controllers/api_controller.rb'
+ AllCops:
+   NewCops: enable
+   Exclude:
+diff --git a/app/models/app.rb b/app/models/app.rb
+index aa7c9a7e..ae2d6c6d 100644
+--- a/app/models/app.rb
++++ b/app/models/app.rb
+@@ -253,7 +253,7 @@ class App < ApplicationRecord
+   end
+ 
+   def availability
+-    @biz ||= Biz::Schedule.new do |config|
++    @availability ||= Biz::Schedule.new do |config|
+       config.hours = hours_format
+       config.time_zone = timezone
+     end

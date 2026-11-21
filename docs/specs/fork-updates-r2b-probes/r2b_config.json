@@ -1,0 +1,80 @@
+{
+ "cops_whole": [
+  "Style/ReturnNilInPredicateMethodDefinition",
+  "Style/MutableConstant",
+  "Naming/MemoizedInstanceVariableName",
+  "Bundler/OrderedGems"
+ ],
+ "cops_partial": [],
+ "app_files": [
+  ".rubocop.yml",
+  "Gemfile",
+  "app/models/app.rb",
+  "app/services/message_apis/oauth_utils.rb",
+  "app/services/message_apis/open_ai/api.rb",
+  "app/services/message_apis/twilio/api.rb"
+ ],
+ "char_specs": [
+  "spec/models/app_availability_memo_spec.rb"
+ ],
+ "fix_specs": [
+  {
+   "file": "spec/services/message_apis/open_ai_locked_for_channel_spec.rb",
+   "base_reason": "expected: false\\n\\s+got: nil"
+  },
+  {
+   "file": "spec/services/message_apis/twilio_new_thread_spec.rb",
+   "base_reason": "expected: false\\n\\s+got: nil"
+  },
+  {
+   "file": "spec/services/message_apis/oauth_utils_headers_spec.rb",
+   "base_reason": "frozen"
+  }
+ ],
+ "mutants": [
+  {"id": "B01", "file": "app/services/message_apis/open_ai/api.rb",
+   "old": "return false unless part.authorable.is_a?(Agent)", "new": "return unless part.authorable.is_a?(Agent)",
+   "specs": ["spec/services/message_apis/open_ai_locked_for_channel_spec.rb"]},
+  {"id": "B02", "file": "app/services/message_apis/open_ai/api.rb",
+   "old": "return false unless part.authorable.is_a?(Agent)", "new": "return true unless part.authorable.is_a?(Agent)",
+   "specs": ["spec/services/message_apis/open_ai_locked_for_channel_spec.rb"]},
+  {"id": "B03", "file": "app/services/message_apis/open_ai/api.rb",
+   "old": "is_a?(Agent) && !part.authorable.bot?", "new": "is_a?(Agent)",
+   "specs": ["spec/services/message_apis/open_ai_locked_for_channel_spec.rb"]},
+  {"id": "B04", "file": "app/services/message_apis/twilio/api.rb",
+   "old": "return false if from.blank?", "new": "return if from.blank?",
+   "specs": ["spec/services/message_apis/twilio_new_thread_spec.rb"]},
+  {"id": "B05", "file": "app/services/message_apis/twilio/api.rb",
+   "old": "return false if new_thread_in_hours.blank?", "new": "return if new_thread_in_hours.blank?",
+   "specs": ["spec/services/message_apis/twilio_new_thread_spec.rb"]},
+  {"id": "B06", "file": "app/services/message_apis/twilio/api.rb",
+   "old": "return false if new_thread_in_hours.blank?", "new": "return true if new_thread_in_hours.blank?",
+   "specs": ["spec/services/message_apis/twilio_new_thread_spec.rb"]},
+  {"id": "B07", "file": "app/services/message_apis/twilio/api.rb",
+   "old": "from < new_thread_in_hours", "new": "from > new_thread_in_hours",
+   "specs": ["spec/services/message_apis/twilio_new_thread_spec.rb"]},
+  {"id": "B08", "file": "app/services/message_apis/oauth_utils.rb",
+   "old": "\"application/json\" }.freeze # Suggested", "new": "\"application/json\" } # Suggested",
+   "specs": ["spec/services/message_apis/oauth_utils_headers_spec.rb"]},
+  {"id": "B09", "file": "app/services/message_apis/oauth_utils.rb",
+   "old": "response = @client.post(uri_path, request, HEADERS)", "new": "response = @client.post(uri_path, request, {})",
+   "specs": ["spec/services/message_apis/oauth_utils_headers_spec.rb"]},
+  {"id": "B10", "file": "app/models/app.rb",
+   "old": "@availability ||= Biz::Schedule.new", "new": "@availability = Biz::Schedule.new",
+   "specs": ["spec/models/app_availability_memo_spec.rb"]},
+  {"id": "B11", "file": "app/models/app.rb",
+   "old": "config.hours = hours_format", "new": "config.hours = { tue: { \"02:00\" => \"03:00\" } }",
+   "specs": ["spec/models/app_availability_memo_spec.rb"]}
+ ],
+ "commits": [
+  {"subject": "Add R2b characterization specs", "patch": null, "added": ["spec/models/app_availability_memo_spec.rb"]},
+  {"subject": "Return false from predicate methods", "patch": "r2b_predicate.patch",
+   "added": ["spec/services/message_apis/open_ai_locked_for_channel_spec.rb", "spec/services/message_apis/twilio_new_thread_spec.rb"]},
+  {"subject": "Freeze the OAuth JSON headers", "patch": "r2b_freeze.patch",
+   "added": ["spec/services/message_apis/oauth_utils_headers_spec.rb"]},
+  {"subject": "Name the availability memo after it", "patch": "r2b_memo.patch", "added": []},
+  {"subject": "Sort the Gemfile", "patch": "r2b_gems.patch", "added": []},
+  {"subject": "Drop R2b entries from RuboCop todo", "patch": null, "added": [], "todo": true},
+  {"subject": "Note fork-updates-r2b in changelog", "patch": null, "added": [], "changelog": true}
+ ]
+}
