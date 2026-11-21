@@ -432,6 +432,14 @@ BASE», фикс, запись Fixed в CHANGELOG; после неё M259/M267 �
 перезапущены постановщиком. Мутационный прогон по 13 спекам R3b-2 — cx (код писал qw2), после снятия
 запрета на Codex 2026-11-22 11:39Z.
 
+## Решение 2026-11-21: R2b, `api_controller.rb:93` не переименовываем
+
+`@user_data` — общее состояние `ApiController` и `Api::GraphqlController` (`get_user_data_from_auth`,
+`set_locale`, `attr_reader :user_data` в подклассе). Автокоррекция `MemoizedInstanceVariableName` разорвала
+бы это, переименование метода в `user_data` столкнулось бы с `attr_reader`. Поэтому для
+`api_controller.rb` — Exclude с причиной в `.rubocop.yml`, переименован только `app.rb:256`
+(`@biz` → `@availability`). 33 offense прочих Style-копов R2b без решения остаются в todo.
+
 ## R9 — удалить `.rubocop_todo.yml`
 
 - Проверка, что todo пуст (или содержит только то, что R8 сознательно перенёс в `.rubocop.yml` с
