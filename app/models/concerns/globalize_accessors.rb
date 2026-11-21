@@ -75,9 +75,7 @@ module GlobalizeAccessors
   end
 
   module InstanceMethods
-    def localized_attr_name_for(attr_name, locale)
-      self.class.localized_attr_name_for(attr_name, locale)
-    end
+    delegate :localized_attr_name_for, to: :class
   end
 end
 

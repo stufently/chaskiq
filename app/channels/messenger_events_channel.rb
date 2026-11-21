@@ -102,9 +102,7 @@ class MessengerEventsChannel < ApplicationCable::Channel
     ActionTrigger.process_next_step(app, message, current_user)
   end
 
-  def data_submit(data, message)
-    ActionTrigger.data_submit(data, message)
-  end
+  delegate :data_submit, to: :ActionTrigger
 
   def trigger_step(data)
     ActionTrigger.trigger_step(data, app, current_user)
