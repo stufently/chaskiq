@@ -1,0 +1,168 @@
+{
+ "cops_whole": [],
+ "cops_partial": [],
+ "app_files": [
+  "app/graphql/types/messenger_type.rb",
+  "app/javascript/src/pages/MessengerSettings.tsx",
+  "app/models/lead.rb",
+  "app/services/dashboard.rb"
+ ],
+ "char_specs": [
+  "spec/models/lead_verify_spec.rb"
+ ],
+ "fix_specs": [
+  "spec/models/lead_verify_unmatched_spec.rb",
+  "spec/graphql/types/messenger_consent_ue_spec.rb",
+  "spec/services/dashboard_visits_spec.rb"
+ ],
+ "mutants": [
+  {
+   "id": "F01",
+   "file": "app/models/lead.rb",
+   "old": "find_by(type: \"AppUser\", email: email)",
+   "new": "find_by(email: email)",
+   "specs": [
+    "spec/models/lead_verify_spec.rb",
+    "spec/models/lead_verify_unmatched_spec.rb"
+   ]
+  },
+  {
+   "id": "F02",
+   "file": "app/models/lead.rb",
+   "old": "find_by(type: \"AppUser\", email: email)",
+   "new": "find_by(type: \"Lead\", email: email)",
+   "specs": [
+    "spec/models/lead_verify_spec.rb",
+    "spec/models/lead_verify_unmatched_spec.rb"
+   ]
+  },
+  {
+   "id": "F03",
+   "file": "app/models/lead.rb",
+   "old": "if email.present? && (app_user =",
+   "new": "if (app_user =",
+   "specs": [
+    "spec/models/lead_verify_spec.rb",
+    "spec/models/lead_verify_unmatched_spec.rb"
+   ]
+  },
+  {
+   "id": "F04",
+   "file": "app/models/lead.rb",
+   "old": "(app_user = app.app_users.find_by(",
+   "new": "(app_user = AppUser.find_by(",
+   "specs": [
+    "spec/models/lead_verify_spec.rb",
+    "spec/models/lead_verify_unmatched_spec.rb"
+   ]
+  },
+  {
+   "id": "F05",
+   "file": "app/models/lead.rb",
+   "old": "if email.present? && (app_user",
+   "new": "if email.present? || (app_user",
+   "specs": [
+    "spec/models/lead_verify_spec.rb",
+    "spec/models/lead_verify_unmatched_spec.rb"
+   ]
+  },
+  {
+   "id": "F06",
+   "file": "app/models/lead.rb",
+   "old": "      self.type = \"AppUser\"\n      save\n",
+   "new": "      self.type = \"AppUser\"\n",
+   "specs": [
+    "spec/models/lead_verify_spec.rb",
+    "spec/models/lead_verify_unmatched_spec.rb"
+   ]
+  },
+  {
+   "id": "F07",
+   "file": "app/models/lead.rb",
+   "old": "      clone_records_and_discard(app_user)\n",
+   "new": "      clone_records_and_discard(app.app_users.where(type: \"AppUser\").first)\n",
+   "specs": [
+    "spec/models/lead_verify_spec.rb",
+    "spec/models/lead_verify_unmatched_spec.rb"
+   ]
+  },
+  {
+   "id": "F08",
+   "file": "app/graphql/types/messenger_type.rb",
+   "old": "%w[eu ue].include?(privacy_consent_required)",
+   "new": "%w[eu].include?(privacy_consent_required)",
+   "specs": [
+    "spec/graphql/types/messenger_consent_ue_spec.rb",
+    "spec/graphql/types/messenger_privacy_consent_spec.rb"
+   ]
+  },
+  {
+   "id": "F09",
+   "file": "app/graphql/types/messenger_type.rb",
+   "old": "%w[eu ue].include?(privacy_consent_required)",
+   "new": "%w[ue].include?(privacy_consent_required)",
+   "specs": [
+    "spec/graphql/types/messenger_consent_ue_spec.rb"
+   ]
+  },
+  {
+   "id": "F10",
+   "file": "app/services/dashboard.rb",
+   "old": "(AppIdentity.new(app.key).visits.get_all || {}).map",
+   "new": "AppIdentity.new(app.key).visits.get_all.map",
+   "specs": [
+    "spec/services/dashboard_visits_spec.rb"
+   ]
+  },
+  {
+   "id": "F11",
+   "file": "app/services/dashboard.rb",
+   "old": "visits.get_all || {}).map",
+   "new": "visits.get_all && {}).map",
+   "specs": [
+    "spec/services/dashboard_visits_spec.rb"
+   ]
+  }
+ ],
+ "commits": [
+  {
+   "subject": "Pin Lead#verify! branches",
+   "patch": null,
+   "added": [
+    "spec/models/lead_verify_spec.rb"
+   ]
+  },
+  {
+   "subject": "Verify a lead with no matching user",
+   "patch": "fxc_lead.patch",
+   "added": [
+    "spec/models/lead_verify_unmatched_spec.rb"
+   ]
+  },
+  {
+   "subject": "Accept the ue privacy consent setting",
+   "patch": "fxc_consent.patch",
+   "added": [
+    "spec/graphql/types/messenger_consent_ue_spec.rb"
+   ]
+  },
+  {
+   "subject": "Guard Dashboard#visits for a deleted series",
+   "patch": "fxc_dashboard.patch",
+   "added": [
+    "spec/services/dashboard_visits_spec.rb"
+   ]
+  },
+  {
+   "subject": "Check the none consent radio when saved",
+   "patch": "fxc_radio.patch",
+   "added": []
+  },
+  {
+   "subject": "Note fix-cleanup-2 in changelog",
+   "patch": null,
+   "added": [],
+   "changelog": true
+  }
+ ]
+}

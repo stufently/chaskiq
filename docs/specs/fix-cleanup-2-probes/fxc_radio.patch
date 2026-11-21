@@ -1,0 +1,15 @@
+diff --git a/app/javascript/src/pages/MessengerSettings.tsx b/app/javascript/src/pages/MessengerSettings.tsx
+index 493f12cf..1a9dc94a 100644
+--- a/app/javascript/src/pages/MessengerSettings.tsx
++++ b/app/javascript/src/pages/MessengerSettings.tsx
+@@ -150,7 +150,9 @@ class AppSettingsContainer extends Component<
+         hint: I18n.t('definitions.settings.privacy_consent_required_none.hint'),
+         type: 'radio',
+         value: 'none',
+-        defaultChecked: this.props.app.privacyConsentRequired === '',
++        defaultChecked:
++          !this.props.app.privacyConsentRequired ||
++          this.props.app.privacyConsentRequired === 'none',
+         grid: { xs: 'w-full', sm: 'w-full' },
+       },
+     ];

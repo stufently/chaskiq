@@ -1,0 +1,1 @@
+# warning-like lines of the suite output at BASE 9032bd30 (normalized)
