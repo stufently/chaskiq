@@ -1,0 +1,112 @@
+diff --git a/app/services/action_trigger_factory.rb b/app/services/action_trigger_factory.rb
+index 9d90ec35..a3c49196 100644
+--- a/app/services/action_trigger_factory.rb
++++ b/app/services/action_trigger_factory.rb
+@@ -240,7 +240,7 @@ class ActionTriggerFactory
+ 
+       c.path(**path_options)
+ 
+-      step_7 = [c.message(
++      step7 = [c.message(
+         text: I18n.t("task_bots.reply_agent", name: app.name),
+         uuid: 7,
+         agent: bot_agent
+@@ -249,29 +249,29 @@ class ActionTriggerFactory
+       if user.email.blank?
+ 
+         if app.email_requirement === "Always"
+-          step_7 << email_requirement
+-          step_7.flatten!
++          step7 << email_requirement
++          step7.flatten!
+         end
+ 
+         if app.email_requirement === "office" && !app.in_business_hours?(Time.current)
+-          step_7 << email_requirement
+-          step_7.flatten!
++          step7 << email_requirement
++          step7.flatten!
+         end
+ 
+       end
+ 
+-      step_7 << c.message(
++      step7 << c.message(
+         text: I18n.t("task_bots.email_requirement.ack"),
+         uuid: 4,
+         agent: bot_agent
+       )
+ 
+       # puts 'STEP 7'
+-      # puts step_7
++      # puts step7
+ 
+       c.path(
+         title: "yes",
+-        steps: step_7,
++        steps: step7,
+         follow_actions: [c.assign(app.lead_tasks_settings["assignee"])]
+       )
+ 
+diff --git a/app/services/message_apis/helpers.rb b/app/services/message_apis/helpers.rb
+index 40d5e395..04143ad3 100644
+--- a/app/services/message_apis/helpers.rb
++++ b/app/services/message_apis/helpers.rb
+@@ -98,21 +98,21 @@ module MessageApis
+     end
+ 
+     def get_aspect_ratio(w, h)
+-      maxWidth = 1000
+-      maxHeight = 1000
++      max_width = 1000
++      max_height = 1000
+       ratio = 0
+       width = w # Current image width
+       height = h # Current image height
+ 
+       # Check if the current width is larger than the max
+-      if width > maxWidth
+-        ratio = maxWidth / width # get ratio for scaling image
++      if width > max_width
++        ratio = max_width / width # get ratio for scaling image
+         height *= ratio # Reset height to match scaled image
+         width *= ratio # Reset width to match scaled image
+ 
+         # Check if current height is larger than max
+-      elsif height > maxHeight
+-        ratio = maxHeight / height # get ratio for scaling image
++      elsif height > max_height
++        ratio = max_height / height # get ratio for scaling image
+         width *= ratio # Reset width to match scaled image
+         height *= ratio # Reset height to match scaled image
+       end
+diff --git a/spec/models/segment_spec.rb b/spec/models/segment_spec.rb
+index 394dcc4d..5e61333b 100644
+--- a/spec/models/segment_spec.rb
++++ b/spec/models/segment_spec.rb
+@@ -299,7 +299,7 @@ RSpec.describe Segment, type: :model do
+         expect(comparator.compare).to be_truthy
+       end
+ 
+-      let(:predicates_on_tags_contains_multiple_2) do
++      let(:predicates_on_tags_contains_multiple2) do
+         [
+           {
+             type: "match",
+@@ -325,14 +325,14 @@ RSpec.describe Segment, type: :model do
+         app.app_users.first.update(name: "marilyn")
+ 
+         allow_any_instance_of(Segment).to receive(:predicates).and_return(
+-          predicates_on_tags_contains_multiple_2
++          predicates_on_tags_contains_multiple2
+         )
+ 
+         expect(app.segments.first.execute_query.size).to be == 1
+ 
+         comparator = SegmentComparator.new(
+           user: app.app_users.last,
+-          predicates: predicates_on_tags_contains_multiple_2
++          predicates: predicates_on_tags_contains_multiple2
+         )
+ 
+         expect(comparator.compare).to be_truthy

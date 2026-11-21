@@ -1,0 +1,259 @@
+{
+ "cops_whole": [
+  "Naming/VariableName",
+  "Naming/VariableNumber"
+ ],
+ "cops_partial": {
+  "Style/OneClassPerFile": [
+   "app/controllers/graphql_controller.rb",
+   "app/graphql/mutations/articles/article_blob_attach.rb",
+   "app/models/app_package_integration.rb"
+  ]
+ },
+ "app_files": [
+  "app/controllers/graphql_controller.rb",
+  "app/graphql/mutations/articles/article_blob_attach.rb",
+  "app/models/app_package_integration.rb",
+  "app/services/message_apis/helpers.rb",
+  "app/services/action_trigger_factory.rb",
+  "spec/models/segment_spec.rb"
+ ],
+ "new_files": [
+  "app/controllers/oauth_exeption.rb",
+  "app/graphql/attach_profile_avatar.rb",
+  "app/models/external_api_client.rb",
+  "app/models/external_presenter_manager.rb"
+ ],
+ "eager": true,
+ "char_specs": [
+  "spec/models/oauth_exeption_spec.rb",
+  "spec/graphql/attach_profile_avatar_spec.rb",
+  "spec/models/external_api_client_spec.rb",
+  "spec/models/external_presenter_manager_spec.rb",
+  "spec/services/message_apis/helpers_aspect_ratio_spec.rb",
+  "spec/services/action_trigger_factory_infer_spec.rb"
+ ],
+ "mutants": [
+  {
+   "id": "D01",
+   "file": "app/controllers/oauth_exeption.rb",
+   "old": "msg = \"This is a custom exception\"",
+   "new": "msg = \"custom exception\"",
+   "specs": [
+    "spec/models/oauth_exeption_spec.rb"
+   ]
+  },
+  {
+   "id": "D02",
+   "file": "app/controllers/oauth_exeption.rb",
+   "old": "    @exception_type = exception_type\n",
+   "new": "    @exception_type = \"custom\"\n",
+   "specs": [
+    "spec/models/oauth_exeption_spec.rb"
+   ]
+  },
+  {
+   "id": "D03",
+   "file": "app/graphql/attach_profile_avatar.rb",
+   "old": "  field :user, Types::AgentType, null: true\n",
+   "new": "  field :user, Types::AgentType, null: false\n",
+   "specs": [
+    "spec/graphql/attach_profile_avatar_spec.rb"
+   ]
+  },
+  {
+   "id": "D04",
+   "file": "app/graphql/attach_profile_avatar.rb",
+   "old": "           required: true\n",
+   "new": "           required: false\n",
+   "specs": [
+    "spec/graphql/attach_profile_avatar_spec.rb"
+   ]
+  },
+  {
+   "id": "D05",
+   "file": "app/models/external_api_client.rb",
+   "old": "@api_url = config[\"package\"].app_package.api_url",
+   "new": "@api_url = config[\"package\"].app_package.api_url.to_s.sub(\"hook\", \"\")",
+   "specs": [
+    "spec/models/external_api_client_spec.rb"
+   ]
+  },
+  {
+   "id": "D06",
+   "file": "app/models/external_api_client.rb",
+   "old": "    post(@api_url, payload)\n",
+   "new": "    post(@api_url, payload.except(:data))\n",
+   "specs": [
+    "spec/models/external_api_client_spec.rb"
+   ]
+  },
+  {
+   "id": "D07",
+   "file": "app/models/external_api_client.rb",
+   "old": "params.merge!({ package: integration.as_json })",
+   "new": "params.merge!({ package: integration.as_json.except(\"id\") })",
+   "specs": [
+    "spec/models/external_api_client_spec.rb"
+   ]
+  },
+  {
+   "id": "D08",
+   "file": "app/models/external_api_client.rb",
+   "old": "\"Content-Type\" => \"application/json\"",
+   "new": "\"Content-Type\" => \"application/x-www-form-urlencoded\"",
+   "specs": [
+    "spec/models/external_api_client_spec.rb"
+   ]
+  },
+  {
+   "id": "D09",
+   "file": "app/models/external_api_client.rb",
+   "old": "    @conn ||= Faraday.new(request: { timeout: 2 }) do |faraday|\n",
+   "new": "    @conn ||= Faraday.new(request: { timeout: 20 }) do |faraday|\n",
+   "specs": [
+    "spec/models/external_api_client_spec.rb"
+   ]
+  },
+  {
+   "id": "D10",
+   "file": "app/models/external_api_client.rb",
+   "old": "    case eventable.class\n",
+   "new": "    case eventable\n",
+   "specs": [
+    "spec/models/external_api_client_spec.rb"
+   ]
+  },
+  {
+   "id": "D11",
+   "file": "app/models/external_presenter_manager.rb",
+   "old": "as_json(only: %i[key name])",
+   "new": "as_json(only: %i[key name id])",
+   "specs": [
+    "spec/models/external_presenter_manager_spec.rb"
+   ]
+  },
+  {
+   "id": "D12",
+   "file": "app/models/external_presenter_manager.rb",
+   "old": "    url = data[:package].app_package.configure_url\n",
+   "new": "    url = data[:package].app_package.initialize_url\n",
+   "specs": [
+    "spec/models/external_presenter_manager_spec.rb"
+   ]
+  },
+  {
+   "id": "D13",
+   "file": "app/models/external_presenter_manager.rb",
+   "old": "    JSON.parse(resp.body)\n",
+   "new": "    resp.body\n",
+   "specs": [
+    "spec/models/external_presenter_manager_spec.rb"
+   ]
+  },
+  {
+   "id": "D14",
+   "file": "app/models/external_presenter_manager.rb",
+   "old": "\"Content-Type\" => \"application/json\"",
+   "new": "\"Content-Type\" => \"text/plain\"",
+   "specs": [
+    "spec/models/external_presenter_manager_spec.rb"
+   ]
+  },
+  {
+   "id": "D15",
+   "file": "app/services/message_apis/helpers.rb",
+   "old": "      max_width = 1000\n",
+   "new": "      max_width = 2000\n",
+   "specs": [
+    "spec/services/message_apis/helpers_aspect_ratio_spec.rb"
+   ]
+  },
+  {
+   "id": "D16",
+   "file": "app/services/message_apis/helpers.rb",
+   "old": "      max_height = 1000\n",
+   "new": "      max_height = 800\n",
+   "specs": [
+    "spec/services/message_apis/helpers_aspect_ratio_spec.rb"
+   ]
+  },
+  {
+   "id": "D17",
+   "file": "app/services/message_apis/helpers.rb",
+   "old": "      fill_ratio = (height / width) * 100\n",
+   "new": "      fill_ratio = (height / width) * 10\n",
+   "specs": [
+    "spec/services/message_apis/helpers_aspect_ratio_spec.rb"
+   ]
+  },
+  {
+   "id": "D18",
+   "file": "app/services/action_trigger_factory.rb",
+   "old": "        if app.email_requirement === \"Always\"\n",
+   "new": "        if app.email_requirement === \"always\"\n",
+   "specs": [
+    "spec/services/action_trigger_factory_infer_spec.rb"
+   ]
+  },
+  {
+   "id": "D19",
+   "file": "app/services/action_trigger_factory.rb",
+   "old": "        steps: step7,\n",
+   "new": "        steps: step7.first(1),\n",
+   "specs": [
+    "spec/services/action_trigger_factory_infer_spec.rb"
+   ]
+  }
+ ],
+ "moved": {
+  "OauthExeption": [
+   "app/controllers/oauth_exeption.rb",
+   "GraphqlController"
+  ],
+  "AttachProfileAvatar": [
+   "app/graphql/attach_profile_avatar.rb",
+   "Mutations::Articles::ArticleBlobAttach"
+  ],
+  "ExternalApiClient": [
+   "app/models/external_api_client.rb",
+   "AppPackageIntegration"
+  ],
+  "ExternalPresenterManager": [
+   "app/models/external_presenter_manager.rb",
+   "AppPackageIntegration"
+  ]
+ },
+ "commits": [
+  {
+   "subject": "Add R7d characterization specs",
+   "patch": null,
+   "added": [
+    "spec/models/oauth_exeption_spec.rb",
+    "spec/graphql/attach_profile_avatar_spec.rb",
+    "spec/models/external_api_client_spec.rb",
+    "spec/models/external_presenter_manager_spec.rb",
+    "spec/services/message_apis/helpers_aspect_ratio_spec.rb",
+    "spec/services/action_trigger_factory_infer_spec.rb"
+   ]
+  },
+  {
+   "subject": "Move extra top-level classes to own files",
+   "patch": "r7d_split.patch",
+   "added": []
+  },
+  {
+   "subject": "Rename camelCase and numbered locals",
+   "patch": "r7d_locals.patch",
+   "added": []
+  },
+  {
+   "subject": "Drop R7d entries from RuboCop todo",
+   "todo": true
+  },
+  {
+   "subject": "Note fork-updates-r7d in changelog",
+   "changelog": true
+  }
+ ]
+}

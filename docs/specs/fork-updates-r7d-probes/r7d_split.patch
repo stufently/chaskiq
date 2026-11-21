@@ -1,0 +1,312 @@
+diff --git a/app/controllers/graphql_controller.rb b/app/controllers/graphql_controller.rb
+index 93c7f2d3..c1d8f34e 100644
+--- a/app/controllers/graphql_controller.rb
++++ b/app/controllers/graphql_controller.rb
+@@ -102,10 +102,3 @@ class GraphqlController < ApplicationController
+     ActiveStorage::Current.url_options = request.base_url if Rails.application.config.active_storage.service == :local
+   end
+ end
+-
+-class OauthExeption < StandardError
+-  def initialize(msg = "This is a custom exception", exception_type = "custom")
+-    @exception_type = exception_type
+-    super(msg)
+-  end
+-end
+diff --git a/app/controllers/oauth_exeption.rb b/app/controllers/oauth_exeption.rb
+new file mode 100644
+index 00000000..10706350
+--- /dev/null
++++ b/app/controllers/oauth_exeption.rb
+@@ -0,0 +1,8 @@
++# frozen_string_literal: true
++
++class OauthExeption < StandardError
++  def initialize(msg = "This is a custom exception", exception_type = "custom")
++    @exception_type = exception_type
++    super(msg)
++  end
++end
+diff --git a/app/graphql/attach_profile_avatar.rb b/app/graphql/attach_profile_avatar.rb
+new file mode 100644
+index 00000000..05d9f7ca
+--- /dev/null
++++ b/app/graphql/attach_profile_avatar.rb
+@@ -0,0 +1,21 @@
++# frozen_string_literal: true
++
++class AttachProfileAvatar < GraphQL::Schema::Mutation
++  description <<~DESC
++    Update the current user's avatar
++    (by attaching a blob via signed ID)
++  DESC
++
++  argument :blob_id, String,
++           "Signed blob ID generated via `createDirectUpload` mutation",
++           required: true
++
++  field :user, Types::AgentType, null: true
++
++  def resolve(blob_id:)
++    # Active Storage retrieves the blob data from DB
++    # using a signed_id and associates the blob with the attachment (avatar)
++    current_user.avatar.attach(blob_id)
++    { user: current_user }
++  end
++end
+diff --git a/app/graphql/mutations/articles/article_blob_attach.rb b/app/graphql/mutations/articles/article_blob_attach.rb
+index 22729d54..808607fe 100644
+--- a/app/graphql/mutations/articles/article_blob_attach.rb
++++ b/app/graphql/mutations/articles/article_blob_attach.rb
+@@ -28,23 +28,3 @@ module Mutations
+     end
+   end
+ end
+-
+-class AttachProfileAvatar < GraphQL::Schema::Mutation
+-  description <<~DESC
+-    Update the current user's avatar
+-    (by attaching a blob via signed ID)
+-  DESC
+-
+-  argument :blob_id, String,
+-           "Signed blob ID generated via `createDirectUpload` mutation",
+-           required: true
+-
+-  field :user, Types::AgentType, null: true
+-
+-  def resolve(blob_id:)
+-    # Active Storage retrieves the blob data from DB
+-    # using a signed_id and associates the blob with the attachment (avatar)
+-    current_user.avatar.attach(blob_id)
+-    { user: current_user }
+-  end
+-end
+diff --git a/app/models/app_package_integration.rb b/app/models/app_package_integration.rb
+index e1fcea41..6783f04c 100644
+--- a/app/models/app_package_integration.rb
++++ b/app/models/app_package_integration.rb
+@@ -249,106 +249,3 @@ class AppPackageIntegration < ApplicationRecord
+     end
+   end
+ end
+-
+-class ExternalApiClient
+-  attr_accessor :config
+-  attr_reader :api_url
+-
+-  def initialize(config:)
+-    @config  = config
+-    @api_url = config["package"].app_package.api_url
+-  end
+-
+-  def trigger(event)
+-    event.as_json
+-
+-    payload = {
+-      action: event.action,
+-      created_at: event.created_at,
+-      data: {
+-        subject: subject_data(event.eventable),
+-        properties: event.properties
+-      }
+-    }
+-
+-    post(@api_url, payload)
+-  end
+-
+-  def report(path, options = {})
+-    # post(@api_url)
+-  end
+-
+-  def enqueue_process_event(params, integration)
+-    params.merge!({ package: integration.as_json })
+-    post(@api_url, params)
+-  end
+-
+-  def conn
+-    # site = Addressable::URI.parse(@api_url).site
+-    # @conn ||= Faraday.new(:url => site , request: { timeout: 2 } ) do |faraday|
+-    @conn ||= Faraday.new(request: { timeout: 2 }) do |faraday|
+-      faraday.request  :url_encoded
+-      faraday.response :logger
+-      faraday.adapter  Faraday.default_adapter
+-    end
+-  end
+-
+-  def post(url, data)
+-    resp = conn.post(
+-      url,
+-      data.to_json,
+-      "Content-Type" => "application/json"
+-    )
+-    JSON.parse(resp.body)
+-  end
+-
+-  def subject_data(eventable)
+-    case eventable.class
+-    when Conversation
+-      eventable.as_json(methods: %i[main_participant assignee latest_message]).to_json
+-    else
+-      eventable.to_json
+-    end
+-  end
+-end
+-
+-class ExternalPresenterManager
+-  def self.post(url, data)
+-    # This it's just to restrict fields on app, refactor this!
+-    data[:ctx][:app] = data.dig(:ctx, :app).as_json(only: %i[key name])
+-    data[:ctx][:current_user] = data.dig(:ctx, :current_user).as_json(methods: %i[email kind display_name avatar_url])
+-    Rails.logger.debug url
+-    Rails.logger.debug data
+-    resp = Faraday.post(
+-      url,
+-      data.to_json,
+-      "Content-Type" => "application/json"
+-    )
+-    JSON.parse(resp.body)
+-  end
+-
+-  def self.initialize_hook(data)
+-    url = data[:package].app_package.initialize_url
+-    post(url, data)
+-  end
+-
+-  def self.configure_hook(data)
+-    url = data[:package].app_package.configure_url
+-    post(url, data)
+-  end
+-
+-  def self.submit_hook(data)
+-    url = data[:package].app_package.submit_url
+-    post(url, data)
+-  end
+-
+-  def self.sheet_hook(data)
+-    url = data[:package].app_package.sheet_url
+-    post(url, data)
+-  end
+-
+-  def self.content_hook(data)
+-    url = data[:package].app_package.content_url
+-    post(url, data)
+-  end
+-end
+diff --git a/app/models/external_api_client.rb b/app/models/external_api_client.rb
+new file mode 100644
+index 00000000..ba7bd598
+--- /dev/null
++++ b/app/models/external_api_client.rb
+@@ -0,0 +1,63 @@
++# frozen_string_literal: true
++
++class ExternalApiClient
++  attr_accessor :config
++  attr_reader :api_url
++
++  def initialize(config:)
++    @config  = config
++    @api_url = config["package"].app_package.api_url
++  end
++
++  def trigger(event)
++    event.as_json
++
++    payload = {
++      action: event.action,
++      created_at: event.created_at,
++      data: {
++        subject: subject_data(event.eventable),
++        properties: event.properties
++      }
++    }
++
++    post(@api_url, payload)
++  end
++
++  def report(path, options = {})
++    # post(@api_url)
++  end
++
++  def enqueue_process_event(params, integration)
++    params.merge!({ package: integration.as_json })
++    post(@api_url, params)
++  end
++
++  def conn
++    # site = Addressable::URI.parse(@api_url).site
++    # @conn ||= Faraday.new(:url => site , request: { timeout: 2 } ) do |faraday|
++    @conn ||= Faraday.new(request: { timeout: 2 }) do |faraday|
++      faraday.request  :url_encoded
++      faraday.response :logger
++      faraday.adapter  Faraday.default_adapter
++    end
++  end
++
++  def post(url, data)
++    resp = conn.post(
++      url,
++      data.to_json,
++      "Content-Type" => "application/json"
++    )
++    JSON.parse(resp.body)
++  end
++
++  def subject_data(eventable)
++    case eventable.class
++    when Conversation
++      eventable.as_json(methods: %i[main_participant assignee latest_message]).to_json
++    else
++      eventable.to_json
++    end
++  end
++end
+diff --git a/app/models/external_presenter_manager.rb b/app/models/external_presenter_manager.rb
+new file mode 100644
+index 00000000..9e74f231
+--- /dev/null
++++ b/app/models/external_presenter_manager.rb
+@@ -0,0 +1,42 @@
++# frozen_string_literal: true
++
++class ExternalPresenterManager
++  def self.post(url, data)
++    # This it's just to restrict fields on app, refactor this!
++    data[:ctx][:app] = data.dig(:ctx, :app).as_json(only: %i[key name])
++    data[:ctx][:current_user] = data.dig(:ctx, :current_user).as_json(methods: %i[email kind display_name avatar_url])
++    Rails.logger.debug url
++    Rails.logger.debug data
++    resp = Faraday.post(
++      url,
++      data.to_json,
++      "Content-Type" => "application/json"
++    )
++    JSON.parse(resp.body)
++  end
++
++  def self.initialize_hook(data)
++    url = data[:package].app_package.initialize_url
++    post(url, data)
++  end
++
++  def self.configure_hook(data)
++    url = data[:package].app_package.configure_url
++    post(url, data)
++  end
++
++  def self.submit_hook(data)
++    url = data[:package].app_package.submit_url
++    post(url, data)
++  end
++
++  def self.sheet_hook(data)
++    url = data[:package].app_package.sheet_url
++    post(url, data)
++  end
++
++  def self.content_hook(data)
++    url = data[:package].app_package.content_url
++    post(url, data)
++  end
++end
