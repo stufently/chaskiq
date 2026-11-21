@@ -299,7 +299,7 @@ RSpec.describe Segment, type: :model do
         expect(comparator.compare).to be_truthy
       end
 
-      let(:predicates_on_tags_contains_multiple_2) do
+      let(:predicates_on_tags_contains_multiple2) do
         [
           {
             type: "match",
@@ -325,14 +325,14 @@ RSpec.describe Segment, type: :model do
         app.app_users.first.update(name: "marilyn")
 
         allow_any_instance_of(Segment).to receive(:predicates).and_return(
-          predicates_on_tags_contains_multiple_2
+          predicates_on_tags_contains_multiple2
         )
 
         expect(app.segments.first.execute_query.size).to be == 1
 
         comparator = SegmentComparator.new(
           user: app.app_users.last,
-          predicates: predicates_on_tags_contains_multiple_2
+          predicates: predicates_on_tags_contains_multiple2
         )
 
         expect(comparator.compare).to be_truthy
