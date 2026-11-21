@@ -166,9 +166,7 @@ module MessageApis::TwilioPhone
       return process_outbound_call(params, "outbound") if params["Direction"] == "outbound-api"
 
       # call events handler
-      if params[:StatusCallbackEvent].present? && params[:Caller] != "client:support_agent"
-        return process_incoming_event(params)
-      end
+      return process_incoming_event(params) if params[:StatusCallbackEvent].present? && params[:Caller] != "client:support_agent"
 
       app = package.app
       # caller initiators

@@ -42,7 +42,7 @@ module GlobalizeAccessors
 
       define_method :delete_translation_if_all_blank do |locale|
         should_delete = true
-        translated_attributes.keys.each do |key|
+        translated_attributes.each_key do |key|
           should_delete = translation_for(locale)[key].blank?
           break unless should_delete
         end
@@ -59,9 +59,7 @@ module GlobalizeAccessors
         end
       end
 
-      if respond_to?(:accessible_attributes) && accessible_attributes.include?(attr_name)
-        attr_accessible :"#{localized_attr_name}"
-      end
+      attr_accessible :"#{localized_attr_name}" if respond_to?(:accessible_attributes) && accessible_attributes.include?(attr_name)
       globalize_attribute_names << localized_attr_name.to_sym
     end
 

@@ -118,10 +118,8 @@ module MessageApis
           return
         end
 
-        profile_id = conversation.main_participant
-                                 &.external_profiles
-                                 &.find_by(provider: PROVIDER)
-                                 &.profile_id
+        external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
+        profile_id = external_profile&.profile_id
 
         # TODO: maybe handle an error here ?
         return if profile_id.blank?

@@ -200,10 +200,8 @@ module MessageApis
       end
 
       def get_profile_for_participant(participant)
-        participant
-          &.external_profiles
-          &.find_by(provider: PROVIDER)
-          &.profile_id
+        external_profile = participant&.external_profiles&.find_by(provider: PROVIDER)
+        external_profile&.profile_id
       end
 
       def get_profile_for_participant_label(participant)
@@ -216,10 +214,8 @@ module MessageApis
         Rails.logger.debug conversation.inspect
         @package = package
 
-        profile_id = conversation.main_participant
-                                 &.external_profiles
-                                 &.find_by(provider: PROVIDER)
-                                 &.profile_id
+        external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
+        profile_id = external_profile&.profile_id
 
         if profile_id.blank?
           profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)

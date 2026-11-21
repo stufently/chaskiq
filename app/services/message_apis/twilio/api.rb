@@ -117,10 +117,8 @@ module MessageApis
       def prepare_initiator_channel_for(conversation, package)
         @package = package
 
-        profile_id = conversation.main_participant
-                                 &.external_profiles
-                                 &.find_by(provider: PROVIDER)
-                                 &.profile_id
+        external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
+        profile_id = external_profile&.profile_id
 
         if profile_id.blank?
           profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
@@ -151,10 +149,8 @@ module MessageApis
 
         blocks = MessageApis::BlockManager.get_blocks(message["serialized_content"])
 
-        profile_id = conversation.main_participant
-                                 &.external_profiles
-                                 &.find_by(provider: PROVIDER)
-                                 &.profile_id
+        external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
+        profile_id = external_profile&.profile_id
 
         # TODO: maybe handle an error here ?
         return if profile_id.blank?
