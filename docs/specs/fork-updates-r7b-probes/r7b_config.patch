@@ -1,0 +1,35 @@
+diff --git a/.rubocop.yml b/.rubocop.yml
+index b032ac0e..c7596da3 100644
+--- a/.rubocop.yml
++++ b/.rubocop.yml
+@@ -43,6 +43,30 @@ Metrics/ModuleLength:
+     - app/services/message_apis/helpers.rb
+ Rails/InverseOf:
+   Enabled: false
++# Owner decisions 2026-11-20 (docs/specs/fork-updates-rubocop-plan.md, R7, second batch):
++# format tokens stay unannotated ("%s"), the style the project writes; no code uses another style.
++Style/FormatStringToken:
++  EnforcedStyle: unannotated
++# These five plugin files stay compact (`class A::B`): nested, `Twilio` in twilio_phone/api.rb would
++# resolve to MessageApis::Twilio, and the four presenters evaluate ERB templates with
++# `result(binding)`, whose constants no static check sees. Nesting them is risk without gain.
++Style/ClassAndModuleChildren:
++  Exclude:
++    - 'app/services/message_apis/article_search/presenter.rb'
++    - 'app/services/message_apis/calendly/presenter.rb'
++    - 'app/services/message_apis/twilio_phone/api.rb'
++    - 'app/services/message_apis/twilio_phone/presenter.rb'
++    - 'app/services/message_apis/ui_catalog/presenter.rb'
++# GraphQL type methods resolve schema fields of the same name (`online`, `owner`, ...); a `?` name
++# would change the schema.
++Naming/PredicateMethod:
++  Exclude:
++    - 'app/graphql/types/**/*'
++# PluginSchemaValidator is one validator built from 21 small schema node classes; a file per class
++# would scatter it without making it clearer.
++Style/OneClassPerFile:
++  Exclude:
++    - 'app/services/plugin_schema_validator.rb'
+ # Owner decision 2026-11-20 (docs/specs/fork-updates-rubocop-plan.md, R7): stub class comments
+ # ("# Class for X") carry no information; classes are documented where it matters (GraphQL schema,
+ # README, specs).

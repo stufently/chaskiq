@@ -1,0 +1,171 @@
+diff --git a/spec/controllers/api/v1/hooks/calendly_spec.rb b/spec/controllers/api/v1/hooks/calendly_spec.rb
+index 9622095e..e4d85af5 100644
+--- a/spec/controllers/api/v1/hooks/calendly_spec.rb
++++ b/spec/controllers/api/v1/hooks/calendly_spec.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require "rails_helper"
+-include ActiveJob::TestHelper
+ 
+ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   def blocks
+diff --git a/spec/controllers/api/v1/hooks/dialog_360_spec.rb b/spec/controllers/api/v1/hooks/dialog_360_spec.rb
+index 2891614e..18caa9c1 100644
+--- a/spec/controllers/api/v1/hooks/dialog_360_spec.rb
++++ b/spec/controllers/api/v1/hooks/dialog_360_spec.rb
+@@ -2,7 +2,6 @@
+ 
+ require "rails_helper"
+ require "webmock"
+-include ActiveJob::TestHelper
+ 
+ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   let(:owner_phone) do
+diff --git a/spec/controllers/api/v1/hooks/message_bird_spec.rb b/spec/controllers/api/v1/hooks/message_bird_spec.rb
+index 264a7fc5..106b30bd 100644
+--- a/spec/controllers/api/v1/hooks/message_bird_spec.rb
++++ b/spec/controllers/api/v1/hooks/message_bird_spec.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require "rails_helper"
+-include ActiveJob::TestHelper
+ 
+ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   let(:owner_phone) do
+diff --git a/spec/controllers/api/v1/hooks/messenger_spec.rb b/spec/controllers/api/v1/hooks/messenger_spec.rb
+index c6b384a1..9eb0f4ca 100644
+--- a/spec/controllers/api/v1/hooks/messenger_spec.rb
++++ b/spec/controllers/api/v1/hooks/messenger_spec.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require "rails_helper"
+-include ActiveJob::TestHelper
+ 
+ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   let(:owner)  do
+diff --git a/spec/controllers/api/v1/hooks/openai_spec.rb b/spec/controllers/api/v1/hooks/openai_spec.rb
+index 4da47d8a..53539230 100644
+--- a/spec/controllers/api/v1/hooks/openai_spec.rb
++++ b/spec/controllers/api/v1/hooks/openai_spec.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require "rails_helper"
+-include ActiveJob::TestHelper
+ 
+ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   let!(:app) do
+diff --git a/spec/controllers/api/v1/hooks/pipedrive_spec.rb b/spec/controllers/api/v1/hooks/pipedrive_spec.rb
+index d7095a00..2a9b46cb 100644
+--- a/spec/controllers/api/v1/hooks/pipedrive_spec.rb
++++ b/spec/controllers/api/v1/hooks/pipedrive_spec.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require "rails_helper"
+-include ActiveJob::TestHelper
+ 
+ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   def block_actions(id:, message_data: {}, conversation: nil)
+diff --git a/spec/controllers/api/v1/hooks/slack_spec.rb b/spec/controllers/api/v1/hooks/slack_spec.rb
+index e3e49cfb..81231eba 100644
+--- a/spec/controllers/api/v1/hooks/slack_spec.rb
++++ b/spec/controllers/api/v1/hooks/slack_spec.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require "rails_helper"
+-include ActiveJob::TestHelper
+ 
+ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   let(:slack_owner) do
+diff --git a/spec/controllers/api/v1/hooks/twilio_spec.rb b/spec/controllers/api/v1/hooks/twilio_spec.rb
+index 7b17e70a..829107e9 100644
+--- a/spec/controllers/api/v1/hooks/twilio_spec.rb
++++ b/spec/controllers/api/v1/hooks/twilio_spec.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require "rails_helper"
+-include ActiveJob::TestHelper
+ 
+ class SuccessMock
+   attr_accessor :body
+diff --git a/spec/controllers/api/v1/hooks/twitter_spec.rb b/spec/controllers/api/v1/hooks/twitter_spec.rb
+index fc713fe9..dd0f187b 100644
+--- a/spec/controllers/api/v1/hooks/twitter_spec.rb
++++ b/spec/controllers/api/v1/hooks/twitter_spec.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require "rails_helper"
+-include ActiveJob::TestHelper
+ 
+ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   describe "Twitter outgoing media" do
+diff --git a/spec/controllers/api/v1/hooks/vonage_spec.rb b/spec/controllers/api/v1/hooks/vonage_spec.rb
+index 29d2d390..5793ee9f 100644
+--- a/spec/controllers/api/v1/hooks/vonage_spec.rb
++++ b/spec/controllers/api/v1/hooks/vonage_spec.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require "rails_helper"
+-include ActiveJob::TestHelper
+ 
+ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+   let(:owner_phone) do
+diff --git a/spec/controllers/api/v1/hooks/zoom_spec.rb b/spec/controllers/api/v1/hooks/zoom_spec.rb
+index be1a7603..c5e5b520 100644
+--- a/spec/controllers/api/v1/hooks/zoom_spec.rb
++++ b/spec/controllers/api/v1/hooks/zoom_spec.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require "rails_helper"
+-include ActiveJob::TestHelper
+ 
+ require "app_packages_catalog"
+ 
+diff --git a/spec/models/conversation_spec.rb b/spec/models/conversation_spec.rb
+index a69cbf28..98bf7c61 100644
+--- a/spec/models/conversation_spec.rb
++++ b/spec/models/conversation_spec.rb
+@@ -3,7 +3,6 @@
+ require "rails_helper"
+ 
+ require "app_packages_catalog"
+-include ActiveJob::TestHelper
+ 
+ RSpec.describe Conversation, type: :model do
+   # it{ should have_many :messages}
+diff --git a/spec/models/outgoing_webhook_spec.rb b/spec/models/outgoing_webhook_spec.rb
+index 40bbebbd..e335db3e 100644
+--- a/spec/models/outgoing_webhook_spec.rb
++++ b/spec/models/outgoing_webhook_spec.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require "rails_helper"
+-include ActiveJob::TestHelper
+ 
+ RSpec.describe OutgoingWebhook, type: :model do
+   let(:app) { FactoryBot.create :app }
+diff --git a/spec/rails_helper.rb b/spec/rails_helper.rb
+index af9f60be..8053c54f 100644
+--- a/spec/rails_helper.rb
++++ b/spec/rails_helper.rb
+@@ -45,6 +45,10 @@ require "database_cleaner/active_record"
+ RSpec.configure do |config|
+   # https://github.com/rspec/rspec-rails/issues/2410
+   config.include ActiveSupport::Testing::Assertions
++  # ActiveJob test helpers (perform_enqueued_jobs, assert_enqueued_jobs, ...) for every example
++  # group. Thirteen spec files used to `include` them at the top level, that is into Object, which
++  # made them reach every spec of the run (Style/MixinUsage).
++  config.include ActiveJob::TestHelper
+   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+   config.fixture_paths = [Rails.root.join("spec/fixtures")]
+ 

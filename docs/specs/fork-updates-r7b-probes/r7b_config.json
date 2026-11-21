@@ -1,0 +1,116 @@
+{
+ "cops_whole": [
+  "Style/FormatStringToken",
+  "Style/ClassAndModuleChildren",
+  "Style/MixinUsage"
+ ],
+ "cops_partial": {
+  "Naming/PredicateMethod": [
+   "app/graphql/types/agent_type.rb",
+   "app/graphql/types/app_user_type.rb",
+   "app/graphql/types/conversation_part_type.rb",
+   "app/graphql/types/public_app_type.rb",
+   "app/graphql/types/query_type.rb",
+   "app/graphql/types/role_type.rb"
+  ],
+  "Style/OneClassPerFile": [
+   "app/services/plugin_schema_validator.rb",
+   "lib/subdomain_routes.rb"
+  ]
+ },
+ "app_files": [
+  ".rubocop.yml",
+  "spec/rails_helper.rb",
+  "spec/controllers/api/v1/hooks/calendly_spec.rb",
+  "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+  "spec/controllers/api/v1/hooks/message_bird_spec.rb",
+  "spec/controllers/api/v1/hooks/messenger_spec.rb",
+  "spec/controllers/api/v1/hooks/openai_spec.rb",
+  "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+  "spec/controllers/api/v1/hooks/slack_spec.rb",
+  "spec/controllers/api/v1/hooks/twilio_spec.rb",
+  "spec/controllers/api/v1/hooks/twitter_spec.rb",
+  "spec/controllers/api/v1/hooks/vonage_spec.rb",
+  "spec/controllers/api/v1/hooks/zoom_spec.rb",
+  "spec/models/conversation_spec.rb",
+  "spec/models/outgoing_webhook_spec.rb"
+ ],
+ "check_specs": [
+  "spec/controllers/api/v1/hooks/calendly_spec.rb",
+  "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+  "spec/controllers/api/v1/hooks/message_bird_spec.rb",
+  "spec/controllers/api/v1/hooks/messenger_spec.rb",
+  "spec/controllers/api/v1/hooks/openai_spec.rb",
+  "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+  "spec/controllers/api/v1/hooks/slack_spec.rb",
+  "spec/controllers/api/v1/hooks/twilio_spec.rb",
+  "spec/controllers/api/v1/hooks/twitter_spec.rb",
+  "spec/controllers/api/v1/hooks/vonage_spec.rb",
+  "spec/controllers/api/v1/hooks/zoom_spec.rb",
+  "spec/models/conversation_spec.rb",
+  "spec/models/outgoing_webhook_spec.rb",
+  "spec/controllers/api/v1/hooks_controller_spec.rb",
+  "spec/models/agent_notifications_spec.rb"
+ ],
+ "show_cops": {
+  "Style/FormatStringToken": {
+   "EnforcedStyle": "unannotated"
+  }
+ },
+ "mutants": [
+  {
+   "id": "B01",
+   "file": "spec/rails_helper.rb",
+   "old": "  config.include ActiveJob::TestHelper\n",
+   "new": "",
+   "specs": [
+    "spec/controllers/api/v1/hooks/calendly_spec.rb",
+    "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+    "spec/controllers/api/v1/hooks/message_bird_spec.rb",
+    "spec/controllers/api/v1/hooks/messenger_spec.rb",
+    "spec/controllers/api/v1/hooks/openai_spec.rb",
+    "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+    "spec/controllers/api/v1/hooks/slack_spec.rb",
+    "spec/controllers/api/v1/hooks/twilio_spec.rb",
+    "spec/controllers/api/v1/hooks/twitter_spec.rb",
+    "spec/controllers/api/v1/hooks/vonage_spec.rb",
+    "spec/controllers/api/v1/hooks/zoom_spec.rb",
+    "spec/models/conversation_spec.rb",
+    "spec/models/outgoing_webhook_spec.rb",
+    "spec/controllers/api/v1/hooks_controller_spec.rb",
+    "spec/models/agent_notifications_spec.rb"
+   ]
+  },
+  {
+   "id": "B02",
+   "file": "spec/rails_helper.rb",
+   "old": "  config.include ActiveJob::TestHelper\n",
+   "new": "  config.include ActiveJob::TestHelper, type: :controller\n",
+   "specs": [
+    "spec/models/outgoing_webhook_spec.rb",
+    "spec/models/agent_notifications_spec.rb",
+    "spec/models/conversation_spec.rb"
+   ]
+  }
+ ],
+ "commits": [
+  {
+   "subject": "Move ActiveJob::TestHelper into RSpec config",
+   "patch": "r7b_mixin.patch",
+   "added": []
+  },
+  {
+   "subject": "Configure four R7 cops by owner decision",
+   "patch": "r7b_config.patch",
+   "added": []
+  },
+  {
+   "subject": "Drop R7b entries from RuboCop todo",
+   "todo": true
+  },
+  {
+   "subject": "Note fork-updates-r7b in changelog",
+   "changelog": true
+  }
+ ]
+}
