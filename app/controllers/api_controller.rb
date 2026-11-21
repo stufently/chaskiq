@@ -131,8 +131,6 @@ class ApiController < ActionController::API
     @app.add_anonymous_user(options)
   end
 
-  class EULocationError < StandardError; end
-
   def get_app_user
     valid_origin?
     @app_user ||= get_user_by_email || get_user_by_session

@@ -34,7 +34,7 @@ module MessageApis
       end
 
       def self.delete_key(conversation_key, key)
-        hash(namespace(conversation_key)).del(key)
+        hash(conversation_key).delete(key)
       end
 
       # locked agents at app key
