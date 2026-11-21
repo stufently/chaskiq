@@ -1,0 +1,9 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index 4bcbc29a..acb4d241 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -28,3 +28,3 @@ module Nightfury
+         # set is called on the smae object
+-        init_time_series unless redis.exists?(redis_key)
++        init_time_series if redis.exists?(redis_key)
+         add_value_to_timeline(value, time)

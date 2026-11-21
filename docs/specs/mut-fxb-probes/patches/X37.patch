@@ -1,0 +1,9 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index 4bcbc29a..a1656614 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -62,3 +62,3 @@ module Nightfury
+       def get_range(start_time, end_time)
+-        return nil unless redis.exists?(redis_key)
++        return nil if redis.exists?(redis_key)
+         start_time = get_step_time(start_time)

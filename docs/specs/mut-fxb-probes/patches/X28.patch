@@ -1,0 +1,9 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index 4bcbc29a..f25e80a5 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -48,3 +48,3 @@ module Nightfury
+         time, data, meta_value = decode_data_point(data_point)
+-        get_meta ? [{time => data}, meta_value] : {time => data}
++        {time => data}
+       end

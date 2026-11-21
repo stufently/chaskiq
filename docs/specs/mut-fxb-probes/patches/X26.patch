@@ -1,0 +1,9 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index 4bcbc29a..23655f8f 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -52,3 +52,3 @@ module Nightfury
+       def get_exact(timestamp, get_meta=false)
+-        return nil unless redis.exists?(redis_key)
++        return(get_meta ? [nil, {}] : nil) unless redis.exists?(redis_key)
+         timestamp = get_step_time(timestamp).to_i

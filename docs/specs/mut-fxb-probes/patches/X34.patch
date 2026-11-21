@@ -1,0 +1,8 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index 4bcbc29a..e0e913af 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -72,3 +72,2 @@ module Nightfury
+         data_points = redis.zrange(redis_key, 0, -1, withscores: true)
+-        data_points.reject! { |member, _score| member.start_with?('{') }
+         decode_many_data_points(data_points)

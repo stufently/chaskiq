@@ -1,0 +1,32 @@
+{
+ "equivalent": [
+  {
+   "id": "E1",
+   "file": "app/services/eu_countries.rb",
+   "old": "  module_function\n",
+   "new": "  extend self\n",
+   "reason": "nothing includes EuCountries (git grep: the only caller is EuCountries.includes? in messenger_type.rb), so a module function and extend self expose the same EuCountries.includes?; the private instance copy of module_function is never reachable."
+  },
+  {
+   "id": "E2",
+   "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+   "old": "        result = get_meta ? [{time => data}, meta_value] : {time => data}\n",
+   "new": "        get_meta ? [{time => data}, meta_value] : {time => data}\n",
+   "reason": "result is a dead local: the assignment is the last expression of get_exact, so the method returns the same value."
+  },
+  {
+   "id": "E3",
+   "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+   "old": "        data_point = ''\n",
+   "new": "",
+   "reason": "dead store: both branches of the following if/else assign data_point before it is read."
+  },
+  {
+   "id": "E4",
+   "file": "app/services/message_apis/twilio_phone/store.rb",
+   "old": "        hash(conversation_key).delete(key)\n",
+   "new": "        Kredis.hash(namespace(conversation_key)).delete(key)\n",
+   "reason": "self.hash(k) is exactly Kredis.hash(namespace(k)) (store.rb); the mutant only inlines it."
+  }
+ ]
+}

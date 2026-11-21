@@ -1,0 +1,8 @@
+diff --git a/app/services/message_apis/twilio_phone/store.rb b/app/services/message_apis/twilio_phone/store.rb
+index aaff46d7..813ad357 100644
+--- a/app/services/message_apis/twilio_phone/store.rb
++++ b/app/services/message_apis/twilio_phone/store.rb
+@@ -37,2 +37,3 @@ module MessageApis
+         hash(conversation_key).delete(key)
++        nil
+       end

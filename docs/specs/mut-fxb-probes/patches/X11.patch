@@ -1,0 +1,9 @@
+diff --git a/app/services/message_apis/slack/api.rb b/app/services/message_apis/slack/api.rb
+index 23906534..68200a4f 100644
+--- a/app/services/message_apis/slack/api.rb
++++ b/app/services/message_apis/slack/api.rb
+@@ -893,3 +893,3 @@ module MessageApis
+           # get slack user
+-          if part&.message&.action == "assigned" && data.is_a?(Hash) && data["email"].present?
++          if part&.message&.action == "assigned" && data.is_a?(Hash) && data.key?("email")
+             slack_user = get_slack_user_by_email(data["email"])

@@ -1,0 +1,9 @@
+diff --git a/app/services/eu_countries.rb b/app/services/eu_countries.rb
+index 4c12ef9e..6f27e22a 100644
+--- a/app/services/eu_countries.rb
++++ b/app/services/eu_countries.rb
+@@ -8,3 +8,3 @@ module EuCountries
+       DE AT BE BG CY HR DK ES EE FI FR GR HU IE
+-      IT LV LT LU MT NL PL PT CZ RO GB SK SI SE
++      IT LV LT LU MT NL PL PT CZ RO SK SI SE
+     ].include?(country_code)

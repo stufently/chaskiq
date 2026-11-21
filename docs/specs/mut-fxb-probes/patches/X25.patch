@@ -1,0 +1,9 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index 4bcbc29a..c77ee2e2 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -33,3 +33,3 @@ module Nightfury
+       def get(timestamp=nil, get_meta=false)
+-        return nil unless redis.exists?(redis_key)
++        return(get_meta ? [nil, {}] : nil) unless redis.exists?(redis_key)
+         data_point = ''

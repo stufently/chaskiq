@@ -1,0 +1,9 @@
+diff --git a/app/controllers/api/graphql_controller.rb b/app/controllers/api/graphql_controller.rb
+index 0e740391..a34eca8a 100644
+--- a/app/controllers/api/graphql_controller.rb
++++ b/app/controllers/api/graphql_controller.rb
+@@ -48,3 +48,3 @@ module Api
+       json_error e.record
+-    rescue OriginValidator::NonAcceptedOrigin => e
++    rescue ActiveRecord::RecordNotUnique => e
+       # GraphQL::ExecutionError.new e.message

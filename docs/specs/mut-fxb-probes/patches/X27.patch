@@ -1,0 +1,9 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index 4bcbc29a..9a22b8b9 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -45,3 +45,3 @@ module Nightfury
+         return get_meta ? [nil, {}] : nil if data_point.nil?
+-        return get_meta ? [nil, {}] : nil if data_point[1].zero?
++        return nil if data_point[1].zero?
+ 

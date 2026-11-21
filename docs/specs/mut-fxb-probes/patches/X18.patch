@@ -1,0 +1,8 @@
+diff --git a/app/graphql/types/messenger_type.rb b/app/graphql/types/messenger_type.rb
+index 96472d1b..817eefbf 100644
+--- a/app/graphql/types/messenger_type.rb
++++ b/app/graphql/types/messenger_type.rb
+@@ -30,3 +30,2 @@ module Types
+       # skip if already consent
+-      return false if user_privacy_consent
+       # skip if privacy consent is none

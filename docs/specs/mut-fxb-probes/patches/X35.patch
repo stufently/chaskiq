@@ -1,0 +1,9 @@
+diff --git a/vendor/nightfury/lib/nightfury/metric/time_series.rb b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+index 4bcbc29a..1dac73fa 100644
+--- a/vendor/nightfury/lib/nightfury/metric/time_series.rb
++++ b/vendor/nightfury/lib/nightfury/metric/time_series.rb
+@@ -20,3 +20,3 @@ module Nightfury
+         super(name, options)
+-        init_time_series unless redis.exists?(redis_key)
++        init_time_series if redis.exists?(redis_key)
+       end

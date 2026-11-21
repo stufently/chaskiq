@@ -1,0 +1,9 @@
+diff --git a/app/controllers/api/graphql_controller.rb b/app/controllers/api/graphql_controller.rb
+index 0e740391..93f3ccc0 100644
+--- a/app/controllers/api/graphql_controller.rb
++++ b/app/controllers/api/graphql_controller.rb
+@@ -52,3 +52,3 @@ module Api
+         errors: [{
+-          message: e.message,
++          message: "not accepted origin",
+           data: {}
