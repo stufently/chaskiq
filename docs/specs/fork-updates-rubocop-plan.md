@@ -449,6 +449,24 @@ BASE», фикс, запись Fixed в CHANGELOG; после неё M259/M267 �
 `MultilineBlockChain`, `HashLikeCase` без решения — вне r7b/c/d. План устарел: `FormatStringToken` 0
 offense; `OneClassPerFile` 25 в 4 файлах; `VariableName` 6.
 
+## Решения 2026-11-21 по оставшимся не-Metrics копам (делегировано владельцем)
+
+После R8a в todo, кроме Metrics/LineLength-выбросов: CaseEquality 22 файла, SafeNavigationChainLength 8,
+StringConcatenation 7, IfUnlessModifier 5, PredicateMethod 4, по 1–2 — CaseLikeIf, FloatDivision,
+HashEachMethods, HashLikeCase, IdenticalConditionalBranches, InverseMethods, MapIntoArray,
+ModuleMemberExistenceCheck, MultilineBlockChain, MultipleComparison, RedundantRegexpEscape, SafeNavigation,
+SingleArgumentDig, SymbolProc.
+- `Style/CaseEquality`: `AllowOnConstant: true` в `.rubocop.yml` (`Class === obj` — идиома); строковые и
+  прочие `===` → `==` с характеризационными тестами.
+- `Style/SafeNavigationChainLength`, `Style/MultilineBlockChain`: переписать (локальная переменная /
+  промежуточный результат), с тестами; без поднятия Max.
+- `Style/StringConcatenation`: интерполяция только там, где операнды гарантированно не nil (иначе
+  поведение меняется: `+ nil` бросает, `"#{nil}"` — пусто); сомнительные места — тест на nil до правки.
+- `Style/IfUnlessModifier`: безопасная автокоррекция.
+- `Naming/PredicateMethod`: см. решение выше (2 rename + alias, 2 в AllowedMethods).
+- Прочие одиночные Style — исправить по копу с тестами на затронутое поведение.
+Вехи R9a/R9b (qw2), затем выбросы Metrics/LineLength — отдельные вехи рефакторинга, потом R9: удалить todo.
+
 ## R9 — удалить `.rubocop_todo.yml`
 
 - Проверка, что todo пуст (или содержит только то, что R8 сознательно перенёс в `.rubocop.yml` с
