@@ -1,0 +1,460 @@
+{
+ "cops_whole": [
+  "Style/CaseEquality",
+  "Naming/PredicateMethod"
+ ],
+ "cops_partial": {
+  "Style/IfUnlessModifier": [
+   "app/services/message_apis/messenger/api.rb"
+  ],
+  "Style/InverseMethods": [
+   "app/models/segment_comparator.rb"
+  ],
+  "Style/MapIntoArray": [
+   "app/services/message_apis/messenger/api.rb"
+  ],
+  "Style/SingleArgumentDig": [
+   "app/jobs/sns_receiver_job.rb"
+  ]
+ },
+ "show_cops": {
+  "Style/CaseEquality": {
+   "AllowOnConstant": "true"
+  }
+ },
+ "app_files": [
+  ".rubocop.yml",
+  "app/graphql/types/messenger_type.rb",
+  "app/graphql/types/role_type.rb",
+  "app/jobs/sns_receiver_job.rb",
+  "app/models/conversation.rb",
+  "app/models/segment_comparator.rb",
+  "app/services/action_trigger_factory.rb",
+  "app/services/message_apis/article_search/presenter.rb",
+  "app/services/message_apis/calendly/presenter.rb",
+  "app/services/message_apis/content_showcase/presenter.rb",
+  "app/services/message_apis/csat/api.rb",
+  "app/services/message_apis/csat/presenter.rb",
+  "app/services/message_apis/dialog360/presenter.rb",
+  "app/services/message_apis/inbox_sections/presenter.rb",
+  "app/services/message_apis/messenger/api.rb",
+  "app/services/message_apis/open_ai/presenter.rb",
+  "app/services/message_apis/slack/api.rb",
+  "app/services/message_apis/ui_catalog/presenter.rb",
+  "app/services/message_apis/zapier/api.rb",
+  "app/services/message_apis/zapier/presenter.rb",
+  "app/services/message_apis/zoom/presenter.rb",
+  "spec/controllers/api/v1/subscriptions/paddle_hooks_controller_spec.rb"
+ ],
+ "char_specs": [
+  "spec/graphql/types/case_equality_types_spec.rb",
+  "spec/jobs/sns_receiver_job_headers_spec.rb",
+  "spec/models/conversation_assign_same_user_spec.rb",
+  "spec/services/action_trigger_factory_kind_spec.rb",
+  "spec/services/message_apis/presenters_case_equality_spec.rb",
+  "spec/services/message_apis/csat_report_label_spec.rb",
+  "spec/services/message_apis/messenger_api_hook_spec.rb",
+  "spec/services/message_apis/slack_process_message_spec.rb"
+ ],
+ "mixed_specs": [
+  "spec/services/message_apis/zapier_api_auth_spec.rb",
+  "spec/models/segment_comparator_compare_spec.rb"
+ ],
+ "mutants": [
+  {
+   "id": "A01",
+   "file": "app/graphql/types/messenger_type.rb",
+   "old": "@user.model_name.name == \"AppUser\"",
+   "new": "@user.model_name.name != \"AppUser\"",
+   "specs": [
+    "spec/graphql/types/case_equality_types_spec.rb"
+   ]
+  },
+  {
+   "id": "A02",
+   "file": "app/graphql/types/role_type.rb",
+   "old": "object.app.owner_id == object.agent_id",
+   "new": "object.app.owner_id != object.agent_id",
+   "specs": [
+    "spec/graphql/types/case_equality_types_spec.rb"
+   ]
+  },
+  {
+   "id": "A03",
+   "file": "app/jobs/sns_receiver_job.rb",
+   "old": "campaign = m[\"mail\"][\"headers\"].find do |o|\n      o[\"name\"] == \"X-CHASKIQ-CAMPAIGN-ID\"",
+   "new": "campaign = m[\"mail\"][\"headers\"].find do |o|\n      o[\"name\"] != \"X-CHASKIQ-CAMPAIGN-ID\"",
+   "specs": [
+    "spec/jobs/sns_receiver_job_headers_spec.rb"
+   ]
+  },
+  {
+   "id": "A04",
+   "file": "app/jobs/sns_receiver_job.rb",
+   "old": "campaign_id = m[\"mail\"][\"headers\"].find do |o|\n      o[\"name\"] == \"X-CHASKIQ-CAMPAIGN-ID\"",
+   "new": "campaign_id = m[\"mail\"][\"headers\"].find do |o|\n      o[\"name\"] != \"X-CHASKIQ-CAMPAIGN-ID\"",
+   "specs": [
+    "spec/jobs/sns_receiver_job_headers_spec.rb"
+   ]
+  },
+  {
+   "id": "A05",
+   "file": "app/jobs/sns_receiver_job.rb",
+   "old": "o[\"name\"] == \"X-CHASKIQ-CAMPAIGN-TO\"",
+   "new": "o[\"name\"] != \"X-CHASKIQ-CAMPAIGN-TO\"",
+   "specs": [
+    "spec/jobs/sns_receiver_job_headers_spec.rb"
+   ]
+  },
+  {
+   "id": "A06",
+   "file": "app/jobs/sns_receiver_job.rb",
+   "old": "    end[\"value\"]\n\n    user_id",
+   "new": "    end[\"name\"]\n\n    user_id",
+   "specs": [
+    "spec/jobs/sns_receiver_job_headers_spec.rb"
+   ]
+  },
+  {
+   "id": "A07",
+   "file": "app/jobs/sns_receiver_job.rb",
+   "old": "    end[\"value\"]\n\n    campaign = ",
+   "new": "    end[\"name\"]\n\n    campaign = ",
+   "specs": [
+    "spec/jobs/sns_receiver_job_headers_spec.rb"
+   ]
+  },
+  {
+   "id": "A08",
+   "file": "app/jobs/sns_receiver_job.rb",
+   "old": "    end[\"value\"]\n\n    campaign = ",
+   "new": "    end&.[](\"value\")\n\n    campaign = ",
+   "specs": [
+    "spec/jobs/sns_receiver_job_headers_spec.rb"
+   ]
+  },
+  {
+   "id": "A09",
+   "file": "app/models/conversation.rb",
+   "old": "assignee.id == user.id",
+   "new": "assignee.id != user.id",
+   "specs": [
+    "spec/models/conversation_assign_same_user_spec.rb"
+   ]
+  },
+  {
+   "id": "A10",
+   "file": "app/services/action_trigger_factory.rb",
+   "old": "if kind == \"AppUser\"",
+   "new": "if kind != \"AppUser\"",
+   "specs": [
+    "spec/services/action_trigger_factory_kind_spec.rb"
+   ]
+  },
+  {
+   "id": "A11",
+   "file": "app/services/action_trigger_factory.rb",
+   "old": "if (kind == \"Lead\") || (kind == \"Visitor\")",
+   "new": "if (kind != \"Lead\") || (kind == \"Visitor\")",
+   "specs": [
+    "spec/services/action_trigger_factory_kind_spec.rb"
+   ]
+  },
+  {
+   "id": "A12",
+   "file": "app/services/action_trigger_factory.rb",
+   "old": "if (kind == \"Lead\") || (kind == \"Visitor\")",
+   "new": "if (kind == \"Lead\") || (kind != \"Visitor\")",
+   "specs": [
+    "spec/services/action_trigger_factory_kind_spec.rb"
+   ]
+  },
+  {
+   "id": "A13",
+   "file": "app/services/action_trigger_factory.rb",
+   "old": "if app.email_requirement == \"Always\"",
+   "new": "if app.email_requirement != \"Always\"",
+   "specs": [
+    "spec/services/action_trigger_factory_kind_spec.rb"
+   ]
+  },
+  {
+   "id": "A14",
+   "file": "app/services/action_trigger_factory.rb",
+   "old": "if app.email_requirement == \"office\"",
+   "new": "if app.email_requirement != \"office\"",
+   "specs": [
+    "spec/services/action_trigger_factory_kind_spec.rb"
+   ]
+  },
+  {
+   "id": "A15",
+   "file": "app/services/action_trigger_factory.rb",
+   "old": "a[\"step_uid\"].to_s == step",
+   "new": "a[\"step_uid\"].to_s != step",
+   "specs": [
+    "spec/services/action_trigger_factory_kind_spec.rb"
+   ]
+  },
+  {
+   "id": "A16",
+   "file": "app/services/message_apis/article_search/presenter.rb",
+   "old": "ctx.dig(:field, :action, :type) == \"submit\" && (ctx.dig(:field, :id) == \"activate-action\")",
+   "new": "ctx.dig(:field, :action, :type) != \"submit\" && (ctx.dig(:field, :id) == \"activate-action\")",
+   "specs": [
+    "spec/services/message_apis/presenters_case_equality_spec.rb"
+   ]
+  },
+  {
+   "id": "A17",
+   "file": "app/services/message_apis/calendly/presenter.rb",
+   "old": "ctx.dig(:field, :action, :type) == \"submit\"",
+   "new": "ctx.dig(:field, :action, :type) != \"submit\"",
+   "specs": [
+    "spec/services/message_apis/presenters_case_equality_spec.rb"
+   ]
+  },
+  {
+   "id": "A18",
+   "file": "app/services/message_apis/content_showcase/presenter.rb",
+   "old": "if ctx.dig(:field, :action, :type) == \"submit\"",
+   "new": "if ctx.dig(:field, :action, :type) != \"submit\"",
+   "specs": [
+    "spec/services/message_apis/presenters_case_equality_spec.rb"
+   ]
+  },
+  {
+   "id": "A19",
+   "file": "app/services/message_apis/csat/api.rb",
+   "old": "d[:id] == o.val",
+   "new": "d[:id] != o.val",
+   "specs": [
+    "spec/services/message_apis/csat_report_label_spec.rb"
+   ]
+  },
+  {
+   "id": "A20",
+   "file": "app/services/message_apis/csat/presenter.rb",
+   "old": "ctx[:field][\"id\"] == \"command-confirm\"",
+   "new": "ctx[:field][\"id\"] != \"command-confirm\"",
+   "specs": [
+    "spec/services/message_apis/presenters_case_equality_spec.rb"
+   ]
+  },
+  {
+   "id": "A21",
+   "file": "app/services/message_apis/dialog360/presenter.rb",
+   "old": "ctx.dig(:field, :action, :type) == \"submit\"",
+   "new": "ctx.dig(:field, :action, :type) != \"submit\"",
+   "specs": [
+    "spec/services/message_apis/presenters_case_equality_spec.rb"
+   ]
+  },
+  {
+   "id": "A22",
+   "file": "app/services/message_apis/inbox_sections/presenter.rb",
+   "old": "if type_value == \"content\"",
+   "new": "if type_value != \"content\"",
+   "specs": [
+    "spec/services/message_apis/presenters_case_equality_spec.rb"
+   ]
+  },
+  {
+   "id": "A23",
+   "file": "app/services/message_apis/messenger/api.rb",
+   "old": "mode == \"subscribe\" && token == verify_token",
+   "new": "mode != \"subscribe\" && token == verify_token",
+   "specs": [
+    "spec/services/message_apis/messenger_api_hook_spec.rb"
+   ]
+  },
+  {
+   "id": "A24",
+   "file": "app/services/message_apis/messenger/api.rb",
+   "old": "mode == \"subscribe\" && token == verify_token",
+   "new": "mode == \"subscribe\" && token != verify_token",
+   "specs": [
+    "spec/services/message_apis/messenger_api_hook_spec.rb"
+   ]
+  },
+  {
+   "id": "A25",
+   "file": "app/services/message_apis/messenger/api.rb",
+   "old": "return create_hook_from_params(params, package) if params",
+   "new": "return create_hook_from_params(params, package) unless params",
+   "specs": [
+    "spec/services/message_apis/messenger_api_hook_spec.rb"
+   ]
+  },
+  {
+   "id": "A26",
+   "file": "app/services/message_apis/messenger/api.rb",
+   "old": "attachments.map { |attachment| media_block(attachment) }",
+   "new": "attachments.map { |attachment| media_block(attachments.first) }",
+   "specs": [
+    "spec/services/message_apis/messenger_api_hook_spec.rb"
+   ]
+  },
+  {
+   "id": "A27",
+   "file": "app/services/message_apis/open_ai/presenter.rb",
+   "old": "ctx.dig(:field, :action, :type) == \"submit\"",
+   "new": "ctx.dig(:field, :action, :type) != \"submit\"",
+   "specs": [
+    "spec/services/message_apis/presenters_case_equality_spec.rb"
+   ]
+  },
+  {
+   "id": "A28",
+   "file": "app/services/message_apis/slack/api.rb",
+   "old": "return if event[\"subtype\"] == \"channel_join\"",
+   "new": "return if event[\"subtype\"] != \"channel_join\"",
+   "specs": [
+    "spec/services/message_apis/slack_process_message_spec.rb"
+   ]
+  },
+  {
+   "id": "A29",
+   "file": "app/services/message_apis/slack/api.rb",
+   "old": "return if event[\"text\"] == \"New conversation from Chaskiq\"",
+   "new": "return if event[\"text\"] != \"New conversation from Chaskiq\"",
+   "specs": [
+    "spec/services/message_apis/slack_process_message_spec.rb"
+   ]
+  },
+  {
+   "id": "A30",
+   "file": "app/services/message_apis/slack/api.rb",
+   "old": "o[\"type\"] == \"image\"",
+   "new": "o[\"type\"] != \"image\"",
+   "specs": [
+    "spec/services/message_apis/slack_process_message_spec.rb"
+   ]
+  },
+  {
+   "id": "A31",
+   "file": "app/services/message_apis/ui_catalog/presenter.rb",
+   "old": "if type_value == \"content\"",
+   "new": "if type_value != \"content\"",
+   "specs": [
+    "spec/services/message_apis/presenters_case_equality_spec.rb"
+   ]
+  },
+  {
+   "id": "A32",
+   "file": "app/services/message_apis/ui_catalog/presenter.rb",
+   "old": "if ctx.dig(:field, :action, :type) == \"submit\"",
+   "new": "if ctx.dig(:field, :action, :type) != \"submit\"",
+   "specs": [
+    "spec/services/message_apis/presenters_case_equality_spec.rb"
+   ]
+  },
+  {
+   "id": "A33",
+   "file": "app/services/message_apis/zapier/api.rb",
+   "old": "package.access_token == params[:auth]",
+   "new": "package.access_token != params[:auth]",
+   "specs": [
+    "spec/services/message_apis/zapier_api_auth_spec.rb"
+   ]
+  },
+  {
+   "id": "A34",
+   "file": "app/services/message_apis/zapier/api.rb",
+   "old": "      alias event_identifier_available? event_identifier_and_url\n",
+   "new": "",
+   "specs": [
+    "spec/services/message_apis/zapier_api_auth_spec.rb"
+   ]
+  },
+  {
+   "id": "A35",
+   "file": "app/services/message_apis/zapier/api.rb",
+   "old": "      alias event_identifier_available? event_identifier_and_url\n",
+   "new": "      alias event_identifier_available? event_identifier_and_url\n      def event_identifier_and_url(*) = nil\n",
+   "specs": [
+    "spec/services/message_apis/zapier_api_auth_spec.rb"
+   ]
+  },
+  {
+   "id": "A36",
+   "file": "app/services/message_apis/zapier/api.rb",
+   "old": "return [nil, nil] if event_identifier.blank?",
+   "new": "return [nil] if event_identifier.blank?",
+   "specs": [
+    "spec/services/message_apis/zapier_api_auth_spec.rb"
+   ]
+  },
+  {
+   "id": "A37",
+   "file": "app/services/message_apis/zapier/presenter.rb",
+   "old": "return unless type_value == \"content\"",
+   "new": "return unless type_value != \"content\"",
+   "specs": [
+    "spec/services/message_apis/presenters_case_equality_spec.rb"
+   ]
+  },
+  {
+   "id": "A38",
+   "file": "app/services/message_apis/zoom/presenter.rb",
+   "old": "ctx.dig(:field, :action, :type) == \"submit\"",
+   "new": "ctx.dig(:field, :action, :type) != \"submit\"",
+   "specs": [
+    "spec/services/message_apis/presenters_case_equality_spec.rb"
+   ]
+  },
+  {
+   "id": "A39",
+   "file": "app/models/segment_comparator.rb",
+   "old": "predicates.reject { |o| o[\"type\"] == \"match\" }",
+   "new": "predicates.reject { |o| o[\"type\"] != \"match\" }",
+   "specs": [
+    "spec/models/segment_comparator_compare_spec.rb"
+   ]
+  },
+  {
+   "id": "A40",
+   "file": "app/models/segment_comparator.rb",
+   "old": "  alias compare compare?\n",
+   "new": "",
+   "specs": [
+    "spec/models/segment_comparator_compare_spec.rb"
+   ]
+  },
+  {
+   "id": "A41",
+   "file": "app/models/segment_comparator.rb",
+   "old": "  alias compare compare?\n",
+   "new": "  alias compare compare?\n  def compare?(*) = nil\n",
+   "specs": [
+    "spec/models/segment_comparator_compare_spec.rb"
+   ]
+  }
+ ],
+ "commits": [
+  {
+   "subject": "Use == for equality, rename two predicates",
+   "patch": "r9a_rewrite.patch",
+   "added": [
+    "spec/graphql/types/case_equality_types_spec.rb",
+    "spec/jobs/sns_receiver_job_headers_spec.rb",
+    "spec/models/conversation_assign_same_user_spec.rb",
+    "spec/models/segment_comparator_compare_spec.rb",
+    "spec/services/action_trigger_factory_kind_spec.rb",
+    "spec/services/message_apis/csat_report_label_spec.rb",
+    "spec/services/message_apis/messenger_api_hook_spec.rb",
+    "spec/services/message_apis/presenters_case_equality_spec.rb",
+    "spec/services/message_apis/slack_process_message_spec.rb",
+    "spec/services/message_apis/zapier_api_auth_spec.rb"
+   ]
+  },
+  {
+   "subject": "Drop R9a entries from RuboCop todo",
+   "todo": true
+  },
+  {
+   "subject": "Note fork-updates-r9a in changelog",
+   "changelog": true
+  }
+ ]
+}

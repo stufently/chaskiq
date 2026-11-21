@@ -1,0 +1,439 @@
+diff --git a/.rubocop.yml b/.rubocop.yml
+index 05d19b57..6f8f740c 100644
+--- a/.rubocop.yml
++++ b/.rubocop.yml
+@@ -66,10 +66,21 @@ Style/ClassAndModuleChildren:
+     - 'app/services/message_apis/twilio_phone/presenter.rb'
+     - 'app/services/message_apis/ui_catalog/presenter.rb'
+ # GraphQL type methods resolve schema fields of the same name (`online`, `owner`, ...); a `?` name
+-# would change the schema.
++# would change the schema. R9a (same plan, decision 2026-11-21): Slack's receive_oauth_code (a plugin
++# interface method: it fetches and stores an OAuth token) and TarDownloader#download_plugin (it
++# downloads a plugin tarball and writes it to tmp/) return true/false but act; a `?` name would hide
++# that. `call` is RuboCop's default.
+ Naming/PredicateMethod:
++  AllowedMethods:
++    - call
++    - receive_oauth_code
++    - download_plugin
+   Exclude:
+     - 'app/graphql/types/**/*'
++# R9a (same plan, decision 2026-11-21): `Klass === obj` is Ruby's type check (what `case`/`when`
++# does); every other `===` in the code is written `==`.
++Style/CaseEquality:
++  AllowOnConstant: true
+ # PluginSchemaValidator is one validator built from 21 small schema node classes; a file per class
+ # would scatter it without making it clearer.
+ Style/OneClassPerFile:
+diff --git a/app/graphql/types/messenger_type.rb b/app/graphql/types/messenger_type.rb
+index 9471130f..ad6cd630 100644
+--- a/app/graphql/types/messenger_type.rb
++++ b/app/graphql/types/messenger_type.rb
+@@ -78,7 +78,7 @@ module Types
+ 
+       return false if @user.blank? || @user.blocked?
+ 
+-      k = @user.model_name.name === "AppUser" ? "users" : "visitors"
++      k = @user.model_name.name == "AppUser" ? "users" : "visitors"
+       return if k.blank?
+       return nil unless object.inbound_settings[k]["enabled"]
+       return true if object.inbound_settings[k]["segment"] == "all"
+diff --git a/app/graphql/types/role_type.rb b/app/graphql/types/role_type.rb
+index 577fa287..695056a6 100644
+--- a/app/graphql/types/role_type.rb
++++ b/app/graphql/types/role_type.rb
+@@ -36,7 +36,7 @@ module Types
+ 
+     field :owner, Boolean, null: true
+     def owner
+-      object.app.owner_id === object.agent_id
++      object.app.owner_id == object.agent_id
+     end
+ 
+     field :online, Boolean, null: true
+diff --git a/app/jobs/sns_receiver_job.rb b/app/jobs/sns_receiver_job.rb
+index acc91a4b..5ec5cf28 100644
+--- a/app/jobs/sns_receiver_job.rb
++++ b/app/jobs/sns_receiver_job.rb
+@@ -10,7 +10,7 @@ class SnsReceiverJob < ApplicationJob
+     end
+ 
+     campaign = m["mail"]["headers"].find do |o|
+-      o["name"] === "X-CHASKIQ-CAMPAIGN-ID"
++      o["name"] == "X-CHASKIQ-CAMPAIGN-ID"
+     end
+ 
+     # handle conversation and exit
+@@ -27,12 +27,12 @@ class SnsReceiverJob < ApplicationJob
+     # message_id = parsed_message_id(m)
+ 
+     campaign_id = m["mail"]["headers"].find do |o|
+-      o["name"] === "X-CHASKIQ-CAMPAIGN-ID"
+-    end.dig("value")
++      o["name"] == "X-CHASKIQ-CAMPAIGN-ID"
++    end["value"]
+ 
+     user_id = m["mail"]["headers"].find do |o|
+-      o["name"] === "X-CHASKIQ-CAMPAIGN-TO"
+-    end.dig("value")
++      o["name"] == "X-CHASKIQ-CAMPAIGN-TO"
++    end["value"]
+ 
+     campaign = Campaign.find_by(id: campaign_id)
+     app_user = AppUser.find_by(id: user_id)
+diff --git a/app/models/conversation.rb b/app/models/conversation.rb
+index 23c1e8d0..3bb9e11e 100644
+--- a/app/models/conversation.rb
++++ b/app/models/conversation.rb
+@@ -174,7 +174,7 @@ class Conversation < ApplicationRecord
+   end
+ 
+   def assign_user(user)
+-    return if assignee.present? && assignee.id === user.id
++    return if assignee.present? && assignee.id == user.id
+ 
+     self.assignee = user
+     return unless save
+diff --git a/app/models/segment_comparator.rb b/app/models/segment_comparator.rb
+index 8ab7881d..5fe77d02 100644
+--- a/app/models/segment_comparator.rb
++++ b/app/models/segment_comparator.rb
+@@ -9,8 +9,8 @@ class SegmentComparator
+     self.additional_fields = additional_fields
+   end
+ 
+-  def compare
+-    condition_predicates = predicates.select { |o| o["type"] != "match" }
++  def compare?
++    condition_predicates = predicates.reject { |o| o["type"] == "match" }
+ 
+     query = handle_condition_predicates(condition_predicates)
+ 
+@@ -22,6 +22,7 @@ class SegmentComparator
+       query.include?(true) && query.exclude?(false)
+     end
+   end
++  alias compare compare?
+ 
+   def handle_condition_predicates(condition_predicates)
+     cols = AppUser.columns
+diff --git a/app/services/action_trigger_factory.rb b/app/services/action_trigger_factory.rb
+index a3c49196..6c792475 100644
+--- a/app/services/action_trigger_factory.rb
++++ b/app/services/action_trigger_factory.rb
+@@ -191,7 +191,7 @@ class ActionTriggerFactory
+         )
+       ]
+ 
+-      if kind === "AppUser"
++      if kind == "AppUser"
+         path_messages << [
+           c.message(
+             text: I18n.t("task_bots.reply_soon", name: app.name),
+@@ -201,7 +201,7 @@ class ActionTriggerFactory
+         ]
+       end
+ 
+-      if (kind === "Lead") || (kind === "Visitor")
++      if (kind == "Lead") || (kind == "Visitor")
+ 
+         if app.lead_tasks_settings["share_typical_time"]
+           path_messages << c.message(
+@@ -248,12 +248,12 @@ class ActionTriggerFactory
+ 
+       if user.email.blank?
+ 
+-        if app.email_requirement === "Always"
++        if app.email_requirement == "Always"
+           step7 << email_requirement
+           step7.flatten!
+         end
+ 
+-        if app.email_requirement === "office" && !app.in_business_hours?(Time.current)
++        if app.email_requirement == "office" && !app.in_business_hours?(Time.current)
+           step7 << email_requirement
+           step7.flatten!
+         end
+@@ -353,7 +353,7 @@ class ActionTriggerFactory
+     begin
+       path = trigger.paths.find do |o|
+         o.with_indifferent_access["steps"].find do |a|
+-          a["step_uid"].to_s === step
++          a["step_uid"].to_s == step
+         end.present?
+       end.with_indifferent_access
+     rescue StandardError
+diff --git a/app/services/message_apis/article_search/presenter.rb b/app/services/message_apis/article_search/presenter.rb
+index 30731241..1a6625b7 100644
+--- a/app/services/message_apis/article_search/presenter.rb
++++ b/app/services/message_apis/article_search/presenter.rb
+@@ -133,7 +133,7 @@ module MessageApis::ArticleSearch
+         }
+       ]
+ 
+-      if ctx.dig(:field, :action, :type) === "submit" && (ctx.dig(:field, :id) == "activate-action")
++      if ctx.dig(:field, :action, :type) == "submit" && (ctx.dig(:field, :id) == "activate-action")
+         results = {
+           foo: "bar",
+           baz: "baaz"
+diff --git a/app/services/message_apis/calendly/presenter.rb b/app/services/message_apis/calendly/presenter.rb
+index 49e72ba7..2d03ef9e 100644
+--- a/app/services/message_apis/calendly/presenter.rb
++++ b/app/services/message_apis/calendly/presenter.rb
+@@ -116,7 +116,7 @@ module MessageApis::Calendly
+       ]
+ 
+       if ctx.dig(:field, :name) == "set_url" &&
+-         ctx.dig(:field, :action, :type) === "submit"
++         ctx.dig(:field, :action, :type) == "submit"
+ 
+         url = ctx.dig(:values, :calendar)
+         label = ctx.dig(:values, :label).presence || "Book a meeting"
+diff --git a/app/services/message_apis/content_showcase/presenter.rb b/app/services/message_apis/content_showcase/presenter.rb
+index c3ce9144..7e24146a 100644
+--- a/app/services/message_apis/content_showcase/presenter.rb
++++ b/app/services/message_apis/content_showcase/presenter.rb
+@@ -91,7 +91,7 @@ module MessageApis
+ 
+         definitions = base_definitions
+ 
+-        if ctx.dig(:field, :action, :type) === "submit"
++        if ctx.dig(:field, :action, :type) == "submit"
+           if ctx.dig(:field, :id) == "pick-another"
+             return {
+               kind: kind,
+diff --git a/app/services/message_apis/csat/api.rb b/app/services/message_apis/csat/api.rb
+index 6b0e3003..a2842894 100644
+--- a/app/services/message_apis/csat/api.rb
++++ b/app/services/message_apis/csat/api.rb
+@@ -59,7 +59,7 @@ module MessageApis
+             package_name: integration.app_package.name,
+             values: options.map do |o|
+               {
+-                label: data_options.find { |d| d[:id] === o.val }[:text],
++                label: data_options.find { |d| d[:id] == o.val }[:text],
+                 name: o.val,
+                 value: "#{(o.freq.to_f / total * 100.0).ceil(1)}%",
+                 value2: "#{o.freq} events"
+diff --git a/app/services/message_apis/csat/presenter.rb b/app/services/message_apis/csat/presenter.rb
+index 35f90e37..235835fa 100644
+--- a/app/services/message_apis/csat/presenter.rb
++++ b/app/services/message_apis/csat/presenter.rb
+@@ -95,7 +95,7 @@ module MessageApis
+           }
+         ]
+ 
+-        if ctx[:field] && ctx[:field]["id"] === "command-confirm"
++        if ctx[:field] && ctx[:field]["id"] == "command-confirm"
+ 
+           return {
+             kind: "initialize",
+diff --git a/app/services/message_apis/dialog360/presenter.rb b/app/services/message_apis/dialog360/presenter.rb
+index 68d9293e..62d09851 100644
+--- a/app/services/message_apis/dialog360/presenter.rb
++++ b/app/services/message_apis/dialog360/presenter.rb
+@@ -197,7 +197,7 @@ module MessageApis
+ 
+         # will submit
+         if ctx.dig(:field, :name) == "submit-template" &&
+-           ctx.dig(:field, :action, :type) === "submit"
++           ctx.dig(:field, :action, :type) == "submit"
+ 
+           decoded = Base64.decode64(ctx.dig(:field, :id))
+           decoded = JSON.parse(decoded)
+diff --git a/app/services/message_apis/inbox_sections/presenter.rb b/app/services/message_apis/inbox_sections/presenter.rb
+index aa6c2e40..79611799 100644
+--- a/app/services/message_apis/inbox_sections/presenter.rb
++++ b/app/services/message_apis/inbox_sections/presenter.rb
+@@ -21,7 +21,7 @@ module MessageApis
+         type_value = ctx.dig(:values, :type)
+         block_type = ctx.dig(:values, :block_type)
+ 
+-        if type_value === "content"
++        if type_value == "content"
+ 
+           # case ctx.dig(:values, :block_type)
+           # when 'tag-blocks'
+diff --git a/app/services/message_apis/messenger/api.rb b/app/services/message_apis/messenger/api.rb
+index 52bb69fa..e4505c87 100644
+--- a/app/services/message_apis/messenger/api.rb
++++ b/app/services/message_apis/messenger/api.rb
+@@ -64,7 +64,7 @@ module MessageApis
+         return if !mode && !token
+         # Checks the mode and token sent is correct
+         # Responds with the challenge token from the request
+-        return challenge if mode === "subscribe" && token === verify_token
++        return challenge if mode == "subscribe" && token == verify_token
+ 
+         # Responds with '403 Forbidden' if verify tokens do not match
+         nil
+@@ -84,9 +84,7 @@ module MessageApis
+         @package = package
+         params["current"]
+ 
+-        if params["hub.verify_token"].present? && params["hub.mode"] == "subscribe"
+-          return create_hook_from_params(params, package)
+-        end
++        return create_hook_from_params(params, package) if params["hub.verify_token"].present? && params["hub.mode"] == "subscribe"
+ 
+         process_message(params, @package) if params["object"] == "page" && params["entry"].present?
+       end
+@@ -228,11 +226,7 @@ module MessageApis
+       def attachment_block(data)
+         attachments = data["message"]["attachments"]
+ 
+-        media_blocks = []
+-
+-        attachments.each do |attachment|
+-          media_blocks << media_block(attachment)
+-        end
++        media_blocks = attachments.map { |attachment| media_block(attachment) }
+ 
+         main_doc(media_blocks.compact).to_json
+       end
+diff --git a/app/services/message_apis/open_ai/presenter.rb b/app/services/message_apis/open_ai/presenter.rb
+index eb5cc1e0..f77ff9b5 100644
+--- a/app/services/message_apis/open_ai/presenter.rb
++++ b/app/services/message_apis/open_ai/presenter.rb
+@@ -81,7 +81,7 @@ module MessageApis
+         end
+ 
+         if ctx.dig(:field, :id) == "add-prompt" &&
+-           ctx.dig(:field, :action, :type) === "submit"
++           ctx.dig(:field, :action, :type) == "submit"
+ 
+           # TODO: validate
+ 
+diff --git a/app/services/message_apis/slack/api.rb b/app/services/message_apis/slack/api.rb
+index 23906534..aa9d76d6 100644
+--- a/app/services/message_apis/slack/api.rb
++++ b/app/services/message_apis/slack/api.rb
+@@ -733,9 +733,9 @@ module MessageApis
+ 
+       def process_message(event)
+         # TODO: add a conversation_event_type for this type
+-        return if event["subtype"] === "channel_join"
++        return if event["subtype"] == "channel_join"
+         return if event["thread_ts"].blank?
+-        return if event["text"] === "New conversation from Chaskiq"
++        return if event["text"] == "New conversation from Chaskiq"
+ 
+         conversation = find_conversation_by_slack_ts(event["thread_ts"])
+ 
+@@ -1051,7 +1051,7 @@ module MessageApis
+ 
+       def process_blocks(data)
+         images = data["blocks"]&.select do |o|
+-          o["type"] === "image"
++          o["type"] == "image"
+         end || []
+ 
+         images = images.map do |block|
+diff --git a/app/services/message_apis/ui_catalog/presenter.rb b/app/services/message_apis/ui_catalog/presenter.rb
+index 66a6dcc2..054f4064 100644
+--- a/app/services/message_apis/ui_catalog/presenter.rb
++++ b/app/services/message_apis/ui_catalog/presenter.rb
+@@ -8,7 +8,7 @@ module MessageApis::UiCatalog
+     def self.initialize_hook(kind:, ctx:)
+       type_value = ctx.dig(:values, :type)
+ 
+-      if type_value === "content"
++      if type_value == "content"
+         return {
+           # ctx: ctx,
+           definitions: [
+@@ -121,7 +121,7 @@ module MessageApis::UiCatalog
+         }
+       ]
+ 
+-      if ctx.dig(:field, :action, :type) === "submit"
++      if ctx.dig(:field, :action, :type) == "submit"
+         if ctx.dig(:field, :id) == "aaaaaaaa"
+           results = {
+             foo: "bar",
+diff --git a/app/services/message_apis/zapier/api.rb b/app/services/message_apis/zapier/api.rb
+index 0f45b40e..b347ea0d 100644
+--- a/app/services/message_apis/zapier/api.rb
++++ b/app/services/message_apis/zapier/api.rb
+@@ -86,7 +86,7 @@ module MessageApis
+           handle_unsubscription_hook(params, package)
+         else
+           if params[:auth].present?
+-            return { status: :ok, app_name: app.name } if package.access_token === params[:auth]
++            return { status: :ok, app_name: app.name } if package.access_token == params[:auth]
+ 
+             return { status: :error, message: "auth key invalid" }
+ 
+@@ -186,7 +186,7 @@ module MessageApis
+         )
+       end
+ 
+-      def event_identifier_available?(event)
++      def event_identifier_and_url(event)
+         event_identifier = Event::EVENT_CONSTANTS.find do |o|
+           o[:name] == event.action
+         end
+@@ -196,6 +196,7 @@ module MessageApis
+ 
+         [event_identifier, url]
+       end
++      alias event_identifier_available? event_identifier_and_url
+ 
+       def polling_sample(params)
+         case params[:event_type]
+diff --git a/app/services/message_apis/zapier/presenter.rb b/app/services/message_apis/zapier/presenter.rb
+index ed7e2bf2..43f41412 100644
+--- a/app/services/message_apis/zapier/presenter.rb
++++ b/app/services/message_apis/zapier/presenter.rb
+@@ -9,7 +9,7 @@ module MessageApis
+         type_value = ctx.dig(:values, :type)
+         block_type = ctx.dig(:values, :block_type)
+ 
+-        return unless type_value === "content"
++        return unless type_value == "content"
+ 
+         {
+           # ctx: ctx,
+diff --git a/app/services/message_apis/zoom/presenter.rb b/app/services/message_apis/zoom/presenter.rb
+index 85b328d8..ec921f3e 100644
+--- a/app/services/message_apis/zoom/presenter.rb
++++ b/app/services/message_apis/zoom/presenter.rb
+@@ -52,7 +52,7 @@ module MessageApis
+         definitions = definitions_for_configure_hook
+ 
+         if ctx.dig(:field, :name) == "set_url" &&
+-           ctx.dig(:field, :action, :type) === "submit"
++           ctx.dig(:field, :action, :type) == "submit"
+ 
+           email = ctx.dig(:values, :zoom_user)
+ 
+diff --git a/spec/controllers/api/v1/subscriptions/paddle_hooks_controller_spec.rb b/spec/controllers/api/v1/subscriptions/paddle_hooks_controller_spec.rb
+index 2fa334ab..6ebf6e64 100644
+--- a/spec/controllers/api/v1/subscriptions/paddle_hooks_controller_spec.rb
++++ b/spec/controllers/api/v1/subscriptions/paddle_hooks_controller_spec.rb
+@@ -140,7 +140,7 @@ RSpec.describe Api::V1::Subscriptions::PaddleHooksController, type: :controller
+     expect(app.paddle_subscription_id).to be_present
+     expect(app.paddle_subscription_plan_id).to be_present
+ 
+-    expect(app.paddle_subscription_status).to be === "trialing"
++    expect(app.paddle_subscription_status).to eq("trialing")
+   end
+ 
+   it "cancel subscription" do
+@@ -151,7 +151,7 @@ RSpec.describe Api::V1::Subscriptions::PaddleHooksController, type: :controller
+     expect(app.paddle_subscription_id).to be_present
+     expect(app.paddle_subscription_plan_id).to be_present
+ 
+-    expect(app.paddle_subscription_status).to be === "deleted"
++    expect(app.paddle_subscription_status).to eq("deleted")
+   end
+ 
+   it "update subscription" do
+@@ -162,6 +162,6 @@ RSpec.describe Api::V1::Subscriptions::PaddleHooksController, type: :controller
+     expect(app.paddle_subscription_id).to be_present
+     expect(app.paddle_subscription_plan_id).to be_present
+ 
+-    expect(app.paddle_subscription_status).to be === "active"
++    expect(app.paddle_subscription_status).to eq("active")
+   end
+ end
