@@ -500,26 +500,10 @@ Naming/PredicateMethod:
     - 'app/graphql/types/public_app_type.rb'
     - 'app/graphql/types/query_type.rb'
     - 'app/graphql/types/role_type.rb'
-    - 'app/models/outgoing_webhook.rb'
     - 'app/models/segment_comparator.rb'
     - 'app/services/message_apis/slack/api.rb'
     - 'app/services/message_apis/zapier/api.rb'
-    - 'app/services/origin_validator.rb'
     - 'app/services/plugins/tar_downloader.rb'
-
-# Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros, UseSorbetSigs.
-# NamePrefix: is_, has_, have_, does_
-# ForbiddenPrefixes: is_, has_, have_, does_
-# AllowedMethods: is_a?
-# MethodDefinitionMacros: define_method, define_singleton_method
-Naming/PredicatePrefix:
-  Exclude:
-    - 'app/controllers/api/v1/hooks_controller.rb'
-    - 'app/models/app_package.rb'
-    - 'app/models/conversation.rb'
-    - 'app/models/conversation_part.rb'
-    - 'app/models/outgoing_webhook.rb'
-    - 'app/services/origin_validator.rb'
 
 # Configuration parameters: EnforcedStyle, AllowedIdentifiers, AllowedPatterns, ForbiddenIdentifiers, ForbiddenPatterns.
 # SupportedStyles: snake_case, camelCase
