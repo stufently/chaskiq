@@ -61,6 +61,13 @@ Naming/MethodParameterName:
 # unused positional arguments get a `_` prefix instead.
 Lint/UnusedMethodArgument:
   AllowUnusedKeywordArguments: true
+# R2b (same plan, owner decisions 2026-11-20): in ApiController the memoized ivars of get_user_data
+# (@user_data) and get_app_user (@app_user) are state that other methods and subclasses also set and
+# read (get_user_data_from_auth, set_locale, Api::GraphqlController#auth and attr_reader :user_data);
+# naming them after the methods would split that state. App#availability is renamed instead.
+Naming/MemoizedInstanceVariableName:
+  Exclude:
+    - 'app/controllers/api_controller.rb'
 AllCops:
   NewCops: enable
   Exclude:
