@@ -377,6 +377,14 @@ BASE», фикс, запись Fixed в CHANGELOG; после неё M259/M267 �
   и бросает `TypeError` на строке/nil (метод модуля — `includes?`): `needs_privacy_consent` при
   настройке "eu" падает. Кандидат в ту же веху фиксов (тест «красный на BASE»).
 
+## Вне бэклога: дефект `Lead#verify!` (найден при подготовке mut-r5b2, 2026-11-21)
+
+`app/models/lead.rb:5-8`: `app_users.any?` стоит отдельной строкой без эффекта, а relation в `if`
+всегда истинна. Любой Lead с email уходит в `clone_records_and_discard(app_users.first)`, даже когда
+подходящего AppUser нет, то есть вызов идёт с `nil`. Решение (делегировано): следующая веха фиксов
+(cx) с тестом на `clone_records_and_discard(nil)` — сначала характеризующий тест, затем
+`if email.present? && (app_user = app.app_users.find_by(type: "AppUser", email: email))`.
+
 ## R9 — удалить `.rubocop_todo.yml`
 
 - Проверка, что todo пуст (или содержит только то, что R8 сознательно перенёс в `.rubocop.yml` с
