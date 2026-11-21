@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-11-20 — fix-cleanup-bugs
+
+- Fixed: `MessageApis::TwilioPhone::Store.delete_key` deletes the field that `set` wrote (it deleted
+  from a double-namespaced key, so nothing was ever removed).
+- Fixed: Slack notification of an `assigned` event no longer raises when the event data is nil or an
+  array (the assignee mention is looked up only for hash data with an email).
+- Fixed: `needs_privacy_consent` with the "eu" setting no longer raises `TypeError`: it calls
+  `EuCountries.includes?`, now a module function, and answers true only for an EU country code.
+- Fixed: unused `ApiController::EULocationError` and its `rescue` in `Api::GraphqlController` removed
+  (never raised); the origin error still answers 422.
+- Fixed: Nightfury time series use `redis.exists?`: with redis 4.8 `exists` returns an Integer and 0
+  is truthy, so a new series was never initialised (its `meta` raised) and `get_range`/`get_all` of a
+  deleted series returned `{}` instead of nil.
+
 ## 2026-11-20 — fork-updates-r5b2
 
 - Removed: unused routing constraints `PersonalizedDomain` and `NoSubdomain` and the `DOMAIN` constant
