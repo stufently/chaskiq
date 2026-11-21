@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/twilio_phone/store.rb b/app/services/message_apis/twilio_phone/store.rb
+index bc4e863b..aaff46d7 100644
+--- a/app/services/message_apis/twilio_phone/store.rb
++++ b/app/services/message_apis/twilio_phone/store.rb
+@@ -34,7 +34,7 @@ module MessageApis
+       end
+ 
+       def self.delete_key(conversation_key, key)
+-        hash(namespace(conversation_key)).del(key)
++        hash(conversation_key).delete(key)
+       end
+ 
+       # locked agents at app key

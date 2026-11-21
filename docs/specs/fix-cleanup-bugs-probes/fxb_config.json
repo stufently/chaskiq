@@ -1,0 +1,264 @@
+{
+ "cops_whole": [],
+ "cops_partial": [],
+ "app_files": [
+  "app/controllers/api/graphql_controller.rb",
+  "app/controllers/api_controller.rb",
+  "app/graphql/types/messenger_type.rb",
+  "app/services/eu_countries.rb",
+  "app/services/message_apis/slack/api.rb",
+  "app/services/message_apis/twilio_phone/store.rb",
+  "vendor/nightfury/lib/nightfury/metric/time_series.rb"
+ ],
+ "char_specs": [
+  "spec/controllers/api/graphql_origin_error_spec.rb"
+ ],
+ "fix_specs": [
+  "spec/services/message_apis/twilio_phone/store_delete_key_spec.rb",
+  "spec/services/message_apis/slack_assigned_event_spec.rb",
+  "spec/graphql/types/messenger_privacy_consent_spec.rb",
+  "spec/controllers/api/eu_location_error_spec.rb",
+  "spec/lib/nightfury_time_series_exists_spec.rb"
+ ],
+ "mutants": [
+  {
+   "id": "M01",
+   "file": "app/services/message_apis/twilio_phone/store.rb",
+   "old": "        hash(conversation_key).delete(key)\n",
+   "new": "        hash(namespace(conversation_key)).delete(key)\n",
+   "specs": [
+    "spec/services/message_apis/twilio_phone/store_delete_key_spec.rb"
+   ]
+  },
+  {
+   "id": "M02",
+   "file": "app/services/message_apis/twilio_phone/store.rb",
+   "old": "        hash(conversation_key).delete(key)\n",
+   "new": "        hash(conversation_key).remove\n",
+   "specs": [
+    "spec/services/message_apis/twilio_phone/store_delete_key_spec.rb"
+   ]
+  },
+  {
+   "id": "M03",
+   "file": "app/services/message_apis/twilio_phone/store.rb",
+   "old": "        hash(conversation_key).delete(key)\n",
+   "new": "        hash(\"#{conversation_key}/data\").delete(key)\n",
+   "specs": [
+    "spec/services/message_apis/twilio_phone/store_delete_key_spec.rb"
+   ]
+  },
+  {
+   "id": "M04",
+   "file": "app/services/message_apis/twilio_phone/store.rb",
+   "old": "        hash(conversation_key).delete(key)\n",
+   "new": "        hash(conversation_key).del(key)\n",
+   "specs": [
+    "spec/services/message_apis/twilio_phone/store_delete_key_spec.rb"
+   ]
+  },
+  {
+   "id": "M05",
+   "file": "app/services/message_apis/slack/api.rb",
+   "old": "if part&.message&.action == \"assigned\" && data.is_a?(Hash) && data[\"email\"].present?",
+   "new": "if part&.message&.action == \"assigned\" && data.present? && data[\"email\"].present?",
+   "specs": [
+    "spec/services/message_apis/slack_assigned_event_spec.rb"
+   ]
+  },
+  {
+   "id": "M06",
+   "file": "app/services/message_apis/slack/api.rb",
+   "old": "if part&.message&.action == \"assigned\" && data.is_a?(Hash) && data[\"email\"].present?",
+   "new": "if part&.message&.action == \"assigned\" && data.is_a?(Hash)",
+   "specs": [
+    "spec/services/message_apis/slack_assigned_event_spec.rb"
+   ]
+  },
+  {
+   "id": "M07",
+   "file": "app/services/message_apis/slack/api.rb",
+   "old": "if part&.message&.action == \"assigned\" && data.is_a?(Hash) && data[\"email\"].present?",
+   "new": "if part&.message&.action == \"assigned\" && !data.is_a?(Array) && data[\"email\"].present?",
+   "specs": [
+    "spec/services/message_apis/slack_assigned_event_spec.rb"
+   ]
+  },
+  {
+   "id": "M08",
+   "file": "app/services/eu_countries.rb",
+   "old": "module EuCountries\n  module_function\n\n",
+   "new": "module EuCountries\n",
+   "specs": [
+    "spec/graphql/types/messenger_privacy_consent_spec.rb"
+   ]
+  },
+  {
+   "id": "M09",
+   "file": "app/graphql/types/messenger_type.rb",
+   "old": "EuCountries.includes?(",
+   "new": "EuCountries.include?(",
+   "specs": [
+    "spec/graphql/types/messenger_privacy_consent_spec.rb"
+   ]
+  },
+  {
+   "id": "M10",
+   "file": "app/graphql/types/messenger_type.rb",
+   "old": "&.location&.country_code)",
+   "new": "&.location&.country_code.to_s.downcase)",
+   "specs": [
+    "spec/graphql/types/messenger_privacy_consent_spec.rb"
+   ]
+  },
+  {
+   "id": "M11",
+   "file": "app/services/eu_countries.rb",
+   "old": "].include?(country_code)",
+   "new": "].exclude?(country_code)",
+   "specs": [
+    "spec/graphql/types/messenger_privacy_consent_spec.rb"
+   ]
+  },
+  {
+   "id": "M12",
+   "file": "app/controllers/api/graphql_controller.rb",
+   "old": "    rescue OriginValidator::NonAcceptedOrigin => e\n",
+   "new": "    rescue EULocationError,\n           OriginValidator::NonAcceptedOrigin => e\n",
+   "specs": [
+    "spec/controllers/api/graphql_origin_error_spec.rb"
+   ]
+  },
+  {
+   "id": "M13",
+   "file": "app/controllers/api/graphql_controller.rb",
+   "old": "      }, status: :unprocessable_content\n      # GraphQL::ExecutionError.new \"Validation failed",
+   "new": "      }, status: :bad_request\n      # GraphQL::ExecutionError.new \"Validation failed",
+   "specs": [
+    "spec/controllers/api/graphql_origin_error_spec.rb"
+   ]
+  },
+  {
+   "id": "M14",
+   "file": "app/controllers/api_controller.rb",
+   "old": "    @app.add_anonymous_user(options)\n  end\n\n  def get_app_user\n",
+   "new": "    @app.add_anonymous_user(options)\n  end\n\n  class EULocationError < StandardError; end\n\n  def get_app_user\n",
+   "specs": [
+    "spec/controllers/api/eu_location_error_spec.rb"
+   ]
+  },
+  {
+   "id": "M15",
+   "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+   "old": "        super(name, options)\n        init_time_series unless redis.exists?(redis_key)\n",
+   "new": "        super(name, options)\n        init_time_series unless redis.exists(redis_key)\n",
+   "specs": [
+    "spec/lib/nightfury_time_series_exists_spec.rb"
+   ]
+  },
+  {
+   "id": "M16",
+   "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+   "old": "        # set is called on the smae object\n        init_time_series unless redis.exists?(redis_key)\n",
+   "new": "        # set is called on the smae object\n        init_time_series unless redis.exists(redis_key)\n",
+   "specs": [
+    "spec/lib/nightfury_time_series_exists_spec.rb"
+   ]
+  },
+  {
+   "id": "M17",
+   "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+   "old": "        return nil unless redis.exists?(redis_key)\n        data_point = ''\n",
+   "new": "        return {} unless redis.exists?(redis_key)\n        data_point = ''\n",
+   "specs": [
+    "spec/lib/nightfury_time_series_exists_spec.rb"
+   ]
+  },
+  {
+   "id": "M18",
+   "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+   "old": "        return nil unless redis.exists?(redis_key)\n        timestamp = get_step_time(timestamp).to_i\n",
+   "new": "        return {} unless redis.exists?(redis_key)\n        timestamp = get_step_time(timestamp).to_i\n",
+   "specs": [
+    "spec/lib/nightfury_time_series_exists_spec.rb"
+   ]
+  },
+  {
+   "id": "M19",
+   "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+   "old": "        return nil unless redis.exists?(redis_key)\n        start_time = get_step_time(start_time)\n",
+   "new": "        return nil unless redis.exists(redis_key)\n        start_time = get_step_time(start_time)\n",
+   "specs": [
+    "spec/lib/nightfury_time_series_exists_spec.rb"
+   ]
+  },
+  {
+   "id": "M20",
+   "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+   "old": "        return nil unless redis.exists?(redis_key)\n        data_points = redis.zrange(redis_key, 0, -1, withscores: true)\n",
+   "new": "        return nil unless redis.exists(redis_key)\n        data_points = redis.zrange(redis_key, 0, -1, withscores: true)\n",
+   "specs": [
+    "spec/lib/nightfury_time_series_exists_spec.rb"
+   ]
+  },
+  {
+   "id": "M21",
+   "file": "vendor/nightfury/lib/nightfury/metric/time_series.rb",
+   "old": "return get_meta ? [nil, {}] : nil if data_point[1].zero?",
+   "new": "return get_meta ? [nil, {}] : {} if data_point[1].zero?",
+   "specs": [
+    "spec/lib/nightfury_time_series_exists_spec.rb"
+   ]
+  }
+ ],
+ "commits": [
+  {
+   "subject": "Pin the widget origin error response",
+   "patch": null,
+   "added": [
+    "spec/controllers/api/graphql_origin_error_spec.rb"
+   ]
+  },
+  {
+   "subject": "Delete the set field in Twilio delete_key",
+   "patch": "fxb_store.patch",
+   "added": [
+    "spec/services/message_apis/twilio_phone/store_delete_key_spec.rb"
+   ]
+  },
+  {
+   "subject": "Skip Slack mention without hash data",
+   "patch": "fxb_slack.patch",
+   "added": [
+    "spec/services/message_apis/slack_assigned_event_spec.rb"
+   ]
+  },
+  {
+   "subject": "Call EuCountries.includes? for consent",
+   "patch": "fxb_eu.patch",
+   "added": [
+    "spec/graphql/types/messenger_privacy_consent_spec.rb"
+   ]
+  },
+  {
+   "subject": "Remove unused EULocationError",
+   "patch": "fxb_eulocation.patch",
+   "added": [
+    "spec/controllers/api/eu_location_error_spec.rb"
+   ]
+  },
+  {
+   "subject": "Use exists? in Nightfury time series",
+   "patch": "fxb_nightfury.patch",
+   "added": [
+    "spec/lib/nightfury_time_series_exists_spec.rb"
+   ]
+  },
+  {
+   "subject": "Note fix-cleanup-bugs in changelog",
+   "patch": null,
+   "added": [],
+   "changelog": true
+  }
+ ]
+}

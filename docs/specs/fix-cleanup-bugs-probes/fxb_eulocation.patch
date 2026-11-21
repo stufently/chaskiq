@@ -1,0 +1,27 @@
+diff --git a/app/controllers/api/graphql_controller.rb b/app/controllers/api/graphql_controller.rb
+index a98e6683..0e740391 100644
+--- a/app/controllers/api/graphql_controller.rb
++++ b/app/controllers/api/graphql_controller.rb
+@@ -46,8 +46,7 @@ module Api
+     rescue ActiveRecord::RecordInvalid => e
+       e.record.errors.full_messages.join("\n")
+       json_error e.record
+-    rescue EULocationError,
+-           OriginValidator::NonAcceptedOrigin => e
++    rescue OriginValidator::NonAcceptedOrigin => e
+       # GraphQL::ExecutionError.new e.message
+       render json: {
+         errors: [{
+diff --git a/app/controllers/api_controller.rb b/app/controllers/api_controller.rb
+index c4e2b4aa..6313217d 100644
+--- a/app/controllers/api_controller.rb
++++ b/app/controllers/api_controller.rb
+@@ -131,8 +131,6 @@ class ApiController < ActionController::API
+     @app.add_anonymous_user(options)
+   end
+ 
+-  class EULocationError < StandardError; end
+-
+   def get_app_user
+     valid_origin?
+     @app_user ||= get_user_by_email || get_user_by_session
