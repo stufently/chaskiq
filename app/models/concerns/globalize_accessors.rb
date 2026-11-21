@@ -59,9 +59,7 @@ module GlobalizeAccessors
         end
       end
 
-      if respond_to?(:accessible_attributes) && accessible_attributes.include?(attr_name)
-        attr_accessible :"#{localized_attr_name}"
-      end
+      attr_accessible :"#{localized_attr_name}" if respond_to?(:accessible_attributes) && accessible_attributes.include?(attr_name)
       globalize_attribute_names << localized_attr_name.to_sym
     end
 
