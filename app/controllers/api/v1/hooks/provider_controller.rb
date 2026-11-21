@@ -19,7 +19,7 @@ module Api
 
         def global_process_event
           response = AppPackage.find_by(
-            name: params["provider"].capitalize
+            name: params.expect("provider").capitalize
           ).process_global_hook(params)
 
           response_handler(response)
