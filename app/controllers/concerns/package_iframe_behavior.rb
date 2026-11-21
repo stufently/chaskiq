@@ -68,7 +68,7 @@ module PackageIframeBehavior
     #  app = conversation.app
     # else
 
-    app = AppUser.find(params[:user]["id"]).app
+    app = AppUser.find(params.expect(user: [:id])[:id]).app
     # end
 
     presenter = app.app_package_integrations

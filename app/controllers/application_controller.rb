@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   def preview
     @app = App.find_by(key: params[:app])
-    @campaign = @app.campaigns.find(params[:id])
+    @campaign = @app.campaigns.find(params.expect(:id))
     # render plain: "hello"
     render "campaigns/iframe", layout: false
   end
