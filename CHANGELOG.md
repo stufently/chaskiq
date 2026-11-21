@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-21 — fix-cleanup-2
+
+- Fixed: `Lead#verify!` of a lead whose email no app user of the app has turns the lead into an app
+  user (it called `clone_records_and_discard(nil)` and raised `NoMethodError`).
+- Fixed: `needs_privacy_consent` honours the "ue" setting that the messenger settings UI saves (only
+  "eu" was checked, so EU consent was never asked); both values are accepted.
+- Fixed: `Dashboard#visits` returns no visits instead of raising when the visits series was deleted.
+- Fixed: the "none" privacy consent radio in the messenger settings is checked when the saved value
+  is "none" or unset (it compared with an empty string).
+
 ## 2026-11-20 — fix-cleanup-bugs
 
 - Fixed: `MessageApis::TwilioPhone::Store.delete_key` deletes the field that `set` wrote (it deleted
