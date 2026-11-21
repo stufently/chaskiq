@@ -244,8 +244,8 @@ module MessageApis
       end
 
       def new_conversation_thread?(from)
-        return if from.blank?
-        return if new_thread_in_hours.blank?
+        return false if from.blank?
+        return false if new_thread_in_hours.blank?
 
         from < new_thread_in_hours
       end
