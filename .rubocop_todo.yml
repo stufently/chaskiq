@@ -550,13 +550,6 @@ Naming/VariableNumber:
     - 'app/services/action_trigger_factory.rb'
     - 'spec/models/segment_spec.rb'
 
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Rails/StrongParametersExpect:
-  Exclude:
-    - 'app/controllers/api/v1/hooks/provider_controller.rb'
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/concerns/package_iframe_behavior.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowOnConstant, AllowOnSelfClass.
 Style/CaseEquality:
