@@ -4,7 +4,7 @@ module MessageApis
   module OauthUtils
     extend ActiveSupport::Concern
 
-    HEADERS = { "content-type" => "application/json" } # Suggested set? Any?
+    HEADERS = { "content-type" => "application/json" }.freeze # Suggested set? Any?
 
     def make_post_request(uri_path, request)
       get_api_access if @client.nil? # token timeout?

@@ -87,7 +87,7 @@ module MessageApis
       end
 
       def locked_for_channel?(conversation, part)
-        return unless part.authorable.is_a?(Agent) && !part.authorable.bot?
+        return false unless part.authorable.is_a?(Agent) && !part.authorable.bot?
 
         conversation.conversation_channels.find_by({
                                                      provider: "open_ai",

@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-21 — fork-updates-r2b
+
+- Changed: `MessageApis::OpenAi::Api#locked_for_channel?` and `MessageApis::Twilio::Api#new_conversation_thread?`
+  return `false` instead of `nil` on their early exits (Style/ReturnNilInPredicateMethodDefinition); callers
+  only test truthiness.
+- Changed: `MessageApis::OauthUtils::HEADERS` is frozen (Style/MutableConstant).
+- Changed: `App#availability` memoizes in `@availability` (was `@biz`); ApiController's memoized ivars are
+  excluded from Naming/MemoizedInstanceVariableName in `.rubocop.yml` with the reason.
+- Changed: Gemfile gems sorted within their sections (Bundler/OrderedGems); Gemfile.lock unchanged.
+
 ## 2026-11-21 — fix-cleanup-3
 
 - Fixed: `Lead#verify!` no longer turns the matching app user into a lead: the merge copied the lead's

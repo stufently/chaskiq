@@ -11,11 +11,11 @@ ruby "4.0.10"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "anycable-rails", ">= 1.5.5"
 
-gem "pg"
 gem "cgi", "~> 0.5"
 gem "csv", "~> 3.3"
 gem "json", "< 3"
 gem "ostruct", "~> 0.6"
+gem "pg"
 gem "rails", "~> 8.1.4", ">= 8.1.4.1"
 gem "uri", "~> 1.1"
 
@@ -102,8 +102,8 @@ gem "roadie"
 gem "roadie-rails", "~> 3.4"
 gem "urlcrypt"
 
-gem "aws-sdk-rails", ">= 3.9.1"
 gem "aws-actionmailer-ses", "~> 1.2"
+gem "aws-sdk-rails", ">= 3.9.1"
 gem "aws-sdk-s3", "~> 1.208", ">= 1.208.0"
 
 gem "mini_magick", "~> 5.1"
