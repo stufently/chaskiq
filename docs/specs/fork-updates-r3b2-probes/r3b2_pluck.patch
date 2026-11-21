@@ -1,0 +1,99 @@
+diff --git a/app/models/segment.rb b/app/models/segment.rb
+index 1bb19a33..43070af9 100644
+--- a/app/models/segment.rb
++++ b/app/models/segment.rb
+@@ -334,7 +334,7 @@ class Segment < ApplicationRecord
+   end
+ 
+   def clause_group(predicates, clause)
+-    predicates&.filter { |o| o[:clause] == clause }&.map { |o| o[:fragment] }&.flatten || []
++    predicates&.filter { |o| o[:clause] == clause }&.pluck(:fragment)&.flatten || []
+   end
+ 
+   def nested_preds_group(_clause, attributes)
+diff --git a/app/services/message_apis/open_ai/api.rb b/app/services/message_apis/open_ai/api.rb
+index e97201a9..1cc96ad8 100644
+--- a/app/services/message_apis/open_ai/api.rb
++++ b/app/services/message_apis/open_ai/api.rb
+@@ -114,9 +114,7 @@ module MessageApis
+ 
+         parsed_content = part&.message&.parsed_content
+         human_input = parsed_content["blocks"]
+-        human_input = human_input&.map do |o|
+-          o["text"]
+-        end&.join(" ")
++        human_input = human_input&.pluck("text")&.join(" ")
+ 
+         messages = previous << { role: "user", content: human_input }
+ 
+diff --git a/spec/controllers/api/v1/hooks/dialog_360_spec.rb b/spec/controllers/api/v1/hooks/dialog_360_spec.rb
+index 36d9277f..042f7bbf 100644
+--- a/spec/controllers/api/v1/hooks/dialog_360_spec.rb
++++ b/spec/controllers/api/v1/hooks/dialog_360_spec.rb
+@@ -280,14 +280,14 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+                                       ["FileBlock", "/uploads/file.pdf"]
+                                     ])
+ 
+-      expect(requests.map { |request| request["type"] }).to eq(%w[audio image video document])
++      expect(requests.pluck("type")).to eq(%w[audio image video document])
+       expect(requests.map { |request| request.fetch(request.fetch("type")) }).to eq([
+                                                                                       { "link" => "https://chat.example.com/uploads/voice.ogg" },
+                                                                                       { "link" => "https://chat.example.com/uploads/first%20image.png", "caption" => "Here are the files" },
+                                                                                       { "link" => "https://cdn.example.com/video.mp4" },
+                                                                                       { "link" => "https://chat.example.com/uploads/file.pdf" }
+                                                                                     ])
+-      expect(requests.map { |request| request["to"] }.uniq).to eq([user_phone])
++      expect(requests.pluck("to").uniq).to eq([user_phone])
+       expect(JSON.parse(result.body)).to eq("messages" => [{ "id" => "wamid.1" }])
+     end
+ 
+diff --git a/spec/controllers/api/v1/hooks/telegram_spec.rb b/spec/controllers/api/v1/hooks/telegram_spec.rb
+index e4f2fdd1..afbb1874 100644
+--- a/spec/controllers/api/v1/hooks/telegram_spec.rb
++++ b/spec/controllers/api/v1/hooks/telegram_spec.rb
+@@ -628,7 +628,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+ 
+       deliver(serialized_content: { type: "doc", content: blocks }.to_json)
+ 
+-      expect(calls.map { |body| body["photo"] }).to eq(%w[https://cdn.example.com/first.png https://cdn.example.com/second.png])
++      expect(calls.pluck("photo")).to eq(%w[https://cdn.example.com/first.png https://cdn.example.com/second.png])
+       expect(calls.map { |body| body["caption"].to_s }).to eq(["See both images", ""])
+     end
+ 
+diff --git a/spec/controllers/api/v1/hooks/twilio_spec.rb b/spec/controllers/api/v1/hooks/twilio_spec.rb
+index 8bc4e905..7b17e70a 100644
+--- a/spec/controllers/api/v1/hooks/twilio_spec.rb
++++ b/spec/controllers/api/v1/hooks/twilio_spec.rb
+@@ -600,8 +600,8 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+                                                                              "https://chat.example.com/uploads/file.pdf",
+                                                                              "https://chat.example.com/uploads/voice.ogg"
+                                                                            ])
+-        expect(requests.map { |request| request["Body"] }).to eq(["Here are the files", nil, nil, nil])
+-        expect(requests.map { |request| request["To"] }.uniq).to eq([user_phone])
++        expect(requests.pluck("Body")).to eq(["Here are the files", nil, nil, nil])
++        expect(requests.pluck("To").uniq).to eq([user_phone])
+         expect(JSON.parse(result.body)).to eq("sid" => "SM1")
+       end
+ 
+@@ -638,7 +638,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+                         ["ImageBlock", "/uploads/another.png"]
+                       ])
+ 
+-        expect(requests.map { |request| request["Body"] }).to eq([nil, "Photo caption", nil])
++        expect(requests.pluck("Body")).to eq([nil, "Photo caption", nil])
+       end
+     end
+   end
+diff --git a/spec/controllers/api/v1/hooks/twitter_spec.rb b/spec/controllers/api/v1/hooks/twitter_spec.rb
+index 7852bca0..d625fa27 100644
+--- a/spec/controllers/api/v1/hooks/twitter_spec.rb
++++ b/spec/controllers/api/v1/hooks/twitter_spec.rb
+@@ -46,7 +46,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
+       expect(api.upload_media(url)).to include("media_id_string" => "7")
+ 
+       assert_requested(download, times: 1)
+-      expect(uploads.map { |body| body["command"] }).to eq(%w[INIT APPEND FINALIZE])
++      expect(uploads.pluck("command")).to eq(%w[INIT APPEND FINALIZE])
+       expect(uploads[0]).to include("media_type" => "image/png", "total_bytes" => png.bytesize.to_s)
+       expect(Base64.decode64(uploads[1].fetch("media_data"))).to eq(png)
+       expect(uploads[2]).to include("media_id" => "7")

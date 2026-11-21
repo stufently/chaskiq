@@ -1,0 +1,222 @@
+diff --git a/app/graphql/types/app_type.rb b/app/graphql/types/app_type.rb
+index 5d375524..28286176 100644
+--- a/app/graphql/types/app_type.rb
++++ b/app/graphql/types/app_type.rb
+@@ -198,7 +198,7 @@ module Types
+ 
+       app_packages = app_packages.where.not("id in(?)", integrations) if integrations.any?
+ 
+-      app_packages.order("id asc").distinct
++      app_packages.order(:id).distinct
+     end
+ 
+     def agent_app_packages
+@@ -398,7 +398,7 @@ module Types
+ 
+       Segment.union_scope(
+         object.segments.all, Segment.where(app_id: nil)
+-      ).order("id asc")
++      ).order(:id)
+     end
+ 
+     field :segment, Types::SegmentType, null: true do
+@@ -420,7 +420,7 @@ module Types
+       # authorize! object, to: :show?, with: AppPolicy
+       authorize! object, to: :can_read_assignment_rules?, with: AppPolicy
+ 
+-      object.assignment_rules.order("priority asc")
++      object.assignment_rules.order(:priority)
+     end
+ 
+     field :quick_replies, [Types::QuickReplyType], null: true do
+@@ -560,7 +560,7 @@ module Types
+       I18n.locale = lang.to_sym
+       # authorize! object, to: :show?, with: AppPolicy
+       authorize! object, to: :can_read_help_center?, with: AppPolicy
+-      object.article_collections.order("position asc")
++      object.article_collections.order(:position)
+     end
+ 
+     field :collection, Types::CollectionType, null: true do
+diff --git a/app/graphql/types/app_user_type.rb b/app/graphql/types/app_user_type.rb
+index 4326bb3c..0ce4f2d6 100644
+--- a/app/graphql/types/app_user_type.rb
++++ b/app/graphql/types/app_user_type.rb
+@@ -71,7 +71,7 @@ module Types
+     end
+ 
+     def visits(page:, per:)
+-      object.visits.page(page).per(per).order("id desc")
++      object.visits.page(page).per(per).order(id: :desc)
+     end
+ 
+     def full_name
+@@ -85,7 +85,7 @@ module Types
+ 
+     def conversations(page:, per:)
+       object.conversations
+-            .order("updated_at desc")
++            .order(updated_at: :desc)
+             .page(page)
+             .per(per)
+     end
+diff --git a/app/graphql/types/article_settings_type.rb b/app/graphql/types/article_settings_type.rb
+index 09745ceb..1ad56c98 100644
+--- a/app/graphql/types/article_settings_type.rb
++++ b/app/graphql/types/article_settings_type.rb
+@@ -106,7 +106,7 @@ module Types
+     field :collections, [Types::CollectionType], null: true
+ 
+     def collections
+-      object.app.article_collections.order("position asc")
++      object.app.article_collections.order(:position)
+     end
+ 
+     field :collection, Types::CollectionType, null: true do
+diff --git a/app/graphql/types/bot_task_type.rb b/app/graphql/types/bot_task_type.rb
+index 252de948..6e2bcdab 100644
+--- a/app/graphql/types/bot_task_type.rb
++++ b/app/graphql/types/bot_task_type.rb
+@@ -35,7 +35,7 @@ module Types
+     def metrics(page: 1, per: 20)
+       @metrics = object.metrics
+                        .includes(:app_user)
+-                       .order("id desc")
++                       .order(id: :desc)
+                        .page(page)
+                        .per(per)
+       # render :index
+diff --git a/app/graphql/types/campaign_type.rb b/app/graphql/types/campaign_type.rb
+index 498eb6b7..bbe23da5 100644
+--- a/app/graphql/types/campaign_type.rb
++++ b/app/graphql/types/campaign_type.rb
+@@ -42,7 +42,7 @@ module Types
+ 
+     def metrics(page: 1, per: 20)
+       @metrics = object.metrics
+-                       .order("id desc")
++                       .order(id: :desc)
+                        .page(page)
+                        .per(per)
+       # render :index
+diff --git a/app/graphql/types/conversation_type.rb b/app/graphql/types/conversation_type.rb
+index 2d4ffbd8..6dc68798 100644
+--- a/app/graphql/types/conversation_type.rb
++++ b/app/graphql/types/conversation_type.rb
+@@ -52,7 +52,7 @@ module Types
+     def messages(per:, page:)
+       @collection = object.messages
+                           .includes(:message_block, :message_event, :message_content, authorable: { avatar_attachment: :blob })
+-                          .order("id desc")
++                          .order(id: :desc)
+                           .page(page)
+                           .per(per)
+                           .fast_page
+diff --git a/app/graphql/types/messenger_type.rb b/app/graphql/types/messenger_type.rb
+index c2aaaf25..a3250900 100644
+--- a/app/graphql/types/messenger_type.rb
++++ b/app/graphql/types/messenger_type.rb
+@@ -47,7 +47,7 @@ module Types
+       @conversations = object.conversations.preload(messages: %i[messageable authorable])
+                              .joins(:main_participant)
+                              .where(main_participant: @user.id)
+-                             .order("updated_at desc")
++                             .order(updated_at: :desc)
+                              .page(page)
+                              .per(per)
+     end
+diff --git a/app/graphql/types/public_conversation_type.rb b/app/graphql/types/public_conversation_type.rb
+index 676ae2cc..da4dfcba 100644
+--- a/app/graphql/types/public_conversation_type.rb
++++ b/app/graphql/types/public_conversation_type.rb
+@@ -15,7 +15,7 @@ module Types
+     def messages(per:, page:)
+       @collection = object.messages
+                           .visibles
+-                          .order("id desc")
++                          .order(id: :desc)
+                           .page(page)
+                           .per(per)
+     end
+diff --git a/app/mailers/chat_notifier_mailer.rb b/app/mailers/chat_notifier_mailer.rb
+index 208f8a8f..310a2654 100644
+--- a/app/mailers/chat_notifier_mailer.rb
++++ b/app/mailers/chat_notifier_mailer.rb
+@@ -49,7 +49,7 @@ class ChatNotifierMailer < ApplicationMailer
+ 
+     # get previous 2 message ids
+     reference_ids = conversation.messages
+-                                .order("id desc")
++                                .order(id: :desc)
+                                 .where
+                                 .not(email_message_id: nil)
+                                 .limit(2)
+diff --git a/app/models/assignment_rule.rb b/app/models/assignment_rule.rb
+index e508cfb9..b2fca020 100644
+--- a/app/models/assignment_rule.rb
++++ b/app/models/assignment_rule.rb
+@@ -5,7 +5,7 @@ class AssignmentRule < ApplicationRecord
+   belongs_to :agent
+   store_accessor :conditions
+ 
+-  default_scope { order("priority asc") }
++  default_scope { order(:priority) }
+ 
+   def check_rule_for(text, part)
+     conditions.find { |o| o["type"] == "match" }
+diff --git a/app/models/conversation.rb b/app/models/conversation.rb
+index ee6c1e2a..55a6d0a0 100644
+--- a/app/models/conversation.rb
++++ b/app/models/conversation.rb
+@@ -17,10 +17,10 @@ class Conversation < ApplicationRecord
+ 
+   has_many :conversation_channels, dependent: :destroy_async
+   has_many :conversation_part_channel_sources, through: :messages
+-  has_one :latest_message, -> { order("id desc") },
++  has_one :latest_message, -> { order(id: :desc) },
+           class_name: "ConversationPart", dependent: nil
+ 
+-  has_one :public_latest_message, -> { visibles.order("id desc") },
++  has_one :public_latest_message, -> { visibles.order(id: :desc) },
+           class_name: "ConversationPart", dependent: nil
+ 
+   acts_as_taggable_on :tags
+diff --git a/app/models/message.rb b/app/models/message.rb
+index a3618ad0..998e03fd 100644
+--- a/app/models/message.rb
++++ b/app/models/message.rb
+@@ -19,7 +19,7 @@ class Message < ApplicationRecord
+ 
+   scope :enabled, -> { where(state: "enabled") }
+   scope :disabled, -> { where(state: "disabled") }
+-  scope :ordered, -> { order("position asc") }
++  scope :ordered, -> { order(:position) }
+   scope :in_time, -> { where(["scheduled_at <= ? AND scheduled_to >= ?", Time.zone.today, Time.zone.today]) }
+   # before_save :detect_changed_template
+   before_create :add_default_predicate
+diff --git a/app/services/message_apis/audits_reports/api.rb b/app/services/message_apis/audits_reports/api.rb
+index a942636c..7e261ac0 100644
+--- a/app/services/message_apis/audits_reports/api.rb
++++ b/app/services/message_apis/audits_reports/api.rb
+@@ -41,7 +41,7 @@ module MessageApis
+             integration.app.audits,
+             Audit.where(auditable_type: "Agent", auditable_id: ids)
+           )
+-                            .order("id desc")
++                            .order(id: :desc)
+                             .page(options[:page])
+                             .per(10)
+           {
+diff --git a/app/services/message_apis/open_ai/api.rb b/app/services/message_apis/open_ai/api.rb
+index b4a71402..e97201a9 100644
+--- a/app/services/message_apis/open_ai/api.rb
++++ b/app/services/message_apis/open_ai/api.rb
+@@ -155,7 +155,7 @@ module MessageApis
+           messages = conversation.messages.where(
+             messageable_type: "ConversationPartContent"
+           ).where.not(id: part.id)
+-                                 .order("id")
++                                 .order(:id)
+ 
+           messages.map do |m|
+             {

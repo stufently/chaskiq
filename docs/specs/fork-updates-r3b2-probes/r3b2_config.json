@@ -1,0 +1,311 @@
+{
+ "cops_whole": [
+  "Rails/OrderArguments",
+  "Rails/Pluck",
+  "Rails/WhereRange",
+  "Rails/Delegate"
+ ],
+ "cops_partial": [],
+ "app_files": [
+  "app/channels/messenger_events_channel.rb",
+  "app/graphql/types/app_type.rb",
+  "app/graphql/types/app_user_type.rb",
+  "app/graphql/types/article_settings_type.rb",
+  "app/graphql/types/article_type.rb",
+  "app/graphql/types/bot_task_type.rb",
+  "app/graphql/types/campaign_type.rb",
+  "app/graphql/types/conversation_type.rb",
+  "app/graphql/types/messenger_type.rb",
+  "app/graphql/types/public_conversation_type.rb",
+  "app/mailers/chat_notifier_mailer.rb",
+  "app/models/assignment_rule.rb",
+  "app/models/concerns/globalize_accessors.rb",
+  "app/models/conversation.rb",
+  "app/models/message.rb",
+  "app/models/segment.rb",
+  "app/services/message_apis/audits_reports/api.rb",
+  "app/services/message_apis/open_ai/api.rb",
+  "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+  "spec/controllers/api/v1/hooks/telegram_spec.rb",
+  "spec/controllers/api/v1/hooks/twilio_spec.rb",
+  "spec/controllers/api/v1/hooks/twitter_spec.rb"
+ ],
+ "char_specs": [
+  "spec/channels/messenger_events_data_submit_spec.rb",
+  "spec/graphql/types/app_type_order_spec.rb",
+  "spec/graphql/types/app_user_type_order_spec.rb",
+  "spec/graphql/types/article_types_order_spec.rb",
+  "spec/graphql/types/conversation_order_spec.rb",
+  "spec/graphql/types/metrics_order_spec.rb",
+  "spec/mailers/chat_notifier_references_spec.rb",
+  "spec/models/conversation_latest_message_spec.rb",
+  "spec/models/globalize_attr_name_spec.rb",
+  "spec/models/message_ordered_spec.rb",
+  "spec/models/segment_clause_group_spec.rb",
+  "spec/services/message_apis/audits_reports_order_spec.rb",
+  "spec/services/message_apis/open_ai_prompt_spec.rb"
+ ],
+ "fix_specs": [],
+ "mutants": [
+  {
+   "id": "M01",
+   "file": "app/graphql/types/app_type.rb",
+   "old": "app_packages.order(:id).distinct",
+   "new": "app_packages.order(id: :desc).distinct",
+   "specs": [
+    "spec/graphql/types/app_type_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M02",
+   "file": "app/graphql/types/app_type.rb",
+   "old": "      ).order(:id)\n",
+   "new": "      ).order(id: :desc)\n",
+   "specs": [
+    "spec/graphql/types/app_type_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M03",
+   "file": "app/graphql/types/app_type.rb",
+   "old": "object.article_collections.order(:position)",
+   "new": "object.article_collections.order(position: :desc)",
+   "specs": [
+    "spec/graphql/types/app_type_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M04",
+   "file": "app/graphql/types/app_user_type.rb",
+   "old": "per(per).order(id: :desc)",
+   "new": "per(per).order(:id)",
+   "specs": [
+    "spec/graphql/types/app_user_type_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M05",
+   "file": "app/graphql/types/app_user_type.rb",
+   "old": ".order(updated_at: :desc)",
+   "new": ".order(:updated_at)",
+   "specs": [
+    "spec/graphql/types/app_user_type_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M06",
+   "file": "app/graphql/types/article_settings_type.rb",
+   "old": "article_collections.order(:position)",
+   "new": "article_collections.order(position: :desc)",
+   "specs": [
+    "spec/graphql/types/article_types_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M07",
+   "file": "app/graphql/types/article_type.rb",
+   "old": "where(position: ...object.position)",
+   "new": "where(position: ..object.position)",
+   "specs": [
+    "spec/graphql/types/article_types_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M08",
+   "file": "app/graphql/types/bot_task_type.rb",
+   "old": ".order(id: :desc)",
+   "new": ".order(:id)",
+   "specs": [
+    "spec/graphql/types/metrics_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M09",
+   "file": "app/graphql/types/campaign_type.rb",
+   "old": ".order(id: :desc)",
+   "new": ".order(:id)",
+   "specs": [
+    "spec/graphql/types/metrics_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M10",
+   "file": "app/graphql/types/conversation_type.rb",
+   "old": ".order(id: :desc)",
+   "new": ".order(:id)",
+   "specs": [
+    "spec/graphql/types/conversation_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M11",
+   "file": "app/graphql/types/messenger_type.rb",
+   "old": ".order(updated_at: :desc)",
+   "new": ".order(:updated_at)",
+   "specs": [
+    "spec/graphql/types/conversation_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M12",
+   "file": "app/graphql/types/public_conversation_type.rb",
+   "old": ".order(id: :desc)",
+   "new": ".order(:id)",
+   "specs": [
+    "spec/graphql/types/conversation_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M13",
+   "file": "app/mailers/chat_notifier_mailer.rb",
+   "old": ".order(id: :desc)",
+   "new": ".order(:id)",
+   "specs": [
+    "spec/mailers/chat_notifier_references_spec.rb"
+   ]
+  },
+  {
+   "id": "M14",
+   "file": "app/models/assignment_rule.rb",
+   "old": "order(:priority)",
+   "new": "order(priority: :desc)",
+   "specs": [
+    "spec/graphql/types/app_type_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M15",
+   "file": "app/models/conversation.rb",
+   "old": "has_one :latest_message, -> { order(id: :desc) }",
+   "new": "has_one :latest_message, -> { order(:id) }",
+   "specs": [
+    "spec/models/conversation_latest_message_spec.rb"
+   ]
+  },
+  {
+   "id": "M16",
+   "file": "app/models/conversation.rb",
+   "old": "visibles.order(id: :desc)",
+   "new": "visibles.order(:id)",
+   "specs": [
+    "spec/models/conversation_latest_message_spec.rb"
+   ]
+  },
+  {
+   "id": "M17",
+   "file": "app/models/message.rb",
+   "old": "scope :ordered, -> { order(:position) }",
+   "new": "scope :ordered, -> { order(position: :desc) }",
+   "specs": [
+    "spec/models/message_ordered_spec.rb"
+   ]
+  },
+  {
+   "id": "M18",
+   "file": "app/services/message_apis/audits_reports/api.rb",
+   "old": ".order(id: :desc)",
+   "new": ".order(:id)",
+   "specs": [
+    "spec/services/message_apis/audits_reports_order_spec.rb"
+   ]
+  },
+  {
+   "id": "M19",
+   "file": "app/services/message_apis/open_ai/api.rb",
+   "old": ".order(:id)",
+   "new": ".order(id: :desc)",
+   "specs": [
+    "spec/services/message_apis/open_ai_prompt_spec.rb"
+   ]
+  },
+  {
+   "id": "M20",
+   "file": "app/services/message_apis/open_ai/api.rb",
+   "old": "&.pluck(\"text\")",
+   "new": "&.pluck(\"type\")",
+   "specs": [
+    "spec/services/message_apis/open_ai_prompt_spec.rb"
+   ]
+  },
+  {
+   "id": "M21",
+   "file": "app/models/segment.rb",
+   "old": "&.pluck(:fragment)",
+   "new": "&.pluck(:clause)",
+   "specs": [
+    "spec/models/segment_clause_group_spec.rb"
+   ]
+  },
+  {
+   "id": "M22",
+   "file": "app/channels/messenger_events_channel.rb",
+   "old": "delegate :data_submit, to: :ActionTrigger",
+   "new": "def data_submit(data, message) = ActionTrigger.data_submit(message, data)",
+   "specs": [
+    "spec/channels/messenger_events_data_submit_spec.rb"
+   ]
+  },
+  {
+   "id": "M23",
+   "file": "app/models/concerns/globalize_accessors.rb",
+   "old": "delegate :localized_attr_name_for, to: :class",
+   "new": "def localized_attr_name_for(attr_name, _locale) = attr_name.to_s",
+   "specs": [
+    "spec/models/globalize_attr_name_spec.rb"
+   ]
+  }
+ ],
+ "commits": [
+  {
+   "subject": "Add R3b-2 characterization specs",
+   "patch": null,
+   "added": [
+    "spec/channels/messenger_events_data_submit_spec.rb",
+    "spec/graphql/types/app_type_order_spec.rb",
+    "spec/graphql/types/app_user_type_order_spec.rb",
+    "spec/graphql/types/article_types_order_spec.rb",
+    "spec/graphql/types/conversation_order_spec.rb",
+    "spec/graphql/types/metrics_order_spec.rb",
+    "spec/mailers/chat_notifier_references_spec.rb",
+    "spec/models/conversation_latest_message_spec.rb",
+    "spec/models/globalize_attr_name_spec.rb",
+    "spec/models/message_ordered_spec.rb",
+    "spec/models/segment_clause_group_spec.rb",
+    "spec/services/message_apis/audits_reports_order_spec.rb",
+    "spec/services/message_apis/open_ai_prompt_spec.rb"
+   ]
+  },
+  {
+   "subject": "Use hash arguments in order",
+   "patch": "r3b2_order.patch",
+   "added": []
+  },
+  {
+   "subject": "Use pluck for key maps",
+   "patch": "r3b2_pluck.patch",
+   "added": []
+  },
+  {
+   "subject": "Use a range in prev_article_url",
+   "patch": "r3b2_where_range.patch",
+   "added": []
+  },
+  {
+   "subject": "Use delegate for forwarders",
+   "patch": "r3b2_delegate.patch",
+   "added": []
+  },
+  {
+   "subject": "Drop R3b-2 entries from RuboCop todo",
+   "patch": null,
+   "added": [],
+   "todo": true
+  },
+  {
+   "subject": "Note fork-updates-r3b2 in changelog",
+   "patch": null,
+   "added": [],
+   "changelog": true
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+diff --git a/app/channels/messenger_events_channel.rb b/app/channels/messenger_events_channel.rb
+index bff53b2b..2a7ea575 100644
+--- a/app/channels/messenger_events_channel.rb
++++ b/app/channels/messenger_events_channel.rb
+@@ -102,9 +102,7 @@ class MessengerEventsChannel < ApplicationCable::Channel
+     ActionTrigger.process_next_step(app, message, current_user)
+   end
+ 
+-  def data_submit(data, message)
+-    ActionTrigger.data_submit(data, message)
+-  end
++  delegate :data_submit, to: :ActionTrigger
+ 
+   def trigger_step(data)
+     ActionTrigger.trigger_step(data, app, current_user)
+diff --git a/app/models/concerns/globalize_accessors.rb b/app/models/concerns/globalize_accessors.rb
+index 7240601d..77bf9a7b 100644
+--- a/app/models/concerns/globalize_accessors.rb
++++ b/app/models/concerns/globalize_accessors.rb
+@@ -75,9 +75,7 @@ module GlobalizeAccessors
+   end
+ 
+   module InstanceMethods
+-    def localized_attr_name_for(attr_name, locale)
+-      self.class.localized_attr_name_for(attr_name, locale)
+-    end
++    delegate :localized_attr_name_for, to: :class
+   end
+ end
+ 
