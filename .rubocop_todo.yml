@@ -521,21 +521,6 @@ Naming/PredicatePrefix:
     - 'app/models/outgoing_webhook.rb'
     - 'app/services/origin_validator.rb'
 
-# Configuration parameters: EnforcedStyle, AllowedIdentifiers, AllowedPatterns, ForbiddenIdentifiers, ForbiddenPatterns.
-# SupportedStyles: snake_case, camelCase
-Naming/VariableName:
-  Exclude:
-    - 'app/controllers/api/v1/hooks_controller.rb'
-    - 'app/services/message_apis/helpers.rb'
-
-# Configuration parameters: EnforcedStyle, CheckMethodNames, CheckSymbols, AllowedIdentifiers, AllowedPatterns.
-# SupportedStyles: snake_case, normalcase, non_integer
-# AllowedIdentifiers: TLS1_1, TLS1_2, capture3, iso8601, rfc1123_date, rfc822, rfc2822, rfc3339, x86_64
-Naming/VariableNumber:
-  Exclude:
-    - 'app/services/action_trigger_factory.rb'
-    - 'spec/models/segment_spec.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowOnConstant, AllowOnSelfClass.
 Style/CaseEquality:
@@ -661,9 +646,6 @@ Style/MultipleComparison:
 # Configuration parameters: AllowedClasses.
 Style/OneClassPerFile:
   Exclude:
-    - 'app/controllers/graphql_controller.rb'
-    - 'app/graphql/mutations/articles/article_blob_attach.rb'
-    - 'app/models/app_package_integration.rb'
     - 'app/services/plugin_schema_validator.rb'
     - 'lib/subdomain_routes.rb'
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-21 — fork-updates-r7d
+
+- Changed: classes that shared a file with another top-level class moved to their own files under
+  Zeitwerk, names unchanged (Style/OneClassPerFile): `OauthExeption` (app/controllers),
+  `AttachProfileAvatar` (app/graphql), `ExternalApiClient` and `ExternalPresenterManager`
+  (app/models). They now autoload on first use instead of only after their former host file loaded.
+- Changed: local variables renamed (Naming/VariableName, Naming/VariableNumber): `maxWidth`/`maxHeight`
+  in `MessageApis::Helpers#get_aspect_ratio`, `step_7` in `ActionTriggerFactory.infer_for`, and a
+  `let` in `segment_spec.rb`; no behaviour change. Specs pin the moved classes and both methods.
+
 ## 2026-11-21 — fork-updates-r2b
 
 - Changed: `MessageApis::OpenAi::Api#locked_for_channel?` and `MessageApis::Twilio::Api#new_conversation_thread?`

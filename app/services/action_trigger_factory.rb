@@ -240,7 +240,7 @@ class ActionTriggerFactory
 
       c.path(**path_options)
 
-      step_7 = [c.message(
+      step7 = [c.message(
         text: I18n.t("task_bots.reply_agent", name: app.name),
         uuid: 7,
         agent: bot_agent
@@ -249,29 +249,29 @@ class ActionTriggerFactory
       if user.email.blank?
 
         if app.email_requirement === "Always"
-          step_7 << email_requirement
-          step_7.flatten!
+          step7 << email_requirement
+          step7.flatten!
         end
 
         if app.email_requirement === "office" && !app.in_business_hours?(Time.current)
-          step_7 << email_requirement
-          step_7.flatten!
+          step7 << email_requirement
+          step7.flatten!
         end
 
       end
 
-      step_7 << c.message(
+      step7 << c.message(
         text: I18n.t("task_bots.email_requirement.ack"),
         uuid: 4,
         agent: bot_agent
       )
 
       # puts 'STEP 7'
-      # puts step_7
+      # puts step7
 
       c.path(
         title: "yes",
-        steps: step_7,
+        steps: step7,
         follow_actions: [c.assign(app.lead_tasks_settings["assignee"])]
       )
 

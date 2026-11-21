@@ -98,21 +98,21 @@ module MessageApis
     end
 
     def get_aspect_ratio(w, h)
-      maxWidth = 1000
-      maxHeight = 1000
+      max_width = 1000
+      max_height = 1000
       ratio = 0
       width = w # Current image width
       height = h # Current image height
 
       # Check if the current width is larger than the max
-      if width > maxWidth
-        ratio = maxWidth / width # get ratio for scaling image
+      if width > max_width
+        ratio = max_width / width # get ratio for scaling image
         height *= ratio # Reset height to match scaled image
         width *= ratio # Reset width to match scaled image
 
         # Check if current height is larger than max
-      elsif height > maxHeight
-        ratio = maxHeight / height # get ratio for scaling image
+      elsif height > max_height
+        ratio = max_height / height # get ratio for scaling image
         width *= ratio # Reset width to match scaled image
         height *= ratio # Reset height to match scaled image
       end
