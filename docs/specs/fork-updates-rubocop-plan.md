@@ -440,6 +440,15 @@ BASE», фикс, запись Fixed в CHANGELOG; после неё M259/M267 �
 `api_controller.rb` — Exclude с причиной в `.rubocop.yml`, переименован только `app.rb:256`
 (`@biz` → `@availability`). 33 offense прочих Style-копов R2b без решения остаются в todo.
 
+## Решение 2026-11-21: R7, остаток `Naming/PredicateMethod` (4 места, делегировано)
+
+`segment_comparator.rb#compare` и `zapier/api.rb#event_identifier_available?` — переименовать с alias
+(следующая спека R7). `slack/api.rb#receive_oauth_code` (метод интерфейса плагина) и
+`tar_downloader.rb#download_plugin` имеют побочные эффекты: имя с `?` вводило бы в заблуждение — в
+`AllowedMethods` с причиной в `.rubocop.yml`. R7: `CaseEquality`, `SafeNavigationChainLength`,
+`MultilineBlockChain`, `HashLikeCase` без решения — вне r7b/c/d. План устарел: `FormatStringToken` 0
+offense; `OneClassPerFile` 25 в 4 файлах; `VariableName` 6.
+
 ## R9 — удалить `.rubocop_todo.yml`
 
 - Проверка, что todo пуст (или содержит только то, что R8 сознательно перенёс в `.rubocop.yml` с
