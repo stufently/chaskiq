@@ -8,7 +8,7 @@ module MessageApis::UiCatalog
     def self.initialize_hook(kind:, ctx:)
       type_value = ctx.dig(:values, :type)
 
-      if type_value === "content"
+      if type_value == "content"
         return {
           # ctx: ctx,
           definitions: [
@@ -121,7 +121,7 @@ module MessageApis::UiCatalog
         }
       ]
 
-      if ctx.dig(:field, :action, :type) === "submit"
+      if ctx.dig(:field, :action, :type) == "submit"
         if ctx.dig(:field, :id) == "aaaaaaaa"
           results = {
             foo: "bar",

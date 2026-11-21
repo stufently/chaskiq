@@ -197,7 +197,7 @@ module MessageApis
 
         # will submit
         if ctx.dig(:field, :name) == "submit-template" &&
-           ctx.dig(:field, :action, :type) === "submit"
+           ctx.dig(:field, :action, :type) == "submit"
 
           decoded = Base64.decode64(ctx.dig(:field, :id))
           decoded = JSON.parse(decoded)

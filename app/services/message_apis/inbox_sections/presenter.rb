@@ -21,7 +21,7 @@ module MessageApis
         type_value = ctx.dig(:values, :type)
         block_type = ctx.dig(:values, :block_type)
 
-        if type_value === "content"
+        if type_value == "content"
 
           # case ctx.dig(:values, :block_type)
           # when 'tag-blocks'

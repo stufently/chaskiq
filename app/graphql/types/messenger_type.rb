@@ -78,7 +78,7 @@ module Types
 
       return false if @user.blank? || @user.blocked?
 
-      k = @user.model_name.name === "AppUser" ? "users" : "visitors"
+      k = @user.model_name.name == "AppUser" ? "users" : "visitors"
       return if k.blank?
       return nil unless object.inbound_settings[k]["enabled"]
       return true if object.inbound_settings[k]["segment"] == "all"

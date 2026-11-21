@@ -36,7 +36,7 @@ module Types
 
     field :owner, Boolean, null: true
     def owner
-      object.app.owner_id === object.agent_id
+      object.app.owner_id == object.agent_id
     end
 
     field :online, Boolean, null: true

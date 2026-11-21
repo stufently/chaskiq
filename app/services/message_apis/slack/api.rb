@@ -733,9 +733,9 @@ module MessageApis
 
       def process_message(event)
         # TODO: add a conversation_event_type for this type
-        return if event["subtype"] === "channel_join"
+        return if event["subtype"] == "channel_join"
         return if event["thread_ts"].blank?
-        return if event["text"] === "New conversation from Chaskiq"
+        return if event["text"] == "New conversation from Chaskiq"
 
         conversation = find_conversation_by_slack_ts(event["thread_ts"])
 
@@ -1051,7 +1051,7 @@ module MessageApis
 
       def process_blocks(data)
         images = data["blocks"]&.select do |o|
-          o["type"] === "image"
+          o["type"] == "image"
         end || []
 
         images = images.map do |block|

@@ -9,7 +9,7 @@ module MessageApis
         type_value = ctx.dig(:values, :type)
         block_type = ctx.dig(:values, :block_type)
 
-        return unless type_value === "content"
+        return unless type_value == "content"
 
         {
           # ctx: ctx,

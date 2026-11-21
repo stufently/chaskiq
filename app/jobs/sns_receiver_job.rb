@@ -10,7 +10,7 @@ class SnsReceiverJob < ApplicationJob
     end
 
     campaign = m["mail"]["headers"].find do |o|
-      o["name"] === "X-CHASKIQ-CAMPAIGN-ID"
+      o["name"] == "X-CHASKIQ-CAMPAIGN-ID"
     end
 
     # handle conversation and exit
@@ -27,12 +27,12 @@ class SnsReceiverJob < ApplicationJob
     # message_id = parsed_message_id(m)
 
     campaign_id = m["mail"]["headers"].find do |o|
-      o["name"] === "X-CHASKIQ-CAMPAIGN-ID"
-    end.dig("value")
+      o["name"] == "X-CHASKIQ-CAMPAIGN-ID"
+    end["value"]
 
     user_id = m["mail"]["headers"].find do |o|
-      o["name"] === "X-CHASKIQ-CAMPAIGN-TO"
-    end.dig("value")
+      o["name"] == "X-CHASKIQ-CAMPAIGN-TO"
+    end["value"]
 
     campaign = Campaign.find_by(id: campaign_id)
     app_user = AppUser.find_by(id: user_id)

@@ -81,7 +81,7 @@ module MessageApis
         end
 
         if ctx.dig(:field, :id) == "add-prompt" &&
-           ctx.dig(:field, :action, :type) === "submit"
+           ctx.dig(:field, :action, :type) == "submit"
 
           # TODO: validate
 

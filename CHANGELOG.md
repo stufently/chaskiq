@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-21 — fork-updates-r9a
+
+- Changed: every `a === b` whose receiver is a String, Integer or nil is written `a == b` (30 places in
+  app/, three `be ===` matchers in a spec): the same method for those receivers. `Style/CaseEquality`
+  allows `Klass === obj` (`AllowOnConstant`); its todo block is gone.
+- Changed: `SegmentComparator#compare` -> `compare?` and `Zapier::Api#event_identifier_available?` ->
+  `event_identifier_and_url`, each old name kept as an `alias`; Slack's `receive_oauth_code` and
+  `TarDownloader#download_plugin` act, so they stay and go to `Naming/PredicateMethod` AllowedMethods.
+- Changed: in the same files `select { != }` -> `reject { == }`, `.dig("value")` -> `["value"]`, a
+  modifier `if` and `each`+`<<` -> `map`. Ten specs pin the behaviour of every changed place.
+
 ## 2026-11-21 — fork-updates-r8a
 
 - Changed: RuboCop metric limits by owner decision (R8), each with its reason in `.rubocop.yml`:
