@@ -1,0 +1,13 @@
+diff --git a/app/jobs/app_user_trigger_job.rb b/app/jobs/app_user_trigger_job.rb
+index 59906345..a2389d17 100644
+--- a/app/jobs/app_user_trigger_job.rb
++++ b/app/jobs/app_user_trigger_job.rb
+@@ -23,7 +23,7 @@ class AppUserTriggerJob < ApplicationJob
+       )
+     end
+ 
+-    if convo.blank?
++    if convo.present?
+       start_conversation(trigger)
+     else
+       add_message(trigger, convo)

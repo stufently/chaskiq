@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index 1f87a88e..6d77afd9 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -75,7 +75,7 @@ module MessageApis
+     def self.follow_redirects(url, limits, headers, address_options, url_allowed)
+       uri = http_uri(url)
+ 
+-      (limits.max_redirects + 1).times do |hop|
++      limits.max_redirects.times do |hop|
+         return nil unless uri
+         return nil if url_allowed && !url_allowed.call(uri)
+ 

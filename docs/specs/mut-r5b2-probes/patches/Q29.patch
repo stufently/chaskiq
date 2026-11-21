@@ -1,0 +1,13 @@
+diff --git a/app/models/concerns/subscribable.rb b/app/models/concerns/subscribable.rb
+index caaa510c..a2e44121 100644
+--- a/app/models/concerns/subscribable.rb
++++ b/app/models/concerns/subscribable.rb
+@@ -33,7 +33,7 @@ module Subscribable
+     if payment_service == PaymentServices::StripeService
+       send(:"stripe_#{key}")
+     elsif payment_service == PaymentServices::Paddle
+-      send(:"paddle_#{key}")
++      send(:"paddle_#{key}").presence || send(:"stripe_#{key}")
+     end
+   end
+ 

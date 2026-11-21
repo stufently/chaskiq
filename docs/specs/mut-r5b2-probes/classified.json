@@ -1,0 +1,53 @@
+{
+ "equivalent": [
+  {
+   "id": "E1",
+   "file": "app/importers/list_importer.rb",
+   "old": "email: row.delete(\"email\")",
+   "new": "email: row[\"email\"]",
+   "reason": "data is built from row before the delete and row is not read afterwards in the callback: the same email and properties reach add_user/add_lead."
+  },
+  {
+   "id": "E2",
+   "file": "app/importers/list_importer.rb",
+   "old": "      @row_count += 1\n",
+   "new": "",
+   "reason": "@row_count is never read (no notification or mail uses it)."
+  },
+  {
+   "id": "E3",
+   "file": "app/models/app_package_integration.rb",
+   "old": "  rescue StandardError\n    ExternalPresenterManager",
+   "new": "  rescue NameError\n    ExternalPresenterManager",
+   "reason": "\"...\".constantize of a missing package raises NameError; nothing else in the method can raise."
+  },
+  {
+   "id": "E4",
+   "file": "app/models/concerns/subscribable.rb",
+   "old": "    elsif payment_service == PaymentServices::Paddle\n",
+   "new": "    else\n",
+   "reason": "payment_service returns only Paddle or StripeService, so after the Stripe branch the Paddle comparison is always true."
+  },
+  {
+   "id": "E5",
+   "file": "app/jobs/app_user_trigger_job.rb",
+   "old": "[\"steps\"].find { |o| o[\"messages\"].any? } if first_path",
+   "new": "[\"steps\"].find { |o| o[\"messages\"].any? }",
+   "reason": "without the guard a nil first_path raises NoMethodError on with_indifferent_access; with it, step is nil and step[:messages] raises the same NoMethodError on the next line."
+  },
+  {
+   "id": "E6",
+   "file": "app/services/message_apis/safe_download.rb",
+   "old": "(limits.max_redirects + 1).times do |hop|",
+   "new": "(limits.max_redirects + 2).times do |hop|",
+   "reason": "the loop already returns nil at hop == max_redirects, so the extra iteration is never reached (kept: return nil if hop == limits.max_redirects)."
+  },
+  {
+   "id": "E7",
+   "file": "app/services/message_apis/safe_download.rb",
+   "old": "        return nil if hop == limits.max_redirects\n",
+   "new": "",
+   "reason": "removing the check only lets the loop run out after hop max_redirects without downloading again: same nil and same requests (R5b-2 dropped it as equivalent too)."
+  }
+ ]
+}

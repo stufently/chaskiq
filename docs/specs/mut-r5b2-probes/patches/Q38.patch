@@ -1,0 +1,13 @@
+diff --git a/app/jobs/app_user_trigger_job.rb b/app/jobs/app_user_trigger_job.rb
+index 59906345..ef76dc25 100644
+--- a/app/jobs/app_user_trigger_job.rb
++++ b/app/jobs/app_user_trigger_job.rb
+@@ -48,7 +48,7 @@ class AppUserTriggerJob < ApplicationJob
+     first_path = trigger.paths.first
+     step = first_path.with_indifferent_access["steps"].find { |o| o["messages"].any? } if first_path
+ 
+-    message = step[:messages].first
++    message = step[:messages].last
+ 
+     @message = conversation.add_message(
+       step_id: step[:step_uid],

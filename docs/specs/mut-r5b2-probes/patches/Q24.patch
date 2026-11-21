@@ -1,0 +1,13 @@
+diff --git a/app/jobs/sns_receiver_job.rb b/app/jobs/sns_receiver_job.rb
+index acc91a4b..5ec32e0b 100644
+--- a/app/jobs/sns_receiver_job.rb
++++ b/app/jobs/sns_receiver_job.rb
+@@ -37,7 +37,7 @@ class SnsReceiverJob < ApplicationJob
+     campaign = Campaign.find_by(id: campaign_id)
+     app_user = AppUser.find_by(id: user_id)
+ 
+-    return if campaign.blank? || app_user.blank?
++    return if campaign.blank? && app_user.blank?
+ 
+     app_user.send(:"track_#{track_type}",
+                   host: data["ipAddress"],

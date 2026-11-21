@@ -1,0 +1,13 @@
+diff --git a/app/jobs/sns_receiver_job.rb b/app/jobs/sns_receiver_job.rb
+index acc91a4b..e998bfd1 100644
+--- a/app/jobs/sns_receiver_job.rb
++++ b/app/jobs/sns_receiver_job.rb
+@@ -70,7 +70,7 @@ class SnsReceiverJob < ApplicationJob
+       get_app_user_from_email(m, "complaint", "complainedRecipients")
+       true
+     when "bounce"
+-      return unless m["bounce"]["bounceType"] == "Permanent"
++      return if m["bounce"]["bounceType"] == "Permanent"
+ 
+       get_app_user_from_email(m, "bounce", "bouncedRecipients")
+     end

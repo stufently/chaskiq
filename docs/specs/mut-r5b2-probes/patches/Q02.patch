@@ -1,0 +1,13 @@
+diff --git a/lib/subdomain_routes.rb b/lib/subdomain_routes.rb
+index 3759e9dd..6af212c2 100644
+--- a/lib/subdomain_routes.rb
++++ b/lib/subdomain_routes.rb
+@@ -5,6 +5,8 @@ class SubdomainOrDomain
+     if (subdomains = request.subdomains) && subdomains.any?
+       subdomain = subdomains.join(".")
+       APP_SUBDOMAINS.exclude?(subdomain)
++    else
++      false
+     end
+   end
+ end

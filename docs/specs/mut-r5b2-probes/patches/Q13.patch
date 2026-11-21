@@ -1,0 +1,15 @@
+diff --git a/app/models/message.rb b/app/models/message.rb
+index c4dcb7f1..8945f627 100644
+--- a/app/models/message.rb
++++ b/app/models/message.rb
+@@ -115,8 +115,8 @@ class Message < ApplicationRecord
+ 
+   def self.infix(filter)
+     Arel::Nodes::InfixOperation.new("@>",
+-                                    arel_table[:segments],
+-                                    Arel::Nodes.build_quoted(BotTask.type_predicate_for(filter).to_json))
++                                    Arel::Nodes.build_quoted(BotTask.type_predicate_for(filter).to_json),
++                                    arel_table[:segments])
+   end
+ 
+   def step_1?

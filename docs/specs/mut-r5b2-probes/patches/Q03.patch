@@ -1,0 +1,13 @@
+diff --git a/lib/subdomain_routes.rb b/lib/subdomain_routes.rb
+index 3759e9dd..078af8a5 100644
+--- a/lib/subdomain_routes.rb
++++ b/lib/subdomain_routes.rb
+@@ -3,7 +3,7 @@
+ class SubdomainOrDomain
+   def self.matches?(request)
+     if (subdomains = request.subdomains) && subdomains.any?
+-      subdomain = subdomains.join(".")
++      subdomain = subdomains.last
+       APP_SUBDOMAINS.exclude?(subdomain)
+     end
+   end

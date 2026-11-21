@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index 1f87a88e..79ca803e 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -82,7 +82,7 @@ module MessageApis
+         addresses = download_addresses(uri, **address_options)
+         return nil unless addresses
+ 
+-        body, location = download(uri, addresses, limits.max_bytes, hop.zero? ? headers : {})
++        body, location = download(uri, addresses, limits.max_bytes, headers)
+         return body unless location
+         return nil if hop == limits.max_redirects
+ 

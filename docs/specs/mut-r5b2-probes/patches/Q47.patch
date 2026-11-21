@@ -1,0 +1,13 @@
+diff --git a/app/graphql/mutations/apps/create_app.rb b/app/graphql/mutations/apps/create_app.rb
+index fcfb6f5a..6a305baf 100644
+--- a/app/graphql/mutations/apps/create_app.rb
++++ b/app/graphql/mutations/apps/create_app.rb
+@@ -11,7 +11,7 @@ module Mutations
+     def resolve(app_params:, operation:)
+       authorize! current_user, to: :create_app?, with: AppPolicy
+ 
+-      if operation.blank? || (operation == "new")
++      if operation == "new"
+         @app = current_user.apps.new
+       elsif (@app = current_user.apps.create(app_params.permit!))
+ 

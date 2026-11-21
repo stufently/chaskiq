@@ -1,0 +1,12 @@
+diff --git a/app/jobs/sns_receiver_job.rb b/app/jobs/sns_receiver_job.rb
+index acc91a4b..7584550b 100644
+--- a/app/jobs/sns_receiver_job.rb
++++ b/app/jobs/sns_receiver_job.rb
+@@ -19,7 +19,6 @@ class SnsReceiverJob < ApplicationJob
+     # handle campaign
+     handle_campaign_message(track_type, m, referrer) if campaign.present?
+ 
+-    unsubscribe_user(track_type, m)
+   end
+ 
+   def handle_campaign_message(track_type, m, _referrer)

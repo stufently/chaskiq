@@ -1,0 +1,13 @@
+diff --git a/app/models/app_package_integration.rb b/app/models/app_package_integration.rb
+index e1fcea41..2bc5f03d 100644
+--- a/app/models/app_package_integration.rb
++++ b/app/models/app_package_integration.rb
+@@ -186,7 +186,7 @@ class AppPackageIntegration < ApplicationRecord
+   def get_presenter_manager
+     "MessageApis::#{app_package.name}::Presenter".constantize
+   rescue StandardError
+-    ExternalPresenterManager
++    nil
+   end
+ 
+   def presenter

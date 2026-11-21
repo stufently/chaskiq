@@ -1,0 +1,13 @@
+diff --git a/app/graphql/mutations/conversations/start_conversation.rb b/app/graphql/mutations/conversations/start_conversation.rb
+index 18ee43bb..111fd63c 100644
+--- a/app/graphql/mutations/conversations/start_conversation.rb
++++ b/app/graphql/mutations/conversations/start_conversation.rb
+@@ -35,7 +35,7 @@ module Mutations
+           participant: participant,
+           initiator_channel: initiator_channel,
+           initiator_block: initiator_block,
+-          subject: subject,
++          subject: nil,
+           message: {
+             html_content: sanitized_html,
+             serialized_content: message[:serialized],

@@ -1,0 +1,12 @@
+diff --git a/app/importers/list_importer.rb b/app/importers/list_importer.rb
+index a8fa2daf..321c937a 100644
+--- a/app/importers/list_importer.rb
++++ b/app/importers/list_importer.rb
+@@ -40,7 +40,6 @@ class ListImporter < ActiveImporter::Base
+ 
+       # add an import tag to contact
+       user.tag_list.add(@tag)
+-      user.save
+ 
+       @row_count += 1
+     end

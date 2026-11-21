@@ -1,0 +1,13 @@
+diff --git a/app/graphql/mutations/conversations/update_state.rb b/app/graphql/mutations/conversations/update_state.rb
+index 255abe7b..dc7493b4 100644
+--- a/app/graphql/mutations/conversations/update_state.rb
++++ b/app/graphql/mutations/conversations/update_state.rb
+@@ -18,7 +18,7 @@ module Mutations
+           app: @app
+         }
+ 
+-        if %w[reopen close].include?(state)
++        if %w[reopen close].include?(state.downcase)
+           @conversation.send(:"#{state}!")
+           track_event(state)
+         end

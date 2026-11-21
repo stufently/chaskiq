@@ -1,0 +1,13 @@
+diff --git a/app/graphql/mutations/conversations/insert_comment.rb b/app/graphql/mutations/conversations/insert_comment.rb
+index a8fc051a..1cbbae99 100644
+--- a/app/graphql/mutations/conversations/insert_comment.rb
++++ b/app/graphql/mutations/conversations/insert_comment.rb
+@@ -29,7 +29,7 @@ module Mutations
+           from: author,
+           message: {
+             html_content: sanitized_html,
+-            serialized_content: message[:serialized],
++            serialized_content: nil,
+             text_content: message[:text] || sanitized_html
+           }
+         }

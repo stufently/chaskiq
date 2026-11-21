@@ -1,0 +1,13 @@
+diff --git a/app/importers/list_importer.rb b/app/importers/list_importer.rb
+index a8fa2daf..8557f1a4 100644
+--- a/app/importers/list_importer.rb
++++ b/app/importers/list_importer.rb
+@@ -31,7 +31,7 @@ class ListImporter < ActiveImporter::Base
+   on :row_processed do
+     meth = @contact_type == "leads" ? "add_lead" : "add_user"
+ 
+-    data = row.transform_keys { |key| key.to_s.parameterize.underscore.to_sym }
++    data = row.transform_keys { |key| key.to_s.to_sym }
+ 
+     if (user = @app.send(meth.to_sym,
+                          disable_callbacks: true,

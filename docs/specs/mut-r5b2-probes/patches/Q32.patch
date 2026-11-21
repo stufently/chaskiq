@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index 1f87a88e..0113393d 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -77,7 +77,7 @@ module MessageApis
+ 
+       (limits.max_redirects + 1).times do |hop|
+         return nil unless uri
+-        return nil if url_allowed && !url_allowed.call(uri)
++        return nil if url_allowed && url_allowed.call(uri)
+ 
+         addresses = download_addresses(uri, **address_options)
+         return nil unless addresses

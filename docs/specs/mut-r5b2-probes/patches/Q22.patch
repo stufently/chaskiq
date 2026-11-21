@@ -1,0 +1,13 @@
+diff --git a/app/graphql/mutations/conversations/update_state.rb b/app/graphql/mutations/conversations/update_state.rb
+index 255abe7b..6e36261e 100644
+--- a/app/graphql/mutations/conversations/update_state.rb
++++ b/app/graphql/mutations/conversations/update_state.rb
+@@ -23,7 +23,7 @@ module Mutations
+           track_event(state)
+         end
+ 
+-        { conversation: @conversation, errors: @conversation.errors }
++        { conversation: @conversation, errors: nil }
+       end
+ 
+       def conversation(conversation_id)

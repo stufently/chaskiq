@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index 1f87a88e..180947a8 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -86,7 +86,7 @@ module MessageApis
+         return body unless location
+         return nil if hop == limits.max_redirects
+ 
+-        uri = http_uri(URI.join(uri.to_s, location).to_s)
++        uri = http_uri(location)
+       end
+ 
+       nil

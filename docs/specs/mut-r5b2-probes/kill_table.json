@@ -1,0 +1,434 @@
+[
+ {
+  "id": "Q01",
+  "file": "lib/subdomain_routes.rb",
+  "patch": "patches/Q01.patch",
+  "description": "one subdomain treated as none",
+  "suggested_spec": "spec/lib/subdomain_or_domain_mutants_spec.rb",
+  "approach": "help.example.com: true",
+  "base_killed": true
+ },
+ {
+  "id": "Q02",
+  "file": "lib/subdomain_routes.rb",
+  "patch": "patches/Q02.patch",
+  "description": "bare domain returns false instead of nil",
+  "suggested_spec": "spec/lib/subdomain_or_domain_mutants_spec.rb",
+  "approach": "example.com: nil (not false)",
+  "base_killed": true
+ },
+ {
+  "id": "Q03",
+  "file": "lib/subdomain_routes.rb",
+  "patch": "patches/Q03.patch",
+  "description": "multi-segment subdomain reduced to its last segment",
+  "suggested_spec": "spec/lib/subdomain_or_domain_mutants_spec.rb",
+  "approach": "APP_SUBDOMAINS stubbed [\"www.help\"]: www.help.example.com false; stubbed [\"help\"]: www.help.example.com true",
+  "base_killed": true
+ },
+ {
+  "id": "Q04",
+  "file": "app/importers/list_importer.rb",
+  "patch": "patches/Q04.patch",
+  "description": "type leads imported as users",
+  "suggested_spec": "spec/importers/list_importer_mutants_spec.rb",
+  "approach": "type leads: two Lead rows, no AppUser of type AppUser",
+  "base_killed": true
+ },
+ {
+  "id": "Q05",
+  "file": "app/importers/list_importer.rb",
+  "patch": "patches/Q05.patch",
+  "description": "row properties dropped",
+  "suggested_spec": "spec/importers/list_importer_mutants_spec.rb",
+  "approach": "imported contact properties include name \"Lead\" and last_name \"One\"",
+  "base_killed": false
+ },
+ {
+  "id": "Q06",
+  "file": "app/importers/list_importer.rb",
+  "patch": "patches/Q06.patch",
+  "description": "column names not normalised",
+  "suggested_spec": "spec/importers/list_importer_mutants_spec.rb",
+  "approach": "column \"last name\": property key \"last_name\" (not \"last name\")",
+  "base_killed": false
+ },
+ {
+  "id": "Q07",
+  "file": "app/importers/list_importer.rb",
+  "patch": "patches/Q07.patch",
+  "description": "import tag not saved",
+  "suggested_spec": "spec/importers/list_importer_mutants_spec.rb",
+  "approach": "reloaded contact tag_list starts with \"import \"",
+  "base_killed": true
+ },
+ {
+  "id": "Q08",
+  "file": "app/importers/list_importer.rb",
+  "patch": "patches/Q08.patch",
+  "description": "import mail not sent",
+  "suggested_spec": "spec/importers/list_importer_mutants_spec.rb",
+  "approach": "import: ImportMailer.notify received with(app:, agent:) and the mail delivered",
+  "base_killed": false
+ },
+ {
+  "id": "Q09",
+  "file": "app/importers/list_importer.rb",
+  "patch": "patches/Q09.patch",
+  "description": "import mail to the first agent",
+  "suggested_spec": "spec/importers/list_importer_mutants_spec.rb",
+  "approach": "two agents, agent_id of the second: ImportMailer.notify with agent: the second",
+  "base_killed": false
+ },
+ {
+  "id": "Q10",
+  "file": "app/services/action_trigger_factory.rb",
+  "patch": "patches/Q10.patch",
+  "description": "rule without predicates crashes",
+  "suggested_spec": "spec/services/action_trigger_factory_mutants_spec.rb",
+  "approach": "rule {\"trigger\" => bot.id} without predicates: returns bot",
+  "base_killed": false
+ },
+ {
+  "id": "Q11",
+  "file": "app/services/action_trigger_factory.rb",
+  "patch": "patches/Q11.patch",
+  "description": "only the first rule is checked",
+  "suggested_spec": "spec/services/action_trigger_factory_mutants_spec.rb",
+  "approach": "rules [non-matching for bot A, matching for bot B]: returns B",
+  "base_killed": false
+ },
+ {
+  "id": "Q12",
+  "file": "app/services/action_trigger_factory.rb",
+  "patch": "patches/Q12.patch",
+  "description": "trigger looked up outside the app",
+  "suggested_spec": "spec/services/action_trigger_factory_mutants_spec.rb",
+  "approach": "matching rule whose trigger is a bot of another app: raises ActiveRecord::RecordNotFound",
+  "base_killed": false
+ },
+ {
+  "id": "Q13",
+  "file": "app/models/message.rb",
+  "patch": "patches/Q13.patch",
+  "description": "@> operands swapped (filter contains segments)",
+  "suggested_spec": "spec/models/bot_task_infix_mutants_spec.rb",
+  "approach": "task whose segments = type predicate for AppUser PLUS another predicate (e.g. email eq): found by infix([\"AppUser\"])",
+  "base_killed": false
+ },
+ {
+  "id": "Q14",
+  "file": "app/models/message.rb",
+  "patch": "patches/Q14.patch",
+  "description": "type predicate comparison in to eq",
+  "suggested_spec": "spec/models/bot_task_infix_mutants_spec.rb",
+  "approach": "segments written as literal JSON [{value: [\"AppUser\"], type: \"string\", attribute: \"type\", comparison: \"in\"}] (update_column): found by infix([\"AppUser\"])",
+  "base_killed": false
+ },
+ {
+  "id": "Q15",
+  "file": "app/models/message.rb",
+  "patch": "patches/Q15.patch",
+  "description": "type predicate attribute renamed",
+  "suggested_spec": "spec/models/bot_task_infix_mutants_spec.rb",
+  "approach": "type_predicate_for([\"Lead\"]) == [{value: [\"Lead\"], type: \"string\", attribute: \"type\", comparison: \"in\"}]; literal segments found",
+  "base_killed": false
+ },
+ {
+  "id": "Q16",
+  "file": "app/models/app_package_integration.rb",
+  "patch": "patches/Q16.patch",
+  "description": "unknown package presenter nil",
+  "suggested_spec": "spec/models/app_package_integration_mutants_spec.rb",
+  "approach": "unknown package: presenter == ExternalPresenterManager, external_package? true",
+  "base_killed": true
+ },
+ {
+  "id": "Q17",
+  "file": "app/models/app_package_integration.rb",
+  "patch": "patches/Q17.patch",
+  "description": "presenter ignores the package",
+  "suggested_spec": "spec/models/app_package_integration_mutants_spec.rb",
+  "approach": "Calendly integration: presenter == MessageApis::Calendly::Presenter, external_package? false",
+  "base_killed": false
+ },
+ {
+  "id": "Q18",
+  "file": "app/controllers/application_controller.rb",
+  "patch": "patches/Q18.patch",
+  "description": "cookie name a String, not a Symbol",
+  "suggested_spec": "spec/controllers/application_controller_cookie_mutants_spec.rb",
+  "approach": "cookie_namespace is a Symbol equal to :chaskiq_session_id_<key without dashes>",
+  "base_killed": true
+ },
+ {
+  "id": "Q19",
+  "file": "app/graphql/mutations/conversations/update_state.rb",
+  "patch": "patches/Q19.patch",
+  "description": "state change not logged",
+  "suggested_spec": "spec/graphql/mutations/update_conversation_state_mutants_spec.rb",
+  "approach": "close: Conversation#log_async received with(action: \"close\", user: agent, ip: request.remote_ip)",
+  "base_killed": false
+ },
+ {
+  "id": "Q20",
+  "file": "app/graphql/mutations/conversations/update_state.rb",
+  "patch": "patches/Q20.patch",
+  "description": "logged action renamed",
+  "suggested_spec": "spec/graphql/mutations/update_conversation_state_mutants_spec.rb",
+  "approach": "close: log_async action \"close\"; reopen: action \"reopen\"",
+  "base_killed": false
+ },
+ {
+  "id": "Q21",
+  "file": "app/graphql/mutations/conversations/update_state.rb",
+  "patch": "patches/Q21.patch",
+  "description": "logged ip dropped",
+  "suggested_spec": "spec/graphql/mutations/update_conversation_state_mutants_spec.rb",
+  "approach": "log_async ip == context[:request].remote_ip",
+  "base_killed": false
+ },
+ {
+  "id": "Q22",
+  "file": "app/graphql/mutations/conversations/update_state.rb",
+  "patch": "patches/Q22.patch",
+  "description": "errors not returned",
+  "suggested_spec": "spec/graphql/mutations/update_conversation_state_mutants_spec.rb",
+  "approach": "resolve result: conversation == the conversation, errors is an empty ActiveModel::Errors",
+  "base_killed": false
+ },
+ {
+  "id": "Q23",
+  "file": "app/graphql/mutations/conversations/update_state.rb",
+  "patch": "patches/Q23.patch",
+  "description": "state matched case-insensitively",
+  "suggested_spec": "spec/graphql/mutations/update_conversation_state_mutants_spec.rb",
+  "approach": "state \"Close\": state stays opened, no log_async",
+  "base_killed": false
+ },
+ {
+  "id": "Q24",
+  "file": "app/jobs/sns_receiver_job.rb",
+  "patch": "patches/Q24.patch",
+  "description": "tracks with a missing campaign",
+  "suggested_spec": "spec/jobs/sns_receiver_job_mutants_spec.rb",
+  "approach": "campaign not found (find_by nil), user found: user does not receive track_click",
+  "base_killed": false
+ },
+ {
+  "id": "Q25",
+  "file": "app/jobs/sns_receiver_job.rb",
+  "patch": "patches/Q25.patch",
+  "description": "bounces no longer unsubscribe",
+  "suggested_spec": "spec/jobs/sns_receiver_job_mutants_spec.rb",
+  "approach": "permanent bounce of the user's email: user state unsubscribed",
+  "base_killed": false
+ },
+ {
+  "id": "Q26",
+  "file": "app/jobs/sns_receiver_job.rb",
+  "patch": "patches/Q26.patch",
+  "description": "bounce type check inverted",
+  "suggested_spec": "spec/jobs/sns_receiver_job_mutants_spec.rb",
+  "approach": "permanent bounce: unsubscribed; transient bounce: stays subscribed",
+  "base_killed": false
+ },
+ {
+  "id": "Q27",
+  "file": "app/jobs/sns_receiver_job.rb",
+  "patch": "patches/Q27.patch",
+  "description": "campaign detected by the TO header",
+  "suggested_spec": "spec/jobs/sns_receiver_job_mutants_spec.rb",
+  "approach": "headers with X-CHASKIQ-CAMPAIGN-TO only (no CAMPAIGN-ID): no tracking, no error",
+  "base_killed": false
+ },
+ {
+  "id": "Q28",
+  "file": "app/models/concerns/subscribable.rb",
+  "patch": "patches/Q28.patch",
+  "description": "payment service on nil instead of present",
+  "suggested_spec": "spec/models/concerns/subscribable_mutants_spec.rb",
+  "approach": "paddle_subscription_plan_id nil: payment_attribute returns the stripe value",
+  "base_killed": true
+ },
+ {
+  "id": "Q29",
+  "file": "app/models/concerns/subscribable.rb",
+  "patch": "patches/Q29.patch",
+  "description": "paddle falls back to stripe",
+  "suggested_spec": "spec/models/concerns/subscribable_mutants_spec.rb",
+  "approach": "paddle app with paddle_subscription_status nil, stripe \"active\": payment_attribute nil",
+  "base_killed": false
+ },
+ {
+  "id": "Q30",
+  "file": "app/services/message_apis/safe_download.rb",
+  "patch": "patches/Q30.patch",
+  "description": "one hop fewer",
+  "suggested_spec": "spec/services/message_apis/safe_download_limits_mutants_spec.rb",
+  "approach": "max_redirects: 1, a -> b (302) -> 200 body: body returned; a and b requested once",
+  "base_killed": false
+ },
+ {
+  "id": "Q31",
+  "file": "app/services/message_apis/safe_download.rb",
+  "patch": "patches/Q31.patch",
+  "description": "stops one redirect early (still nil on the limit test)",
+  "suggested_spec": "spec/services/message_apis/safe_download_limits_mutants_spec.rb",
+  "approach": "max_redirects: 1, a -> b -> c (all 302): nil, a and b requested once each, c never; a -> b -> 200: body",
+  "base_killed": false
+ },
+ {
+  "id": "Q32",
+  "file": "app/services/message_apis/safe_download.rb",
+  "patch": "patches/Q32.patch",
+  "description": "url_allowed inverted",
+  "suggested_spec": "spec/services/message_apis/safe_download_limits_mutants_spec.rb",
+  "approach": "url_allowed -> true: body returned",
+  "base_killed": true
+ },
+ {
+  "id": "Q33",
+  "file": "app/services/message_apis/safe_download.rb",
+  "patch": "patches/Q33.patch",
+  "description": "url_allowed only on the first hop",
+  "suggested_spec": "spec/services/message_apis/safe_download_limits_mutants_spec.rb",
+  "approach": "a -> 302 to other.example.com, url_allowed rejects other.example.com: nil, other host never requested",
+  "base_killed": false
+ },
+ {
+  "id": "Q34",
+  "file": "app/services/message_apis/safe_download.rb",
+  "patch": "patches/Q34.patch",
+  "description": "headers forwarded to redirect targets",
+  "suggested_spec": "spec/services/message_apis/safe_download_limits_mutants_spec.rb",
+  "approach": "headers {\"Authorization\" => \"x\"}: first request has it, the redirected request does not",
+  "base_killed": false
+ },
+ {
+  "id": "Q35",
+  "file": "app/services/message_apis/safe_download.rb",
+  "patch": "patches/Q35.patch",
+  "description": "relative Location not resolved",
+  "suggested_spec": "spec/services/message_apis/safe_download_limits_mutants_spec.rb",
+  "approach": "302 Location \"/b\": https://cdn.example.com/b requested, its body returned",
+  "base_killed": false
+ },
+ {
+  "id": "Q36",
+  "file": "app/services/message_apis/safe_download.rb",
+  "patch": "patches/Q36.patch",
+  "description": "default redirect limit 3 to 2",
+  "suggested_spec": "spec/services/message_apis/safe_download_limits_mutants_spec.rb",
+  "approach": "default limits, three 302 hops then 200: body returned",
+  "base_killed": false
+ },
+ {
+  "id": "Q37",
+  "file": "app/services/message_apis/safe_download.rb",
+  "patch": "patches/Q37.patch",
+  "description": "deadline guard inverted (always nil)",
+  "suggested_spec": "spec/services/message_apis/safe_download_limits_mutants_spec.rb",
+  "approach": "plain 200 fetch with default limits: body returned",
+  "base_killed": false
+ },
+ {
+  "id": "Q38",
+  "file": "app/jobs/app_user_trigger_job.rb",
+  "patch": "patches/Q38.patch",
+  "description": "last message of the step",
+  "suggested_spec": "spec/jobs/app_user_trigger_job_mutants_spec.rb",
+  "approach": "step with two messages: add_message gets the first one's html_content",
+  "base_killed": false
+ },
+ {
+  "id": "Q39",
+  "file": "app/jobs/app_user_trigger_job.rb",
+  "patch": "patches/Q39.patch",
+  "description": "lock ignored",
+  "suggested_spec": "spec/jobs/app_user_trigger_job_mutants_spec.rb",
+  "approach": "trigger_locked.value set: perform adds no message",
+  "base_killed": false
+ },
+ {
+  "id": "Q40",
+  "file": "app/jobs/app_user_trigger_job.rb",
+  "patch": "patches/Q40.patch",
+  "description": "lock not set",
+  "suggested_spec": "spec/jobs/app_user_trigger_job_mutants_spec.rb",
+  "approach": "after perform: user.trigger_locked.value present",
+  "base_killed": false
+ },
+ {
+  "id": "Q41",
+  "file": "app/jobs/app_user_trigger_job.rb",
+  "patch": "patches/Q41.patch",
+  "description": "existing conversation ignored",
+  "suggested_spec": "spec/jobs/app_user_trigger_job_mutants_spec.rb",
+  "approach": "perform with an existing conversation key: message added there, no new conversation",
+  "base_killed": false
+ },
+ {
+  "id": "Q42",
+  "file": "app/jobs/app_user_trigger_job.rb",
+  "patch": "patches/Q42.patch",
+  "description": "new conversation without the bot initiator",
+  "suggested_spec": "spec/jobs/app_user_trigger_job_mutants_spec.rb",
+  "approach": "perform without a conversation: new conversation initiator == app.agent_bots.first",
+  "base_killed": false
+ },
+ {
+  "id": "Q43",
+  "file": "app/graphql/mutations/conversations/insert_comment.rb",
+  "patch": "patches/Q43.patch",
+  "description": "insert_comment ignores the text",
+  "suggested_spec": "spec/graphql/mutations/conversation_authors_mutants_spec.rb",
+  "approach": "message text \"plain\", html \"<p>rich</p>\": part text_content \"plain\"",
+  "base_killed": false
+ },
+ {
+  "id": "Q44",
+  "file": "app/graphql/mutations/conversations/insert_comment.rb",
+  "patch": "patches/Q44.patch",
+  "description": "insert_comment html not stripped",
+  "suggested_spec": "spec/graphql/mutations/conversation_authors_mutants_spec.rb",
+  "approach": "html \"<p>rich</p>\": part html_content \"rich\"",
+  "base_killed": false
+ },
+ {
+  "id": "Q45",
+  "file": "app/graphql/mutations/conversations/insert_comment.rb",
+  "patch": "patches/Q45.patch",
+  "description": "insert_comment serialized content dropped",
+  "suggested_spec": "spec/graphql/mutations/conversation_authors_mutants_spec.rb",
+  "approach": "part serialized_content == the serialized JSON",
+  "base_killed": false
+ },
+ {
+  "id": "Q46",
+  "file": "app/graphql/mutations/conversations/start_conversation.rb",
+  "patch": "patches/Q46.patch",
+  "description": "start_conversation subject dropped",
+  "suggested_spec": "spec/graphql/mutations/conversation_authors_mutants_spec.rb",
+  "approach": "subject \"Hi\": conversation subject \"Hi\"",
+  "base_killed": false
+ },
+ {
+  "id": "Q47",
+  "file": "app/graphql/mutations/apps/create_app.rb",
+  "patch": "patches/Q47.patch",
+  "description": "blank operation creates an app",
+  "suggested_spec": "spec/graphql/mutations/conversation_authors_mutants_spec.rb",
+  "approach": "operation nil: app not persisted, agent apps unchanged",
+  "base_killed": false
+ },
+ {
+  "id": "Q48",
+  "file": "app/graphql/mutations/apps/create_app.rb",
+  "patch": "patches/Q48.patch",
+  "description": "operation new creates an app",
+  "suggested_spec": "spec/graphql/mutations/conversation_authors_mutants_spec.rb",
+  "approach": "operation \"new\": app not persisted",
+  "base_killed": false
+ }
+]

@@ -1,0 +1,12 @@
+diff --git a/app/jobs/app_user_trigger_job.rb b/app/jobs/app_user_trigger_job.rb
+index 59906345..9f60d4be 100644
+--- a/app/jobs/app_user_trigger_job.rb
++++ b/app/jobs/app_user_trigger_job.rb
+@@ -11,7 +11,6 @@ class AppUserTriggerJob < ApplicationJob
+ 
+     return if @app_user.trigger_locked.value.present?
+ 
+-    @app_user.trigger_locked.value = 1
+ 
+     trigger = begin
+       @app.bot_tasks.find(trigger_id)

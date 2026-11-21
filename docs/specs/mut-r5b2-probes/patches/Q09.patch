@@ -1,0 +1,13 @@
+diff --git a/app/importers/list_importer.rb b/app/importers/list_importer.rb
+index a8fa2daf..fa5e5d76 100644
+--- a/app/importers/list_importer.rb
++++ b/app/importers/list_importer.rb
+@@ -22,7 +22,7 @@ class ListImporter < ActiveImporter::Base
+ 
+   on :import_started do
+     @app = App.find(params[:app_id])
+-    @agent = @app.agents.find(params[:agent_id])
++    @agent = @app.agents.first
+     @contact_type = params[:type]
+     @row_count = 0
+     @tag = "import #{I18n.l(Time.zone.now, format: :short)}"

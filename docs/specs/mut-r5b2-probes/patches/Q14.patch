@@ -1,0 +1,13 @@
+diff --git a/app/models/message.rb b/app/models/message.rb
+index c4dcb7f1..f639c13d 100644
+--- a/app/models/message.rb
++++ b/app/models/message.rb
+@@ -109,7 +109,7 @@ class Message < ApplicationRecord
+       value: type_predicate,
+       type: "string",
+       attribute: "type",
+-      comparison: "in"
++      comparison: "eq"
+     }]
+   end
+ 

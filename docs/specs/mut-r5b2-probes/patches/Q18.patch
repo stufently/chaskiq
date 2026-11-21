@@ -1,0 +1,13 @@
+diff --git a/app/controllers/application_controller.rb b/app/controllers/application_controller.rb
+index 2ef4a573..0504e5d1 100644
+--- a/app/controllers/application_controller.rb
++++ b/app/controllers/application_controller.rb
+@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
+   end
+ 
+   def cookie_namespace
+-    :"chaskiq_session_id_#{@app.key.gsub('-', '')}"
++    "chaskiq_session_id_#{@app.key.gsub('-', '')}"
+   end
+ 
+   def render_empty

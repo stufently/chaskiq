@@ -1,0 +1,13 @@
+diff --git a/app/models/concerns/subscribable.rb b/app/models/concerns/subscribable.rb
+index caaa510c..0c33e279 100644
+--- a/app/models/concerns/subscribable.rb
++++ b/app/models/concerns/subscribable.rb
+@@ -22,7 +22,7 @@ module Subscribable
+   end
+ 
+   def payment_service
+-    if paddle_subscription_plan_id.present?
++    if paddle_subscription_plan_id.nil?
+       PaymentServices::Paddle
+     else
+       PaymentServices::StripeService

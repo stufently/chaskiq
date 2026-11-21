@@ -1,0 +1,13 @@
+diff --git a/app/importers/list_importer.rb b/app/importers/list_importer.rb
+index a8fa2daf..542ecbfc 100644
+--- a/app/importers/list_importer.rb
++++ b/app/importers/list_importer.rb
+@@ -36,7 +36,7 @@ class ListImporter < ActiveImporter::Base
+     if (user = @app.send(meth.to_sym,
+                          disable_callbacks: true,
+                          email: row.delete("email"),
+-                         properties: data))
++                         properties: {}))
+ 
+       # add an import tag to contact
+       user.tag_list.add(@tag)

@@ -1,0 +1,13 @@
+diff --git a/app/jobs/sns_receiver_job.rb b/app/jobs/sns_receiver_job.rb
+index acc91a4b..4b1941cb 100644
+--- a/app/jobs/sns_receiver_job.rb
++++ b/app/jobs/sns_receiver_job.rb
+@@ -10,7 +10,7 @@ class SnsReceiverJob < ApplicationJob
+     end
+ 
+     campaign = m["mail"]["headers"].find do |o|
+-      o["name"] === "X-CHASKIQ-CAMPAIGN-ID"
++      o["name"] === "X-CHASKIQ-CAMPAIGN-TO"
+     end
+ 
+     # handle conversation and exit

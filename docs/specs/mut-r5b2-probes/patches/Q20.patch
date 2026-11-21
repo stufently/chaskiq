@@ -1,0 +1,13 @@
+diff --git a/app/graphql/mutations/conversations/update_state.rb b/app/graphql/mutations/conversations/update_state.rb
+index 255abe7b..8447e0b5 100644
+--- a/app/graphql/mutations/conversations/update_state.rb
++++ b/app/graphql/mutations/conversations/update_state.rb
+@@ -20,7 +20,7 @@ module Mutations
+ 
+         if %w[reopen close].include?(state)
+           @conversation.send(:"#{state}!")
+-          track_event(state)
++          track_event("closed")
+         end
+ 
+         { conversation: @conversation, errors: @conversation.errors }

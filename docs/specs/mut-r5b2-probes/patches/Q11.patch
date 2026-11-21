@@ -1,0 +1,13 @@
+diff --git a/app/services/action_trigger_factory.rb b/app/services/action_trigger_factory.rb
+index 9d90ec35..677e8c81 100644
+--- a/app/services/action_trigger_factory.rb
++++ b/app/services/action_trigger_factory.rb
+@@ -304,7 +304,7 @@ class ActionTriggerFactory
+   end
+ 
+   def self.find_by_segment(app:, user:, rules:)
+-    rules.find do |o|
++    rules.first(1).find do |o|
+       comparator = SegmentComparator.new(
+         user: user,
+         predicates: o["predicates"] || []

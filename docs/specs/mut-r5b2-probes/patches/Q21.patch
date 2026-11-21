@@ -1,0 +1,13 @@
+diff --git a/app/graphql/mutations/conversations/update_state.rb b/app/graphql/mutations/conversations/update_state.rb
+index 255abe7b..6b945e02 100644
+--- a/app/graphql/mutations/conversations/update_state.rb
++++ b/app/graphql/mutations/conversations/update_state.rb
+@@ -38,7 +38,7 @@ module Mutations
+         @conversation.log_async(
+           action: action,
+           user: current_user,
+-          ip: context[:request].remote_ip
++          ip: nil
+         )
+       end
+     end

@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index 1f87a88e..4996c84b 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -25,7 +25,7 @@ module MessageApis
+     class FetchLimits
+       attr_reader :max_bytes, :max_redirects
+ 
+-      def initialize(max_bytes: 15 * 1024 * 1024, max_redirects: 3, deadline: 30)
++      def initialize(max_bytes: 15 * 1024 * 1024, max_redirects: 2, deadline: 30)
+         @max_bytes = max_bytes
+         @max_redirects = max_redirects
+         @deadline = deadline

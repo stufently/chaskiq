@@ -1,0 +1,13 @@
+diff --git a/app/services/message_apis/safe_download.rb b/app/services/message_apis/safe_download.rb
+index 1f87a88e..59552aa3 100644
+--- a/app/services/message_apis/safe_download.rb
++++ b/app/services/message_apis/safe_download.rb
+@@ -32,7 +32,7 @@ module MessageApis
+       end
+ 
+       def within_deadline(&)
+-        return unless @deadline.positive?
++        return if @deadline.positive?
+ 
+         Timeout.timeout(@deadline, &)
+       rescue StandardError

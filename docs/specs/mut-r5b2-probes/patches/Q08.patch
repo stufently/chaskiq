@@ -1,0 +1,15 @@
+diff --git a/app/importers/list_importer.rb b/app/importers/list_importer.rb
+index a8fa2daf..3184fc4d 100644
+--- a/app/importers/list_importer.rb
++++ b/app/importers/list_importer.rb
+@@ -53,10 +53,6 @@ class ListImporter < ActiveImporter::Base
+   on :import_finished do
+     send_notification("Data imported successfully!")
+ 
+-    ImportMailer.notify(
+-      app: @app,
+-      agent: @agent
+-    ).deliver_now
+   end
+ 
+   on :import_failed do |exception|

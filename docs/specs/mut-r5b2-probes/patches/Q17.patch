@@ -1,0 +1,13 @@
+diff --git a/app/models/app_package_integration.rb b/app/models/app_package_integration.rb
+index e1fcea41..5a38555e 100644
+--- a/app/models/app_package_integration.rb
++++ b/app/models/app_package_integration.rb
+@@ -190,7 +190,7 @@ class AppPackageIntegration < ApplicationRecord
+   end
+ 
+   def presenter
+-    @presenter ||= get_presenter_manager
++    @presenter ||= ExternalPresenterManager
+   end
+ 
+   def external_package?

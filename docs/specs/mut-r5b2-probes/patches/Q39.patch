@@ -1,0 +1,12 @@
+diff --git a/app/jobs/app_user_trigger_job.rb b/app/jobs/app_user_trigger_job.rb
+index 59906345..aeb9a06a 100644
+--- a/app/jobs/app_user_trigger_job.rb
++++ b/app/jobs/app_user_trigger_job.rb
+@@ -9,7 +9,6 @@ class AppUserTriggerJob < ApplicationJob
+     convo = @app.conversations.find_by(key: conversation)
+     @app_user = @app.app_users.find(user_id)
+ 
+-    return if @app_user.trigger_locked.value.present?
+ 
+     @app_user.trigger_locked.value = 1
+ 
