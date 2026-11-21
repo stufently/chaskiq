@@ -8,7 +8,7 @@ class PluginSchemaValidator
   end
 
   def valid?
-    !schema.map { |o| o.valid? }.any? { |o| !o }
+    schema.map(&:valid?).all?
   end
 end
 

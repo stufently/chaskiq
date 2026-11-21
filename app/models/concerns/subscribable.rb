@@ -4,11 +4,11 @@ module Subscribable
   extend ActiveSupport::Concern
 
   def plan
-    if stripe_subscription_status == "active" || stripe_subscription_status == "trialing"
+    if %w[active trialing].include?(stripe_subscription_status)
       @plan ||= Plan.new(
         Plan.get_by_id(stripe_subscription_plan_id) || Plan.get("free")
       )
-    elsif paddle_subscription_status == "active" || paddle_subscription_status == "trialing"
+    elsif %w[active trialing].include?(paddle_subscription_status)
       @plan ||= Plan.new(
         Plan.get_by_id(paddle_subscription_plan_id.to_i) || Plan.get("free")
       )

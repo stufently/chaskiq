@@ -23,6 +23,17 @@ Style/HashSyntax:
 Rails/EnvironmentVariableAccess:
   AllowReads: true
 
+# R9b (docs/specs/fork-updates-rubocop-plan.md, decision 2026-11-21): `a + b` and "#{a}#{b}" differ
+# when b is not a String: `+` raises, interpolation calls to_s. The GraphQL controllers concatenate
+# the client's operationName (an Array, Hash or number param raises TypeError, which both answer with
+# an error) and Campaign#clone_newsletter concatenates name (a nameless campaign raises
+# NoMethodError). Those behaviours stay; every other concatenation is interpolated.
+Style/StringConcatenation:
+  Exclude:
+    - 'app/controllers/api/graphql_controller.rb'
+    - 'app/controllers/graphql_controller.rb'
+    - 'app/models/campaign.rb'
+
 Lint/EmptyBlock:
   Exclude:
     - 'spec/**/*'

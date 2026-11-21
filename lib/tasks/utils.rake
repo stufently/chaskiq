@@ -18,7 +18,7 @@ namespace :packages do
 
   task attach: :environment do
     Rails.logger = Logger.new($stdout)
-    App.find_each { |a| a.attach_default_packages }
+    App.find_each(&:attach_default_packages)
   end
 
   task :publish, [:pkg_name] => :environment do |_task, args|

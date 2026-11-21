@@ -12,6 +12,12 @@ class AppUser < ApplicationRecord
   include Avatar
   include AuditableBehavior
 
+  STYLE_CLASSES = {
+    "passive" => "plain",
+    "subscribed" => "information",
+    "unsusbscribed" => "warning"
+  }.freeze
+
   ENABLED_SEARCH_FIELDS = [
     { "name" => "email", "type" => "string" },
     { "name" => "postal", "type" => "string" },
@@ -318,14 +324,7 @@ class AppUser < ApplicationRecord
   end
 
   def style_class
-    case state
-    when "passive"
-      "plain"
-    when "subscribed"
-      "information"
-    when "unsusbscribed"
-      "warning"
-    end
+    STYLE_CLASSES[state]
   end
 
   def enqueue_social_enrichment

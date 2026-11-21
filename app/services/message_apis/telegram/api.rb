@@ -130,10 +130,8 @@ module MessageApis
       end
 
       def get_profile_for_participant(conversation)
-        conversation.main_participant
-                    &.external_profiles
-                    &.find_by(provider: PROVIDER)
-                    &.profile_id
+        external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
+        external_profile&.profile_id
       end
 
       def get_media(id)

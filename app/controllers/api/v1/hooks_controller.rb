@@ -96,7 +96,8 @@ module Api
         mail.part # will convert plain into multipart
         # EmailReplyParser.parse_reply(mail.text_part.body.to_s)
         # message = EmailReplyParser.parse_reply(mail.text_part.body.to_s).gsub("\n", "<br/>").force_encoding(Encoding::UTF_8)
-        body = mail&.text_part&.body&.to_s&.force_encoding(Encoding::UTF_8)
+        text_body = mail&.text_part&.body
+        body = text_body&.to_s&.force_encoding(Encoding::UTF_8)
 
         return if body.blank?
         return if recipients.empty?

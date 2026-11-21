@@ -153,7 +153,7 @@ module MessageApis
 
       authority, suffix = address.captures
       path_and_query, separator, fragment = suffix.partition("#")
-      unsafe = %r{%(?![A-Fa-f0-9]{2})|[^A-Za-z0-9._~!$&'()*+,;=:@/?%\-]}
+      unsafe = %r{%(?![A-Fa-f0-9]{2})|[^A-Za-z0-9._~!$&'()*+,;=:@/?%-]}
       encoded = authority + URI::DEFAULT_PARSER.escape(path_and_query, unsafe) +
                 separator + URI::DEFAULT_PARSER.escape(fragment, unsafe)
       encoded if URI.parse(encoded).host.present?

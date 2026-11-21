@@ -19,7 +19,7 @@ class ConversationPartBlock < ApplicationRecord
       nil
     end
     return if klass.blank?
-    return unless klass.instance_methods.include?(:create_fase)
+    return unless klass.method_defined?(:create_fase)
 
     # TODO: look for a better method to query app packages
     klass = get_package_integration(app, package_class_name)

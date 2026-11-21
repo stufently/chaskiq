@@ -43,7 +43,7 @@ class Event < ApplicationRecord
 
     # puts "EL EVENT: #{action}"
 
-    action_event = "Events::" + action.gsub(".", "_").classify
+    action_event = "Events::#{action.gsub('.', '_').classify}"
     klass = begin
       action_event.constantize
     rescue StandardError

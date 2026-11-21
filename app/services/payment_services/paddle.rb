@@ -30,14 +30,15 @@ module PaymentServices
         params: auth
       )
 
-      res.filter do |o|
+      available = res.filter do |o|
         Plan.all.map { |o| o[:id] }.include?(o.id)
-      end.map do |o|
+      end
+      available.map do |o|
         p = Plan.get_by_id(o.id)
         {
           id: p["id"],
           source: "paddle",
-          features: p.dig("features"),
+          features: p["features"],
           name: p["name"],
           pricing: o.recurring_price.USD,
           billing_type: o.recurring_price.billing_type

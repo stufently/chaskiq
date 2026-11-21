@@ -36,7 +36,7 @@ RSpec.describe Api::GraphqlController, type: :controller do
   end
 
   before do
-    file = Rails.root + "app/javascript/packages/messenger/src/client_messenger/graphql/testEntry.ts"
+    file = Rails.root.join("app/javascript/packages/messenger/src/client_messenger/graphql/testEntry.ts")
 
     @graphql_client = GraphQL::TestClient.new
     @graphql_client.configure(file)

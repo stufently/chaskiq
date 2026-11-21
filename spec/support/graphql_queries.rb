@@ -47,7 +47,7 @@ module GraphQL
   class TestClient
     attr_accessor :actions, :entry
 
-    def configure(entry = Rails.root + "app/javascript/packages/store/src/graphql/testEntry.ts")
+    def configure(entry = Rails.root.join("app/javascript/packages/store/src/graphql/testEntry.ts"))
       @entry = entry
     end
 

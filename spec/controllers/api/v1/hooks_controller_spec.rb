@@ -1030,7 +1030,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
         allow_any_instance_of(Api::V1::HooksController).to receive(
           :read_mail_file
         ).and_return(
-          File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
+          Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
         )
 
         expect(ConversationPart.last).to_not be_read
@@ -1047,7 +1047,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
         allow_any_instance_of(Api::V1::HooksController).to receive(
           :read_mail_file
         ).and_return(
-          File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample_multi_inline_attachment.eml")
+          Rails.root.join("spec/fixtures/emails/aws_sample_multi_inline_attachment.eml").read
         )
 
         expect(ConversationPart.last).to_not be_read
@@ -1061,7 +1061,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
         allow_any_instance_of(Api::V1::HooksController).to receive(
           :read_mail_file
         ).and_return(
-          File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample_as_attachment.eml")
+          Rails.root.join("spec/fixtures/emails/aws_sample_as_attachment.eml").read
         )
 
         expect(ConversationPart.last).to_not be_read
@@ -1080,7 +1080,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
       end
 
       it "serializes an email reply with 1000 nested divs" do
-        nested_html = ("<div>" * 1000) + "Nested text" + ("</div>" * 1000)
+        nested_html = "#{'<div>' * 1000}Nested text#{'</div>' * 1000}"
         stub_email_receipt("<p>Reply <strong>before nesting</strong></p>#{nested_html}")
 
         expect { send_data(message_notification_params) }.to change { conversation.messages.count }.by(1)
@@ -1115,7 +1115,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
       allow_any_instance_of(Api::V1::HooksController).to receive(
         :read_mail_file
       ).and_return(
-        File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
+        Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
       )
 
       allow_any_instance_of(Mail::Message).to receive(
@@ -1142,7 +1142,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
       allow_any_instance_of(Api::V1::HooksController).to receive(
         :read_mail_file
       ).and_return(
-        File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
+        Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
       )
 
       allow_any_instance_of(Mail::Message).to receive(
@@ -1178,7 +1178,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
       allow_any_instance_of(Api::V1::HooksController).to receive(
         :read_mail_file
       ).and_return(
-        File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
+        Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
       )
 
       allow_any_instance_of(Mail::Message).to receive(
@@ -1218,7 +1218,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
       allow_any_instance_of(Api::V1::HooksController).to receive(
         :read_mail_file
       ).and_return(
-        File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
+        Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
       )
 
       allow_any_instance_of(Mail::Message).to receive(
@@ -1240,7 +1240,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
       allow_any_instance_of(Api::V1::HooksController).to receive(
         :read_mail_file
       ).and_return(
-        File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
+        Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
       )
 
       allow_any_instance_of(Mail::Message).to receive(

@@ -87,7 +87,9 @@ class ActionTrigger
       # normal flow , get next step from next index on the static trigger
       paths = trigger.paths.map do |o|
         o[:steps].find do |s|
-          s[:step_uid].to_s == message&.message&.blocks&.dig("next_step_uuid")
+          step_uid = s[:step_uid].to_s
+          blocks = message&.message&.blocks
+          step_uid == blocks&.dig("next_step_uuid")
         end
       end
       next_step = paths.find { |o| o }.with_indifferent_access

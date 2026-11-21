@@ -60,7 +60,8 @@ module Types
     end
 
     def plans
-      object.payment_service&.new&.get_plans&.sort_by { |p| p[:pricing] }
+      service = object.payment_service&.new
+      service&.get_plans&.sort_by { |p| p[:pricing] }
     end
 
     field :user_transactions, [Types::JsonType], null: true
@@ -463,11 +464,12 @@ module Types
       authorize! object, to: :can_read_help_center?, with: AppPolicy
 
       I18n.locale = lang
-      if mode == "all"
+      case mode
+      when "all"
         articles = object.articles
-      elsif mode == "published"
+      when "published"
         articles = object.articles.published
-      elsif mode == "draft"
+      when "draft"
         articles = object.articles.draft
       end
 
