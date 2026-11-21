@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-21 — fork-updates-r3b3
+
+- Changed: `POST /package_iframe_internal/:package` reads the user id with
+  `params.expect(user: [:id])` and answers 400 when `user` is missing, not a hash or has no `id`
+  (was 500 for a missing `user` and 404 otherwise).
+- Changed: Rails/StrongParametersExpect cleaned up: the two path parameters (`provider` of the global
+  hooks, `id` of the campaign preview) are read with `params.expect` without behaviour changes;
+  specs added for all three sites.
+
 ## 2026-11-21 — fix-cleanup-2
 
 - Fixed: `Lead#verify!` of a lead whose email no app user of the app has turns the lead into an app
