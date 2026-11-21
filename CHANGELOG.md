@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-21 — fix-cleanup-3
+
+- Fixed: `Lead#verify!` no longer turns the matching app user into a lead: the merge copied the lead's
+  `type` attribute onto the user, and a repeated `verify!` then converted the lead itself.
+- Fixed: `Lead#verify!` merges into the matching app user with the smallest id when several app users
+  of the app share the email (`find_by` without an order picked an arbitrary row).
+
 ## 2026-11-21 — fix-cleanup-2
 
 - Fixed: `Lead#verify!` of a lead whose email no app user of the app has turns the lead into an app
