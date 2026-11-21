@@ -1,0 +1,60 @@
+diff --git a/app/graphql/types/app_type.rb b/app/graphql/types/app_type.rb
+index 28286176..0e09e16b 100644
+--- a/app/graphql/types/app_type.rb
++++ b/app/graphql/types/app_type.rb
+@@ -161,9 +161,7 @@ module Types
+     end
+ 
+     def app_packages_capabilities(kind:)
+-      unless %w[home conversations conversation_part bots inbox fixed_sidebar conversations_initiator].include?(kind)
+-        raise "not in type"
+-      end
++      raise "not in type" unless %w[home conversations conversation_part bots inbox fixed_sidebar conversations_initiator].include?(kind)
+ 
+       authorize! object, to: :show?, with: AppPolicy
+ 
+diff --git a/app/models/app.rb b/app/models/app.rb
+index ae2d6c6d..bd07e176 100644
+--- a/app/models/app.rb
++++ b/app/models/app.rb
+@@ -225,9 +225,7 @@ class App < ApplicationRecord
+ 
+       if options[:initiator_block]
+         pkg = find_app_package(options[:initiator_block]["name"])
+-        if pkg.present?
+-          pkg&.message_api_klass&.prepare_block_initiator_channel_for(conversation, pkg, options[:initiator_block])
+-        end
++        pkg&.message_api_klass&.prepare_block_initiator_channel_for(conversation, pkg, options[:initiator_block]) if pkg.present?
+         message = nil
+       end
+ 
+diff --git a/app/models/concerns/globalize_accessors.rb b/app/models/concerns/globalize_accessors.rb
+index 77bf9a7b..fa700d4d 100644
+--- a/app/models/concerns/globalize_accessors.rb
++++ b/app/models/concerns/globalize_accessors.rb
+@@ -59,9 +59,7 @@ module GlobalizeAccessors
+         end
+       end
+ 
+-      if respond_to?(:accessible_attributes) && accessible_attributes.include?(attr_name)
+-        attr_accessible :"#{localized_attr_name}"
+-      end
++      attr_accessible :"#{localized_attr_name}" if respond_to?(:accessible_attributes) && accessible_attributes.include?(attr_name)
+       globalize_attribute_names << localized_attr_name.to_sym
+     end
+ 
+diff --git a/app/services/message_apis/twilio_phone/api.rb b/app/services/message_apis/twilio_phone/api.rb
+index 7c2245d0..c96a5cbb 100644
+--- a/app/services/message_apis/twilio_phone/api.rb
++++ b/app/services/message_apis/twilio_phone/api.rb
+@@ -166,9 +166,7 @@ module MessageApis::TwilioPhone
+       return process_outbound_call(params, "outbound") if params["Direction"] == "outbound-api"
+ 
+       # call events handler
+-      if params[:StatusCallbackEvent].present? && params[:Caller] != "client:support_agent"
+-        return process_incoming_event(params)
+-      end
++      return process_incoming_event(params) if params[:StatusCallbackEvent].present? && params[:Caller] != "client:support_agent"
+ 
+       app = package.app
+       # caller initiators

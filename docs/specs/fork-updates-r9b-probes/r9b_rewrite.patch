@@ -1,0 +1,515 @@
+diff --git a/.rubocop.yml b/.rubocop.yml
+index 05d19b57..f330769c 100644
+--- a/.rubocop.yml
++++ b/.rubocop.yml
+@@ -23,6 +23,17 @@ Style/HashSyntax:
+ Rails/EnvironmentVariableAccess:
+   AllowReads: true
+ 
++# R9b (docs/specs/fork-updates-rubocop-plan.md, decision 2026-11-21): `a + b` and "#{a}#{b}" differ
++# when b is not a String: `+` raises, interpolation calls to_s. The GraphQL controllers concatenate
++# the client's operationName (an Array, Hash or number param raises TypeError, which both answer with
++# an error) and Campaign#clone_newsletter concatenates name (a nameless campaign raises
++# NoMethodError). Those behaviours stay; every other concatenation is interpolated.
++Style/StringConcatenation:
++  Exclude:
++    - 'app/controllers/api/graphql_controller.rb'
++    - 'app/controllers/graphql_controller.rb'
++    - 'app/models/campaign.rb'
++
+ Lint/EmptyBlock:
+   Exclude:
+     - 'spec/**/*'
+diff --git a/app/controllers/api/v1/hooks_controller.rb b/app/controllers/api/v1/hooks_controller.rb
+index ab067d4f..2f65f5e2 100644
+--- a/app/controllers/api/v1/hooks_controller.rb
++++ b/app/controllers/api/v1/hooks_controller.rb
+@@ -96,7 +96,8 @@ module Api
+         mail.part # will convert plain into multipart
+         # EmailReplyParser.parse_reply(mail.text_part.body.to_s)
+         # message = EmailReplyParser.parse_reply(mail.text_part.body.to_s).gsub("\n", "<br/>").force_encoding(Encoding::UTF_8)
+-        body = mail&.text_part&.body&.to_s&.force_encoding(Encoding::UTF_8)
++        text_body = mail&.text_part&.body
++        body = text_body&.to_s&.force_encoding(Encoding::UTF_8)
+ 
+         return if body.blank?
+         return if recipients.empty?
+diff --git a/app/graphql/types/app_type.rb b/app/graphql/types/app_type.rb
+index 0e09e16b..8b805c42 100644
+--- a/app/graphql/types/app_type.rb
++++ b/app/graphql/types/app_type.rb
+@@ -60,7 +60,8 @@ module Types
+     end
+ 
+     def plans
+-      object.payment_service&.new&.get_plans&.sort_by { |p| p[:pricing] }
++      service = object.payment_service&.new
++      service&.get_plans&.sort_by { |p| p[:pricing] }
+     end
+ 
+     field :user_transactions, [Types::JsonType], null: true
+@@ -463,11 +464,12 @@ module Types
+       authorize! object, to: :can_read_help_center?, with: AppPolicy
+ 
+       I18n.locale = lang
+-      if mode == "all"
++      case mode
++      when "all"
+         articles = object.articles
+-      elsif mode == "published"
++      when "published"
+         articles = object.articles.published
+-      elsif mode == "draft"
++      when "draft"
+         articles = object.articles.draft
+       end
+ 
+diff --git a/app/models/app_package_integration.rb b/app/models/app_package_integration.rb
+index 6783f04c..5023b4f4 100644
+--- a/app/models/app_package_integration.rb
++++ b/app/models/app_package_integration.rb
+@@ -112,7 +112,7 @@ class AppPackageIntegration < ApplicationRecord
+   def handle_registration
+     return if app_package.is_external?
+ 
+-    register_hook if message_api_klass && message_api_klass.respond_to?(:register_webhook)
++    register_hook if message_api_klass.respond_to?(:register_webhook)
+     message_api_klass.after_install if message_api_klass.respond_to?(:after_install)
+   end
+ 
+diff --git a/app/models/app_user.rb b/app/models/app_user.rb
+index fb857fe9..cedec849 100644
+--- a/app/models/app_user.rb
++++ b/app/models/app_user.rb
+@@ -12,6 +12,12 @@ class AppUser < ApplicationRecord
+   include Avatar
+   include AuditableBehavior
+ 
++  STYLE_CLASSES = {
++    "passive" => "plain",
++    "subscribed" => "information",
++    "unsusbscribed" => "warning"
++  }.freeze
++
+   ENABLED_SEARCH_FIELDS = [
+     { "name" => "email", "type" => "string" },
+     { "name" => "postal", "type" => "string" },
+@@ -318,14 +324,7 @@ class AppUser < ApplicationRecord
+   end
+ 
+   def style_class
+-    case state
+-    when "passive"
+-      "plain"
+-    when "subscribed"
+-      "information"
+-    when "unsusbscribed"
+-      "warning"
+-    end
++    STYLE_CLASSES[state]
+   end
+ 
+   def enqueue_social_enrichment
+diff --git a/app/models/campaign.rb b/app/models/campaign.rb
+index 2fa1793d..e5ab95de 100644
+--- a/app/models/campaign.rb
++++ b/app/models/campaign.rb
+@@ -62,7 +62,7 @@ class Campaign < Message
+   def delivery_progress
+     return 0 if metrics.deliveries.empty?
+ 
+-    subscriptions.availables.size.to_f / metrics.deliveries.size.to_f * 100.0
++    subscriptions.availables.size.to_f / metrics.deliveries.size * 100.0
+   end
+ 
+   def subscriber_status_for(subscriber); end
+diff --git a/app/models/concerns/globalize_accessors.rb b/app/models/concerns/globalize_accessors.rb
+index fa700d4d..0fe18397 100644
+--- a/app/models/concerns/globalize_accessors.rb
++++ b/app/models/concerns/globalize_accessors.rb
+@@ -42,7 +42,7 @@ module GlobalizeAccessors
+ 
+       define_method :delete_translation_if_all_blank do |locale|
+         should_delete = true
+-        translated_attributes.keys.each do |key|
++        translated_attributes.each_key do |key|
+           should_delete = translation_for(locale)[key].blank?
+           break unless should_delete
+         end
+diff --git a/app/models/concerns/subscribable.rb b/app/models/concerns/subscribable.rb
+index caaa510c..8534bf21 100644
+--- a/app/models/concerns/subscribable.rb
++++ b/app/models/concerns/subscribable.rb
+@@ -4,11 +4,11 @@ module Subscribable
+   extend ActiveSupport::Concern
+ 
+   def plan
+-    if stripe_subscription_status == "active" || stripe_subscription_status == "trialing"
++    if %w[active trialing].include?(stripe_subscription_status)
+       @plan ||= Plan.new(
+         Plan.get_by_id(stripe_subscription_plan_id) || Plan.get("free")
+       )
+-    elsif paddle_subscription_status == "active" || paddle_subscription_status == "trialing"
++    elsif %w[active trialing].include?(paddle_subscription_status)
+       @plan ||= Plan.new(
+         Plan.get_by_id(paddle_subscription_plan_id.to_i) || Plan.get("free")
+       )
+diff --git a/app/models/conversation_part_block.rb b/app/models/conversation_part_block.rb
+index 27f729e4..a297cbff 100644
+--- a/app/models/conversation_part_block.rb
++++ b/app/models/conversation_part_block.rb
+@@ -19,7 +19,7 @@ class ConversationPartBlock < ApplicationRecord
+       nil
+     end
+     return if klass.blank?
+-    return unless klass.instance_methods.include?(:create_fase)
++    return unless klass.method_defined?(:create_fase)
+ 
+     # TODO: look for a better method to query app packages
+     klass = get_package_integration(app, package_class_name)
+diff --git a/app/models/event.rb b/app/models/event.rb
+index 88277a8b..ff5103cf 100644
+--- a/app/models/event.rb
++++ b/app/models/event.rb
+@@ -43,7 +43,7 @@ class Event < ApplicationRecord
+ 
+     # puts "EL EVENT: #{action}"
+ 
+-    action_event = "Events::" + action.gsub(".", "_").classify
++    action_event = "Events::#{action.gsub('.', '_').classify}"
+     klass = begin
+       action_event.constantize
+     rescue StandardError
+diff --git a/app/models/segment.rb b/app/models/segment.rb
+index 43070af9..7ea0d230 100644
+--- a/app/models/segment.rb
++++ b/app/models/segment.rb
+@@ -246,9 +246,8 @@ class Segment < ApplicationRecord
+     end
+ 
+     if to_exclude
+-      exx = []
+-      to_exclude.each do |ex|
+-        exx << result.select("app_users.id").arel.except(result.joins(ex.join_sources).select("app_users.id").arel)
++      exx = to_exclude.map do |ex|
++        result.select("app_users.id").arel.except(result.joins(ex.join_sources).select("app_users.id").arel)
+       end
+ 
+       exx.each do |e|
+diff --git a/app/services/action_trigger.rb b/app/services/action_trigger.rb
+index 970b03e4..29bebbe5 100644
+--- a/app/services/action_trigger.rb
++++ b/app/services/action_trigger.rb
+@@ -87,7 +87,9 @@ class ActionTrigger
+       # normal flow , get next step from next index on the static trigger
+       paths = trigger.paths.map do |o|
+         o[:steps].find do |s|
+-          s[:step_uid].to_s == message&.message&.blocks&.dig("next_step_uuid")
++          step_uid = s[:step_uid].to_s
++          blocks = message&.message&.blocks
++          step_uid == blocks&.dig("next_step_uuid")
+         end
+       end
+       next_step = paths.find { |o| o }.with_indifferent_access
+diff --git a/app/services/message_apis/block_manager.rb b/app/services/message_apis/block_manager.rb
+index 99979763..24b3f40d 100644
+--- a/app/services/message_apis/block_manager.rb
++++ b/app/services/message_apis/block_manager.rb
+@@ -153,7 +153,7 @@ module MessageApis
+ 
+       authority, suffix = address.captures
+       path_and_query, separator, fragment = suffix.partition("#")
+-      unsafe = %r{%(?![A-Fa-f0-9]{2})|[^A-Za-z0-9._~!$&'()*+,;=:@/?%\-]}
++      unsafe = %r{%(?![A-Fa-f0-9]{2})|[^A-Za-z0-9._~!$&'()*+,;=:@/?%-]}
+       encoded = authority + URI::DEFAULT_PARSER.escape(path_and_query, unsafe) +
+                 separator + URI::DEFAULT_PARSER.escape(fragment, unsafe)
+       encoded if URI.parse(encoded).host.present?
+diff --git a/app/services/message_apis/dialog360/api.rb b/app/services/message_apis/dialog360/api.rb
+index d5bf6646..f4cd2b27 100644
+--- a/app/services/message_apis/dialog360/api.rb
++++ b/app/services/message_apis/dialog360/api.rb
+@@ -200,10 +200,8 @@ module MessageApis
+       end
+ 
+       def get_profile_for_participant(participant)
+-        participant
+-          &.external_profiles
+-          &.find_by(provider: PROVIDER)
+-          &.profile_id
++        external_profile = participant&.external_profiles&.find_by(provider: PROVIDER)
++        external_profile&.profile_id
+       end
+ 
+       def get_profile_for_participant_label(participant)
+@@ -216,10 +214,8 @@ module MessageApis
+         Rails.logger.debug conversation.inspect
+         @package = package
+ 
+-        profile_id = conversation.main_participant
+-                                 &.external_profiles
+-                                 &.find_by(provider: PROVIDER)
+-                                 &.profile_id
++        external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
++        profile_id = external_profile&.profile_id
+ 
+         if profile_id.blank?
+           profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+diff --git a/app/services/message_apis/message_bird/api.rb b/app/services/message_apis/message_bird/api.rb
+index 66e58ed7..f2f109f9 100644
+--- a/app/services/message_apis/message_bird/api.rb
++++ b/app/services/message_apis/message_bird/api.rb
+@@ -132,10 +132,8 @@ module MessageApis
+           return
+         end
+ 
+-        profile_id = conversation.main_participant
+-                                 &.external_profiles
+-                                 &.find_by(provider: PROVIDER)
+-                                 &.profile_id
++        external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
++        profile_id = external_profile&.profile_id
+ 
+         # TODO: maybe handle an error here ?
+         return if profile_id.blank?
+diff --git a/app/services/message_apis/telegram/api.rb b/app/services/message_apis/telegram/api.rb
+index 702b63ff..dcb0f6f5 100644
+--- a/app/services/message_apis/telegram/api.rb
++++ b/app/services/message_apis/telegram/api.rb
+@@ -130,10 +130,8 @@ module MessageApis
+       end
+ 
+       def get_profile_for_participant(conversation)
+-        conversation.main_participant
+-                    &.external_profiles
+-                    &.find_by(provider: PROVIDER)
+-                    &.profile_id
++        external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
++        external_profile&.profile_id
+       end
+ 
+       def get_media(id)
+diff --git a/app/services/message_apis/twilio/api.rb b/app/services/message_apis/twilio/api.rb
+index ad8420b2..4c737d47 100644
+--- a/app/services/message_apis/twilio/api.rb
++++ b/app/services/message_apis/twilio/api.rb
+@@ -117,10 +117,8 @@ module MessageApis
+       def prepare_initiator_channel_for(conversation, package)
+         @package = package
+ 
+-        profile_id = conversation.main_participant
+-                                 &.external_profiles
+-                                 &.find_by(provider: PROVIDER)
+-                                 &.profile_id
++        external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
++        profile_id = external_profile&.profile_id
+ 
+         if profile_id.blank?
+           profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+@@ -151,10 +149,8 @@ module MessageApis
+ 
+         blocks = MessageApis::BlockManager.get_blocks(message["serialized_content"])
+ 
+-        profile_id = conversation.main_participant
+-                                 &.external_profiles
+-                                 &.find_by(provider: PROVIDER)
+-                                 &.profile_id
++        external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
++        profile_id = external_profile&.profile_id
+ 
+         # TODO: maybe handle an error here ?
+         return if profile_id.blank?
+diff --git a/app/services/message_apis/vonage/api.rb b/app/services/message_apis/vonage/api.rb
+index 6877e402..6e717b1d 100644
+--- a/app/services/message_apis/vonage/api.rb
++++ b/app/services/message_apis/vonage/api.rb
+@@ -118,10 +118,8 @@ module MessageApis
+           return
+         end
+ 
+-        profile_id = conversation.main_participant
+-                                 &.external_profiles
+-                                 &.find_by(provider: PROVIDER)
+-                                 &.profile_id
++        external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
++        profile_id = external_profile&.profile_id
+ 
+         # TODO: maybe handle an error here ?
+         return if profile_id.blank?
+diff --git a/app/services/origin_validator.rb b/app/services/origin_validator.rb
+index 5095c36e..9986e59e 100644
+--- a/app/services/origin_validator.rb
++++ b/app/services/origin_validator.rb
+@@ -18,11 +18,10 @@ class OriginValidator
+     return true if @app.blank?
+     return true if @app == "*"
+ 
+-    raise NonAcceptedOrigin if @app.delete(" ").split(",").map do |domain|
++    results = @app.delete(" ").split(",").map do |domain|
+       validate_domain(domain)
+-    end.none?  do |r|
+-      r == true
+     end
++    raise NonAcceptedOrigin if results.none? { |r| r == true }
+ 
+     true
+   end
+diff --git a/app/services/payment_services/paddle.rb b/app/services/payment_services/paddle.rb
+index 08057c8c..50a81feb 100644
+--- a/app/services/payment_services/paddle.rb
++++ b/app/services/payment_services/paddle.rb
+@@ -30,14 +30,15 @@ module PaymentServices
+         params: auth
+       )
+ 
+-      res.filter do |o|
++      available = res.filter do |o|
+         Plan.all.map { |o| o[:id] }.include?(o.id)
+-      end.map do |o|
++      end
++      available.map do |o|
+         p = Plan.get_by_id(o.id)
+         {
+           id: p["id"],
+           source: "paddle",
+-          features: p.dig("features"),
++          features: p["features"],
+           name: p["name"],
+           pricing: o.recurring_price.USD,
+           billing_type: o.recurring_price.billing_type
+diff --git a/app/services/plugin_schema_validator.rb b/app/services/plugin_schema_validator.rb
+index 76981096..1bc7c33e 100644
+--- a/app/services/plugin_schema_validator.rb
++++ b/app/services/plugin_schema_validator.rb
+@@ -8,7 +8,7 @@ class PluginSchemaValidator
+   end
+ 
+   def valid?
+-    !schema.map { |o| o.valid? }.any? { |o| !o }
++    schema.map(&:valid?).all?
+   end
+ end
+ 
+diff --git a/lib/tasks/utils.rake b/lib/tasks/utils.rake
+index 31195a8d..ede07354 100644
+--- a/lib/tasks/utils.rake
++++ b/lib/tasks/utils.rake
+@@ -18,7 +18,7 @@ namespace :packages do
+ 
+   task attach: :environment do
+     Rails.logger = Logger.new($stdout)
+-    App.find_each { |a| a.attach_default_packages }
++    App.find_each(&:attach_default_packages)
+   end
+ 
+   task :publish, [:pkg_name] => :environment do |_task, args|
+diff --git a/spec/controllers/api/graphql_controller_spec.rb b/spec/controllers/api/graphql_controller_spec.rb
+index 7293a27f..8888370a 100644
+--- a/spec/controllers/api/graphql_controller_spec.rb
++++ b/spec/controllers/api/graphql_controller_spec.rb
+@@ -36,7 +36,7 @@ RSpec.describe Api::GraphqlController, type: :controller do
+   end
+ 
+   before do
+-    file = Rails.root + "app/javascript/packages/messenger/src/client_messenger/graphql/testEntry.ts"
++    file = Rails.root.join("app/javascript/packages/messenger/src/client_messenger/graphql/testEntry.ts")
+ 
+     @graphql_client = GraphQL::TestClient.new
+     @graphql_client.configure(file)
+diff --git a/spec/controllers/api/v1/hooks_controller_spec.rb b/spec/controllers/api/v1/hooks_controller_spec.rb
+index 2c4782e3..a1937a78 100644
+--- a/spec/controllers/api/v1/hooks_controller_spec.rb
++++ b/spec/controllers/api/v1/hooks_controller_spec.rb
+@@ -1030,7 +1030,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+         allow_any_instance_of(Api::V1::HooksController).to receive(
+           :read_mail_file
+         ).and_return(
+-          File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
++          Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
+         )
+ 
+         expect(ConversationPart.last).to_not be_read
+@@ -1047,7 +1047,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+         allow_any_instance_of(Api::V1::HooksController).to receive(
+           :read_mail_file
+         ).and_return(
+-          File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample_multi_inline_attachment.eml")
++          Rails.root.join("spec/fixtures/emails/aws_sample_multi_inline_attachment.eml").read
+         )
+ 
+         expect(ConversationPart.last).to_not be_read
+@@ -1061,7 +1061,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+         allow_any_instance_of(Api::V1::HooksController).to receive(
+           :read_mail_file
+         ).and_return(
+-          File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample_as_attachment.eml")
++          Rails.root.join("spec/fixtures/emails/aws_sample_as_attachment.eml").read
+         )
+ 
+         expect(ConversationPart.last).to_not be_read
+@@ -1080,7 +1080,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+       end
+ 
+       it "serializes an email reply with 1000 nested divs" do
+-        nested_html = ("<div>" * 1000) + "Nested text" + ("</div>" * 1000)
++        nested_html = "#{'<div>' * 1000}Nested text#{'</div>' * 1000}"
+         stub_email_receipt("<p>Reply <strong>before nesting</strong></p>#{nested_html}")
+ 
+         expect { send_data(message_notification_params) }.to change { conversation.messages.count }.by(1)
+@@ -1115,7 +1115,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+       allow_any_instance_of(Api::V1::HooksController).to receive(
+         :read_mail_file
+       ).and_return(
+-        File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
++        Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
+       )
+ 
+       allow_any_instance_of(Mail::Message).to receive(
+@@ -1142,7 +1142,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+       allow_any_instance_of(Api::V1::HooksController).to receive(
+         :read_mail_file
+       ).and_return(
+-        File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
++        Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
+       )
+ 
+       allow_any_instance_of(Mail::Message).to receive(
+@@ -1178,7 +1178,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+       allow_any_instance_of(Api::V1::HooksController).to receive(
+         :read_mail_file
+       ).and_return(
+-        File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
++        Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
+       )
+ 
+       allow_any_instance_of(Mail::Message).to receive(
+@@ -1218,7 +1218,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+       allow_any_instance_of(Api::V1::HooksController).to receive(
+         :read_mail_file
+       ).and_return(
+-        File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
++        Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
+       )
+ 
+       allow_any_instance_of(Mail::Message).to receive(
+@@ -1240,7 +1240,7 @@ RSpec.describe Api::V1::HooksController, type: :controller do
+       allow_any_instance_of(Api::V1::HooksController).to receive(
+         :read_mail_file
+       ).and_return(
+-        File.read(Rails.root.to_s + "/spec/fixtures/emails/aws_sample.eml")
++        Rails.root.join("spec/fixtures/emails/aws_sample.eml").read
+       )
+ 
+       allow_any_instance_of(Mail::Message).to receive(
+diff --git a/spec/support/graphql_queries.rb b/spec/support/graphql_queries.rb
+index db8b5a1e..8861b4a3 100644
+--- a/spec/support/graphql_queries.rb
++++ b/spec/support/graphql_queries.rb
+@@ -47,7 +47,7 @@ module GraphQL
+   class TestClient
+     attr_accessor :actions, :entry
+ 
+-    def configure(entry = Rails.root + "app/javascript/packages/store/src/graphql/testEntry.ts")
++    def configure(entry = Rails.root.join("app/javascript/packages/store/src/graphql/testEntry.ts"))
+       @entry = entry
+     end
+ 

@@ -1,0 +1,532 @@
+{
+ "cops_whole": [
+  "Style/CaseLikeIf",
+  "Style/FloatDivision",
+  "Style/HashEachMethods",
+  "Style/HashLikeCase",
+  "Style/IdenticalConditionalBranches",
+  "Style/ModuleMemberExistenceCheck",
+  "Style/MultilineBlockChain",
+  "Style/MultipleComparison",
+  "Style/RedundantRegexpEscape",
+  "Style/SafeNavigation",
+  "Style/SafeNavigationChainLength",
+  "Style/SpecialGlobalVars",
+  "Style/StringConcatenation",
+  "Style/SymbolProc"
+ ],
+ "cops_partial": {
+  "Metrics/AbcSize": [
+   "app/models/concerns/globalize_accessors.rb"
+  ],
+  "Metrics/BlockLength": [
+   "app/models/app.rb"
+  ],
+  "Style/IfUnlessModifier": [
+   "app/graphql/types/app_type.rb",
+   "app/models/app.rb",
+   "app/models/concerns/globalize_accessors.rb",
+   "app/services/message_apis/twilio_phone/api.rb"
+  ],
+  "Style/InverseMethods": [
+   "app/services/plugin_schema_validator.rb"
+  ],
+  "Style/MapIntoArray": [
+   "app/models/segment.rb"
+  ],
+  "Style/SingleArgumentDig": [
+   "app/services/payment_services/paddle.rb"
+  ]
+ },
+ "iseq_same": {
+  "patch": "r9b_modifier.patch",
+  "files": [
+   "app/graphql/types/app_type.rb",
+   "app/models/app.rb",
+   "app/models/concerns/globalize_accessors.rb",
+   "app/services/message_apis/twilio_phone/api.rb"
+  ]
+ },
+ "app_files": [
+  ".rubocop.yml",
+  "app/controllers/api/v1/hooks_controller.rb",
+  "app/graphql/types/app_type.rb",
+  "app/models/app.rb",
+  "app/models/app_package_integration.rb",
+  "app/models/app_user.rb",
+  "app/models/campaign.rb",
+  "app/models/concerns/globalize_accessors.rb",
+  "app/models/concerns/subscribable.rb",
+  "app/models/conversation_part_block.rb",
+  "app/models/event.rb",
+  "app/models/segment.rb",
+  "app/services/action_trigger.rb",
+  "app/services/message_apis/block_manager.rb",
+  "app/services/message_apis/dialog360/api.rb",
+  "app/services/message_apis/message_bird/api.rb",
+  "app/services/message_apis/telegram/api.rb",
+  "app/services/message_apis/twilio/api.rb",
+  "app/services/message_apis/twilio_phone/api.rb",
+  "app/services/message_apis/vonage/api.rb",
+  "app/services/origin_validator.rb",
+  "app/services/payment_services/paddle.rb",
+  "app/services/plugin_schema_validator.rb",
+  "lib/tasks/utils.rake",
+  "spec/controllers/api/graphql_controller_spec.rb",
+  "spec/controllers/api/v1/hooks_controller_spec.rb",
+  "spec/support/graphql_queries.rb"
+ ],
+ "char_specs": [
+  "spec/graphql/types/app_type_style_spec.rb",
+  "spec/controllers/api/v1/hooks_email_text_part_spec.rb",
+  "spec/services/message_apis/profile_lookup_style_spec.rb",
+  "spec/services/services_style_spec.rb",
+  "spec/models/models_style_spec.rb",
+  "spec/lib/tasks/packages_attach_spec.rb",
+  "spec/controllers/graphql_operation_name_spec.rb"
+ ],
+ "mutants": [
+  {
+   "id": "B01",
+   "file": "app/graphql/types/app_type.rb",
+   "old": "raise \"not in type\" unless %w[",
+   "new": "raise \"not in type\" if %w[",
+   "specs": [
+    "spec/graphql/types/app_type_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B02",
+   "file": "app/graphql/types/app_type.rb",
+   "old": "      when \"published\"\n",
+   "new": "      when \"publish\"\n",
+   "specs": [
+    "spec/graphql/types/app_type_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B03",
+   "file": "app/graphql/types/app_type.rb",
+   "old": "      when \"draft\"\n",
+   "new": "      when \"drafts\"\n",
+   "specs": [
+    "spec/graphql/types/app_type_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B04",
+   "file": "app/graphql/types/app_type.rb",
+   "old": "      case mode\n      when \"all\"\n",
+   "new": "      case mode\n      when \"any\"\n",
+   "specs": [
+    "spec/graphql/types/app_type_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B05",
+   "file": "app/graphql/types/app_type.rb",
+   "old": "service = object.payment_service&.new\n",
+   "new": "service = nil\n",
+   "specs": [
+    "spec/graphql/types/app_type_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B06",
+   "file": "app/graphql/types/app_type.rb",
+   "old": "service&.get_plans&.sort_by",
+   "new": "service.get_plans&.sort_by",
+   "specs": [
+    "spec/graphql/types/app_type_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B07",
+   "file": "app/graphql/types/app_type.rb",
+   "old": "service&.get_plans&.sort_by",
+   "new": "service&.get_plans.sort_by",
+   "specs": [
+    "spec/graphql/types/app_type_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B08",
+   "file": "app/controllers/api/v1/hooks_controller.rb",
+   "old": "text_body = mail&.text_part&.body\n",
+   "new": "text_body = mail&.body\n",
+   "specs": [
+    "spec/controllers/api/v1/hooks_email_text_part_spec.rb"
+   ]
+  },
+  {
+   "id": "B09",
+   "file": "app/controllers/api/v1/hooks_controller.rb",
+   "old": "body = text_body&.to_s&.force_encoding(Encoding::UTF_8)",
+   "new": "body = nil",
+   "specs": [
+    "spec/controllers/api/v1/hooks_email_text_part_spec.rb"
+   ]
+  },
+  {
+   "id": "B10",
+   "file": "app/services/action_trigger.rb",
+   "old": "step_uid = s[:step_uid].to_s\n",
+   "new": "step_uid = s[:step_uid]\n",
+   "specs": [
+    "spec/services/services_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B11",
+   "file": "app/services/action_trigger.rb",
+   "old": "step_uid == blocks&.dig(\"next_step_uuid\")",
+   "new": "step_uid == blocks&.dig(\"next_step\")",
+   "specs": [
+    "spec/services/services_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B12",
+   "file": "app/services/message_apis/dialog360/api.rb",
+   "old": "external_profile = participant&.external_profiles",
+   "new": "external_profile = participant.external_profiles",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B13",
+   "file": "app/services/message_apis/dialog360/api.rb",
+   "old": "        external_profile&.profile_id\n      end\n",
+   "new": "        external_profile.profile_id\n      end\n",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B14",
+   "file": "app/services/message_apis/dialog360/api.rb",
+   "old": "profile_id = external_profile&.profile_id",
+   "new": "profile_id = nil",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B15",
+   "file": "app/services/message_apis/dialog360/api.rb",
+   "old": "profile_id = external_profile&.profile_id",
+   "new": "profile_id = external_profile.profile_id",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B16",
+   "file": "app/services/message_apis/message_bird/api.rb",
+   "old": "profile_id = external_profile&.profile_id",
+   "new": "profile_id = nil",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B17",
+   "file": "app/services/message_apis/message_bird/api.rb",
+   "old": "external_profile&.profile_id",
+   "new": "external_profile.profile_id",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B18",
+   "file": "app/services/message_apis/message_bird/api.rb",
+   "old": "find_by(provider: PROVIDER)",
+   "new": "find_by(provider: \"messagebird\")",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B19",
+   "file": "app/services/message_apis/twilio/api.rb",
+   "old": "profile_id = external_profile&.profile_id\n\n        if profile_id.blank?",
+   "new": "profile_id = nil\n\n        if profile_id.blank?",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B20",
+   "file": "app/services/message_apis/twilio/api.rb",
+   "old": "external_profile&.profile_id\n\n        if profile_id.blank?",
+   "new": "external_profile.profile_id\n\n        if profile_id.blank?",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B21",
+   "file": "app/services/message_apis/twilio/api.rb",
+   "old": "profile_id = external_profile&.profile_id\n\n        # TODO",
+   "new": "profile_id = nil\n\n        # TODO",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B22",
+   "file": "app/services/message_apis/twilio/api.rb",
+   "old": "external_profile&.profile_id\n\n        # TODO",
+   "new": "external_profile.profile_id\n\n        # TODO",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B23",
+   "file": "app/services/message_apis/vonage/api.rb",
+   "old": "profile_id = external_profile&.profile_id",
+   "new": "profile_id = nil",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B24",
+   "file": "app/services/message_apis/vonage/api.rb",
+   "old": "external_profile&.profile_id",
+   "new": "external_profile.profile_id",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B25",
+   "file": "app/services/message_apis/telegram/api.rb",
+   "old": "&.find_by(provider: PROVIDER)\n        external_profile",
+   "new": "&.find_by(provider: \"tg\")\n        external_profile",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B26",
+   "file": "app/services/message_apis/telegram/api.rb",
+   "old": "external_profile&.profile_id",
+   "new": "external_profile.profile_id",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B27",
+   "file": "app/services/message_apis/twilio_phone/api.rb",
+   "old": "return process_incoming_event(params) if params",
+   "new": "return process_incoming_event(params) unless params",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B28",
+   "file": "app/services/message_apis/block_manager.rb",
+   "old": "@/?%-]}",
+   "new": "@/?%]}",
+   "specs": [
+    "spec/services/message_apis/profile_lookup_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B29",
+   "file": "app/services/origin_validator.rb",
+   "old": "results.none? { |r| r == true }",
+   "new": "results.any? { |r| r == true }",
+   "specs": [
+    "spec/services/services_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B30",
+   "file": "app/services/origin_validator.rb",
+   "old": "results = @app.delete(\" \").split(\",\").map",
+   "new": "results = @app.delete(\" \").split(\",\").first(2).map",
+   "specs": [
+    "spec/services/services_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B31",
+   "file": "app/services/payment_services/paddle.rb",
+   "old": "available.map do |o|",
+   "new": "available.first(1).map do |o|",
+   "specs": [
+    "spec/services/services_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B32",
+   "file": "app/services/payment_services/paddle.rb",
+   "old": "features: p[\"features\"]",
+   "new": "features: p[\"name\"]",
+   "specs": [
+    "spec/services/services_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B33",
+   "file": "app/services/payment_services/paddle.rb",
+   "old": "available = res.filter do |o|",
+   "new": "available = res.reject do |o|",
+   "specs": [
+    "spec/services/services_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B34",
+   "file": "app/services/plugin_schema_validator.rb",
+   "old": "schema.map(&:valid?).all?",
+   "new": "schema.all?(&:valid?)",
+   "specs": [
+    "spec/services/services_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B35",
+   "file": "app/services/plugin_schema_validator.rb",
+   "old": "schema.map(&:valid?).all?",
+   "new": "schema.map(&:valid?).any?",
+   "specs": [
+    "spec/services/services_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B36",
+   "file": "app/models/campaign.rb",
+   "old": "subscriptions.availables.size.to_f / metrics.deliveries.size",
+   "new": "subscriptions.availables.size / metrics.deliveries.size",
+   "specs": [
+    "spec/models/models_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B37",
+   "file": "app/models/concerns/subscribable.rb",
+   "old": "if %w[active trialing].include?(stripe_subscription_status)",
+   "new": "if %w[active].include?(stripe_subscription_status)",
+   "specs": [
+    "spec/models/models_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B38",
+   "file": "app/models/concerns/subscribable.rb",
+   "old": "elsif %w[active trialing].include?(paddle_subscription_status)",
+   "new": "elsif %w[trialing].include?(paddle_subscription_status)",
+   "specs": [
+    "spec/models/models_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B39",
+   "file": "app/models/app_user.rb",
+   "old": "STYLE_CLASSES[state]",
+   "new": "STYLE_CLASSES.fetch(state, \"plain\")",
+   "specs": [
+    "spec/models/models_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B40",
+   "file": "app/models/app_user.rb",
+   "old": "\"unsusbscribed\" => \"warning\"",
+   "new": "\"unsubscribed\" => \"warning\"",
+   "specs": [
+    "spec/models/models_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B41",
+   "file": "app/models/conversation_part_block.rb",
+   "old": "klass.method_defined?(:create_fase)",
+   "new": "klass.private_method_defined?(:create_fase)",
+   "specs": [
+    "spec/models/models_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B42",
+   "file": "app/models/app_package_integration.rb",
+   "old": "register_hook if message_api_klass.respond_to?(:register_webhook)",
+   "new": "register_hook if message_api_klass",
+   "specs": [
+    "spec/models/models_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B43",
+   "file": "app/models/event.rb",
+   "old": "action.gsub('.', '_').classify",
+   "new": "action.gsub('.', '').classify",
+   "specs": [
+    "spec/models/models_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B44",
+   "file": "app/models/concerns/globalize_accessors.rb",
+   "old": "translated_attributes.each_key do |key|",
+   "new": "translated_attributes.each_value do |key|",
+   "specs": [
+    "spec/models/models_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B45",
+   "file": "app/models/segment.rb",
+   "old": "exx = to_exclude.map do |ex|",
+   "new": "exx = to_exclude.first(1).map do |ex|",
+   "specs": [
+    "spec/models/models_style_spec.rb"
+   ]
+  },
+  {
+   "id": "B46",
+   "file": "lib/tasks/utils.rake",
+   "old": "App.find_each(&:attach_default_packages)",
+   "new": "App.first(1).each(&:attach_default_packages)",
+   "specs": [
+    "spec/lib/tasks/packages_attach_spec.rb"
+   ]
+  }
+ ],
+ "commits": [
+  {
+   "subject": "Use modifier if/unless for one-line bodies",
+   "patch": "r9b_modifier.patch",
+   "added": []
+  },
+  {
+   "subject": "Rewrite the remaining one-off Style offenses",
+   "patch": "r9b_rewrite.patch",
+   "added": [
+    "spec/controllers/api/v1/hooks_email_text_part_spec.rb",
+    "spec/controllers/graphql_operation_name_spec.rb",
+    "spec/graphql/types/app_type_style_spec.rb",
+    "spec/lib/tasks/packages_attach_spec.rb",
+    "spec/models/models_style_spec.rb",
+    "spec/services/message_apis/profile_lookup_style_spec.rb",
+    "spec/services/services_style_spec.rb"
+   ]
+  },
+  {
+   "subject": "Drop R9b entries from RuboCop todo",
+   "todo": true
+  },
+  {
+   "subject": "Note fork-updates-r9b in changelog",
+   "changelog": true
+  }
+ ]
+}
