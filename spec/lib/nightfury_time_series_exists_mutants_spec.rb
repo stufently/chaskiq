@@ -72,10 +72,8 @@ RSpec.describe Nightfury::Metric::TimeSeries do
       series.set(7, time)
 
       result = series.get_range(time - 60, time)
-      expect(result).to eq({
-        (time - 60).to_i.to_s => "5",
-        time.to_i.to_s => "7"
-      })
+      expected = { (time - 60).to_i.to_s => "5", time.to_i.to_s => "7" }
+      expect(result).to eq(expected)
     end
   end
 end
