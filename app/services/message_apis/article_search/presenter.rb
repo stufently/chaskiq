@@ -133,7 +133,7 @@ module MessageApis::ArticleSearch
         }
       ]
 
-      if ctx.dig(:field, :action, :type) === "submit" && (ctx.dig(:field, :id) == "activate-action")
+      if ctx.dig(:field, :action, :type) == "submit" && (ctx.dig(:field, :id) == "activate-action")
         results = {
           foo: "bar",
           baz: "baaz"

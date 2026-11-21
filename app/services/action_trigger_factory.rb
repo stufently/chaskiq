@@ -191,7 +191,7 @@ class ActionTriggerFactory
         )
       ]
 
-      if kind === "AppUser"
+      if kind == "AppUser"
         path_messages << [
           c.message(
             text: I18n.t("task_bots.reply_soon", name: app.name),
@@ -201,7 +201,7 @@ class ActionTriggerFactory
         ]
       end
 
-      if (kind === "Lead") || (kind === "Visitor")
+      if (kind == "Lead") || (kind == "Visitor")
 
         if app.lead_tasks_settings["share_typical_time"]
           path_messages << c.message(
@@ -248,12 +248,12 @@ class ActionTriggerFactory
 
       if user.email.blank?
 
-        if app.email_requirement === "Always"
+        if app.email_requirement == "Always"
           step7 << email_requirement
           step7.flatten!
         end
 
-        if app.email_requirement === "office" && !app.in_business_hours?(Time.current)
+        if app.email_requirement == "office" && !app.in_business_hours?(Time.current)
           step7 << email_requirement
           step7.flatten!
         end
@@ -353,7 +353,7 @@ class ActionTriggerFactory
     begin
       path = trigger.paths.find do |o|
         o.with_indifferent_access["steps"].find do |a|
-          a["step_uid"].to_s === step
+          a["step_uid"].to_s == step
         end.present?
       end.with_indifferent_access
     rescue StandardError

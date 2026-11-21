@@ -66,10 +66,21 @@ Style/ClassAndModuleChildren:
     - 'app/services/message_apis/twilio_phone/presenter.rb'
     - 'app/services/message_apis/ui_catalog/presenter.rb'
 # GraphQL type methods resolve schema fields of the same name (`online`, `owner`, ...); a `?` name
-# would change the schema.
+# would change the schema. R9a (same plan, decision 2026-11-21): Slack's receive_oauth_code (a plugin
+# interface method: it fetches and stores an OAuth token) and TarDownloader#download_plugin (it
+# downloads a plugin tarball and writes it to tmp/) return true/false but act; a `?` name would hide
+# that. `call` is RuboCop's default.
 Naming/PredicateMethod:
+  AllowedMethods:
+    - call
+    - receive_oauth_code
+    - download_plugin
   Exclude:
     - 'app/graphql/types/**/*'
+# R9a (same plan, decision 2026-11-21): `Klass === obj` is Ruby's type check (what `case`/`when`
+# does); every other `===` in the code is written `==`.
+Style/CaseEquality:
+  AllowOnConstant: true
 # PluginSchemaValidator is one validator built from 21 small schema node classes; a file per class
 # would scatter it without making it clearer.
 Style/OneClassPerFile:

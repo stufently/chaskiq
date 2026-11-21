@@ -52,7 +52,7 @@ module MessageApis
         definitions = definitions_for_configure_hook
 
         if ctx.dig(:field, :name) == "set_url" &&
-           ctx.dig(:field, :action, :type) === "submit"
+           ctx.dig(:field, :action, :type) == "submit"
 
           email = ctx.dig(:values, :zoom_user)
 

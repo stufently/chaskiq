@@ -140,7 +140,7 @@ RSpec.describe Api::V1::Subscriptions::PaddleHooksController, type: :controller 
     expect(app.paddle_subscription_id).to be_present
     expect(app.paddle_subscription_plan_id).to be_present
 
-    expect(app.paddle_subscription_status).to be === "trialing"
+    expect(app.paddle_subscription_status).to eq("trialing")
   end
 
   it "cancel subscription" do
@@ -151,7 +151,7 @@ RSpec.describe Api::V1::Subscriptions::PaddleHooksController, type: :controller 
     expect(app.paddle_subscription_id).to be_present
     expect(app.paddle_subscription_plan_id).to be_present
 
-    expect(app.paddle_subscription_status).to be === "deleted"
+    expect(app.paddle_subscription_status).to eq("deleted")
   end
 
   it "update subscription" do
@@ -162,6 +162,6 @@ RSpec.describe Api::V1::Subscriptions::PaddleHooksController, type: :controller 
     expect(app.paddle_subscription_id).to be_present
     expect(app.paddle_subscription_plan_id).to be_present
 
-    expect(app.paddle_subscription_status).to be === "active"
+    expect(app.paddle_subscription_status).to eq("active")
   end
 end

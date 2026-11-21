@@ -9,8 +9,8 @@ class SegmentComparator
     self.additional_fields = additional_fields
   end
 
-  def compare
-    condition_predicates = predicates.select { |o| o["type"] != "match" }
+  def compare?
+    condition_predicates = predicates.reject { |o| o["type"] == "match" }
 
     query = handle_condition_predicates(condition_predicates)
 
@@ -22,6 +22,7 @@ class SegmentComparator
       query.include?(true) && query.exclude?(false)
     end
   end
+  alias compare compare?
 
   def handle_condition_predicates(condition_predicates)
     cols = AppUser.columns

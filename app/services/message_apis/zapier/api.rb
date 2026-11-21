@@ -86,7 +86,7 @@ module MessageApis
           handle_unsubscription_hook(params, package)
         else
           if params[:auth].present?
-            return { status: :ok, app_name: app.name } if package.access_token === params[:auth]
+            return { status: :ok, app_name: app.name } if package.access_token == params[:auth]
 
             return { status: :error, message: "auth key invalid" }
 
@@ -186,7 +186,7 @@ module MessageApis
         )
       end
 
-      def event_identifier_available?(event)
+      def event_identifier_and_url(event)
         event_identifier = Event::EVENT_CONSTANTS.find do |o|
           o[:name] == event.action
         end
@@ -196,6 +196,7 @@ module MessageApis
 
         [event_identifier, url]
       end
+      alias event_identifier_available? event_identifier_and_url
 
       def polling_sample(params)
         case params[:event_type]

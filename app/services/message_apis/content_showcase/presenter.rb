@@ -91,7 +91,7 @@ module MessageApis
 
         definitions = base_definitions
 
-        if ctx.dig(:field, :action, :type) === "submit"
+        if ctx.dig(:field, :action, :type) == "submit"
           if ctx.dig(:field, :id) == "pick-another"
             return {
               kind: kind,

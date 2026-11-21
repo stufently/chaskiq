@@ -116,7 +116,7 @@ module MessageApis::Calendly
       ]
 
       if ctx.dig(:field, :name) == "set_url" &&
-         ctx.dig(:field, :action, :type) === "submit"
+         ctx.dig(:field, :action, :type) == "submit"
 
         url = ctx.dig(:values, :calendar)
         label = ctx.dig(:values, :label).presence || "Book a meeting"

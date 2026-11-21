@@ -95,7 +95,7 @@ module MessageApis
           }
         ]
 
-        if ctx[:field] && ctx[:field]["id"] === "command-confirm"
+        if ctx[:field] && ctx[:field]["id"] == "command-confirm"
 
           return {
             kind: "initialize",

@@ -64,7 +64,7 @@ module MessageApis
         return if !mode && !token
         # Checks the mode and token sent is correct
         # Responds with the challenge token from the request
-        return challenge if mode === "subscribe" && token === verify_token
+        return challenge if mode == "subscribe" && token == verify_token
 
         # Responds with '403 Forbidden' if verify tokens do not match
         nil
@@ -84,9 +84,7 @@ module MessageApis
         @package = package
         params["current"]
 
-        if params["hub.verify_token"].present? && params["hub.mode"] == "subscribe"
-          return create_hook_from_params(params, package)
-        end
+        return create_hook_from_params(params, package) if params["hub.verify_token"].present? && params["hub.mode"] == "subscribe"
 
         process_message(params, @package) if params["object"] == "page" && params["entry"].present?
       end
@@ -228,11 +226,7 @@ module MessageApis
       def attachment_block(data)
         attachments = data["message"]["attachments"]
 
-        media_blocks = []
-
-        attachments.each do |attachment|
-          media_blocks << media_block(attachment)
-        end
+        media_blocks = attachments.map { |attachment| media_block(attachment) }
 
         main_doc(media_blocks.compact).to_json
       end

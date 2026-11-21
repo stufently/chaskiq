@@ -174,7 +174,7 @@ class Conversation < ApplicationRecord
   end
 
   def assign_user(user)
-    return if assignee.present? && assignee.id === user.id
+    return if assignee.present? && assignee.id == user.id
 
     self.assignee = user
     return unless save
