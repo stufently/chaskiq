@@ -1,0 +1,452 @@
+{
+ "r8_cops": [
+  "Layout/LineLength",
+  "Metrics/AbcSize",
+  "Metrics/BlockLength",
+  "Metrics/ClassLength",
+  "Metrics/CyclomaticComplexity",
+  "Metrics/MethodLength",
+  "Metrics/ModuleLength",
+  "Metrics/ParameterLists",
+  "Metrics/PerceivedComplexity"
+ ],
+ "show_cops": {
+  "Metrics/MethodLength": {
+   "Max": "30"
+  },
+  "Metrics/AbcSize": {
+   "Max": "30"
+  },
+  "Metrics/CyclomaticComplexity": {
+   "Max": "13"
+  },
+  "Metrics/PerceivedComplexity": {
+   "Max": "13"
+  },
+  "Metrics/ParameterLists": {
+   "Max": "7"
+  },
+  "Metrics/ClassLength": {
+   "Max": "300"
+  },
+  "Metrics/BlockLength": {
+   "Max": "25"
+  },
+  "Metrics/ModuleLength": {
+   "Max": "123"
+  },
+  "Layout/LineLength": {
+   "Max": "140"
+  }
+ },
+ "show_lists": {
+  "Metrics/ClassLength": {
+   "Exclude": [
+    "/app/app/services/message_apis/**/*"
+   ]
+  },
+  "Metrics/BlockLength": {
+   "Exclude": [
+    "/app/**/*.gemspec",
+    "/app/spec/**/*",
+    "/app/lib/tasks/**/*",
+    "/app/config/routes.rb"
+   ]
+  },
+  "Metrics/ModuleLength": {
+   "Exclude": [
+    "/app/app/services/message_apis/helpers.rb"
+   ]
+  },
+  "Metrics/MethodLength": {
+   "Exclude": null
+  },
+  "Metrics/AbcSize": {
+   "Exclude": null
+  },
+  "Metrics/CyclomaticComplexity": {
+   "Exclude": null
+  },
+  "Metrics/PerceivedComplexity": {
+   "Exclude": null
+  },
+  "Metrics/ParameterLists": {
+   "Exclude": null
+  },
+  "Layout/LineLength": {
+   "Exclude": null,
+   "AllowedPatterns": [
+    "\\A.{0,139}https?://[^\\s\"'`<>]+[\"'`]?[\\s,;)\\]}]*\\z",
+    "\\A.{0,139}(?=[A-Za-z0-9+/]*\\d)(?=[A-Za-z0-9+/]*[A-Z])(?=[A-Za-z0-9+/]*[a-z])[A-Za-z0-9+/]{40,}={0,2}[\"']?[\\s,;)\\]}]*\\z"
+   ]
+  }
+ },
+ "app_files": [
+  ".rubocop.yml"
+ ],
+ "commits": [
+  {
+   "subject": "Set R8 metric limits by owner decision",
+   "patch": "r8a_config.patch",
+   "added": []
+  },
+  {
+   "subject": "Keep only R8 outliers in RuboCop todo",
+   "todo": true
+  },
+  {
+   "subject": "Note fork-updates-r8a in changelog",
+   "changelog": true
+  }
+ ],
+ "todo_additions": {
+  "Style/IfUnlessModifier": {
+   "comment": "# This cop supports safe autocorrection (--autocorrect).",
+   "files": [
+    "app/graphql/types/app_type.rb",
+    "app/models/app.rb",
+    "app/models/concerns/globalize_accessors.rb",
+    "app/services/message_apis/messenger/api.rb",
+    "app/services/message_apis/twilio_phone/api.rb"
+   ]
+  }
+ },
+ "cops_keep": {
+  "Layout/LineLength": [
+   "app/controllers/api/v1/hooks_controller.rb",
+   "app/graphql/chaskiq_schema.rb",
+   "app/graphql/types/app_type.rb",
+   "app/models/agent.rb",
+   "app/models/app_user.rb",
+   "app/models/campaign.rb",
+   "app/models/concerns/globalize_accessors.rb",
+   "app/services/action_trigger_factory.rb",
+   "app/services/dante/migrator.rb",
+   "app/services/dante/renderer.rb",
+   "app/services/message_apis/article_search/presenter.rb",
+   "app/services/message_apis/block_manager.rb",
+   "app/services/message_apis/calendly/presenter.rb",
+   "app/services/message_apis/contact_fields/presenter.rb",
+   "app/services/message_apis/content_showcase/presenter.rb",
+   "app/services/message_apis/csat/presenter.rb",
+   "app/services/message_apis/dialog360/presenter.rb",
+   "app/services/message_apis/full_contact/presenter.rb",
+   "app/services/message_apis/inbox_sections/presenter.rb",
+   "app/services/message_apis/open_ai/presenter.rb",
+   "app/services/message_apis/slack/api.rb",
+   "app/services/message_apis/telegram/presenter.rb",
+   "app/services/message_apis/twilio/api.rb",
+   "app/services/message_apis/twilio_phone/api.rb",
+   "app/services/message_apis/twilio_phone/presenter.rb",
+   "app/services/message_apis/ui_catalog/presenter.rb",
+   "app/services/message_apis/zapier/presenter.rb",
+   "app/services/message_apis/zoom/presenter.rb",
+   "lib/tasks/utils.rake",
+   "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+   "spec/controllers/api/v1/hooks/message_bird_spec.rb",
+   "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+   "spec/controllers/api/v1/hooks/twilio_spec.rb",
+   "spec/controllers/api/v1/hooks/twitter_spec.rb",
+   "spec/controllers/api/v1/hooks/vonage_spec.rb",
+   "spec/controllers/api/v1/hooks_controller_spec.rb",
+   "spec/models/app_package_spec.rb",
+   "spec/models/campaign_spec.rb",
+   "spec/services/dante_renderer_spec.rb"
+  ],
+  "Metrics/AbcSize": [
+   "app/controllers/api/graphql_controller.rb",
+   "app/controllers/api/v1/hooks_controller.rb",
+   "app/controllers/concerns/package_iframe_behavior.rb",
+   "app/controllers/graphql_controller.rb",
+   "app/graphql/mutations/conversations/start_conversation.rb",
+   "app/graphql/types/app_type.rb",
+   "app/graphql/types/messenger_type.rb",
+   "app/mailers/chat_notifier_mailer.rb",
+   "app/models/app_package_integration.rb",
+   "app/models/concerns/globalize_accessors.rb",
+   "app/models/plugin.rb",
+   "app/models/segment.rb",
+   "app/services/action_trigger.rb",
+   "app/services/action_trigger_factory.rb",
+   "app/services/dante/converter.rb",
+   "app/services/dante/migrator.rb",
+   "app/services/dante/renderer.rb",
+   "app/services/fetch_link_card_service.rb",
+   "app/services/message_apis/block_manager.rb",
+   "app/services/message_apis/content_showcase/presenter.rb",
+   "app/services/message_apis/csat/api.rb",
+   "app/services/message_apis/dialog360/api.rb",
+   "app/services/message_apis/dialog360/presenter.rb",
+   "app/services/message_apis/inbox_sections/presenter.rb",
+   "app/services/message_apis/message_bird/api.rb",
+   "app/services/message_apis/open_ai/api.rb",
+   "app/services/message_apis/slack/api.rb",
+   "app/services/message_apis/telegram/api.rb",
+   "app/services/message_apis/twilio/api.rb",
+   "app/services/message_apis/twilio_phone/api.rb",
+   "app/services/message_apis/twitter/api.rb",
+   "app/services/message_apis/ui_catalog/presenter.rb",
+   "app/services/message_apis/vonage/api.rb",
+   "app/services/visit_collector.rb"
+  ],
+  "Metrics/BlockLength": [
+   "app/models/app.rb",
+   "app/models/concerns/globalize_accessors.rb",
+   "app/models/segment.rb",
+   "app/services/action_trigger_factory.rb",
+   "app/services/message_apis/dialog360/api.rb",
+   "app/services/message_apis/twitter/api.rb"
+  ],
+  "Metrics/ClassLength": [
+   "app/graphql/types/app_type.rb",
+   "app/models/app.rb",
+   "app/models/app_user.rb",
+   "app/models/segment.rb",
+   "app/services/action_trigger_factory.rb"
+  ],
+  "Metrics/CyclomaticComplexity": [
+   "app/mailers/chat_notifier_mailer.rb",
+   "app/models/segment.rb",
+   "app/models/segment_comparator.rb",
+   "app/services/action_trigger_factory.rb",
+   "app/services/dante/renderer.rb",
+   "app/services/message_apis/block_manager.rb",
+   "app/services/message_apis/content_showcase/presenter.rb",
+   "app/services/message_apis/dialog360/presenter.rb",
+   "app/services/message_apis/inbox_sections/presenter.rb",
+   "app/services/message_apis/slack/api.rb",
+   "app/services/message_apis/ui_catalog/presenter.rb",
+   "app/services/plugin_schema_validator.rb"
+  ],
+  "Metrics/MethodLength": [
+   "app/controllers/api/graphql_controller.rb",
+   "app/controllers/api/v1/hooks_controller.rb",
+   "app/controllers/concerns/package_iframe_behavior.rb",
+   "app/controllers/graphql_controller.rb",
+   "app/graphql/mutations/conversations/start_conversation.rb",
+   "app/graphql/types/app_type.rb",
+   "app/mailers/chat_notifier_mailer.rb",
+   "app/models/app.rb",
+   "app/models/bot_task.rb",
+   "app/models/segment.rb",
+   "app/services/action_trigger.rb",
+   "app/services/action_trigger_factory.rb",
+   "app/services/dante/renderer.rb",
+   "app/services/message_apis/article_search/presenter.rb",
+   "app/services/message_apis/audits_reports/api.rb",
+   "app/services/message_apis/block_manager.rb",
+   "app/services/message_apis/calendly/api.rb",
+   "app/services/message_apis/calendly/presenter.rb",
+   "app/services/message_apis/contact_fields/presenter.rb",
+   "app/services/message_apis/content_showcase/presenter.rb",
+   "app/services/message_apis/csat/api.rb",
+   "app/services/message_apis/csat/presenter.rb",
+   "app/services/message_apis/dialog360/api.rb",
+   "app/services/message_apis/dialog360/presenter.rb",
+   "app/services/message_apis/full_contact/presenter.rb",
+   "app/services/message_apis/inbox_sections/presenter.rb",
+   "app/services/message_apis/message_bird/api.rb",
+   "app/services/message_apis/open_ai/api.rb",
+   "app/services/message_apis/slack/api.rb",
+   "app/services/message_apis/telegram/api.rb",
+   "app/services/message_apis/telnyx_sms/api.rb",
+   "app/services/message_apis/twilio/api.rb",
+   "app/services/message_apis/twilio_phone/api.rb",
+   "app/services/message_apis/twilio_phone/presenter.rb",
+   "app/services/message_apis/twitter/api.rb",
+   "app/services/message_apis/ui_catalog/presenter.rb",
+   "app/services/message_apis/vonage/api.rb",
+   "app/services/message_apis/zoom/api.rb",
+   "lib/app_packages_catalog.rb",
+   "spec/controllers/api/v1/hooks/calendly_spec.rb",
+   "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+   "spec/controllers/api/v1/hooks/telegram_spec.rb",
+   "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+   "spec/controllers/api/v1/hooks/twitter_spec.rb"
+  ],
+  "Metrics/ModuleLength": [],
+  "Metrics/ParameterLists": [
+   "app/graphql/types/app_type.rb"
+  ],
+  "Metrics/PerceivedComplexity": [
+   "app/mailers/chat_notifier_mailer.rb",
+   "app/models/segment.rb",
+   "app/policies/app_policy.rb",
+   "app/services/action_trigger_factory.rb",
+   "app/services/message_apis/block_manager.rb",
+   "app/services/message_apis/content_showcase/presenter.rb",
+   "app/services/message_apis/inbox_sections/presenter.rb",
+   "app/services/message_apis/slack/api.rb",
+   "app/services/message_apis/ui_catalog/presenter.rb"
+  ]
+ },
+ "outliers": {
+  "Layout/LineLength": {
+   "app/controllers/api/v1/hooks_controller.rb": 2,
+   "app/graphql/chaskiq_schema.rb": 1,
+   "app/graphql/types/app_type.rb": 1,
+   "app/models/agent.rb": 1,
+   "app/models/app_user.rb": 2,
+   "app/models/campaign.rb": 5,
+   "app/models/concerns/globalize_accessors.rb": 1,
+   "app/services/action_trigger_factory.rb": 1,
+   "app/services/dante/migrator.rb": 1,
+   "app/services/dante/renderer.rb": 1,
+   "app/services/message_apis/article_search/presenter.rb": 1,
+   "app/services/message_apis/block_manager.rb": 1,
+   "app/services/message_apis/calendly/presenter.rb": 3,
+   "app/services/message_apis/contact_fields/presenter.rb": 1,
+   "app/services/message_apis/content_showcase/presenter.rb": 1,
+   "app/services/message_apis/csat/presenter.rb": 1,
+   "app/services/message_apis/dialog360/presenter.rb": 3,
+   "app/services/message_apis/full_contact/presenter.rb": 1,
+   "app/services/message_apis/inbox_sections/presenter.rb": 2,
+   "app/services/message_apis/open_ai/presenter.rb": 1,
+   "app/services/message_apis/slack/api.rb": 1,
+   "app/services/message_apis/telegram/presenter.rb": 3,
+   "app/services/message_apis/twilio/api.rb": 1,
+   "app/services/message_apis/twilio_phone/api.rb": 3,
+   "app/services/message_apis/twilio_phone/presenter.rb": 7,
+   "app/services/message_apis/ui_catalog/presenter.rb": 1,
+   "app/services/message_apis/zapier/presenter.rb": 3,
+   "app/services/message_apis/zoom/presenter.rb": 3,
+   "lib/tasks/utils.rake": 1,
+   "spec/controllers/api/v1/hooks/dialog_360_spec.rb": 3,
+   "spec/controllers/api/v1/hooks/message_bird_spec.rb": 1,
+   "spec/controllers/api/v1/hooks/pipedrive_spec.rb": 10,
+   "spec/controllers/api/v1/hooks/twilio_spec.rb": 1,
+   "spec/controllers/api/v1/hooks/twitter_spec.rb": 1,
+   "spec/controllers/api/v1/hooks/vonage_spec.rb": 1,
+   "spec/controllers/api/v1/hooks_controller_spec.rb": 9,
+   "spec/models/app_package_spec.rb": 1,
+   "spec/models/campaign_spec.rb": 1,
+   "spec/services/dante_renderer_spec.rb": 11
+  },
+  "Metrics/AbcSize": {
+   "app/controllers/api/graphql_controller.rb": 1,
+   "app/controllers/api/v1/hooks_controller.rb": 1,
+   "app/controllers/concerns/package_iframe_behavior.rb": 2,
+   "app/controllers/graphql_controller.rb": 1,
+   "app/graphql/mutations/conversations/start_conversation.rb": 1,
+   "app/graphql/types/app_type.rb": 1,
+   "app/graphql/types/messenger_type.rb": 1,
+   "app/mailers/chat_notifier_mailer.rb": 1,
+   "app/models/app_package_integration.rb": 1,
+   "app/models/concerns/globalize_accessors.rb": 1,
+   "app/models/plugin.rb": 1,
+   "app/models/segment.rb": 3,
+   "app/services/action_trigger.rb": 2,
+   "app/services/action_trigger_factory.rb": 1,
+   "app/services/dante/converter.rb": 1,
+   "app/services/dante/migrator.rb": 1,
+   "app/services/dante/renderer.rb": 1,
+   "app/services/fetch_link_card_service.rb": 1,
+   "app/services/message_apis/block_manager.rb": 1,
+   "app/services/message_apis/content_showcase/presenter.rb": 1,
+   "app/services/message_apis/csat/api.rb": 1,
+   "app/services/message_apis/dialog360/api.rb": 2,
+   "app/services/message_apis/dialog360/presenter.rb": 1,
+   "app/services/message_apis/inbox_sections/presenter.rb": 1,
+   "app/services/message_apis/message_bird/api.rb": 1,
+   "app/services/message_apis/open_ai/api.rb": 1,
+   "app/services/message_apis/slack/api.rb": 3,
+   "app/services/message_apis/telegram/api.rb": 1,
+   "app/services/message_apis/twilio/api.rb": 1,
+   "app/services/message_apis/twilio_phone/api.rb": 3,
+   "app/services/message_apis/twitter/api.rb": 2,
+   "app/services/message_apis/ui_catalog/presenter.rb": 1,
+   "app/services/message_apis/vonage/api.rb": 1,
+   "app/services/visit_collector.rb": 1
+  },
+  "Metrics/BlockLength": {
+   "app/models/app.rb": 1,
+   "app/models/concerns/globalize_accessors.rb": 1,
+   "app/models/segment.rb": 1,
+   "app/services/action_trigger_factory.rb": 3,
+   "app/services/message_apis/dialog360/api.rb": 1,
+   "app/services/message_apis/twitter/api.rb": 1
+  },
+  "Metrics/ClassLength": {
+   "app/graphql/types/app_type.rb": 1,
+   "app/models/app.rb": 1,
+   "app/models/app_user.rb": 1,
+   "app/models/segment.rb": 1,
+   "app/services/action_trigger_factory.rb": 1
+  },
+  "Metrics/CyclomaticComplexity": {
+   "app/mailers/chat_notifier_mailer.rb": 1,
+   "app/models/segment.rb": 3,
+   "app/models/segment_comparator.rb": 1,
+   "app/services/action_trigger_factory.rb": 1,
+   "app/services/dante/renderer.rb": 1,
+   "app/services/message_apis/block_manager.rb": 1,
+   "app/services/message_apis/content_showcase/presenter.rb": 1,
+   "app/services/message_apis/dialog360/presenter.rb": 1,
+   "app/services/message_apis/inbox_sections/presenter.rb": 1,
+   "app/services/message_apis/slack/api.rb": 1,
+   "app/services/message_apis/ui_catalog/presenter.rb": 1,
+   "app/services/plugin_schema_validator.rb": 1
+  },
+  "Metrics/MethodLength": {
+   "app/controllers/api/graphql_controller.rb": 1,
+   "app/controllers/api/v1/hooks_controller.rb": 1,
+   "app/controllers/concerns/package_iframe_behavior.rb": 1,
+   "app/controllers/graphql_controller.rb": 1,
+   "app/graphql/mutations/conversations/start_conversation.rb": 1,
+   "app/graphql/types/app_type.rb": 1,
+   "app/mailers/chat_notifier_mailer.rb": 1,
+   "app/models/app.rb": 2,
+   "app/models/bot_task.rb": 1,
+   "app/models/segment.rb": 3,
+   "app/services/action_trigger.rb": 2,
+   "app/services/action_trigger_factory.rb": 3,
+   "app/services/dante/renderer.rb": 1,
+   "app/services/message_apis/article_search/presenter.rb": 3,
+   "app/services/message_apis/audits_reports/api.rb": 1,
+   "app/services/message_apis/block_manager.rb": 1,
+   "app/services/message_apis/calendly/api.rb": 1,
+   "app/services/message_apis/calendly/presenter.rb": 2,
+   "app/services/message_apis/contact_fields/presenter.rb": 1,
+   "app/services/message_apis/content_showcase/presenter.rb": 6,
+   "app/services/message_apis/csat/api.rb": 1,
+   "app/services/message_apis/csat/presenter.rb": 2,
+   "app/services/message_apis/dialog360/api.rb": 3,
+   "app/services/message_apis/dialog360/presenter.rb": 2,
+   "app/services/message_apis/full_contact/presenter.rb": 1,
+   "app/services/message_apis/inbox_sections/presenter.rb": 2,
+   "app/services/message_apis/message_bird/api.rb": 2,
+   "app/services/message_apis/open_ai/api.rb": 1,
+   "app/services/message_apis/slack/api.rb": 6,
+   "app/services/message_apis/telegram/api.rb": 2,
+   "app/services/message_apis/telnyx_sms/api.rb": 1,
+   "app/services/message_apis/twilio/api.rb": 2,
+   "app/services/message_apis/twilio_phone/api.rb": 3,
+   "app/services/message_apis/twilio_phone/presenter.rb": 3,
+   "app/services/message_apis/twitter/api.rb": 2,
+   "app/services/message_apis/ui_catalog/presenter.rb": 1,
+   "app/services/message_apis/vonage/api.rb": 2,
+   "app/services/message_apis/zoom/api.rb": 1,
+   "lib/app_packages_catalog.rb": 1,
+   "spec/controllers/api/v1/hooks/calendly_spec.rb": 1,
+   "spec/controllers/api/v1/hooks/dialog_360_spec.rb": 1,
+   "spec/controllers/api/v1/hooks/telegram_spec.rb": 5,
+   "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb": 1,
+   "spec/controllers/api/v1/hooks/twitter_spec.rb": 3
+  },
+  "Metrics/ModuleLength": {},
+  "Metrics/ParameterLists": {
+   "app/graphql/types/app_type.rb": 1
+  },
+  "Metrics/PerceivedComplexity": {
+   "app/mailers/chat_notifier_mailer.rb": 1,
+   "app/models/segment.rb": 1,
+   "app/policies/app_policy.rb": 1,
+   "app/services/action_trigger_factory.rb": 1,
+   "app/services/message_apis/block_manager.rb": 1,
+   "app/services/message_apis/content_showcase/presenter.rb": 1,
+   "app/services/message_apis/inbox_sections/presenter.rb": 1,
+   "app/services/message_apis/slack/api.rb": 1,
+   "app/services/message_apis/ui_catalog/presenter.rb": 1
+  }
+ }
+}

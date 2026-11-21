@@ -1,0 +1,65 @@
+diff --git a/.rubocop.yml b/.rubocop.yml
+index 9f26a4b3..05d19b57 100644
+--- a/.rubocop.yml
++++ b/.rubocop.yml
+@@ -26,9 +26,14 @@ Rails/EnvironmentVariableAccess:
+ Lint/EmptyBlock:
+   Exclude:
+     - 'spec/**/*'
++# R8 (docs/specs/fork-updates-rubocop-plan.md, owner decisions 2026-11-20, second batch): rake task
++# files and the routes file are DSL blocks whose length is the list of tasks or routes they declare.
++# config/** is outside AllCops too; the entry keeps the decision if config/ is ever linted.
+ Metrics/BlockLength:
+   Exclude:
+   - 'spec/**/*'
++  - 'lib/tasks/**/*'
++  - 'config/routes.rb'
+ 
+ Style/OpenStructUse:
+   Enabled: false
+@@ -38,7 +43,10 @@ Lint/MissingSuper:
+   Enabled: false
+ Rails/SkipsModelValidations:
+   Enabled: false
++# R8 (same plan and decisions): Max is the length of app/models/concerns/user_handler.rb, the only
++# module above the default 100 lines; it gets its own refactor milestone, after which Max goes down.
+ Metrics/ModuleLength:
++  Max: 123
+   Exclude:
+     - app/services/message_apis/helpers.rb
+ Rails/InverseOf:
+@@ -92,6 +100,34 @@ Lint/UnusedMethodArgument:
+ Naming/MemoizedInstanceVariableName:
+   Exclude:
+     - 'app/controllers/api_controller.rb'
++# R8 (same plan and decisions): metric limits at the level common in Rails projects, chosen from the
++# distribution measured in the plan. Methods and classes above them are outliers: they stay listed in
++# .rubocop_todo.yml and get refactor milestones with tests (docs/specs/fork-updates-r8a.md).
++Metrics/MethodLength:
++  Max: 30
++Metrics/AbcSize:
++  Max: 30
++Metrics/CyclomaticComplexity:
++  Max: 13
++Metrics/PerceivedComplexity:
++  Max: 13
++Metrics/ParameterLists:
++  Max: 7
++# Integration adapters (app/services/message_apis/**) are one class per provider API: their length
++# follows the API they wrap.
++Metrics/ClassLength:
++  Max: 300
++  Exclude:
++    - 'app/services/message_apis/**/*'
++# A URL or a base64 blob cannot be wrapped. A line may run past Max only when such a token starts
++# within the first 139 columns and runs to the end of the line (closing quotes and brackets aside);
++# this extends AllowURI to quoted URLs. Base64: 40+ characters of its alphabet with a digit, an
++# upper- and a lower-case letter.
++Layout/LineLength:
++  Max: 140
++  AllowedPatterns:
++    - '\A.{0,139}https?://[^\s"''`<>]+["''`]?[\s,;)\]}]*\z'
++    - '\A.{0,139}(?=[A-Za-z0-9+/]*\d)(?=[A-Za-z0-9+/]*[A-Z])(?=[A-Za-z0-9+/]*[a-z])[A-Za-z0-9+/]{40,}={0,2}["'']?[\s,;)\]}]*\z'
+ AllCops:
+   NewCops: enable
+   Exclude:
