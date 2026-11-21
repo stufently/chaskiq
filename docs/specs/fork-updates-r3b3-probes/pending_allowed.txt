@@ -1,4 +1,4 @@
-# pending examples at BASE e0b470d0 (30), LC_ALL=C sorted
+# pending examples at BASE 2b291654 (30), LC_ALL=C sorted
 ./spec/controllers/api/v1/hooks/twilio_phone_spec.rb :: Api::V1::Hooks::ProviderController hooks receive inbound conversation data
 ./spec/controllers/client_tester_controller_spec.rb :: ClientTesterController text route
 ./spec/generator/chaskiq_plugins_generator_spec.rb :: ChaskiqPlugins add some scenarios (or delete) /app/spec/generator/chaskiq_plugins_generator_spec.rb

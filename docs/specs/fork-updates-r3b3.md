@@ -7,9 +7,9 @@
   `docs/specs/fork-updates-rubocop-plan.md` (раздел «Решения владельца 2026-11-20, вторая партия»:
   «G1 → R3b-3: `StrongParametersExpect` — перевести все три с тестами; в `package_iframe_behavior.rb:71`
   вручную `params.expect(user: [:id])[:id]` (400 вместо 500/404 — запись Changed в CHANGELOG)»).
-- BASE_SHA: `e0b470d0e7179e11457c00e8628a2d74a0f526b8` — HEAD `main` (Ruby 4.0.10, RuboCop 1.92.3,
-  rubocop-rails 2.38.0, Rails 8.1.4.1).
-- BASE плавающий: постановщик переносит его после влития R3b-2 (раздел 2), коммитит новое значение в
+- BASE_SHA: `2b291654941220eb7aae23e4351703df23e77dd2` — HEAD `main` после влития R3b-2, fix-cleanup-bugs,
+  fix-cleanup-2 и mut-r5b2 (Ruby 4.0.10, RuboCop 1.92.3, rubocop-rails 2.38.0, Rails 8.1.4.1).
+- BASE перенесён 2026-11-21 с e0b470d0 после влития R3b-2 (раздел 2): постановщик коммитит это значение в
   строку BASE_SHA и только потом снимает клон. Команды критериев считают `B=$(git merge-base HEAD @{u})`
   сами. В `report.json` поле `base_sha` равно значению строки BASE_SHA. Коммиты исполнителя в
   `docs/specs` запрещены (AC-008).
@@ -52,13 +52,15 @@
    `git apply --check` двух патчей по порядку; тексты 10 мутантов — каждый ровно один раз в своём файле
    дерева после патчей; имена четырёх новых спек не заняты. Перегенерировать снимки
    `CHASKIQ_R3B3_CACHE=$HOME/.cache/chaskiq-r3b3-ci bash docs/specs/fork-updates-r3b3-probes/rspec_gate_r3b3.sh --write-base`
-   на чистом checkout `main`, пересчитать sha256 в AC-008. Сейчас в снимках — список примеров e0b470d0.
+   на чистом checkout `main`, пересчитать sha256 в AC-008. Сейчас в снимках — список примеров 2b291654
+   (перенос сделан 2026-11-21).
 3. Закоммитить в `main` одним коммитом: спеку, пробники, патчи, снимки, их sha256 в AC-008 и строку
    BASE_SHA. Только после этого — `make_clone.sh`.
 
 ## 3. Места, поведение и почему
 
-Строки — по BASE e0b470d0.
+Строки — по BASE 2b291654 (три файла кода с e0b470d0 изменились только вне правок: `cookie_namespace`
+в `application_controller.rb`).
 
 **`r3b3_path.patch` — два параметра пути, вывод `rubocop -A --only Rails/StrongParametersExpect`.**
 - `app/controllers/api/v1/hooks/provider_controller.rb:22` (`global_process_event`, маршруты
@@ -75,12 +77,12 @@
 **Автокоррекция RuboCop здесь неверна**: она пишет `params.expect(:user)`, а `expect(:user)` разрешает
 только скаляр — рабочий запрос с хешем `user` получил бы `ParameterMissing`. Поведение:
 - `user` — хеш с `id` (рабочий путь): то же; `opts[:user]` для презентера по-прежнему весь
-  `params[:user]` (строка 82 не меняется — мутант M09 это закрепляет);
+  `params[:user]` (строка 81 не меняется — мутант M09 это закрепляет);
 - `user` нет: было `NoMethodError` (`nil["id"]`, 500) → стало `ActionController::ParameterMissing` — 400;
 - `user` — строка: было `"abc"["id"]` → `nil` → `RecordNotFound` (404) → стало 400;
 - `user` — хеш без `id`: было `find(nil)` → 404 → стало 400.
 Единственный вызывающий в коде — `package_iframe`/`iframe_package_request` того же concern
-(строки 37, 131-134): `Faraday.post` JSON с `user: app_user` — запись `AppUser` (хеш с `id`) или `nil`,
+(строки 37, 129-131): `Faraday.post` JSON с `user: app_user` — запись `AppUser` (хеш с `id`) или `nil`,
 когда пользователь не найден; во втором случае было 500, станет 400. Это запись `Changed` в CHANGELOG
 (решение владельца).
 
@@ -92,7 +94,7 @@
 ## 4. Что проверено вживую, а что предположение
 
 Проверено 2026-11-20 в Docker (`chaskiq-ci-local:ruby-4.0.10-ubuntu-26.04`, кэш `chaskiq-r3b3-ci`) на
-клоне BASE e0b470d0:
+клоне BASE e0b470d0; после переноса повторено 2026-11-21 на BASE 2b291654 (раздел 7, пробный прогон):
 
 1. Rubocop без блока todo на BASE: у копа 3 офенса в трёх файлах раздела 3. После двух патчей —
    0 офенсов во всём `app/`, `lib/`; на рукописной форме `params.expect(user: [:id])[:id]` коп молчит.
@@ -198,7 +200,7 @@ git commit -am "Drop R3b-3 entries from RuboCop todo"
 и после), текст ниже не трогай:
 
 ```
-## 2026-11-20 — fork-updates-r3b3
+## 2026-11-21 — fork-updates-r3b3
 
 - Changed: `POST /package_iframe_internal/:package` reads the user id with
   `params.expect(user: [:id])` and answers 400 when `user` is missing, not a hash or has no `id`
@@ -251,7 +253,7 @@ git commit -am "Note fork-updates-r3b3 in changelog"
   `bash -c 'B=$(git merge-base HEAD @{u}) && python3 -I docs/specs/fork-updates-r3b3-probes/source_scan.py $B'`
 
 - **AC-008** — коммитов в docs/specs нет, пробники, патчи и снимки постановщика не тронуты (sha256), спека не тронута.
-  `bash -c 'B=$(git merge-base HEAD @{u}) && L=$(git log --format=%H $B..HEAD -- docs/specs) && test -z "$L" && printf "%s\n" "7275e574de65f72ba9d8d2bc676665580e6dad53b24ff0abcdef155ee05b1009  docs/specs/fork-updates-r3b3-probes/r3b3_probe.py" "885b44e1ea29292dea57704a2ebc974e0539b8b48b119f6d21564c8ea22ece57  docs/specs/fork-updates-r3b3-probes/r3b3_config.json" "069240cf7b3abcaa858e80b83e4f525d2f56cfd1dbfdabf975f8bb7167faf99a  docs/specs/fork-updates-r3b3-probes/r3b3_tests.rb" "788c913831a0aecacddc3866d7858be14f041c82c2defe5f0a0ee059c4112e6b  docs/specs/fork-updates-r3b3-probes/r3b3_tests_gate.sh" "894e568e34e5544cf9f3588ab1a7c46ef7d651625eb0db4410beb66f0080b232  docs/specs/fork-updates-r3b3-probes/r3b3_backlog_probe.sh" "2d10921c04e8f189eeaa95d19a91dc5fb838a07847485db44330e14218219d23  docs/specs/fork-updates-r3b3-probes/source_scan.py" "9d817a74a0bd0509b8a4b9b93ddcf80e8e096b2de2e87ce0f4ec05075057f8c5  docs/specs/fork-updates-r3b3-probes/r3b3_path.patch" "2abb051805c9c33bc963144881d14cd3425f4f30e5aee0dfbae477972ab77b05  docs/specs/fork-updates-r3b3-probes/r3b3_iframe.patch" "0246c9e4317381ae6a152db2b35672a80ff7fd41cb6a0667aa7e178a2df2eaa3  docs/specs/fork-updates-r3b3-probes/rspec_gate_r3b3.sh" "334089a75686267d0ab86be410d520fe4ea10b91eab8ef3fc955078c53d199c8  docs/specs/fork-updates-r3b3-probes/r3b3_sentinel.rb" "de984653ffc30169d3793483e4da2c59fe1ee835ef6574a9f85f5898394e6a49  docs/specs/fork-updates-r3b3-probes/examples_base.txt" "7788c9cb0f423c798a80de3b798cfb36059fcb697f8e46cc5d37f62a5df9a558  docs/specs/fork-updates-r3b3-probes/pending_allowed.txt" "84a711aaf5582d0f641750a97a4d16293a348261cce30483d35bda89d53eacf5  docs/specs/fork-updates-r3b3-probes/warnings_base.txt" | sha256sum -c --quiet - && git diff --quiet $B HEAD -- docs/specs'`
+  `bash -c 'B=$(git merge-base HEAD @{u}) && L=$(git log --format=%H $B..HEAD -- docs/specs) && test -z "$L" && printf "%s\n" "7275e574de65f72ba9d8d2bc676665580e6dad53b24ff0abcdef155ee05b1009  docs/specs/fork-updates-r3b3-probes/r3b3_probe.py" "885b44e1ea29292dea57704a2ebc974e0539b8b48b119f6d21564c8ea22ece57  docs/specs/fork-updates-r3b3-probes/r3b3_config.json" "069240cf7b3abcaa858e80b83e4f525d2f56cfd1dbfdabf975f8bb7167faf99a  docs/specs/fork-updates-r3b3-probes/r3b3_tests.rb" "788c913831a0aecacddc3866d7858be14f041c82c2defe5f0a0ee059c4112e6b  docs/specs/fork-updates-r3b3-probes/r3b3_tests_gate.sh" "894e568e34e5544cf9f3588ab1a7c46ef7d651625eb0db4410beb66f0080b232  docs/specs/fork-updates-r3b3-probes/r3b3_backlog_probe.sh" "2d10921c04e8f189eeaa95d19a91dc5fb838a07847485db44330e14218219d23  docs/specs/fork-updates-r3b3-probes/source_scan.py" "d56bb9d374354c4498e86ef309825142e89f87ace68527a4212bfc2384817a2a  docs/specs/fork-updates-r3b3-probes/r3b3_path.patch" "2abb051805c9c33bc963144881d14cd3425f4f30e5aee0dfbae477972ab77b05  docs/specs/fork-updates-r3b3-probes/r3b3_iframe.patch" "0246c9e4317381ae6a152db2b35672a80ff7fd41cb6a0667aa7e178a2df2eaa3  docs/specs/fork-updates-r3b3-probes/rspec_gate_r3b3.sh" "334089a75686267d0ab86be410d520fe4ea10b91eab8ef3fc955078c53d199c8  docs/specs/fork-updates-r3b3-probes/r3b3_sentinel.rb" "d7188ace00400a12a5b3ff11cfa30e138d9a67539e2a6709b9c6db20117653c1  docs/specs/fork-updates-r3b3-probes/examples_base.txt" "b5eaf4806a7efc6e92afa8f3a6e12f21cf85feaa62efae9b53404142c3426c33  docs/specs/fork-updates-r3b3-probes/pending_allowed.txt" "afe830dae96a9da4c312e3e048b1f7bf48d859d6ed312d02f9b0ede85f2b3620  docs/specs/fork-updates-r3b3-probes/warnings_base.txt" | sha256sum -c --quiet - && git diff --quiet $B HEAD -- docs/specs'`
 
 - **AC-009** — дерево чистое (сбой git — тоже FAIL), нет игнорируемых, но существующих .rspec-local, .rspec-parallel и файлов под app/, lib/, config/, spec/.
   `bash -c 'git status --porcelain >/dev/null && test -z "$(git status --porcelain -- . ":(exclude)report.json" ":(exclude)report-blocked.md")" && I=$(git status --porcelain --ignored=matching -- .rspec-local .rspec-parallel app lib config spec) && test -z "$I"'`
@@ -260,17 +262,17 @@ git commit -am "Note fork-updates-r3b3 in changelog"
 BASE + r3b3_path.patch, r3b3_iframe.patch`); AC-003 красный (спек нет — `no examples ran`); AC-004 красный
 (`Rails/StrongParametersExpect: 3 offenses left`); AC-006 красный (`missing commits`).
 
-Пробный прогон автора (20.11.2026, свежий клон от BASE e0b470d0, сборка по разделу 5 буквально, спеки —
-образцы постановщика):
-- чистый клон: AC-005, AC-007 (`SOURCE SCAN PASS 0 files`), AC-008, AC-009 зелёные; AC-002, AC-004, AC-006
-  красные с сообщениями выше (AC-001 и AC-003 на чистом клоне не гонялись);
-- после сборки: все 9 AC зелёные — rspec 803 examples (8 новых), 0 failures, 30 pending, сторож 775;
+Пробный прогон после переноса BASE (21.11.2026, свежий клон `main` 2b291654 + коммит спеки и пробников
+сверху, сборка по разделу 5 буквально, спеки — образцы постановщика):
+- чистый клон: AC-001 (rspec 1026 examples, 0 failures, 30 pending, сторож 998), AC-005, AC-007
+  (`SOURCE SCAN PASS 0 files`), AC-008, AC-009 зелёные; AC-002, AC-003 (`no examples ran`), AC-004
+  (`3 offenses left`, BASE 1093), AC-006 (`missing commits`) красные с сообщениями выше;
+- после сборки: все 9 AC зелёные — rspec 1034 examples (8 новых), 0 failures, 30 pending, сторож 1006;
   AC-003 `R3B3 TREE PASS 8 examples`, `R3B3 BASE PASS 5 char / 1 fix failing`, `R3B3 MUTANTS PASS 10/10 killed`;
-  AC-004 backlog без todo BASE 1218 → 1215; AC-007 `SOURCE SCAN PASS 4 files`; файлов от root нет
-  (после добавления мутанта M10 повторены AC-002…AC-009);
+  AC-004 backlog без todo BASE 1093 → 1090; AC-007 `SOURCE SCAN PASS 4 files`; файлов от root нет;
 - порченые правки (все ловятся): `Rails.root.join("app/…/package_iframe_behavior.rb").read` в спеке → AC-007;
-  автокоррекция `params.expect(:user)` вместо рукописной формы → AC-002; откат коммита todo → AC-002;
-  спека 400 с `be >= 400` вместо `eq(400)` → AC-003, выжил M10 (404 без исключения).
+  автокоррекция `params.expect(:user)` вместо рукописной формы → AC-002; откат коммита todo → AC-002 и
+  AC-006; спека 400 с `be >= 400` вместо `eq(400)` → AC-003, выжил M10 (404 без исключения).
 
 ## 8. Авторевью и контракт отчёта
 
@@ -338,10 +340,10 @@ REVIEW_EXCLUDE: docs/specs/fork-updates-r3b3-probes/**
 
 ## 10. Стыки
 
-- **R3b-2 — до этой вехи.** Её AC-008 проверяет, что `provider_controller.rb`, `application_controller.rb`,
-  `package_iframe_behavior.rb` равны её BASE и блок `Rails/StrongParametersExpect:` в todo на месте.
-  Если R3b-3 вольётся первой, AC-008 R3b-2 покраснеет — тогда в R3b-2 его надо снять. Общих файлов кода
-  с R3b-2 нет; обе правят `.rubocop_todo.yml` (разные блоки) и CHANGELOG — пробник todo считает
-  ожидаемое от BASE, поэтому BASE переносится после R3b-2.
+- **R3b-2 — влита до этой вехи** (merge `6541ba93`, принята `2b291654` = BASE). Её AC-008 требовал, чтобы
+  `provider_controller.rb`, `application_controller.rb`, `package_iframe_behavior.rb` и блок
+  `Rails/StrongParametersExpect:` в todo остались нетронутыми, — они на месте. Общих файлов кода с R3b-2
+  нет; обе правят `.rubocop_todo.yml` (разные блоки) и CHANGELOG — пробник todo считает ожидаемое от BASE,
+  поэтому BASE перенесён после R3b-2.
 - **R5b-2, R6c, fix-cleanup-bugs** — общих файлов нет.
 - После R3b-2 и этой вехи из Rails-копов в todo не остаётся ни одного.
