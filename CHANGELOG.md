@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-21 — fork-updates-r9b
+
+- Changed: the last one-off RuboCop Style offenses outside Metrics, behaviour kept: modifier if/unless
+  (same bytecode), safe navigation chains split through a local, block chains through a local,
+  interpolation instead of `+` where the operand is always a String, `case` and a frozen hash instead
+  of if-chains and a hash-like `case`, `map`, `each_key`, `method_defined?`, `include?` on a word list.
+- Changed: `Style/StringConcatenation` excludes the two GraphQL controllers and `campaign.rb`: there
+  `+` raises on a non-String operand (client operationName, a nameless campaign) and that stays.
+- Removed: empty todo blocks IdenticalConditionalBranches and SpecialGlobalVars. Seven specs pin the
+  changed behaviour; the modifier rewrite is checked by bytecode.
+
 ## 2026-11-21 — fork-updates-r8a
 
 - Changed: RuboCop metric limits by owner decision (R8), each with its reason in `.rubocop.yml`:
