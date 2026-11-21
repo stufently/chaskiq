@@ -5,7 +5,7 @@ class AssignmentRule < ApplicationRecord
   belongs_to :agent
   store_accessor :conditions
 
-  default_scope { order("priority asc") }
+  default_scope { order(:priority) }
 
   def check_rule_for(text, part)
     conditions.find { |o| o["type"] == "match" }

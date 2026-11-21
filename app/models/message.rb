@@ -19,7 +19,7 @@ class Message < ApplicationRecord
 
   scope :enabled, -> { where(state: "enabled") }
   scope :disabled, -> { where(state: "disabled") }
-  scope :ordered, -> { order("position asc") }
+  scope :ordered, -> { order(:position) }
   scope :in_time, -> { where(["scheduled_at <= ? AND scheduled_to >= ?", Time.zone.today, Time.zone.today]) }
   # before_save :detect_changed_template
   before_create :add_default_predicate

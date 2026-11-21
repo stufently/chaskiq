@@ -279,14 +279,14 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
                                       ["FileBlock", "/uploads/file.pdf"]
                                     ])
 
-      expect(requests.map { |request| request["type"] }).to eq(%w[audio image video document])
+      expect(requests.pluck("type")).to eq(%w[audio image video document])
       expect(requests.map { |request| request.fetch(request.fetch("type")) }).to eq([
                                                                                       { "link" => "https://chat.example.com/uploads/voice.ogg" },
                                                                                       { "link" => "https://chat.example.com/uploads/first%20image.png", "caption" => "Here are the files" },
                                                                                       { "link" => "https://cdn.example.com/video.mp4" },
                                                                                       { "link" => "https://chat.example.com/uploads/file.pdf" }
                                                                                     ])
-      expect(requests.map { |request| request["to"] }.uniq).to eq([user_phone])
+      expect(requests.pluck("to").uniq).to eq([user_phone])
       expect(JSON.parse(result.body)).to eq("messages" => [{ "id" => "wamid.1" }])
     end
 

@@ -47,7 +47,7 @@ module Types
       @conversations = object.conversations.preload(messages: %i[messageable authorable])
                              .joins(:main_participant)
                              .where(main_participant: @user.id)
-                             .order("updated_at desc")
+                             .order(updated_at: :desc)
                              .page(page)
                              .per(per)
     end

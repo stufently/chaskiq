@@ -198,7 +198,7 @@ module Types
 
       app_packages = app_packages.where.not("id in(?)", integrations) if integrations.any?
 
-      app_packages.order("id asc").distinct
+      app_packages.order(:id).distinct
     end
 
     def agent_app_packages
@@ -398,7 +398,7 @@ module Types
 
       Segment.union_scope(
         object.segments.all, Segment.where(app_id: nil)
-      ).order("id asc")
+      ).order(:id)
     end
 
     field :segment, Types::SegmentType, null: true do
@@ -420,7 +420,7 @@ module Types
       # authorize! object, to: :show?, with: AppPolicy
       authorize! object, to: :can_read_assignment_rules?, with: AppPolicy
 
-      object.assignment_rules.order("priority asc")
+      object.assignment_rules.order(:priority)
     end
 
     field :quick_replies, [Types::QuickReplyType], null: true do
@@ -560,7 +560,7 @@ module Types
       I18n.locale = lang.to_sym
       # authorize! object, to: :show?, with: AppPolicy
       authorize! object, to: :can_read_help_center?, with: AppPolicy
-      object.article_collections.order("position asc")
+      object.article_collections.order(:position)
     end
 
     field :collection, Types::CollectionType, null: true do

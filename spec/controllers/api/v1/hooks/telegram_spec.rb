@@ -627,7 +627,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
       deliver(serialized_content: { type: "doc", content: blocks }.to_json)
 
-      expect(calls.map { |body| body["photo"] }).to eq(%w[https://cdn.example.com/first.png https://cdn.example.com/second.png])
+      expect(calls.pluck("photo")).to eq(%w[https://cdn.example.com/first.png https://cdn.example.com/second.png])
       expect(calls.map { |body| body["caption"].to_s }).to eq(["See both images", ""])
     end
 

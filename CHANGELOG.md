@@ -24,6 +24,12 @@
   is truthy, so a new series was never initialised (its `meta` raised) and `get_range`/`get_all` of a
   deleted series returned `{}` instead of nil.
 
+## 2026-11-20 — fork-updates-r3b2
+
+- Changed: Rails/OrderArguments, Rails/Pluck, Rails/WhereRange and Rails/Delegate cleaned up in 22 files
+  (hash arguments in `order`, `pluck` on arrays, a range in `prev_article_url`, `delegate` for two
+  forwarders) without behaviour changes; characterization specs added for every site.
+
 ## 2026-11-20 — fork-updates-r5b2
 
 - Removed: unused routing constraints `PersonalizedDomain` and `NoSubdomain` and the `DOMAIN` constant

@@ -550,52 +550,12 @@ Naming/VariableNumber:
     - 'app/services/action_trigger_factory.rb'
     - 'spec/models/segment_spec.rb'
 
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforceForPrefixed.
-Rails/Delegate:
-  Exclude:
-    - 'app/channels/messenger_events_channel.rb'
-    - 'app/models/concerns/globalize_accessors.rb'
-
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Rails/OrderArguments:
-  Exclude:
-    - 'app/graphql/types/app_type.rb'
-    - 'app/graphql/types/app_user_type.rb'
-    - 'app/graphql/types/article_settings_type.rb'
-    - 'app/graphql/types/bot_task_type.rb'
-    - 'app/graphql/types/campaign_type.rb'
-    - 'app/graphql/types/conversation_type.rb'
-    - 'app/graphql/types/messenger_type.rb'
-    - 'app/graphql/types/public_conversation_type.rb'
-    - 'app/mailers/chat_notifier_mailer.rb'
-    - 'app/models/assignment_rule.rb'
-    - 'app/models/conversation.rb'
-    - 'app/models/message.rb'
-    - 'app/services/message_apis/audits_reports/api.rb'
-    - 'app/services/message_apis/open_ai/api.rb'
-
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Rails/Pluck:
-  Exclude:
-    - 'app/models/segment.rb'
-    - 'app/services/message_apis/open_ai/api.rb'
-    - 'spec/controllers/api/v1/hooks/dialog_360_spec.rb'
-    - 'spec/controllers/api/v1/hooks/telegram_spec.rb'
-    - 'spec/controllers/api/v1/hooks/twilio_spec.rb'
-    - 'spec/controllers/api/v1/hooks/twitter_spec.rb'
-
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Rails/StrongParametersExpect:
   Exclude:
     - 'app/controllers/api/v1/hooks/provider_controller.rb'
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/concerns/package_iframe_behavior.rb'
-
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Rails/WhereRange:
-  Exclude:
-    - 'app/graphql/types/article_type.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowOnConstant, AllowOnSelfClass.
