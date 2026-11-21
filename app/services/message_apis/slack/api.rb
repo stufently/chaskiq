@@ -891,7 +891,7 @@ module MessageApis
                      end
 
           # get slack user
-          if part&.message&.action == "assigned" && data["email"].present?
+          if part&.message&.action == "assigned" && data.is_a?(Hash) && data["email"].present?
             slack_user = get_slack_user_by_email(data["email"])
             data_fmt << "\n <@#{slack_user['id']}>" if slack_user.present?
           end
