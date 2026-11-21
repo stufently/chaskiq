@@ -334,7 +334,7 @@ class Segment < ApplicationRecord
   end
 
   def clause_group(predicates, clause)
-    predicates&.filter { |o| o[:clause] == clause }&.map { |o| o[:fragment] }&.flatten || []
+    predicates&.filter { |o| o[:clause] == clause }&.pluck(:fragment)&.flatten || []
   end
 
   def nested_preds_group(_clause, attributes)

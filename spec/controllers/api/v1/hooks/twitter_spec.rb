@@ -46,7 +46,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       expect(api.upload_media(url)).to include("media_id_string" => "7")
 
       assert_requested(download, times: 1)
-      expect(uploads.map { |body| body["command"] }).to eq(%w[INIT APPEND FINALIZE])
+      expect(uploads.pluck("command")).to eq(%w[INIT APPEND FINALIZE])
       expect(uploads[0]).to include("media_type" => "image/png", "total_bytes" => png.bytesize.to_s)
       expect(Base64.decode64(uploads[1].fetch("media_data"))).to eq(png)
       expect(uploads[2]).to include("media_id" => "7")

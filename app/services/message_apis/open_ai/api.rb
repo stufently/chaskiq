@@ -114,9 +114,7 @@ module MessageApis
 
         parsed_content = part&.message&.parsed_content
         human_input = parsed_content["blocks"]
-        human_input = human_input&.map do |o|
-          o["text"]
-        end&.join(" ")
+        human_input = human_input&.pluck("text")&.join(" ")
 
         messages = previous << { role: "user", content: human_input }
 

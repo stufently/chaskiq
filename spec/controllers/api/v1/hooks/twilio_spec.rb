@@ -600,8 +600,8 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
                                                                              "https://chat.example.com/uploads/file.pdf",
                                                                              "https://chat.example.com/uploads/voice.ogg"
                                                                            ])
-        expect(requests.map { |request| request["Body"] }).to eq(["Here are the files", nil, nil, nil])
-        expect(requests.map { |request| request["To"] }.uniq).to eq([user_phone])
+        expect(requests.pluck("Body")).to eq(["Here are the files", nil, nil, nil])
+        expect(requests.pluck("To").uniq).to eq([user_phone])
         expect(JSON.parse(result.body)).to eq("sid" => "SM1")
       end
 
@@ -638,7 +638,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
                         ["ImageBlock", "/uploads/another.png"]
                       ])
 
-        expect(requests.map { |request| request["Body"] }).to eq([nil, "Photo caption", nil])
+        expect(requests.pluck("Body")).to eq([nil, "Photo caption", nil])
       end
     end
   end
