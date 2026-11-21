@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module EuCountries
+  module_function
+
   def includes?(country_code)
     %w[
       DE AT BE BG CY HR DK ES EE FI FR GR HU IE
