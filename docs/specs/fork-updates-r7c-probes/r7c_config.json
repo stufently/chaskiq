@@ -1,0 +1,276 @@
+{
+ "cops_whole": [
+  "Naming/PredicatePrefix"
+ ],
+ "cops_partial": {
+  "Naming/PredicateMethod": [
+   "app/models/outgoing_webhook.rb",
+   "app/services/origin_validator.rb"
+  ]
+ },
+ "app_files": [
+  "app/controllers/api/v1/hooks_controller.rb",
+  "app/models/app_package.rb",
+  "app/models/conversation_part.rb",
+  "app/models/conversation.rb",
+  "app/models/outgoing_webhook.rb",
+  "app/services/origin_validator.rb"
+ ],
+ "mixed_specs": [
+  "spec/controllers/api/v1/hooks_notification_alias_spec.rb",
+  "spec/models/app_package_external_alias_spec.rb",
+  "spec/models/conversation_part_predicates_alias_spec.rb",
+  "spec/models/conversation_visible_comment_alias_spec.rb",
+  "spec/models/outgoing_webhook_enabled_alias_spec.rb",
+  "spec/services/origin_validator_alias_spec.rb"
+ ],
+ "mutants": [
+  {
+   "id": "C01",
+   "file": "app/controllers/api/v1/hooks_controller.rb",
+   "old": "      alias is_notification_message? notification_message?\n",
+   "new": "",
+   "specs": [
+    "spec/controllers/api/v1/hooks_notification_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C02",
+   "file": "app/controllers/api/v1/hooks_controller.rb",
+   "old": "      alias is_notification_message? notification_message?\n",
+   "new": "      alias is_notification_message? notification_message?\n      def notification_message?(*) = nil\n",
+   "specs": [
+    "spec/controllers/api/v1/hooks_notification_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C03",
+   "file": "app/controllers/api/v1/hooks_controller.rb",
+   "old": "        @request_body[\"Type\"] == \"Notification\"\n",
+   "new": "        @request_body.key?(\"Type\")\n",
+   "specs": [
+    "spec/controllers/api/v1/hooks_notification_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C04",
+   "file": "app/controllers/api/v1/hooks_controller.rb",
+   "old": "      alias is_notification_message? notification_message?\n",
+   "new": "      alias is_notification_message? notification_message?\n      public :notification_message?, :is_notification_message?\n",
+   "specs": [
+    "spec/controllers/api/v1/hooks_notification_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C05",
+   "file": "app/models/app_package.rb",
+   "old": "  alias is_external? external?\n",
+   "new": "",
+   "specs": [
+    "spec/models/app_package_external_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C06",
+   "file": "app/models/app_package.rb",
+   "old": "  alias is_external? external?\n",
+   "new": "  alias is_external? external?\n  def external?(*) = nil\n",
+   "specs": [
+    "spec/models/app_package_external_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C07",
+   "file": "app/models/app_package.rb",
+   "old": "    return true if author.present?\n",
+   "new": "    return false if author.present?\n",
+   "specs": [
+    "spec/models/app_package_external_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C08",
+   "file": "app/models/app_package.rb",
+   "old": "    return false if plugin.present? && plugin.new_record?\n",
+   "new": "",
+   "specs": [
+    "spec/models/app_package_external_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C09",
+   "file": "app/models/conversation_part.rb",
+   "old": "  alias is_event_message? event_message?\n",
+   "new": "",
+   "specs": [
+    "spec/models/conversation_part_predicates_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C10",
+   "file": "app/models/conversation_part.rb",
+   "old": "  alias is_event_message? event_message?\n",
+   "new": "  alias is_event_message? event_message?\n  def event_message?(*) = nil\n",
+   "specs": [
+    "spec/models/conversation_part_predicates_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C11",
+   "file": "app/models/conversation_part.rb",
+   "old": "    messageable.is_a?(ConversationPartEvent)\n",
+   "new": "    messageable.present?\n",
+   "specs": [
+    "spec/models/conversation_part_predicates_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C12",
+   "file": "app/models/conversation_part.rb",
+   "old": "  alias is_from_auto_message_campaign? from_auto_message_campaign?\n",
+   "new": "",
+   "specs": [
+    "spec/models/conversation_part_predicates_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C13",
+   "file": "app/models/conversation_part.rb",
+   "old": "  alias is_from_auto_message_campaign? from_auto_message_campaign?\n",
+   "new": "  alias is_from_auto_message_campaign? from_auto_message_campaign?\n  def from_auto_message_campaign?(*) = nil\n",
+   "specs": [
+    "spec/models/conversation_part_predicates_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C14",
+   "file": "app/models/conversation_part.rb",
+   "old": "    message_source.is_a? UserAutoMessage\n",
+   "new": "    message_source.is_a? Message\n",
+   "specs": [
+    "spec/models/conversation_part_predicates_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C15",
+   "file": "app/models/conversation.rb",
+   "old": "  alias has_user_visible_comment? user_visible_comment?\n",
+   "new": "",
+   "specs": [
+    "spec/models/conversation_visible_comment_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C16",
+   "file": "app/models/conversation.rb",
+   "old": "  alias has_user_visible_comment? user_visible_comment?\n",
+   "new": "  alias has_user_visible_comment? user_visible_comment?\n  def user_visible_comment?(*) = nil\n",
+   "specs": [
+    "spec/models/conversation_visible_comment_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C17",
+   "file": "app/models/outgoing_webhook.rb",
+   "old": "  alias is_enabled enabled?\n",
+   "new": "",
+   "specs": [
+    "spec/models/outgoing_webhook_enabled_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C18",
+   "file": "app/models/outgoing_webhook.rb",
+   "old": "  alias is_enabled enabled?\n",
+   "new": "  alias is_enabled enabled?\n  def enabled?(*) = nil\n",
+   "specs": [
+    "spec/models/outgoing_webhook_enabled_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C19",
+   "file": "app/models/outgoing_webhook.rb",
+   "old": "    state == \"enabled\"\n",
+   "new": "    state != \"disabled\"\n",
+   "specs": [
+    "spec/models/outgoing_webhook_enabled_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C20",
+   "file": "app/services/origin_validator.rb",
+   "old": "  alias is_valid? valid?\n",
+   "new": "",
+   "specs": [
+    "spec/services/origin_validator_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C21",
+   "file": "app/services/origin_validator.rb",
+   "old": "  alias is_valid? valid?\n",
+   "new": "  alias is_valid? valid?\n  def valid?(*) = nil\n",
+   "specs": [
+    "spec/services/origin_validator_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C22",
+   "file": "app/services/origin_validator.rb",
+   "old": "    return true if @app == \"*\"\n",
+   "new": "    return false if @app == \"*\"\n",
+   "specs": [
+    "spec/services/origin_validator_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C23",
+   "file": "app/services/origin_validator.rb",
+   "old": "  alias validate_domain validate_domain?\n",
+   "new": "",
+   "specs": [
+    "spec/services/origin_validator_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C24",
+   "file": "app/services/origin_validator.rb",
+   "old": "  alias validate_domain validate_domain?\n",
+   "new": "  alias validate_domain validate_domain?\n  def validate_domain?(*) = nil\n",
+   "specs": [
+    "spec/services/origin_validator_alias_spec.rb"
+   ]
+  },
+  {
+   "id": "C25",
+   "file": "app/services/origin_validator.rb",
+   "old": "    return false if app_domain.normalized_site != env_domain.normalized_site\n",
+   "new": "    return false if app_domain.host != env_domain.host\n",
+   "specs": [
+    "spec/services/origin_validator_alias_spec.rb"
+   ]
+  }
+ ],
+ "commits": [
+  {
+   "subject": "Rename is_/has_ predicates, keep old names",
+   "patch": "r7c_rename.patch",
+   "added": [
+    "spec/controllers/api/v1/hooks_notification_alias_spec.rb",
+    "spec/models/app_package_external_alias_spec.rb",
+    "spec/models/conversation_part_predicates_alias_spec.rb",
+    "spec/models/conversation_visible_comment_alias_spec.rb",
+    "spec/models/outgoing_webhook_enabled_alias_spec.rb",
+    "spec/services/origin_validator_alias_spec.rb"
+   ]
+  },
+  {
+   "subject": "Drop R7c entries from RuboCop todo",
+   "todo": true
+  },
+  {
+   "subject": "Note fork-updates-r7c in changelog",
+   "changelog": true
+  }
+ ]
+}
