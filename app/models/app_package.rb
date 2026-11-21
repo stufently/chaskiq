@@ -45,7 +45,7 @@ class AppPackage < ApplicationRecord
 
   before_save :set_default_definitions
 
-  def is_external?
+  def external?
     return true if author.present?
 
     return false if plugin.present? && plugin.new_record?
@@ -59,6 +59,7 @@ class AppPackage < ApplicationRecord
     end
     external.nil?
   end
+  alias is_external? external?
 
   def api_url_challenge
     token = SecureRandom.urlsafe_base64(nil, false)

@@ -494,26 +494,10 @@ Metrics/PerceivedComplexity:
 # WaywardPredicates: infinite?, nonzero?
 Naming/PredicateMethod:
   Exclude:
-    - 'app/models/outgoing_webhook.rb'
     - 'app/models/segment_comparator.rb'
     - 'app/services/message_apis/slack/api.rb'
     - 'app/services/message_apis/zapier/api.rb'
-    - 'app/services/origin_validator.rb'
     - 'app/services/plugins/tar_downloader.rb'
-
-# Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros, UseSorbetSigs.
-# NamePrefix: is_, has_, have_, does_
-# ForbiddenPrefixes: is_, has_, have_, does_
-# AllowedMethods: is_a?
-# MethodDefinitionMacros: define_method, define_singleton_method
-Naming/PredicatePrefix:
-  Exclude:
-    - 'app/controllers/api/v1/hooks_controller.rb'
-    - 'app/models/app_package.rb'
-    - 'app/models/conversation.rb'
-    - 'app/models/conversation_part.rb'
-    - 'app/models/outgoing_webhook.rb'
-    - 'app/services/origin_validator.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowOnConstant, AllowOnSelfClass.

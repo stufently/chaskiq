@@ -45,9 +45,10 @@ class ConversationPart < ApplicationRecord
     trigger_id.present? && step_id.present?
   end
 
-  def is_event_message?
+  def event_message?
     messageable.is_a?(ConversationPartEvent)
   end
+  alias is_event_message? event_message?
 
   def message
     # self.conversation_part_content
@@ -187,9 +188,10 @@ class ConversationPart < ApplicationRecord
       conversation&.main_participant&.disabled_notifications?
   end
 
-  def is_from_auto_message_campaign?
+  def from_auto_message_campaign?
     message_source.is_a? UserAutoMessage
   end
+  alias is_from_auto_message_campaign? from_auto_message_campaign?
 
   def as_json(*)
     super.tap do |hash|

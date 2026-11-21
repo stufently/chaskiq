@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-21 — fork-updates-r7c
+
+- Changed: predicate methods renamed for Naming/PredicatePrefix and Naming/PredicateMethod, each old
+  name kept as an `alias` (callers, stubs and integrations keep working):
+  `HooksController#is_notification_message?` -> `notification_message?` (private),
+  `AppPackage#is_external?` -> `external?`, `ConversationPart#is_event_message?` -> `event_message?`,
+  `ConversationPart#is_from_auto_message_campaign?` -> `from_auto_message_campaign?`,
+  `Conversation#has_user_visible_comment?` -> `user_visible_comment?`, `OutgoingWebhook#is_enabled` ->
+  `enabled?`, `OriginValidator#is_valid?` -> `valid?`, `OriginValidator#validate_domain` ->
+  `validate_domain?`. Specs pin both names.
+
 ## 2026-11-21 — fork-updates-r7b
 
 - Changed: RuboCop settings by owner decision, each with its reason in `.rubocop.yml`:

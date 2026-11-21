@@ -217,9 +217,10 @@ class Conversation < ApplicationRecord
     update_column(:latest_user_visible_comment_at, Time.zone.now)
   end
 
-  def has_user_visible_comment?
+  def user_visible_comment?
     latest_user_visible_comment_at.present?
   end
+  alias has_user_visible_comment? user_visible_comment?
 
   def block(msg = nil)
     self.blocked = true
