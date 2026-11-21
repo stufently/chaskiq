@@ -192,43 +192,6 @@ Metrics/PerceivedComplexity:
     - 'app/services/message_apis/slack/api.rb'
     - 'app/services/message_apis/ui_catalog/presenter.rb'
 
-# Configuration parameters: Mode, AllowedMethods, AllowedPatterns, AllowBangMethods, WaywardPredicates.
-# AllowedMethods: call
-# WaywardPredicates: infinite?, nonzero?
-Naming/PredicateMethod:
-  Exclude:
-    - 'app/models/segment_comparator.rb'
-    - 'app/services/message_apis/slack/api.rb'
-    - 'app/services/message_apis/zapier/api.rb'
-    - 'app/services/plugins/tar_downloader.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowOnConstant, AllowOnSelfClass.
-Style/CaseEquality:
-  Exclude:
-    - 'app/controllers/api/v1/hooks_controller.rb'
-    - 'app/graphql/types/messenger_type.rb'
-    - 'app/graphql/types/role_type.rb'
-    - 'app/jobs/sns_receiver_job.rb'
-    - 'app/models/conversation.rb'
-    - 'app/models/plan.rb'
-    - 'app/services/action_trigger_factory.rb'
-    - 'app/services/message_apis/article_search/presenter.rb'
-    - 'app/services/message_apis/calendly/presenter.rb'
-    - 'app/services/message_apis/content_showcase/presenter.rb'
-    - 'app/services/message_apis/csat/api.rb'
-    - 'app/services/message_apis/csat/presenter.rb'
-    - 'app/services/message_apis/dialog360/presenter.rb'
-    - 'app/services/message_apis/inbox_sections/presenter.rb'
-    - 'app/services/message_apis/messenger/api.rb'
-    - 'app/services/message_apis/open_ai/presenter.rb'
-    - 'app/services/message_apis/slack/api.rb'
-    - 'app/services/message_apis/ui_catalog/presenter.rb'
-    - 'app/services/message_apis/zapier/api.rb'
-    - 'app/services/message_apis/zapier/presenter.rb'
-    - 'app/services/message_apis/zoom/presenter.rb'
-    - 'spec/controllers/api/v1/subscriptions/paddle_hooks_controller_spec.rb'
-
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: MinBranchesCount.
 Style/CaseLikeIf:
@@ -265,21 +228,18 @@ Style/IfUnlessModifier:
     - 'app/graphql/types/app_type.rb'
     - 'app/models/app.rb'
     - 'app/models/concerns/globalize_accessors.rb'
-    - 'app/services/message_apis/messenger/api.rb'
     - 'app/services/message_apis/twilio_phone/api.rb'
 
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: InverseMethods, InverseBlocks.
 Style/InverseMethods:
   Exclude:
-    - 'app/models/segment_comparator.rb'
     - 'app/services/plugin_schema_validator.rb'
 
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/MapIntoArray:
   Exclude:
     - 'app/models/segment.rb'
-    - 'app/services/message_apis/messenger/api.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
 Style/ModuleMemberExistenceCheck:
@@ -324,7 +284,6 @@ Style/SafeNavigationChainLength:
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/SingleArgumentDig:
   Exclude:
-    - 'app/jobs/sns_receiver_job.rb'
     - 'app/services/payment_services/paddle.rb'
 
 # This cop supports unsafe autocorrection (--autocorrect-all).
