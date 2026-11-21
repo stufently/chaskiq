@@ -2,7 +2,6 @@
 
 require "rails_helper"
 require "webmock"
-include ActiveJob::TestHelper
 
 RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
   let(:owner_phone) do

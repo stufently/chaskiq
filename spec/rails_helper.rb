@@ -45,6 +45,10 @@ require "database_cleaner/active_record"
 RSpec.configure do |config|
   # https://github.com/rspec/rspec-rails/issues/2410
   config.include ActiveSupport::Testing::Assertions
+  # ActiveJob test helpers (perform_enqueued_jobs, assert_enqueued_jobs, ...) for every example
+  # group. Thirteen spec files used to `include` them at the top level, that is into Object, which
+  # made them reach every spec of the run (Style/MixinUsage).
+  config.include ActiveJob::TestHelper
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [Rails.root.join("spec/fixtures")]
 

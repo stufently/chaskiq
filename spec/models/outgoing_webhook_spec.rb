@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-include ActiveJob::TestHelper
 
 RSpec.describe OutgoingWebhook, type: :model do
   let(:app) { FactoryBot.create :app }
