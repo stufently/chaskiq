@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10e
+
+- Changed: no spec line is over 140 characters any more (Layout/LineLength outliers of R8a in ten spec
+  files, decision K3 of the R10 programme): 22 long request payloads of the Dante renderer, Pipedrive,
+  Twitter and Amazon SES specs moved into 21 files under spec/fixtures/requests/<provider>/, read in
+  place of the literal; header values, a settings string, expected arrays and call arguments are
+  wrapped. Each fixture is byte for byte the old literal and every spec compiles to its old bytecode
+  with the fixture read in place of the literal (probe of the milestone); the suite runs the same
+  examples. Their 10 entries leave the Layout/LineLength block of the todo.
+
 ## 2026-11-22 — fork-updates-r10c
 
 - Changed: every line over 140 characters in the nine files fork-updates-r9b touched (Layout/LineLength

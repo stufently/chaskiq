@@ -279,12 +279,14 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
                                     ])
 
       expect(requests.pluck("type")).to eq(%w[audio image video document])
-      expect(requests.map { |request| request.fetch(request.fetch("type")) }).to eq([
-                                                                                      { "link" => "https://chat.example.com/uploads/voice.ogg" },
-                                                                                      { "link" => "https://chat.example.com/uploads/first%20image.png", "caption" => "Here are the files" },
-                                                                                      { "link" => "https://cdn.example.com/video.mp4" },
-                                                                                      { "link" => "https://chat.example.com/uploads/file.pdf" }
-                                                                                    ])
+      expect(requests.map { |request| request.fetch(request.fetch("type")) }).to eq(
+        [
+          { "link" => "https://chat.example.com/uploads/voice.ogg" },
+          { "link" => "https://chat.example.com/uploads/first%20image.png", "caption" => "Here are the files" },
+          { "link" => "https://cdn.example.com/video.mp4" },
+          { "link" => "https://chat.example.com/uploads/file.pdf" }
+        ]
+      )
       expect(requests.pluck("to").uniq).to eq([user_phone])
       expect(JSON.parse(result.body)).to eq("messages" => [{ "id" => "wamid.1" }])
     end
@@ -292,10 +294,12 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
     it "sends audio without a caption and posts the text separately" do
       deliver_dialog_media("Listen to this", [["AudioRecorderBlock", "/uploads/voice.ogg"]])
 
-      expect(requests.map { |request| request.slice("type", "audio", "text") }).to eq([
-                                                                                        { "type" => "audio", "audio" => { "link" => "https://chat.example.com/uploads/voice.ogg" } },
-                                                                                        { "type" => "text", "text" => { "body" => "Listen to this" } }
-                                                                                      ])
+      expect(requests.map { |request| request.slice("type", "audio", "text") }).to eq(
+        [
+          { "type" => "audio", "audio" => { "link" => "https://chat.example.com/uploads/voice.ogg" } },
+          { "type" => "text", "text" => { "body" => "Listen to this" } }
+        ]
+      )
     end
 
     context "when notifying a saved message" do
@@ -320,7 +324,9 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
       it "records a partial failure for rejected media" do
         error = { errors: [{ code: 1008, title: "Required parameter is missing" }] }
-        stub_request(:post, endpoint).to_return(success_response("wamid.1"), { status: 400, body: error.to_json }, success_response("wamid.3"))
+        stub_request(:post, endpoint).to_return(
+          success_response("wamid.1"), { status: 400, body: error.to_json }, success_response("wamid.3")
+        )
 
         notify
 

@@ -6,22 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Max, AllowHeredoc, AllowURI, AllowQualifiedName, URISchemes, AllowRBSInlineAnnotation, AllowCopDirectives, AllowedPatterns, SplitStrings.
-# URISchemes: http, https
-Layout/LineLength:
-  Exclude:
-    - 'spec/controllers/api/v1/hooks/dialog_360_spec.rb'
-    - 'spec/controllers/api/v1/hooks/message_bird_spec.rb'
-    - 'spec/controllers/api/v1/hooks/pipedrive_spec.rb'
-    - 'spec/controllers/api/v1/hooks/twilio_spec.rb'
-    - 'spec/controllers/api/v1/hooks/twitter_spec.rb'
-    - 'spec/controllers/api/v1/hooks/vonage_spec.rb'
-    - 'spec/controllers/api/v1/hooks_controller_spec.rb'
-    - 'spec/models/app_package_spec.rb'
-    - 'spec/models/campaign_spec.rb'
-    - 'spec/services/dante_renderer_spec.rb'
-
 
 # Configuration parameters: AllowedMethods, AllowedPatterns, CountRepeatedAttributes, Max.
 Metrics/AbcSize:

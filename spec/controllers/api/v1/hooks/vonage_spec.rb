@@ -379,10 +379,12 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
 
       response = deliver(serialized_content: { type: "doc", content: blocks }.to_json)
 
-      expect(contents).to eq([
-                               { "type" => "image", "image" => { "url" => "https://cdn.example.com/image.png", "caption" => "See both files" } },
-                               { "type" => "file", "file" => { "url" => "https://cdn.example.com/guide.pdf" } }
-                             ])
+      expect(contents).to eq(
+        [
+          { "type" => "image", "image" => { "url" => "https://cdn.example.com/image.png", "caption" => "See both files" } },
+          { "type" => "file", "file" => { "url" => "https://cdn.example.com/guide.pdf" } }
+        ]
+      )
       expect(api.get_message_id(JSON.parse(response.body))).to eq("uuid-1")
     end
 

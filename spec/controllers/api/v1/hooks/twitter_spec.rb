@@ -413,7 +413,7 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
       ))
       perform_enqueued_jobs
 
-      event = '{"event":{"type":"message_create","id":"1226014113735880708","created_timestamp":"1581139517612","message_create":{"target":{"recipient_id":"1140620289006551040"},"sender_id":"7472512","message_data":{"text":"oopkpko","entities":{"hashtags":[],"symbols":[],"user_mentions":[],"urls":[]}}}}}'
+      event = Rails.root.join("spec/fixtures/requests/twitter/message_create_event.json").read
 
       allow_any_instance_of(MessageApis::Twitter::Api).to receive(:make_post_request)
         .and_return(event)
