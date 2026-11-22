@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10l
+
+- Changed: the WhatsApp adapters (Twilio, Vonage, MessageBird, Dialog360) build their outgoing
+  requests in smaller methods without a change in behaviour (Metrics outliers of R8a, milestone
+  R10l of the R10 programme): each `send_message` hands the delivery to a `deliver_blocks` helper,
+  Vonage and MessageBird parse the message content in `outgoing_blocks`/`parse_blocks`, and
+  Dialog360 `send_template_message` finds the conversation, the profile, the payload and the sent
+  message record in their own methods. A golden fixture (spec/fixtures/whatsapp/provider_payloads.json,
+  110 cases generated on the old code with WebMock) pins the returned values, every request (URI,
+  headers, raw body) and the conversation rows afterwards, and a new spec checks it. Their seven
+  todo lines are gone.
 ## 2026-11-22 — fork-updates-r10k
 
 - Changed: `MessageApis::Slack::Api` builds its Block Kit payloads in smaller methods without a
