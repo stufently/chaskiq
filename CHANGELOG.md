@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10h1
+
+- Changed: `MessageApis::ContentShowcase::Presenter.configure_hook` is split without a change in
+  behaviour (Metrics outliers of R8a, milestone R10h of the R10 programme): the chain of twelve
+  field-id branches is a table of actions with one method per branch, and the response skeletons
+  `{kind:, definitions:}` / `{kind: "initialize", definitions:, results:}` are two helpers. A golden
+  fixture (spec/fixtures/presenters/content_showcase_hooks.json, 30 cases generated on the old code)
+  pins the full output of every branch, and a new spec checks it. Its four todo lines are gone.
+
 ## 2026-11-22 — fork-updates-r10g
 
 - Changed: `MessageApis::UiCatalog::Presenter.configure_hook` (the messenger UI catalog demo) picks its
