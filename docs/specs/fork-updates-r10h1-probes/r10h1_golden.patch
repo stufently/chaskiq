@@ -1,0 +1,2994 @@
+diff --git a/spec/fixtures/presenters/content_showcase_hooks.json b/spec/fixtures/presenters/content_showcase_hooks.json
+new file mode 100644
+index 00000000..f25c3cf4
+--- /dev/null
++++ b/spec/fixtures/presenters/content_showcase_hooks.json
+@@ -0,0 +1,2988 @@
++[
++  {
++    "name": "initialize single article",
++    "hook": "initialize",
++    "kind": "initialize",
++    "ctx": {
++      "values": {
++        "heading": "News",
++        "title": "T",
++        "description": "D",
++        "page_url": "https://blog.example.com/one",
++        "cover_image": "https://img.example.com/c.png",
++        "extra": "x"
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":wait_for_input": false,
++      ":definitions": [
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "News"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "image",
++          ":url": "https://img.example.com/c.png",
++          ":height": 200,
++          ":width": "100%",
++          ":align": "center"
++        },
++        {
++          ":type": "list",
++          ":disabled": false,
++          ":items": [
++            {
++              ":type": "item",
++              ":id": "list-item-1",
++              ":title": "T",
++              ":subtitle": "D",
++              ":action": {
++                ":type": "url",
++                ":url": "https://blog.example.com/one"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  },
++  {
++    "name": "initialize article list",
++    "hook": "initialize",
++    "kind": "initialize",
++    "ctx": {
++      "values": {
++        "heading": "Top",
++        "article": [
++          {
++            "title": "A",
++            "page_url": "https://blog.example.com/one",
++            "description": "a",
++            "cover_image": "https://img.example.com/a.png"
++          },
++          {
++            "title": "B",
++            "page_url": "https://blog.example.com/two"
++          }
++        ]
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":wait_for_input": false,
++      ":definitions": [
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Top"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "list",
++          ":disabled": false,
++          ":items": [
++            {
++              ":type": "item",
++              ":id": "list-item-1",
++              ":title": "A",
++              ":subtitle": "a",
++              ":image": "https://img.example.com/a.png",
++              ":action": {
++                ":type": "url",
++                ":url": "https://blog.example.com/one"
++              }
++            },
++            {
++              ":type": "item",
++              ":id": "list-item-1",
++              ":title": "B",
++              ":subtitle": null,
++              ":image": null,
++              ":action": {
++                ":type": "url",
++                ":url": "https://blog.example.com/two"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  },
++  {
++    "name": "initialize without values",
++    "hook": "initialize",
++    "kind": "initialize",
++    "ctx": {},
++    "link_cards": {},
++    "outcome": {
++      "@raise": "NoMethodError"
++    }
++  },
++  {
++    "name": "configure without field",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {},
++    "link_cards": {},
++    "outcome": {
++      ":kind": "configure",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Pick a template",
++          ":style": "header"
++        },
++        {
++          ":type": "list",
++          ":disabled": false,
++          ":items": [
++            {
++              ":type": "item",
++              ":id": "announcement",
++              ":title": "Announcement",
++              ":subtitle": "Broadcast a new message",
++              ":action": {
++                ":type": "submit"
++              }
++            },
++            {
++              ":type": "item",
++              ":id": "top-articles",
++              ":title": "Top Articles",
++              ":subtitle": "Suggest helpful articles",
++              ":action": {
++                ":type": "submit"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure click action is not a submit",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "id": "announcement",
++        "action": {
++          "type": "click"
++        }
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "configure",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Pick a template",
++          ":style": "header"
++        },
++        {
++          ":type": "list",
++          ":disabled": false,
++          ":items": [
++            {
++              ":type": "item",
++              ":id": "announcement",
++              ":title": "Announcement",
++              ":subtitle": "Broadcast a new message",
++              ":action": {
++                ":type": "submit"
++              }
++            },
++            {
++              ":type": "item",
++              ":id": "top-articles",
++              ":title": "Top Articles",
++              ":subtitle": "Suggest helpful articles",
++              ":action": {
++                ":type": "submit"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit pick-another",
++    "hook": "configure",
++    "kind": "kind-a",
++    "ctx": {
++      "field": {
++        "id": "pick-another",
++        "action": {
++          "type": "submit"
++        }
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "kind-a",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Pick a template",
++          ":style": "header"
++        },
++        {
++          ":type": "list",
++          ":disabled": false,
++          ":items": [
++            {
++              ":type": "item",
++              ":id": "announcement",
++              ":title": "Announcement",
++              ":subtitle": "Broadcast a new message",
++              ":action": {
++                ":type": "submit"
++              }
++            },
++            {
++              ":type": "item",
++              ":id": "top-articles",
++              ":title": "Top Articles",
++              ":subtitle": "Suggest helpful articles",
++              ":action": {
++                ":type": "submit"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit announcement",
++    "hook": "configure",
++    "kind": "kind-b",
++    "ctx": {
++      "field": {
++        "id": "announcement",
++        "action": {
++          "type": "submit"
++        }
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "kind-b",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Announcement",
++          ":style": "header",
++          ":align": "center"
++        },
++        {
++          ":type": "text",
++          ":text": "Broadcast a message",
++          ":style": "muted",
++          ":align": "center"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":id": "customize-announcement",
++          ":label": "Customize",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "button",
++          ":id": "pick-another",
++          ":variant": "outlined",
++          ":size": "small",
++          ":label": "Pick another template",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit top-articles",
++    "hook": "configure",
++    "kind": "kind-c",
++    "ctx": {
++      "field": {
++        "id": "top-articles",
++        "action": {
++          "type": "submit"
++        }
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "kind-c",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Top Articles",
++          ":style": "header",
++          ":align": "center"
++        },
++        {
++          ":type": "text",
++          ":text": "Suggest helpful articles",
++          ":style": "muted",
++          ":align": "center"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":id": "customize-top-articles",
++          ":label": "Customize",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "button",
++          ":id": "pick-another",
++          ":variant": "outlined",
++          ":size": "small",
++          ":label": "Pick another template",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit autofill with a link card",
++    "hook": "configure",
++    "kind": "kind-d",
++    "ctx": {
++      "field": {
++        "id": "autofill",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Hello",
++        "page_url": "https://blog.example.com/one",
++        "title": "Typed",
++        "description": "Typed d"
++      }
++    },
++    "link_cards": {
++      "https://blog.example.com/one": {
++        "title": "Card one",
++        "description": "First card",
++        "images": [
++          "https://img.example.com/1.png",
++          "https://img.example.com/x.png"
++        ]
++      }
++    },
++    "outcome": {
++      ":kind": "kind-d",
++      ":definitions": [
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Hello"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "page_url",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/one",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":value": "Card one",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":value": "First card",
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":value": "https://img.example.com/1.png",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-to-messenger",
++          ":label": "Add to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit autofill without a link card",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "id": "autofill",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Hello",
++        "page_url": "https://blog.example.com/one",
++        "title": "Typed",
++        "description": "Typed d"
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "configure",
++      ":definitions": [
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Hello"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "page_url",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/one",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":value": "Typed",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":value": "Typed d",
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-to-messenger",
++          ":label": "Add to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit autofill with an invalid url",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "id": "autofill",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Hello",
++        "page_url": "not a url",
++        "title": "Typed"
++      }
++    },
++    "link_cards": {
++      "not a url": {
++        "title": "Card one",
++        "description": "First card",
++        "images": [
++          "https://img.example.com/1.png",
++          "https://img.example.com/x.png"
++        ]
++      }
++    },
++    "outcome": {
++      ":kind": "configure",
++      ":definitions": [
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Hello"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "page_url",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "not a url",
++          ":errors": "is invalid"
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":value": "Typed",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-to-messenger",
++          ":label": "Add to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit autofill card without images",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "id": "autofill",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Hi",
++        "page_url": "https://blog.example.com/two"
++      }
++    },
++    "link_cards": {
++      "https://blog.example.com/two": {
++        "title": "Card two",
++        "description": "Second card",
++        "images": []
++      }
++    },
++    "outcome": {
++      ":kind": "configure",
++      ":definitions": [
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Hi"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "page_url",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/two",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":value": "Card two",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":value": "Second card",
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-to-messenger",
++          ":label": "Add to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit add-to-messenger valid",
++    "hook": "configure",
++    "kind": "kind-e",
++    "ctx": {
++      "field": {
++        "id": "add-to-messenger",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Hello",
++        "page_url": "https://blog.example.com/one",
++        "title": "",
++        "description": "",
++        "other": "kept"
++      }
++    },
++    "link_cards": {
++      "https://blog.example.com/one": {
++        "title": "Card one",
++        "description": "First card",
++        "images": [
++          "https://img.example.com/1.png",
++          "https://img.example.com/x.png"
++        ]
++      }
++    },
++    "outcome": {
++      ":kind": "initialize",
++      ":definitions": [
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Hello"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "page_url",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/one",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":value": "Card one",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":value": "First card",
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":value": "https://img.example.com/1.png",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-to-messenger",
++          ":label": "Add to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ],
++      ":results": {
++        "@parameters": {
++          "heading": "Hello",
++          "page_url": "https://blog.example.com/one",
++          "title": "",
++          "description": "",
++          "other": "kept"
++        }
++      }
++    }
++  },
++  {
++    "name": "configure submit add-to-messenger without title",
++    "hook": "configure",
++    "kind": "kind-f",
++    "ctx": {
++      "field": {
++        "id": "add-to-messenger",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Hello",
++        "page_url": "https://blog.example.com/two",
++        "title": ""
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "kind-f",
++      ":definitions": [
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Hello"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "page_url",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/two",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":value": "",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-to-messenger",
++          ":label": "Add to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit add-to-messenger with a loose url",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "id": "add-to-messenger",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Hello",
++        "page_url": "ftp:/bad url",
++        "title": "Has title"
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "initialize",
++      ":definitions": [
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Hello"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "page_url",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "ftp:/bad url",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":value": "Has title",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-to-messenger",
++          ":label": "Add to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ],
++      ":results": {
++        "@parameters": {
++          "heading": "Hello",
++          "page_url": "ftp:/bad url",
++          "title": "Has title"
++        }
++      }
++    }
++  },
++  {
++    "name": "configure submit add-to-messenger with a bad url",
++    "hook": "configure",
++    "kind": "kind-n",
++    "ctx": {
++      "field": {
++        "id": "add-to-messenger",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Hello",
++        "page_url": "bad url",
++        "title": "Has title"
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "kind-n",
++      ":definitions": [
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Hello"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "page_url",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "bad url",
++          ":errors": "is invalid"
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":value": "Has title",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-to-messenger",
++          ":label": "Add to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit customize-announcement",
++    "hook": "configure",
++    "kind": "kind-g",
++    "ctx": {
++      "field": {
++        "id": "customize-announcement",
++        "action": {
++          "type": "submit"
++        }
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "kind-g",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Announcement",
++          ":style": "header",
++          ":align": "center"
++        },
++        {
++          ":type": "text",
++          ":text": "Broadcast a message",
++          ":style": "muted",
++          ":align": "center"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": null
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "input",
++          ":name": "page_url",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": null,
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-to-messenger",
++          ":label": "Add to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit customize-top-articles",
++    "hook": "configure",
++    "kind": "kind-h",
++    "ctx": {
++      "field": {
++        "id": "customize-top-articles",
++        "action": {
++          "type": "submit"
++        }
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "kind-h",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Top Articles",
++          ":style": "header",
++          ":align": "center"
++        },
++        {
++          ":type": "text",
++          ":text": "Suggest helpful articles",
++          ":style": "muted",
++          ":align": "center"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[0][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": null,
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-0",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[0][title]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[0][description]",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[0][cover_image]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-new-article",
++          ":variant": "outlined",
++          ":label": "Add new article",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-articles-to-messenger",
++          ":label": "Add articles to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit add-articles-to-messenger all valid",
++    "hook": "configure",
++    "kind": "kind-i",
++    "ctx": {
++      "field": {
++        "id": "add-articles-to-messenger",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Top",
++        "article": [
++          {
++            "title": "A",
++            "page_url": "https://blog.example.com/one"
++          },
++          {
++            "title": "B",
++            "page_url": "https://blog.example.com/two",
++            "cover_image": "https://img.example.com/b.png"
++          }
++        ]
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "initialize",
++      ":definitions": [],
++      ":results": {
++        "@parameters": {
++          "heading": "Top",
++          "article": [
++            {
++              "title": "A",
++              "page_url": "https://blog.example.com/one"
++            },
++            {
++              "title": "B",
++              "page_url": "https://blog.example.com/two",
++              "cover_image": "https://img.example.com/b.png"
++            }
++          ]
++        }
++      }
++    }
++  },
++  {
++    "name": "configure submit add-articles-to-messenger one invalid",
++    "hook": "configure",
++    "kind": "kind-j",
++    "ctx": {
++      "field": {
++        "id": "add-articles-to-messenger",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Top",
++        "article": [
++          {
++            "title": "A",
++            "page_url": "https://blog.example.com/one"
++          },
++          {
++            "title": "",
++            "page_url": "bad url",
++            "description": "d2"
++          }
++        ]
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "kind-j",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Top Articles",
++          ":style": "header",
++          ":align": "center"
++        },
++        {
++          ":type": "text",
++          ":text": "Suggest helpful articles",
++          ":style": "muted",
++          ":align": "center"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Top"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[0][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/one",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-0",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[0][title]",
++          ":value": "A",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[0][description]",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[0][cover_image]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[1][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "bad url",
++          ":errors": "is invalid"
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-1",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[1][title]",
++          ":value": "",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[1][description]",
++          ":value": "d2",
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[1][cover_image]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-new-article",
++          ":variant": "outlined",
++          ":label": "Add new article",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-articles-to-messenger",
++          ":label": "Add articles to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit add-articles-to-messenger first invalid",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "id": "add-articles-to-messenger",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Top",
++        "article": [
++          {
++            "title": "",
++            "page_url": "https://blog.example.com/one"
++          },
++          {
++            "title": "B",
++            "page_url": "https://blog.example.com/two"
++          }
++        ]
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "configure",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Top Articles",
++          ":style": "header",
++          ":align": "center"
++        },
++        {
++          ":type": "text",
++          ":text": "Suggest helpful articles",
++          ":style": "muted",
++          ":align": "center"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Top"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[0][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/one",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-0",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[0][title]",
++          ":value": "",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[0][description]",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[0][cover_image]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[1][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/two",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-1",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[1][title]",
++          ":value": "B",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[1][description]",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[1][cover_image]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-new-article",
++          ":variant": "outlined",
++          ":label": "Add new article",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-articles-to-messenger",
++          ":label": "Add articles to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit add-articles-to-messenger empty list",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "id": "add-articles-to-messenger",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Top",
++        "article": []
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "initialize",
++      ":definitions": [],
++      ":results": {
++        "@parameters": {
++          "heading": "Top",
++          "article": []
++        }
++      }
++    }
++  },
++  {
++    "name": "configure submit add-articles-to-messenger without articles",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "id": "add-articles-to-messenger",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Top"
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      "@raise": "NoMethodError"
++    }
++  },
++  {
++    "name": "configure submit add-new-article",
++    "hook": "configure",
++    "kind": "kind-k",
++    "ctx": {
++      "field": {
++        "id": "add-new-article",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Top",
++        "article": [
++          {
++            "title": "A",
++            "page_url": "bad url",
++            "description": "a"
++          }
++        ]
++      }
++    },
++    "link_cards": {
++      "bad url": {
++        "title": "Card one",
++        "description": "First card",
++        "images": [
++          "https://img.example.com/1.png",
++          "https://img.example.com/x.png"
++        ]
++      }
++    },
++    "outcome": {
++      ":kind": "kind-k",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Top Articles",
++          ":style": "header",
++          ":align": "center"
++        },
++        {
++          ":type": "text",
++          ":text": "Suggest helpful articles",
++          ":style": "muted",
++          ":align": "center"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Top"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[0][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "bad url",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-0",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[0][title]",
++          ":value": "A",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[0][description]",
++          ":value": "a",
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[0][cover_image]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[1][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": null,
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-1",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[1][title]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[1][description]",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[1][cover_image]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-new-article",
++          ":variant": "outlined",
++          ":label": "Add new article",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-articles-to-messenger",
++          ":label": "Add articles to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit add-new-article to an empty list",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "id": "add-new-article",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Empty",
++        "article": []
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "configure",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Top Articles",
++          ":style": "header",
++          ":align": "center"
++        },
++        {
++          ":type": "text",
++          ":text": "Suggest helpful articles",
++          ":style": "muted",
++          ":align": "center"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Empty"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[0][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": null,
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-0",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[0][title]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[0][description]",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[0][cover_image]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-new-article",
++          ":variant": "outlined",
++          ":label": "Add new article",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-articles-to-messenger",
++          ":label": "Add articles to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit autofill-1",
++    "hook": "configure",
++    "kind": "kind-l",
++    "ctx": {
++      "field": {
++        "id": "autofill-1",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Top",
++        "article": [
++          {
++            "title": "A",
++            "page_url": "https://blog.example.com/one",
++            "description": "a"
++          },
++          {
++            "title": "B",
++            "page_url": "https://blog.example.com/two"
++          }
++        ]
++      }
++    },
++    "link_cards": {
++      "https://blog.example.com/one": {
++        "title": "Card one",
++        "description": "First card",
++        "images": [
++          "https://img.example.com/1.png",
++          "https://img.example.com/x.png"
++        ]
++      },
++      "https://blog.example.com/two": {
++        "title": "Card two",
++        "description": "Second card",
++        "images": []
++      }
++    },
++    "outcome": {
++      ":kind": "kind-l",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Top Articles",
++          ":style": "header",
++          ":align": "center"
++        },
++        {
++          ":type": "text",
++          ":text": "Suggest helpful articles",
++          ":style": "muted",
++          ":align": "center"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Top"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[0][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/one",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-0",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[0][title]",
++          ":value": "A",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[0][description]",
++          ":value": "a",
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[0][cover_image]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[1][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/two",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-1",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[1][title]",
++          ":value": "Card two",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[1][description]",
++          ":value": "Second card",
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[1][cover_image]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-new-article",
++          ":variant": "outlined",
++          ":label": "Add new article",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-articles-to-messenger",
++          ":label": "Add articles to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit autofill-0 with a link card",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "id": "autofill-0",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Top",
++        "article": [
++          {
++            "title": "A",
++            "page_url": "https://blog.example.com/one"
++          },
++          {
++            "title": "",
++            "page_url": "bad url"
++          }
++        ]
++      }
++    },
++    "link_cards": {
++      "https://blog.example.com/one": {
++        "title": "Card one",
++        "description": "First card",
++        "images": [
++          "https://img.example.com/1.png",
++          "https://img.example.com/x.png"
++        ]
++      }
++    },
++    "outcome": {
++      ":kind": "configure",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Top Articles",
++          ":style": "header",
++          ":align": "center"
++        },
++        {
++          ":type": "text",
++          ":text": "Suggest helpful articles",
++          ":style": "muted",
++          ":align": "center"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Top"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[0][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/one",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-0",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[0][title]",
++          ":value": "Card one",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[0][description]",
++          ":value": "First card",
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[0][cover_image]",
++          ":value": "https://img.example.com/1.png",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[1][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "bad url",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-1",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[1][title]",
++          ":value": "",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[1][description]",
++          ":value": null,
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[1][cover_image]",
++          ":value": null,
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-new-article",
++          ":variant": "outlined",
++          ":label": "Add new article",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-articles-to-messenger",
++          ":label": "Add articles to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit id containing autofill-",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "id": "row-autofill-0",
++        "action": {
++          "type": "submit"
++        }
++      },
++      "values": {
++        "heading": "Row",
++        "article": [
++          {
++            "title": "A",
++            "page_url": "https://blog.example.com/two"
++          }
++        ]
++      }
++    },
++    "link_cards": {
++      "https://blog.example.com/two": {
++        "title": "Card one",
++        "description": "First card",
++        "images": [
++          "https://img.example.com/1.png",
++          "https://img.example.com/x.png"
++        ]
++      }
++    },
++    "outcome": {
++      ":kind": "configure",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Top Articles",
++          ":style": "header",
++          ":align": "center"
++        },
++        {
++          ":type": "text",
++          ":text": "Suggest helpful articles",
++          ":style": "muted",
++          ":align": "center"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "input",
++          ":name": "heading",
++          ":label": "heading",
++          ":placeholder": "Introduce your announcement",
++          ":id": "heading",
++          ":value": "Row"
++        },
++        {
++          ":type": "spacer",
++          ":size": "sm"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "text",
++          ":style": "header",
++          ":text": "Article"
++        },
++        {
++          ":type": "input",
++          ":name": "article[0][page_url]",
++          ":label": "Page url",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "page_url",
++          ":value": "https://blog.example.com/two",
++          ":errors": null
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "button",
++          ":variant": "outlined",
++          ":id": "autofill-0",
++          ":size": "small",
++          ":label": "autofill inputs with page details",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "spacer",
++          ":size": "s"
++        },
++        {
++          ":type": "input",
++          ":label": "Title (required)",
++          ":name": "article[0][title]",
++          ":value": "Card one",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "title"
++        },
++        {
++          ":type": "input",
++          ":label": "Description",
++          ":name": "article[0][description]",
++          ":value": "First card",
++          ":placeholder": "Make a short description",
++          ":id": "description"
++        },
++        {
++          ":type": "input",
++          ":label": "Cover image url (required)",
++          ":name": "article[0][cover_image]",
++          ":value": "https://img.example.com/1.png",
++          ":placeholder": "e.g. https://blog.chaskiq.io",
++          ":id": "cover_image"
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-new-article",
++          ":variant": "outlined",
++          ":label": "Add new article",
++          ":action": {
++            ":type": "submit"
++          }
++        },
++        {
++          ":type": "separator"
++        },
++        {
++          ":type": "button",
++          ":size": "small",
++          ":id": "add-articles-to-messenger",
++          ":label": "Add articles to messenger home",
++          ":action": {
++            ":type": "submit"
++          }
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit unknown id",
++    "hook": "configure",
++    "kind": "kind-m",
++    "ctx": {
++      "field": {
++        "id": "something-else",
++        "action": {
++          "type": "submit"
++        }
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      ":kind": "kind-m",
++      ":definitions": [
++        {
++          ":type": "text",
++          ":text": "Pick a template",
++          ":style": "header"
++        },
++        {
++          ":type": "list",
++          ":disabled": false,
++          ":items": [
++            {
++              ":type": "item",
++              ":id": "announcement",
++              ":title": "Announcement",
++              ":subtitle": "Broadcast a new message",
++              ":action": {
++                ":type": "submit"
++              }
++            },
++            {
++              ":type": "item",
++              ":id": "top-articles",
++              ":title": "Top Articles",
++              ":subtitle": "Suggest helpful articles",
++              ":action": {
++                ":type": "submit"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  },
++  {
++    "name": "configure submit without id",
++    "hook": "configure",
++    "kind": "configure",
++    "ctx": {
++      "field": {
++        "action": {
++          "type": "submit"
++        }
++      }
++    },
++    "link_cards": {},
++    "outcome": {
++      "@raise": "NoMethodError"
++    }
++  }
++]

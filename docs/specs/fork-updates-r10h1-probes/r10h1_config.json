@@ -1,0 +1,298 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Metrics/AbcSize": [
+      "app/services/message_apis/content_showcase/presenter.rb"
+    ],
+    "Metrics/CyclomaticComplexity": [
+      "app/services/message_apis/content_showcase/presenter.rb"
+    ],
+    "Metrics/MethodLength": [
+      "app/services/message_apis/content_showcase/presenter.rb"
+    ],
+    "Metrics/PerceivedComplexity": [
+      "app/services/message_apis/content_showcase/presenter.rb"
+    ]
+  },
+  "app_files": [
+    "app/services/message_apis/content_showcase/presenter.rb"
+  ],
+  "new_files": [
+    "spec/fixtures/presenters/content_showcase_hooks.json"
+  ],
+  "char_specs": [
+    "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+  ],
+  "golden": {
+    "fixture": "spec/fixtures/presenters/content_showcase_hooks.json",
+    "spec": "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb",
+    "generator": "r10h1_golden_spec.rb",
+    "cases": "r10h1_cases.json"
+  },
+  "commits": [
+    {
+      "subject": "Pin content showcase hooks",
+      "patch": "r10h1_golden.patch",
+      "added": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "subject": "Split content showcase configure hook",
+      "patch": "r10h1_rewrite.patch"
+    },
+    {
+      "subject": "Drop R10h1 entries from RuboCop todo",
+      "todo": true
+    },
+    {
+      "subject": "Note fork-updates-r10h1 in changelog",
+      "changelog": true
+    }
+  ],
+  "mutants": [
+    {
+      "id": "H01",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "\"Broadcast a message\"",
+      "new": "\"Broadcast a new message\"",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H02",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "TOP_ARTICLES_TITLE = { title: \"Top Articles\"",
+      "new": "TOP_ARTICLES_TITLE = { title: \"Top articles\"",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H03",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "\"top-articles\" => :configure_top_articles",
+      "new": "\"top_articles\" => :configure_top_articles",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H04",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "\"autofill\" => :configure_autofill,",
+      "new": "\"auto-fill\" => :configure_autofill,",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H05",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "if ctx.dig(:field, :action, :type) == \"submit\"",
+      "new": "if ctx.dig(:field, :action, :type) != \"submit\"",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H06",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "        configure_response(kind, record.base_schema)\n      end\n\n      def self.configure_action",
+      "new": "        configure_response(kind, [])\n      end\n\n      def self.configure_action",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H07",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "def self.configure_pick_another(kind, _ctx, record)\n        configure_response(kind, record.base_schema)",
+      "new": "def self.configure_pick_another(kind, _ctx, record)\n        configure_response(kind, record.schema)",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H08",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "{ kind: kind, definitions: definitions }",
+      "new": "{ kind: \"configure\", definitions: definitions }",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H09",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "kind: \"initialize\", definitions: definitions, results: results",
+      "new": "kind: \"initialized\", definitions: definitions, results: results",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H10",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "definitions: definitions, results: results }",
+      "new": "definitions: definitions, results: results.to_unsafe_h }",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H11",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "customize_buttons(type: \"announcement\")",
+      "new": "customize_buttons(type: \"top-articles\")",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H12",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "return configure_response(kind, record.schema) unless record.valid?",
+      "new": "return configure_response(kind, record.schema) if record.valid?",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H13",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "initialize_response(record.schema, ctx[:values])",
+      "new": "initialize_response(record.schema, ctx[:field])",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H14",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "heading: ctx.dig(:values, :heading),",
+      "new": "heading: ctx.dig(:values, :title),",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H15",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": ").tap(&:autofill)",
+      "new": ")",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H16",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "record.base_title(**ANNOUNCEMENT_TITLE) + record.schema)",
+      "new": "record.base_title(**TOP_ARTICLES_TITLE) + record.schema)",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H17",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "record.top_articles_schema)\n",
+      "new": "record.top_articles_schema(record.article_fields(1)))\n",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H18",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "return initialize_response([], ctx[:values]) if articles_valid?(articles)",
+      "new": "return initialize_response([], ctx[:values]) unless articles_valid?(articles)",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H19",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "end.all?",
+      "new": "end.any?",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H20",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "o.permit(:description, :heading, :page_url, :title, :cover_image)",
+      "new": "o.permit(:description, :heading, :page_url, :cover_image)",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H21",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "append: false, validate: true)",
+      "new": "append: false, validate: false)",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H22",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "append: true, validate: false)",
+      "new": "append: false, validate: false)",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H23",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "record.heading = ctx.dig(:values, \"heading\")\n        top_articles_response(kind, record, ctx.dig(:values, \"article\"), append: true",
+      "new": "top_articles_response(kind, record, ctx.dig(:values, \"article\"), append: true",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H24",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "ctx.dig(:field, :id).split(\"-\").last.to_i",
+      "new": "ctx.dig(:field, :id).split(\"-\").first.to_i",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H25",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "autofill_index: index)",
+      "new": "autofill_index: index + 1)",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H26",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "if id.include?(\"autofill-\")",
+      "new": "if id.start_with?(\"autofill-\")",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "H27",
+      "file": "app/services/message_apis/content_showcase/presenter.rb",
+      "old": "record.top_articles_schema(fields)).flatten)",
+      "new": "record.top_articles_schema(fields)))",
+      "specs": [
+        "spec/services/message_apis/content_showcase/presenter_hooks_spec.rb"
+      ]
+    }
+  ]
+}

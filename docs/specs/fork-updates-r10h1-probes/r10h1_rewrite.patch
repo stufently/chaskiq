@@ -1,0 +1,312 @@
+diff --git a/app/services/message_apis/content_showcase/presenter.rb b/app/services/message_apis/content_showcase/presenter.rb
+index f2e8775d..22044d48 100644
+--- a/app/services/message_apis/content_showcase/presenter.rb
++++ b/app/services/message_apis/content_showcase/presenter.rb
+@@ -81,212 +81,130 @@ module MessageApis
+         }
+       end
+ 
++      ANNOUNCEMENT_TITLE = { title: "Announcement", subtitle: "Broadcast a message" }.freeze
++      TOP_ARTICLES_TITLE = { title: "Top Articles", subtitle: "Suggest helpful articles" }.freeze
++      # Submit actions of configure_hook by field id; an id that only contains "autofill-" fills one
++      # article of the list (configure_autofill_article).
++      CONFIGURE_ACTIONS = {
++        "pick-another" => :configure_pick_another,
++        "announcement" => :configure_announcement,
++        "top-articles" => :configure_top_articles,
++        "autofill" => :configure_autofill,
++        "add-to-messenger" => :configure_add_to_messenger,
++        "customize-announcement" => :configure_customize_announcement,
++        "customize-top-articles" => :configure_customize_top_articles,
++        "add-articles-to-messenger" => :configure_add_articles_to_messenger,
++        "add-new-article" => :configure_add_new_article
++      }.freeze
++
+       # Configure flow webhook URL (optional)
+       # Sent when a teammate wants to use your app, so that you can show
+       # them configuration options before it’s inserted. Leaving this option
+       # blank will skip configuration.
+       def self.configure_hook(kind:, ctx:)
+         record = AnnouncementRecord.new
+-        base_definitions = record.base_schema
+-
+-        definitions = base_definitions
+-
+         if ctx.dig(:field, :action, :type) == "submit"
+-          if ctx.dig(:field, :id) == "pick-another"
+-            return {
+-              kind: kind,
+-              definitions: base_definitions
+-            }
+-          end
+-
+-          if ctx.dig(:field, :id) == "announcement"
+-            definitions = record.base_title(
+-              title: "Announcement",
+-              subtitle: "Broadcast a message"
+-            ) + record.customize_buttons(type: "announcement")
+-
+-            return {
+-              kind: kind,
+-              definitions: definitions
+-            }
+-          end
+-
+-          if ctx.dig(:field, :id) == "top-articles"
+-            definitions = record.base_title(
+-              title: "Top Articles",
+-              subtitle: "Suggest helpful articles"
+-            ) + record.customize_buttons(type: "top-articles")
+-
+-            return {
+-              kind: kind,
+-              definitions: definitions
+-            }
+-          end
+-
+-          if ctx.dig(:field, :id) == "autofill"
+-            aa = AnnouncementRecord.new(
+-              description: ctx.dig(:values, :description),
+-              heading: ctx.dig(:values, :heading),
+-              page_url: ctx.dig(:values, :page_url),
+-              title: ctx.dig(:values, :title)
+-            )
+-            aa.autofill
+-            aa.schema
+-
+-            return {
+-              kind: kind,
+-              definitions: aa.schema
+-            }
+-          end
++          response = configure_action(kind, ctx, record)
++          return response if response
++        end
+ 
+-          if ctx.dig(:field, :id) == "add-to-messenger"
+-            aa = AnnouncementRecord.new(
+-              description: ctx.dig(:values, :description),
+-              heading: ctx.dig(:values, :heading),
+-              page_url: ctx.dig(:values, :page_url),
+-              title: ctx.dig(:values, :title)
+-            )
+-            aa.autofill
+-            aa.schema
++        configure_response(kind, record.base_schema)
++      end
+ 
+-            unless aa.valid?
+-              return {
+-                kind: kind,
+-                definitions: aa.schema
+-              }
+-            end
++      def self.configure_action(kind, ctx, record)
++        id = ctx.dig(:field, :id)
++        action = CONFIGURE_ACTIONS[id]
++        return send(action, kind, ctx, record) if action
+ 
+-            return {
+-              kind: "initialize",
+-              definitions: aa.schema,
+-              results: ctx[:values]
+-            }
+-          end
+-
+-          # CUSTOMIZE ACTIONS
++        configure_autofill_article(kind, ctx, record) if id.include?("autofill-")
++      end
+ 
+-          if ctx.dig(:field, :id) == "customize-announcement"
++      def self.configure_response(kind, definitions)
++        { kind: kind, definitions: definitions }
++      end
+ 
+-            definitions = record.base_title(
+-              title: "Announcement",
+-              subtitle: "Broadcast a message"
+-            ) + record.schema
++      def self.initialize_response(definitions, results)
++        { kind: "initialize", definitions: definitions, results: results }
++      end
+ 
+-            return {
+-              kind: kind,
+-              definitions: definitions
+-            }
+-          end
++      def self.configure_pick_another(kind, _ctx, record)
++        configure_response(kind, record.base_schema)
++      end
+ 
+-          if ctx.dig(:field, :id) == "customize-top-articles"
+-            definitions = record.base_title(
+-              title: "Top Articles",
+-              subtitle: "Suggest helpful articles"
+-            ) + record.top_articles_schema
++      def self.configure_announcement(kind, _ctx, record)
++        configure_response(kind, record.base_title(**ANNOUNCEMENT_TITLE) + record.customize_buttons(type: "announcement"))
++      end
+ 
+-            return {
+-              kind: kind,
+-              definitions: definitions
+-            }
+-          end
++      def self.configure_top_articles(kind, _ctx, record)
++        configure_response(kind, record.base_title(**TOP_ARTICLES_TITLE) + record.customize_buttons(type: "top-articles"))
++      end
+ 
+-          if ctx.dig(:field, :id) == "add-articles-to-messenger"
+-            articles = ctx.dig(:values, "article")
+-
+-            record.heading = ctx.dig(:values, "heading")
+-
+-            validations = articles.map do |o|
+-              options = o.permit(
+-                :description,
+-                :heading,
+-                :page_url,
+-                :title,
+-                :cover_image
+-              )
+-              record.class.new(options).valid?
+-            end.uniq
+-
+-            if validations.any?(&:!)
+-
+-              definitions = record.base_title(
+-                title: "Top Articles",
+-                subtitle: "Suggest helpful articles"
+-              ) + record.top_articles_schema(
+-                record.class.generate_collection_definitions(
+-                  articles,
+-                  append: false,
+-                  validate: true
+-                )
+-              )
+-
+-              return {
+-                kind: kind,
+-                definitions: definitions.flatten
+-              }
++      def self.configure_autofill(kind, ctx, _record)
++        configure_response(kind, autofilled_record(ctx).schema)
++      end
+ 
+-            else
++      def self.configure_add_to_messenger(kind, ctx, _record)
++        record = autofilled_record(ctx)
++        return configure_response(kind, record.schema) unless record.valid?
+ 
+-              return {
+-                kind: "initialize",
+-                definitions: [],
+-                results: ctx[:values]
+-              }
++        initialize_response(record.schema, ctx[:values])
++      end
+ 
+-            end
+-          end
++      def self.autofilled_record(ctx)
++        AnnouncementRecord.new(
++          description: ctx.dig(:values, :description),
++          heading: ctx.dig(:values, :heading),
++          page_url: ctx.dig(:values, :page_url),
++          title: ctx.dig(:values, :title)
++        ).tap(&:autofill)
++      end
+ 
+-          if ctx.dig(:field, :id) == "add-new-article"
+-            record.heading = ctx.dig(:values, "heading")
+-
+-            articles = ctx.dig(:values, "article")
+-            definitions = record.base_title(
+-              title: "Top Articles",
+-              subtitle: "Suggest helpful articles"
+-            ) + record.top_articles_schema(
+-              record.class.generate_collection_definitions(
+-                articles, append: true, validate: false
+-              )
+-            )
+-            return {
+-              kind: kind,
+-              definitions: definitions.flatten
+-            }
+-          end
++      def self.configure_customize_announcement(kind, _ctx, record)
++        configure_response(kind, record.base_title(**ANNOUNCEMENT_TITLE) + record.schema)
++      end
+ 
+-          if ctx.dig(:field, :id).include? "autofill-"
++      def self.configure_customize_top_articles(kind, _ctx, record)
++        configure_response(kind, record.base_title(**TOP_ARTICLES_TITLE) + record.top_articles_schema)
++      end
+ 
+-            record.heading = ctx.dig(:values, "heading")
++      def self.configure_add_articles_to_messenger(kind, ctx, record)
++        articles = ctx.dig(:values, "article")
++        record.heading = ctx.dig(:values, "heading")
++        return initialize_response([], ctx[:values]) if articles_valid?(articles)
+ 
+-            autofill_index = ctx.dig(:field, :id).split("-").last.to_i
+-            articles = ctx.dig(:values, "article")
++        top_articles_response(kind, record, articles, append: false, validate: true)
++      end
+ 
+-            definitions = record.base_title(
+-              title: "Top Articles",
+-              subtitle: "Suggest helpful articles"
+-            ) + record.top_articles_schema(
+-              record.class.generate_collection_definitions(
+-                articles,
+-                append: false,
+-                validate: false,
+-                autofill_index: autofill_index
+-              )
+-            )
+-            return {
+-              kind: kind,
+-              definitions: definitions.flatten
+-            }
++      def self.articles_valid?(articles)
++        articles.map do |o|
++          AnnouncementRecord.new(o.permit(:description, :heading, :page_url, :title, :cover_image)).valid?
++        end.all?
++      end
+ 
+-          end
++      def self.configure_add_new_article(kind, ctx, record)
++        record.heading = ctx.dig(:values, "heading")
++        top_articles_response(kind, record, ctx.dig(:values, "article"), append: true, validate: false)
++      end
+ 
+-        end
++      def self.configure_autofill_article(kind, ctx, record)
++        record.heading = ctx.dig(:values, "heading")
++        index = ctx.dig(:field, :id).split("-").last.to_i
++        top_articles_response(kind, record, ctx.dig(:values, "article"), append: false, validate: false,
++                                                                         autofill_index: index)
++      end
+ 
+-        {
+-          kind: kind,
+-          # ctx: ctx,
+-          definitions: definitions
+-        }
++      def self.top_articles_response(kind, record, articles, **)
++        fields = AnnouncementRecord.generate_collection_definitions(articles, **)
++        configure_response(kind, (record.base_title(**TOP_ARTICLES_TITLE) + record.top_articles_schema(fields)).flatten)
+       end
+ 
++      private_class_method :configure_action, :configure_response, :initialize_response, :configure_pick_another,
++                           :configure_announcement, :configure_top_articles, :configure_autofill,
++                           :configure_add_to_messenger, :autofilled_record, :configure_customize_announcement,
++                           :configure_customize_top_articles, :configure_add_articles_to_messenger,
++                           :articles_valid?, :configure_add_new_article, :configure_autofill_article,
++                           :top_articles_response
++
+       # Submit Sheet flow webhook URL (optional)
+       # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
+       # and submitted when the Submit Sheets JS method is called.

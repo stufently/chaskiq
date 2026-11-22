@@ -1,0 +1,633 @@
+[
+  {
+    "name": "initialize single article",
+    "hook": "initialize",
+    "kind": "initialize",
+    "ctx": {
+      "values": {
+        "heading": "News",
+        "title": "T",
+        "description": "D",
+        "page_url": "https://blog.example.com/one",
+        "cover_image": "https://img.example.com/c.png",
+        "extra": "x"
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "initialize article list",
+    "hook": "initialize",
+    "kind": "initialize",
+    "ctx": {
+      "values": {
+        "heading": "Top",
+        "article": [
+          {
+            "title": "A",
+            "page_url": "https://blog.example.com/one",
+            "description": "a",
+            "cover_image": "https://img.example.com/a.png"
+          },
+          {
+            "title": "B",
+            "page_url": "https://blog.example.com/two"
+          }
+        ]
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "initialize without values",
+    "hook": "initialize",
+    "kind": "initialize",
+    "ctx": {},
+    "link_cards": {}
+  },
+  {
+    "name": "configure without field",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {},
+    "link_cards": {}
+  },
+  {
+    "name": "configure click action is not a submit",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "announcement",
+        "action": {
+          "type": "click"
+        }
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit pick-another",
+    "hook": "configure",
+    "kind": "kind-a",
+    "ctx": {
+      "field": {
+        "id": "pick-another",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit announcement",
+    "hook": "configure",
+    "kind": "kind-b",
+    "ctx": {
+      "field": {
+        "id": "announcement",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit top-articles",
+    "hook": "configure",
+    "kind": "kind-c",
+    "ctx": {
+      "field": {
+        "id": "top-articles",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit autofill with a link card",
+    "hook": "configure",
+    "kind": "kind-d",
+    "ctx": {
+      "field": {
+        "id": "autofill",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Hello",
+        "page_url": "https://blog.example.com/one",
+        "title": "Typed",
+        "description": "Typed d"
+      }
+    },
+    "link_cards": {
+      "https://blog.example.com/one": {
+        "title": "Card one",
+        "description": "First card",
+        "images": [
+          "https://img.example.com/1.png",
+          "https://img.example.com/x.png"
+        ]
+      }
+    }
+  },
+  {
+    "name": "configure submit autofill without a link card",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "autofill",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Hello",
+        "page_url": "https://blog.example.com/one",
+        "title": "Typed",
+        "description": "Typed d"
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit autofill with an invalid url",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "autofill",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Hello",
+        "page_url": "not a url",
+        "title": "Typed"
+      }
+    },
+    "link_cards": {
+      "not a url": {
+        "title": "Card one",
+        "description": "First card",
+        "images": [
+          "https://img.example.com/1.png",
+          "https://img.example.com/x.png"
+        ]
+      }
+    }
+  },
+  {
+    "name": "configure submit autofill card without images",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "autofill",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Hi",
+        "page_url": "https://blog.example.com/two"
+      }
+    },
+    "link_cards": {
+      "https://blog.example.com/two": {
+        "title": "Card two",
+        "description": "Second card",
+        "images": []
+      }
+    }
+  },
+  {
+    "name": "configure submit add-to-messenger valid",
+    "hook": "configure",
+    "kind": "kind-e",
+    "ctx": {
+      "field": {
+        "id": "add-to-messenger",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Hello",
+        "page_url": "https://blog.example.com/one",
+        "title": "",
+        "description": "",
+        "other": "kept"
+      }
+    },
+    "link_cards": {
+      "https://blog.example.com/one": {
+        "title": "Card one",
+        "description": "First card",
+        "images": [
+          "https://img.example.com/1.png",
+          "https://img.example.com/x.png"
+        ]
+      }
+    }
+  },
+  {
+    "name": "configure submit add-to-messenger without title",
+    "hook": "configure",
+    "kind": "kind-f",
+    "ctx": {
+      "field": {
+        "id": "add-to-messenger",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Hello",
+        "page_url": "https://blog.example.com/two",
+        "title": ""
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit add-to-messenger with a loose url",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "add-to-messenger",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Hello",
+        "page_url": "ftp:/bad url",
+        "title": "Has title"
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit add-to-messenger with a bad url",
+    "hook": "configure",
+    "kind": "kind-n",
+    "ctx": {
+      "field": {
+        "id": "add-to-messenger",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Hello",
+        "page_url": "bad url",
+        "title": "Has title"
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit customize-announcement",
+    "hook": "configure",
+    "kind": "kind-g",
+    "ctx": {
+      "field": {
+        "id": "customize-announcement",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit customize-top-articles",
+    "hook": "configure",
+    "kind": "kind-h",
+    "ctx": {
+      "field": {
+        "id": "customize-top-articles",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit add-articles-to-messenger all valid",
+    "hook": "configure",
+    "kind": "kind-i",
+    "ctx": {
+      "field": {
+        "id": "add-articles-to-messenger",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Top",
+        "article": [
+          {
+            "title": "A",
+            "page_url": "https://blog.example.com/one"
+          },
+          {
+            "title": "B",
+            "page_url": "https://blog.example.com/two",
+            "cover_image": "https://img.example.com/b.png"
+          }
+        ]
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit add-articles-to-messenger one invalid",
+    "hook": "configure",
+    "kind": "kind-j",
+    "ctx": {
+      "field": {
+        "id": "add-articles-to-messenger",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Top",
+        "article": [
+          {
+            "title": "A",
+            "page_url": "https://blog.example.com/one"
+          },
+          {
+            "title": "",
+            "page_url": "bad url",
+            "description": "d2"
+          }
+        ]
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit add-articles-to-messenger first invalid",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "add-articles-to-messenger",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Top",
+        "article": [
+          {
+            "title": "",
+            "page_url": "https://blog.example.com/one"
+          },
+          {
+            "title": "B",
+            "page_url": "https://blog.example.com/two"
+          }
+        ]
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit add-articles-to-messenger empty list",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "add-articles-to-messenger",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Top",
+        "article": []
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit add-articles-to-messenger without articles",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "add-articles-to-messenger",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Top"
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit add-new-article",
+    "hook": "configure",
+    "kind": "kind-k",
+    "ctx": {
+      "field": {
+        "id": "add-new-article",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Top",
+        "article": [
+          {
+            "title": "A",
+            "page_url": "bad url",
+            "description": "a"
+          }
+        ]
+      }
+    },
+    "link_cards": {
+      "bad url": {
+        "title": "Card one",
+        "description": "First card",
+        "images": [
+          "https://img.example.com/1.png",
+          "https://img.example.com/x.png"
+        ]
+      }
+    }
+  },
+  {
+    "name": "configure submit add-new-article to an empty list",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "add-new-article",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Empty",
+        "article": []
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit autofill-1",
+    "hook": "configure",
+    "kind": "kind-l",
+    "ctx": {
+      "field": {
+        "id": "autofill-1",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Top",
+        "article": [
+          {
+            "title": "A",
+            "page_url": "https://blog.example.com/one",
+            "description": "a"
+          },
+          {
+            "title": "B",
+            "page_url": "https://blog.example.com/two"
+          }
+        ]
+      }
+    },
+    "link_cards": {
+      "https://blog.example.com/one": {
+        "title": "Card one",
+        "description": "First card",
+        "images": [
+          "https://img.example.com/1.png",
+          "https://img.example.com/x.png"
+        ]
+      },
+      "https://blog.example.com/two": {
+        "title": "Card two",
+        "description": "Second card",
+        "images": []
+      }
+    }
+  },
+  {
+    "name": "configure submit autofill-0 with a link card",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "autofill-0",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Top",
+        "article": [
+          {
+            "title": "A",
+            "page_url": "https://blog.example.com/one"
+          },
+          {
+            "title": "",
+            "page_url": "bad url"
+          }
+        ]
+      }
+    },
+    "link_cards": {
+      "https://blog.example.com/one": {
+        "title": "Card one",
+        "description": "First card",
+        "images": [
+          "https://img.example.com/1.png",
+          "https://img.example.com/x.png"
+        ]
+      }
+    }
+  },
+  {
+    "name": "configure submit id containing autofill-",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "row-autofill-0",
+        "action": {
+          "type": "submit"
+        }
+      },
+      "values": {
+        "heading": "Row",
+        "article": [
+          {
+            "title": "A",
+            "page_url": "https://blog.example.com/two"
+          }
+        ]
+      }
+    },
+    "link_cards": {
+      "https://blog.example.com/two": {
+        "title": "Card one",
+        "description": "First card",
+        "images": [
+          "https://img.example.com/1.png",
+          "https://img.example.com/x.png"
+        ]
+      }
+    }
+  },
+  {
+    "name": "configure submit unknown id",
+    "hook": "configure",
+    "kind": "kind-m",
+    "ctx": {
+      "field": {
+        "id": "something-else",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "link_cards": {}
+  },
+  {
+    "name": "configure submit without id",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "link_cards": {}
+  }
+]
