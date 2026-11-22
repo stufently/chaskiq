@@ -1,0 +1,164 @@
+{
+  "case": "submit_list_item_4",
+  "kind": "configure",
+  "ctx_keys": "symbol",
+  "ctx": {
+    "field": {
+      "type": "item",
+      "id": "list-item-4",
+      "title": "Item 4",
+      "subtitle": "With Action",
+      "action": {
+        "type": "submit"
+      }
+    }
+  },
+  "result": {
+    "kind": "configure",
+    "definitions": [
+      {
+        "type": "single-select",
+        "id": "single-select-1",
+        "label": "Unsaved Options",
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Option 1",
+            "action": {
+              "type": "submit"
+            }
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      },
+      {
+        "type": "single-select",
+        "id": "single-select-2",
+        "label": "Pre-selected Option",
+        "value": "option-1",
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Option 1",
+            "action": {
+              "type": "submit"
+            }
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      },
+      {
+        "type": "single-select",
+        "id": "single-select-3",
+        "label": "Saved Options",
+        "save_state": "saved",
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Option 1"
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      },
+      {
+        "type": "single-select",
+        "id": "single-select-4",
+        "label": "Failed Options",
+        "save_state": "failed",
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Option 1"
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      },
+      {
+        "type": "single-select",
+        "id": "single-select-5",
+        "label": "Disabled Options",
+        "disabled": true,
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Option 1"
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      },
+      {
+        "type": "single-select",
+        "id": "single-select-6",
+        "label": "Disabled Option",
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Disabled",
+            "disabled": true
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      }
+    ]
+  }
+}

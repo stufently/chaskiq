@@ -1,0 +1,139 @@
+{
+  "case": "submit_list_item_1_named_bubu",
+  "kind": "configure",
+  "ctx_keys": "symbol",
+  "ctx": {
+    "field": {
+      "type": "item",
+      "id": "list-item-1",
+      "name": "bubu",
+      "action": {
+        "type": "submit"
+      }
+    }
+  },
+  "result": {
+    "kind": "configure",
+    "definitions": [
+      {
+        "type": "text",
+        "text": "This is a header",
+        "style": "header"
+      },
+      {
+        "type": "text",
+        "text": "This is paragraph text. Here's a [link](https://dev.chaskiq.io/). Here's some *bold text*. Lorem ipsum.",
+        "style": "paragraph"
+      },
+      {
+        "type": "text",
+        "text": "Left aligned",
+        "align": "left"
+      },
+      {
+        "type": "text",
+        "text": "Center aligned",
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "text": "Right aligned",
+        "align": "right"
+      },
+      {
+        "type": "data-table",
+        "items": [
+          {
+            "type": "field-value",
+            "field": "Key",
+            "value": "Value 1"
+          },
+          {
+            "type": "field-value",
+            "field": "Key",
+            "value": "Value 2"
+          },
+          {
+            "type": "field-value",
+            "field": "Key",
+            "value": "Value 3 which is a very long value that will exhibit different behaviours to the other values"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "url": "https://via.placeholder.com/150",
+        "height": 50,
+        "width": 130
+      },
+      {
+        "type": "image",
+        "url": "https://via.placeholder.com/150",
+        "height": 64,
+        "width": 64,
+        "align": "left",
+        "rounded": true
+      },
+      {
+        "type": "image",
+        "url": "https://via.placeholder.com/150",
+        "height": 64,
+        "width": 64,
+        "align": "center",
+        "rounded": true
+      },
+      {
+        "type": "image",
+        "url": "https://via.placeholder.com/150",
+        "height": 64,
+        "width": 64,
+        "align": "right",
+        "rounded": true
+      },
+      {
+        "type": "text",
+        "text": "Size as *xs* is below."
+      },
+      {
+        "type": "spacer",
+        "size": "xs"
+      },
+      {
+        "type": "text",
+        "text": "Size as *s* is below."
+      },
+      {
+        "type": "spacer",
+        "size": "s"
+      },
+      {
+        "type": "text",
+        "text": "Size as *m* is below."
+      },
+      {
+        "type": "spacer",
+        "size": "m"
+      },
+      {
+        "type": "text",
+        "text": "Size as *l* is below."
+      },
+      {
+        "type": "spacer",
+        "size": "l"
+      },
+      {
+        "type": "text",
+        "text": "Size as *xl* is below."
+      },
+      {
+        "type": "spacer",
+        "size": "xl"
+      },
+      {
+        "type": "text",
+        "text": "This is the last component."
+      }
+    ]
+  }
+}

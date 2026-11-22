@@ -1,0 +1,89 @@
+{
+  "case": "submit_list_item_8",
+  "kind": "configure",
+  "ctx_keys": "symbol",
+  "ctx": {
+    "field": {
+      "type": "item",
+      "id": "list-item-8",
+      "title": "Item 8",
+      "subtitle": "Inputs",
+      "tertiary_text": "With inputut pupx",
+      "action": {
+        "type": "submit"
+      }
+    }
+  },
+  "result": {
+    "kind": "configure",
+    "definitions": [
+      {
+        "type": "input",
+        "id": "unsaved-1",
+        "label": "Unsaved",
+        "placeholder": "Enter input here...",
+        "save_state": "unsaved"
+      },
+      {
+        "type": "input",
+        "id": "unsaved-2",
+        "label": "Unsaved (Action)",
+        "placeholder": "Enter input here...",
+        "save_state": "unsaved",
+        "action": {
+          "type": "submit"
+        }
+      },
+      {
+        "type": "input",
+        "id": "unsaved-3",
+        "label": "Unsaved (Disabled)",
+        "placeholder": "Enter input here...",
+        "save_state": "unsaved",
+        "disabled": true,
+        "action": {
+          "type": "submit"
+        }
+      },
+      {
+        "type": "input",
+        "id": "failed-1",
+        "label": "Failed",
+        "placeholder": "Enter input here...",
+        "value": "Value is given in JSON",
+        "save_state": "failed"
+      },
+      {
+        "type": "input",
+        "id": "failed-2",
+        "label": "Failed (Action)",
+        "placeholder": "Enter input here...",
+        "value": "Value is given in JSON",
+        "save_state": "failed",
+        "action": {
+          "type": "submit"
+        }
+      },
+      {
+        "type": "input",
+        "id": "failed-3",
+        "label": "Failed (Disabled)",
+        "placeholder": "Enter input here...",
+        "value": "Value is given in JSON",
+        "save_state": "failed",
+        "disabled": true,
+        "action": {
+          "type": "submit"
+        }
+      },
+      {
+        "type": "input",
+        "id": "saved-1",
+        "label": "Saved",
+        "placeholder": "Enter input here...",
+        "value": "Value is given in JSON",
+        "save_state": "saved"
+      }
+    ]
+  }
+}

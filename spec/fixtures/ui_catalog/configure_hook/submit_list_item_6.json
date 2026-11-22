@@ -1,0 +1,159 @@
+{
+  "case": "submit_list_item_6",
+  "kind": "configure",
+  "ctx_keys": "symbol",
+  "ctx": {
+    "field": {
+      "type": "item",
+      "id": "list-item-6",
+      "title": "Item 6",
+      "subtitle": "Show dropdowns",
+      "tertiary_text": "With Tertiary Text",
+      "action": {
+        "type": "submit"
+      }
+    }
+  },
+  "result": {
+    "kind": "configure",
+    "definitions": [
+      {
+        "type": "dropdown",
+        "id": "dropdown-1",
+        "label": "Unsaved Options",
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Option 1"
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      },
+      {
+        "type": "dropdown",
+        "id": "dropdown-2",
+        "label": "Pre-selected Option",
+        "value": "option-1",
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Option 1"
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      },
+      {
+        "type": "dropdown",
+        "id": "dropdown-3",
+        "label": "Saved Options",
+        "save_state": "saved",
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Option 1"
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      },
+      {
+        "type": "dropdown",
+        "id": "dropdown-4",
+        "label": "Failed Options",
+        "save_state": "failed",
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Option 1"
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      },
+      {
+        "type": "dropdown",
+        "id": "dropdown-5",
+        "label": "Disabled Options",
+        "disabled": true,
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Option 1"
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      },
+      {
+        "type": "dropdown",
+        "id": "dropdown-6",
+        "label": "Disabled Option",
+        "options": [
+          {
+            "type": "option",
+            "id": "option-1",
+            "text": "Disabled",
+            "disabled": true
+          },
+          {
+            "type": "option",
+            "id": "option-2",
+            "text": "Option 2"
+          },
+          {
+            "type": "option",
+            "id": "option-3",
+            "text": "Option 3"
+          }
+        ]
+      }
+    ]
+  }
+}
