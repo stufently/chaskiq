@@ -1,0 +1,2250 @@
+diff --git a/spec/fixtures/dialog360/configure_hook/list_conversation.json b/spec/fixtures/dialog360/configure_hook/list_conversation.json
+new file mode 100644
+index 00000000..fd98778d
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/list_conversation.json
+@@ -0,0 +1,73 @@
++{
++  "case": "list_conversation",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-1"
++  },
++  "api": {
++    "templates_json": "{\"meta\":{\"success\":true},\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "paragraph",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "xs"
++        },
++        {
++          "type": "separator"
++        },
++        {
++          "type": "list",
++          "disabled": false,
++          "items": [
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoib3JkZXJfdXBkYXRlIiwiY2F0ZWdvcnkiOiJBQ0NPVU5UX1VQ\nREFURSIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiQk9EWSIs\nInRleHQiOiJPcmRlciB7ezF9fSBzaGlwcGVkIn1dfQ==\n",
++              "name": "submit-template",
++              "title": "Template Name: order_update",
++              "subtitle": "Category: ACCOUNT_UPDATE",
++              "action": {
++                "type": "submit"
++              }
++            },
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoid2VsY29tZSBcdTAwMjYgY28iLCJjYXRlZ29yeSI6Ik1BUktF\nVElORyIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlcyIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiSEVBREVS\nIiwiZm9ybWF0IjoiVEVYVCIsInRleHQiOiJIb2xhIn0seyJ0eXBlIjoiQk9E\nWSIsInRleHQiOiJIaSB7ezF9fSwgY29kZSBcdTAwM2N7ezJ9fVx1MDAzZSJ9\nXX0=\n",
++              "name": "submit-template",
++              "title": "Template Name: welcome & co",
++              "subtitle": "Category: MARKETING",
++              "action": {
++                "type": "submit"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/list_selected_user_field.json b/spec/fixtures/dialog360/configure_hook/list_selected_user_field.json
+new file mode 100644
+index 00000000..031501dc
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/list_selected_user_field.json
+@@ -0,0 +1,85 @@
++{
++  "case": "list_selected_user_field",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "field": {
++      "name": "selected-user",
++      "id": 7,
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "paragraph",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "xs"
++        },
++        {
++          "type": "separator"
++        },
++        {
++          "type": "list",
++          "disabled": false,
++          "items": [
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoib3JkZXJfdXBkYXRlIiwiY2F0ZWdvcnkiOiJBQ0NPVU5UX1VQ\nREFURSIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiQk9EWSIs\nInRleHQiOiJPcmRlciB7ezF9fSBzaGlwcGVkIn1dfQ==\n",
++              "name": "submit-template",
++              "title": "Template Name: order_update",
++              "subtitle": "Category: ACCOUNT_UPDATE",
++              "action": {
++                "type": "submit"
++              }
++            },
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoid2VsY29tZSBcdTAwMjYgY28iLCJjYXRlZ29yeSI6Ik1BUktF\nVElORyIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlcyIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiSEVBREVS\nIiwiZm9ybWF0IjoiVEVYVCIsInRleHQiOiJIb2xhIn0seyJ0eXBlIjoiQk9E\nWSIsInRleHQiOiJIaSB7ezF9fSwgY29kZSBcdTAwM2N7ezJ9fVx1MDAzZSJ9\nXX0=\n",
++              "name": "submit-template",
++              "title": "Template Name: welcome & co",
++              "subtitle": "Category: MARKETING",
++              "action": {
++                "type": "submit"
++              }
++            }
++          ]
++        },
++        {
++          "value": 7,
++          "name": "selected_user",
++          "type": "hidden",
++          "id": "selected_user"
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/list_selected_user_value.json b/spec/fixtures/dialog360/configure_hook/list_selected_user_value.json
+new file mode 100644
+index 00000000..8556e315
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/list_selected_user_value.json
+@@ -0,0 +1,75 @@
++{
++  "case": "list_selected_user_value",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "values": {
++      "selected_user": "7"
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "paragraph",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "xs"
++        },
++        {
++          "type": "separator"
++        },
++        {
++          "type": "list",
++          "disabled": false,
++          "items": [
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoib3JkZXJfdXBkYXRlIiwiY2F0ZWdvcnkiOiJBQ0NPVU5UX1VQ\nREFURSIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiQk9EWSIs\nInRleHQiOiJPcmRlciB7ezF9fSBzaGlwcGVkIn1dfQ==\n",
++              "name": "submit-template",
++              "title": "Template Name: order_update",
++              "subtitle": "Category: ACCOUNT_UPDATE",
++              "action": {
++                "type": "submit"
++              }
++            },
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoid2VsY29tZSBcdTAwMjYgY28iLCJjYXRlZ29yeSI6Ik1BUktF\nVElORyIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlcyIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiSEVBREVS\nIiwiZm9ybWF0IjoiVEVYVCIsInRleHQiOiJIb2xhIn0seyJ0eXBlIjoiQk9E\nWSIsInRleHQiOiJIaSB7ezF9fSwgY29kZSBcdTAwM2N7ezJ9fVx1MDAzZSJ9\nXX0=\n",
++              "name": "submit-template",
++              "title": "Template Name: welcome & co",
++              "subtitle": "Category: MARKETING",
++              "action": {
++                "type": "submit"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/list_symbol_keys_selected_user_field.json b/spec/fixtures/dialog360/configure_hook/list_symbol_keys_selected_user_field.json
+new file mode 100644
+index 00000000..39f7e644
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/list_symbol_keys_selected_user_field.json
+@@ -0,0 +1,77 @@
++{
++  "case": "list_symbol_keys_selected_user_field",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "conversation_key": "conv-1",
++    "field": {
++      "name": "selected-user",
++      "id": 7
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "paragraph",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "xs"
++        },
++        {
++          "type": "separator"
++        },
++        {
++          "type": "list",
++          "disabled": false,
++          "items": [
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoib3JkZXJfdXBkYXRlIiwiY2F0ZWdvcnkiOiJBQ0NPVU5UX1VQ\nREFURSIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiQk9EWSIs\nInRleHQiOiJPcmRlciB7ezF9fSBzaGlwcGVkIn1dfQ==\n",
++              "name": "submit-template",
++              "title": "Template Name: order_update",
++              "subtitle": "Category: ACCOUNT_UPDATE",
++              "action": {
++                "type": "submit"
++              }
++            },
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoid2VsY29tZSBcdTAwMjYgY28iLCJjYXRlZ29yeSI6Ik1BUktF\nVElORyIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlcyIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiSEVBREVS\nIiwiZm9ybWF0IjoiVEVYVCIsInRleHQiOiJIb2xhIn0seyJ0eXBlIjoiQk9E\nWSIsInRleHQiOiJIaSB7ezF9fSwgY29kZSBcdTAwM2N7ezJ9fVx1MDAzZSJ9\nXX0=\n",
++              "name": "submit-template",
++              "title": "Template Name: welcome & co",
++              "subtitle": "Category: MARKETING",
++              "action": {
++                "type": "submit"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/page_field_without_id.json b/spec/fixtures/dialog360/configure_hook/page_field_without_id.json
+new file mode 100644
+index 00000000..3e8771f8
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/page_field_without_id.json
+@@ -0,0 +1,18 @@
++{
++  "case": "page_field_without_id",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "field": {
++      "name": "paginate-template"
++    }
++  },
++  "api": {},
++  "calls": [],
++  "outcome": {
++    "raised": {
++      "class": "NoMethodError",
++      "message": "undefined method 'gsub' for nil"
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/page_last_kind_custom.json b/spec/fixtures/dialog360/configure_hook/page_last_kind_custom.json
+new file mode 100644
+index 00000000..62ace11b
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/page_last_kind_custom.json
+@@ -0,0 +1,89 @@
++{
++  "case": "page_last_kind_custom",
++  "kind": "custom",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-1",
++    "field": {
++      "name": "paginate-template",
++      "id": "paginate-template-20"
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":20,\"sort\":[\"id\"],\"total\":25,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 20
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "custom",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "paragraph",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "xs"
++        },
++        {
++          "type": "separator"
++        },
++        {
++          "type": "list",
++          "disabled": false,
++          "items": [
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoib3JkZXJfdXBkYXRlIiwiY2F0ZWdvcnkiOiJBQ0NPVU5UX1VQ\nREFURSIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiQk9EWSIs\nInRleHQiOiJPcmRlciB7ezF9fSBzaGlwcGVkIn1dfQ==\n",
++              "name": "submit-template",
++              "title": "Template Name: order_update",
++              "subtitle": "Category: ACCOUNT_UPDATE",
++              "action": {
++                "type": "submit"
++              }
++            },
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoid2VsY29tZSBcdTAwMjYgY28iLCJjYXRlZ29yeSI6Ik1BUktF\nVElORyIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlcyIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiSEVBREVS\nIiwiZm9ybWF0IjoiVEVYVCIsInRleHQiOiJIb2xhIn0seyJ0eXBlIjoiQk9E\nWSIsInRleHQiOiJIaSB7ezF9fSwgY29kZSBcdTAwM2N7ezJ9fVx1MDAzZSJ9\nXX0=\n",
++              "name": "submit-template",
++              "title": "Template Name: welcome & co",
++              "subtitle": "Category: MARKETING",
++              "action": {
++                "type": "submit"
++              }
++            }
++          ]
++        },
++        {
++          "type": "button",
++          "name": "paginate-template",
++          "id": "paginate-template-10",
++          "variant": "success",
++          "size": "small",
++          "align": "center",
++          "label": "<- Prev",
++          "action": {
++            "type": "submit"
++          }
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/page_middle.json b/spec/fixtures/dialog360/configure_hook/page_middle.json
+new file mode 100644
+index 00000000..5c96cee7
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/page_middle.json
+@@ -0,0 +1,104 @@
++{
++  "case": "page_middle",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-1",
++    "field": {
++      "name": "paginate-template",
++      "id": "paginate-template-10",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":10,\"sort\":[\"id\"],\"total\":25,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 10
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "paragraph",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "xs"
++        },
++        {
++          "type": "separator"
++        },
++        {
++          "type": "list",
++          "disabled": false,
++          "items": [
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoib3JkZXJfdXBkYXRlIiwiY2F0ZWdvcnkiOiJBQ0NPVU5UX1VQ\nREFURSIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiQk9EWSIs\nInRleHQiOiJPcmRlciB7ezF9fSBzaGlwcGVkIn1dfQ==\n",
++              "name": "submit-template",
++              "title": "Template Name: order_update",
++              "subtitle": "Category: ACCOUNT_UPDATE",
++              "action": {
++                "type": "submit"
++              }
++            },
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoid2VsY29tZSBcdTAwMjYgY28iLCJjYXRlZ29yeSI6Ik1BUktF\nVElORyIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlcyIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiSEVBREVS\nIiwiZm9ybWF0IjoiVEVYVCIsInRleHQiOiJIb2xhIn0seyJ0eXBlIjoiQk9E\nWSIsInRleHQiOiJIaSB7ezF9fSwgY29kZSBcdTAwM2N7ezJ9fVx1MDAzZSJ9\nXX0=\n",
++              "name": "submit-template",
++              "title": "Template Name: welcome & co",
++              "subtitle": "Category: MARKETING",
++              "action": {
++                "type": "submit"
++              }
++            }
++          ]
++        },
++        {
++          "type": "button",
++          "name": "paginate-template",
++          "id": "paginate-template-0",
++          "variant": "success",
++          "size": "small",
++          "align": "center",
++          "label": "<- Prev",
++          "action": {
++            "type": "submit"
++          }
++        },
++        {
++          "type": "button",
++          "name": "paginate-template",
++          "id": "paginate-template-20",
++          "variant": "success",
++          "size": "small",
++          "align": "center",
++          "label": "Next ->",
++          "action": {
++            "type": "submit"
++          }
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/page_next_at_total.json b/spec/fixtures/dialog360/configure_hook/page_next_at_total.json
+new file mode 100644
+index 00000000..682827bc
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/page_next_at_total.json
+@@ -0,0 +1,85 @@
++{
++  "case": "page_next_at_total",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-1"
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":10,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "paragraph",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "xs"
++        },
++        {
++          "type": "separator"
++        },
++        {
++          "type": "list",
++          "disabled": false,
++          "items": [
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoib3JkZXJfdXBkYXRlIiwiY2F0ZWdvcnkiOiJBQ0NPVU5UX1VQ\nREFURSIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiQk9EWSIs\nInRleHQiOiJPcmRlciB7ezF9fSBzaGlwcGVkIn1dfQ==\n",
++              "name": "submit-template",
++              "title": "Template Name: order_update",
++              "subtitle": "Category: ACCOUNT_UPDATE",
++              "action": {
++                "type": "submit"
++              }
++            },
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoid2VsY29tZSBcdTAwMjYgY28iLCJjYXRlZ29yeSI6Ik1BUktF\nVElORyIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlcyIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiSEVBREVS\nIiwiZm9ybWF0IjoiVEVYVCIsInRleHQiOiJIb2xhIn0seyJ0eXBlIjoiQk9E\nWSIsInRleHQiOiJIaSB7ezF9fSwgY29kZSBcdTAwM2N7ezJ9fVx1MDAzZSJ9\nXX0=\n",
++              "name": "submit-template",
++              "title": "Template Name: welcome & co",
++              "subtitle": "Category: MARKETING",
++              "action": {
++                "type": "submit"
++              }
++            }
++          ]
++        },
++        {
++          "type": "button",
++          "name": "paginate-template",
++          "id": "paginate-template-10",
++          "variant": "success",
++          "size": "small",
++          "align": "center",
++          "label": "Next ->",
++          "action": {
++            "type": "submit"
++          }
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/page_no_next.json b/spec/fixtures/dialog360/configure_hook/page_no_next.json
+new file mode 100644
+index 00000000..e6ffd9f9
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/page_no_next.json
+@@ -0,0 +1,73 @@
++{
++  "case": "page_no_next",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-1"
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":9,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "paragraph",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "xs"
++        },
++        {
++          "type": "separator"
++        },
++        {
++          "type": "list",
++          "disabled": false,
++          "items": [
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoib3JkZXJfdXBkYXRlIiwiY2F0ZWdvcnkiOiJBQ0NPVU5UX1VQ\nREFURSIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiQk9EWSIs\nInRleHQiOiJPcmRlciB7ezF9fSBzaGlwcGVkIn1dfQ==\n",
++              "name": "submit-template",
++              "title": "Template Name: order_update",
++              "subtitle": "Category: ACCOUNT_UPDATE",
++              "action": {
++                "type": "submit"
++              }
++            },
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoid2VsY29tZSBcdTAwMjYgY28iLCJjYXRlZ29yeSI6Ik1BUktF\nVElORyIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlcyIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiSEVBREVS\nIiwiZm9ybWF0IjoiVEVYVCIsInRleHQiOiJIb2xhIn0seyJ0eXBlIjoiQk9E\nWSIsInRleHQiOiJIaSB7ezF9fSwgY29kZSBcdTAwM2N7ezJ9fVx1MDAzZSJ9\nXX0=\n",
++              "name": "submit-template",
++              "title": "Template Name: welcome & co",
++              "subtitle": "Category: MARKETING",
++              "action": {
++                "type": "submit"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/pick_errors.json b/spec/fixtures/dialog360/configure_hook/pick_errors.json
+new file mode 100644
+index 00000000..71aadcc5
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/pick_errors.json
+@@ -0,0 +1,101 @@
++{
++  "case": "pick_errors",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-2",
++    "field": {
++      "name": "pick-template",
++      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++      "title": "Template Name: form_tpl",
++      "action": {
++        "type": "submit"
++      }
++    },
++    "values": {
++      "unsaved-1": [
++        "x"
++      ]
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}",
++    "send_json": "{\"errors\": [{\"code\": 1000, \"details\": \"bad number\"}, {\"code\": 1001, \"details\": \"no template\"}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    },
++    {
++      "call": "send_template_message",
++      "args": [
++        {
++          "template": {
++            "name": "form_tpl",
++            "category": "UTILITY",
++            "status": "approved",
++            "language": "en",
++            "namespace": "ns-2",
++            "components": [
++              {
++                "type": "HEADER",
++                "format": "TEXT",
++                "text": "Hi {{1}}"
++              },
++              {
++                "type": "BODY",
++                "text": "Order {{1}} for {{2}} and {{10}}"
++              },
++              {
++                "type": "FOOTER",
++                "text": "no params"
++              },
++              {
++                "type": "BUTTONS",
++                "buttons": [
++                  {
++                    "type": "QUICK_REPLY",
++                    "text": "ok"
++                  }
++                ]
++              }
++            ]
++          },
++          "selected_user": null,
++          "conversation_key": "conv-2",
++          "parameters": [
++            "x"
++          ]
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "form_tpl template NOT sent!",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "1000: bad number\n1001: no template",
++          "style": "muted",
++          "align": "center"
++        }
++      ],
++      "results": {
++        "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++        "label": "Template Name: form_tpl"
++      }
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/pick_not_hash.json b/spec/fixtures/dialog360/configure_hook/pick_not_hash.json
+new file mode 100644
+index 00000000..444a32e7
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/pick_not_hash.json
+@@ -0,0 +1,128 @@
++{
++  "case": "pick_not_hash",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-2",
++    "field": {
++      "name": "pick-template",
++      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++      "title": "Template Name: form_tpl",
++      "action": {
++        "type": "submit"
++      }
++    },
++    "values": {}
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}",
++    "send_json": "null"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    },
++    {
++      "call": "send_template_message",
++      "args": [
++        {
++          "template": {
++            "name": "form_tpl",
++            "category": "UTILITY",
++            "status": "approved",
++            "language": "en",
++            "namespace": "ns-2",
++            "components": [
++              {
++                "type": "HEADER",
++                "format": "TEXT",
++                "text": "Hi {{1}}"
++              },
++              {
++                "type": "BODY",
++                "text": "Order {{1}} for {{2}} and {{10}}"
++              },
++              {
++                "type": "FOOTER",
++                "text": "no params"
++              },
++              {
++                "type": "BUTTONS",
++                "buttons": [
++                  {
++                    "type": "QUICK_REPLY",
++                    "text": "ok"
++                  }
++                ]
++              }
++            ]
++          },
++          "selected_user": null,
++          "conversation_key": "conv-2",
++          "parameters": null
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "paragraph",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "xs"
++        },
++        {
++          "type": "separator"
++        },
++        {
++          "type": "list",
++          "disabled": false,
++          "items": [
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoib3JkZXJfdXBkYXRlIiwiY2F0ZWdvcnkiOiJBQ0NPVU5UX1VQ\nREFURSIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiQk9EWSIs\nInRleHQiOiJPcmRlciB7ezF9fSBzaGlwcGVkIn1dfQ==\n",
++              "name": "submit-template",
++              "title": "Template Name: order_update",
++              "subtitle": "Category: ACCOUNT_UPDATE",
++              "action": {
++                "type": "submit"
++              }
++            },
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoid2VsY29tZSBcdTAwMjYgY28iLCJjYXRlZ29yeSI6Ik1BUktF\nVElORyIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlcyIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiSEVBREVS\nIiwiZm9ybWF0IjoiVEVYVCIsInRleHQiOiJIb2xhIn0seyJ0eXBlIjoiQk9E\nWSIsInRleHQiOiJIaSB7ezF9fSwgY29kZSBcdTAwM2N7ezJ9fVx1MDAzZSJ9\nXX0=\n",
++              "name": "submit-template",
++              "title": "Template Name: welcome & co",
++              "subtitle": "Category: MARKETING",
++              "action": {
++                "type": "submit"
++              }
++            }
++          ]
++        }
++      ],
++      "results": {
++        "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++        "label": "Template Name: form_tpl"
++      }
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/pick_sent.json b/spec/fixtures/dialog360/configure_hook/pick_sent.json
+new file mode 100644
+index 00000000..968197ea
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/pick_sent.json
+@@ -0,0 +1,113 @@
++{
++  "case": "pick_sent",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "field": {
++      "name": "pick-template",
++      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++      "title": "Template Name: form_tpl",
++      "action": {
++        "type": "submit"
++      }
++    },
++    "values": {
++      "selected_user": "7",
++      "unsaved-1": [
++        "Ann",
++        "A-1"
++      ]
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}",
++    "send_json": "{\"conversation_key\": \"conv-9\", \"messages\": [{\"id\": \"wamid.1\"}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    },
++    {
++      "call": "send_template_message",
++      "args": [
++        {
++          "template": {
++            "name": "form_tpl",
++            "category": "UTILITY",
++            "status": "approved",
++            "language": "en",
++            "namespace": "ns-2",
++            "components": [
++              {
++                "type": "HEADER",
++                "format": "TEXT",
++                "text": "Hi {{1}}"
++              },
++              {
++                "type": "BODY",
++                "text": "Order {{1}} for {{2}} and {{10}}"
++              },
++              {
++                "type": "FOOTER",
++                "text": "no params"
++              },
++              {
++                "type": "BUTTONS",
++                "buttons": [
++                  {
++                    "type": "QUICK_REPLY",
++                    "text": "ok"
++                  }
++                ]
++              }
++            ]
++          },
++          "selected_user": "7",
++          "conversation_key": null,
++          "parameters": [
++            "Ann",
++            "A-1"
++          ]
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "template sent!",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "you can close this window",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "id": "visit-link",
++          "type": "button",
++          "label": "Visit conversation",
++          "action": {
++            "type": "link",
++            "url": "/apps/app-key-1/conversations/conv-9"
++          },
++          "align": "center"
++        }
++      ],
++      "results": {
++        "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++        "label": "Template Name: form_tpl"
++      }
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/pick_sent_empty_errors_kind_custom.json b/spec/fixtures/dialog360/configure_hook/pick_sent_empty_errors_kind_custom.json
+new file mode 100644
+index 00000000..66382e5b
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/pick_sent_empty_errors_kind_custom.json
+@@ -0,0 +1,107 @@
++{
++  "case": "pick_sent_empty_errors_kind_custom",
++  "kind": "custom",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-2",
++    "field": {
++      "name": "pick-template",
++      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++      "title": "Template Name: form_tpl",
++      "action": {
++        "type": "submit"
++      }
++    },
++    "values": {
++      "unsaved-1": "solo"
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}",
++    "send_json": "{\"errors\": [], \"conversation_key\": \"conv-2\"}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    },
++    {
++      "call": "send_template_message",
++      "args": [
++        {
++          "template": {
++            "name": "form_tpl",
++            "category": "UTILITY",
++            "status": "approved",
++            "language": "en",
++            "namespace": "ns-2",
++            "components": [
++              {
++                "type": "HEADER",
++                "format": "TEXT",
++                "text": "Hi {{1}}"
++              },
++              {
++                "type": "BODY",
++                "text": "Order {{1}} for {{2}} and {{10}}"
++              },
++              {
++                "type": "FOOTER",
++                "text": "no params"
++              },
++              {
++                "type": "BUTTONS",
++                "buttons": [
++                  {
++                    "type": "QUICK_REPLY",
++                    "text": "ok"
++                  }
++                ]
++              }
++            ]
++          },
++          "selected_user": null,
++          "conversation_key": "conv-2",
++          "parameters": "solo"
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "template sent!",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "you can close this window",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "id": "visit-link",
++          "type": "button",
++          "label": "Visit conversation",
++          "action": {
++            "type": "link",
++            "url": "/apps/app-key-1/conversations/conv-2"
++          },
++          "align": "center"
++        }
++      ],
++      "results": {
++        "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++        "label": "Template Name: form_tpl"
++      }
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/pick_symbol_keys.json b/spec/fixtures/dialog360/configure_hook/pick_symbol_keys.json
+new file mode 100644
+index 00000000..1e827161
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/pick_symbol_keys.json
+@@ -0,0 +1,83 @@
++{
++  "case": "pick_symbol_keys",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "conversation_key": "conv-2",
++    "field": {
++      "name": "pick-template",
++      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++      "title": "Template Name: form_tpl",
++      "action": {
++        "type": "submit"
++      }
++    },
++    "values": {
++      "selected_user": "7",
++      "unsaved-1": [
++        "Ann"
++      ]
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}",
++    "send_json": "{\"conversation_key\": \"conv-9\", \"messages\": [{\"id\": \"wamid.1\"}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    },
++    {
++      "call": "send_template_message",
++      "args": [
++        {
++          "template": {
++            "name": "form_tpl",
++            "category": "UTILITY",
++            "status": "approved",
++            "language": "en",
++            "namespace": "ns-2",
++            "components": [
++              {
++                "type": "HEADER",
++                "format": "TEXT",
++                "text": "Hi {{1}}"
++              },
++              {
++                "type": "BODY",
++                "text": "Order {{1}} for {{2}} and {{10}}"
++              },
++              {
++                "type": "FOOTER",
++                "text": "no params"
++              },
++              {
++                "type": "BUTTONS",
++                "buttons": [
++                  {
++                    "type": "QUICK_REPLY",
++                    "text": "ok"
++                  }
++                ]
++              }
++            ]
++          },
++          "selected_user": null,
++          "conversation_key": "conv-2",
++          "parameters": null
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "raised": {
++      "class": "NoMethodError",
++      "message": "undefined method 'app' for nil"
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/pick_without_values.json b/spec/fixtures/dialog360/configure_hook/pick_without_values.json
+new file mode 100644
+index 00000000..e62912d6
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/pick_without_values.json
+@@ -0,0 +1,35 @@
++{
++  "case": "pick_without_values",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-2",
++    "field": {
++      "name": "pick-template",
++      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++      "title": "Template Name: form_tpl",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "raised": {
++      "class": "NoMethodError",
++      "message": "undefined method '[]' for nil"
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/search_blank_term.json b/spec/fixtures/dialog360/configure_hook/search_blank_term.json
+new file mode 100644
+index 00000000..b7630147
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/search_blank_term.json
+@@ -0,0 +1,33 @@
++{
++  "case": "search_blank_term",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "values": {
++      "search_contact": ""
++    }
++  },
++  "api": {},
++  "calls": [],
++  "outcome": {
++    "result": {
++      "definitions": [
++        {
++          "type": "input",
++          "id": "unsaved-2",
++          "name": "search_contact",
++          "label": "Search contact by email, name or phone",
++          "placeholder": "Search for a contact...",
++          "save_state": "unsaved",
++          "action": {
++            "type": "submit"
++          }
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/search_no_field.json b/spec/fixtures/dialog360/configure_hook/search_no_field.json
+new file mode 100644
+index 00000000..dad426d6
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/search_no_field.json
+@@ -0,0 +1,29 @@
++{
++  "case": "search_no_field",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {},
++  "api": {},
++  "calls": [],
++  "outcome": {
++    "result": {
++      "definitions": [
++        {
++          "type": "input",
++          "id": "unsaved-2",
++          "name": "search_contact",
++          "label": "Search contact by email, name or phone",
++          "placeholder": "Search for a contact...",
++          "save_state": "unsaved",
++          "action": {
++            "type": "submit"
++          }
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/search_no_results.json b/spec/fixtures/dialog360/configure_hook/search_no_results.json
+new file mode 100644
+index 00000000..280099ab
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/search_no_results.json
+@@ -0,0 +1,54 @@
++{
++  "case": "search_no_results",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "values": {
++      "search_contact": "zed"
++    }
++  },
++  "api": {
++    "users": []
++  },
++  "calls": [
++    {
++      "call": "limit",
++      "args": [
++        15
++      ]
++    },
++    {
++      "call": "ransack",
++      "args": [
++        {
++          "last_name_or_first_name_or_name_or_email_or_phone_or_external_profiles_profile_id_i_cont_any": "zed"
++        }
++      ]
++    },
++    {
++      "call": "result",
++      "args": []
++    }
++  ],
++  "outcome": {
++    "result": {
++      "definitions": [
++        {
++          "type": "input",
++          "id": "unsaved-2",
++          "name": "search_contact",
++          "label": "Search contact by email, name or phone",
++          "placeholder": "Search for a contact...",
++          "save_state": "unsaved",
++          "action": {
++            "type": "submit"
++          }
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/search_results.json b/spec/fixtures/dialog360/configure_hook/search_results.json
+new file mode 100644
+index 00000000..d4cb0c7a
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/search_results.json
+@@ -0,0 +1,109 @@
++{
++  "case": "search_results",
++  "kind": "custom",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "values": {
++      "search_contact": "ann"
++    }
++  },
++  "api": {
++    "users": [
++      {
++        "id": 7,
++        "type": "AppUser",
++        "display_name": "Ann Lee",
++        "email": "ann@example.com",
++        "phone": "+15550001",
++        "label": "Dialog360 profile: 15550001"
++      },
++      {
++        "id": 9,
++        "type": "Lead",
++        "display_name": "Anna Visitor",
++        "email": null,
++        "phone": null,
++        "label": null
++      }
++    ]
++  },
++  "calls": [
++    {
++      "call": "limit",
++      "args": [
++        15
++      ]
++    },
++    {
++      "call": "ransack",
++      "args": [
++        {
++          "last_name_or_first_name_or_name_or_email_or_phone_or_external_profiles_profile_id_i_cont_any": "ann"
++        }
++      ]
++    },
++    {
++      "call": "result",
++      "args": []
++    },
++    {
++      "call": "get_profile_for_participant_label",
++      "args": [
++        7
++      ]
++    },
++    {
++      "call": "get_profile_for_participant_label",
++      "args": [
++        9
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "definitions": [
++        {
++          "type": "input",
++          "id": "unsaved-2",
++          "name": "search_contact",
++          "label": "Search contact by email, name or phone",
++          "placeholder": "Search for a contact...",
++          "save_state": "unsaved",
++          "action": {
++            "type": "submit"
++          }
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        },
++        {
++          "type": "list",
++          "disabled": false,
++          "items": [
++            {
++              "type": "item",
++              "id": 7,
++              "name": "selected-user",
++              "title": "AppUser: Ann Lee ann@example.com",
++              "subtitle": "Phone: +15550001 | Dialog360 profile: 15550001",
++              "action": {
++                "type": "submit"
++              }
++            },
++            {
++              "type": "item",
++              "id": 9,
++              "name": "selected-user",
++              "title": "Lead: Anna Visitor ",
++              "subtitle": "Phone:  | ",
++              "action": {
++                "type": "submit"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/search_symbol_keys_selected_user.json b/spec/fixtures/dialog360/configure_hook/search_symbol_keys_selected_user.json
+new file mode 100644
+index 00000000..ed3aca4f
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/search_symbol_keys_selected_user.json
+@@ -0,0 +1,33 @@
++{
++  "case": "search_symbol_keys_selected_user",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "values": {
++      "selected_user": "7"
++    }
++  },
++  "api": {},
++  "calls": [],
++  "outcome": {
++    "result": {
++      "definitions": [
++        {
++          "type": "input",
++          "id": "unsaved-2",
++          "name": "search_contact",
++          "label": "Search contact by email, name or phone",
++          "placeholder": "Search for a contact...",
++          "save_state": "unsaved",
++          "action": {
++            "type": "submit"
++          }
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/search_symbol_keys_term.json b/spec/fixtures/dialog360/configure_hook/search_symbol_keys_term.json
+new file mode 100644
+index 00000000..47c6539b
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/search_symbol_keys_term.json
+@@ -0,0 +1,33 @@
++{
++  "case": "search_symbol_keys_term",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "values": {
++      "search_contact": "ann"
++    }
++  },
++  "api": {},
++  "calls": [],
++  "outcome": {
++    "result": {
++      "definitions": [
++        {
++          "type": "input",
++          "id": "unsaved-2",
++          "name": "search_contact",
++          "label": "Search contact by email, name or phone",
++          "placeholder": "Search for a contact...",
++          "save_state": "unsaved",
++          "action": {
++            "type": "submit"
++          }
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/submit_template.json b/spec/fixtures/dialog360/configure_hook/submit_template.json
+new file mode 100644
+index 00000000..9246a0f1
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/submit_template.json
+@@ -0,0 +1,115 @@
++{
++  "case": "submit_template",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "field": {
++      "name": "submit-template",
++      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++      "title": "Template Name: form_tpl",
++      "action": {
++        "type": "submit"
++      }
++    },
++    "values": {
++      "selected_user": "7"
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp template",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Template Name: form_tpl",
++          "style": "muted",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        },
++        {
++          "type": "input",
++          "id": "unsaved-1",
++          "label": "parameter: {{1}}",
++          "placeholder": "{{1}}",
++          "save_state": "unsaved"
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        },
++        {
++          "type": "text",
++          "text": "Hi {{1}}",
++          "style": "muted"
++        },
++        {
++          "type": "input",
++          "id": "unsaved-1",
++          "label": "parameter: {{1}}",
++          "placeholder": "{{1}}",
++          "save_state": "unsaved"
++        },
++        {
++          "type": "input",
++          "id": "unsaved-1",
++          "label": "parameter: {{2}}",
++          "placeholder": "{{2}}",
++          "save_state": "unsaved"
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        },
++        {
++          "type": "text",
++          "text": "Order {{1}} for {{2}} and {{10}}",
++          "style": "muted"
++        },
++        {
++          "type": "button",
++          "name": "pick-template",
++          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++          "variant": "success",
++          "size": "large",
++          "align": "center",
++          "label": "confirm",
++          "action": {
++            "type": "submit"
++          }
++        },
++        {
++          "value": "7",
++          "name": "selected_user",
++          "type": "hidden",
++          "id": "selected_user"
++        }
++      ],
++      "results": {
++        "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++        "label": "Template Name: form_tpl"
++      }
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/submit_template_click.json b/spec/fixtures/dialog360/configure_hook/submit_template_click.json
+new file mode 100644
+index 00000000..51d8ba3b
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/submit_template_click.json
+@@ -0,0 +1,81 @@
++{
++  "case": "submit_template_click",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-1",
++    "field": {
++      "name": "submit-template",
++      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++      "title": "Template Name: form_tpl",
++      "action": {
++        "type": "click"
++      }
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Whatsapp templates",
++          "style": "paragraph",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "xs"
++        },
++        {
++          "type": "separator"
++        },
++        {
++          "type": "list",
++          "disabled": false,
++          "items": [
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoib3JkZXJfdXBkYXRlIiwiY2F0ZWdvcnkiOiJBQ0NPVU5UX1VQ\nREFURSIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiQk9EWSIs\nInRleHQiOiJPcmRlciB7ezF9fSBzaGlwcGVkIn1dfQ==\n",
++              "name": "submit-template",
++              "title": "Template Name: order_update",
++              "subtitle": "Category: ACCOUNT_UPDATE",
++              "action": {
++                "type": "submit"
++              }
++            },
++            {
++              "type": "item",
++              "id": "eyJuYW1lIjoid2VsY29tZSBcdTAwMjYgY28iLCJjYXRlZ29yeSI6Ik1BUktF\nVElORyIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlcyIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiSEVBREVS\nIiwiZm9ybWF0IjoiVEVYVCIsInRleHQiOiJIb2xhIn0seyJ0eXBlIjoiQk9E\nWSIsInRleHQiOiJIaSB7ezF9fSwgY29kZSBcdTAwM2N7ezJ9fVx1MDAzZSJ9\nXX0=\n",
++              "name": "submit-template",
++              "title": "Template Name: welcome & co",
++              "subtitle": "Category: MARKETING",
++              "action": {
++                "type": "submit"
++              }
++            }
++          ]
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/submit_template_conversation_kind_custom.json b/spec/fixtures/dialog360/configure_hook/submit_template_conversation_kind_custom.json
+new file mode 100644
+index 00000000..50597ace
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/submit_template_conversation_kind_custom.json
+@@ -0,0 +1,107 @@
++{
++  "case": "submit_template_conversation_kind_custom",
++  "kind": "custom",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-1",
++    "field": {
++      "name": "submit-template",
++      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++      "title": "Template Name: form_tpl",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp template",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Template Name: form_tpl",
++          "style": "muted",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        },
++        {
++          "type": "input",
++          "id": "unsaved-1",
++          "label": "parameter: {{1}}",
++          "placeholder": "{{1}}",
++          "save_state": "unsaved"
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        },
++        {
++          "type": "text",
++          "text": "Hi {{1}}",
++          "style": "muted"
++        },
++        {
++          "type": "input",
++          "id": "unsaved-1",
++          "label": "parameter: {{1}}",
++          "placeholder": "{{1}}",
++          "save_state": "unsaved"
++        },
++        {
++          "type": "input",
++          "id": "unsaved-1",
++          "label": "parameter: {{2}}",
++          "placeholder": "{{2}}",
++          "save_state": "unsaved"
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        },
++        {
++          "type": "text",
++          "text": "Order {{1}} for {{2}} and {{10}}",
++          "style": "muted"
++        },
++        {
++          "type": "button",
++          "name": "pick-template",
++          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++          "variant": "success",
++          "size": "large",
++          "align": "center",
++          "label": "confirm",
++          "action": {
++            "type": "submit"
++          }
++        }
++      ],
++      "results": {
++        "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++        "label": "Template Name: form_tpl"
++      }
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/submit_template_symbol_keys.json b/spec/fixtures/dialog360/configure_hook/submit_template_symbol_keys.json
+new file mode 100644
+index 00000000..398f37d5
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/submit_template_symbol_keys.json
+@@ -0,0 +1,110 @@
++{
++  "case": "submit_template_symbol_keys",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "conversation_key": "conv-1",
++    "field": {
++      "name": "submit-template",
++      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++      "title": "Template Name: form_tpl",
++      "action": {
++        "type": "submit"
++      }
++    },
++    "values": {
++      "selected_user": "7"
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Whatsapp template",
++          "style": "header",
++          "align": "center"
++        },
++        {
++          "type": "text",
++          "text": "Template Name: form_tpl",
++          "style": "muted",
++          "align": "center"
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        },
++        {
++          "type": "input",
++          "id": "unsaved-1",
++          "label": "parameter: {{1}}",
++          "placeholder": "{{1}}",
++          "save_state": "unsaved"
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        },
++        {
++          "type": "text",
++          "text": "Hi {{1}}",
++          "style": "muted"
++        },
++        {
++          "type": "input",
++          "id": "unsaved-1",
++          "label": "parameter: {{1}}",
++          "placeholder": "{{1}}",
++          "save_state": "unsaved"
++        },
++        {
++          "type": "input",
++          "id": "unsaved-1",
++          "label": "parameter: {{2}}",
++          "placeholder": "{{2}}",
++          "save_state": "unsaved"
++        },
++        {
++          "type": "spacer",
++          "size": "m"
++        },
++        {
++          "type": "text",
++          "text": "Order {{1}} for {{2}} and {{10}}",
++          "style": "muted"
++        },
++        {
++          "type": "button",
++          "name": "pick-template",
++          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++          "variant": "success",
++          "size": "large",
++          "align": "center",
++          "label": "confirm",
++          "action": {
++            "type": "submit"
++          }
++        }
++      ],
++      "results": {
++        "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
++        "label": "Template Name: form_tpl"
++      }
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/submit_template_without_components.json b/spec/fixtures/dialog360/configure_hook/submit_template_without_components.json
+new file mode 100644
+index 00000000..b5bb2288
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/submit_template_without_components.json
+@@ -0,0 +1,35 @@
++{
++  "case": "submit_template_without_components",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-1",
++    "field": {
++      "name": "submit-template",
++      "id": "eyJuYW1lIjoiYmFyZSIsImNhdGVnb3J5IjoiVVRJTElUWSIsInN0YXR1cyI6\nImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiJ9\n",
++      "title": "Template Name: form_tpl",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "api": {
++    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "raised": {
++      "class": "NoMethodError",
++      "message": "undefined method 'each' for nil"
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/templates_error.json b/spec/fixtures/dialog360/configure_hook/templates_error.json
+new file mode 100644
+index 00000000..a3bdd2db
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/templates_error.json
+@@ -0,0 +1,32 @@
++{
++  "case": "templates_error",
++  "kind": "custom",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-1"
++  },
++  "api": {
++    "templates_json": "{\"meta\":{\"success\":false,\"developer_message\":\"Invalid api key\"},\"count\":0,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":0,\"waba_templates\":[]}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "custom",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Error retrieving templates Invalid api key"
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/templates_error_no_message.json b/spec/fixtures/dialog360/configure_hook/templates_error_no_message.json
+new file mode 100644
+index 00000000..29aecf07
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/templates_error_no_message.json
+@@ -0,0 +1,32 @@
++{
++  "case": "templates_error_no_message",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-1"
++  },
++  "api": {
++    "templates_json": "{\"meta\": {\"success\": false}}"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "result": {
++      "kind": "configure",
++      "definitions": [
++        {
++          "type": "text",
++          "text": "Error retrieving templates "
++        }
++      ]
++    }
++  }
++}
+diff --git a/spec/fixtures/dialog360/configure_hook/templates_not_json.json b/spec/fixtures/dialog360/configure_hook/templates_not_json.json
+new file mode 100644
+index 00000000..4212ca45
+--- /dev/null
++++ b/spec/fixtures/dialog360/configure_hook/templates_not_json.json
+@@ -0,0 +1,27 @@
++{
++  "case": "templates_not_json",
++  "kind": "configure",
++  "ctx_keys": "indifferent",
++  "ctx": {
++    "conversation_key": "conv-1"
++  },
++  "api": {
++    "templates_json": "<html>502</html>"
++  },
++  "calls": [
++    {
++      "call": "retrieve_templates",
++      "args": [
++        {
++          "offset": 0
++        }
++      ]
++    }
++  ],
++  "outcome": {
++    "raised": {
++      "class": "JSON::ParserError",
++      "message": "unexpected character: '<html>502</html>' at line 1 column 1"
++    }
++  }
++}

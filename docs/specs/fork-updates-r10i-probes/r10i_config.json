@@ -1,0 +1,840 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Metrics/AbcSize": [
+      "app/services/message_apis/dialog360/presenter.rb"
+    ],
+    "Metrics/CyclomaticComplexity": [
+      "app/services/message_apis/dialog360/presenter.rb"
+    ],
+    "Metrics/MethodLength": [
+      "app/services/message_apis/dialog360/presenter.rb"
+    ]
+  },
+  "base_requires": [
+    "  CountAsOne: [array, hash, heredoc]"
+  ],
+  "app_files": [
+    "app/services/message_apis/dialog360/presenter.rb"
+  ],
+  "new_files": [
+    "spec/fixtures/dialog360/configure_hook/list_conversation.json",
+    "spec/fixtures/dialog360/configure_hook/list_selected_user_field.json",
+    "spec/fixtures/dialog360/configure_hook/list_selected_user_value.json",
+    "spec/fixtures/dialog360/configure_hook/list_symbol_keys_selected_user_field.json",
+    "spec/fixtures/dialog360/configure_hook/page_field_without_id.json",
+    "spec/fixtures/dialog360/configure_hook/page_last_kind_custom.json",
+    "spec/fixtures/dialog360/configure_hook/page_middle.json",
+    "spec/fixtures/dialog360/configure_hook/page_next_at_total.json",
+    "spec/fixtures/dialog360/configure_hook/page_no_next.json",
+    "spec/fixtures/dialog360/configure_hook/pick_errors.json",
+    "spec/fixtures/dialog360/configure_hook/pick_not_hash.json",
+    "spec/fixtures/dialog360/configure_hook/pick_sent.json",
+    "spec/fixtures/dialog360/configure_hook/pick_sent_empty_errors_kind_custom.json",
+    "spec/fixtures/dialog360/configure_hook/pick_symbol_keys.json",
+    "spec/fixtures/dialog360/configure_hook/pick_without_values.json",
+    "spec/fixtures/dialog360/configure_hook/search_blank_term.json",
+    "spec/fixtures/dialog360/configure_hook/search_no_field.json",
+    "spec/fixtures/dialog360/configure_hook/search_no_results.json",
+    "spec/fixtures/dialog360/configure_hook/search_results.json",
+    "spec/fixtures/dialog360/configure_hook/search_symbol_keys_selected_user.json",
+    "spec/fixtures/dialog360/configure_hook/search_symbol_keys_term.json",
+    "spec/fixtures/dialog360/configure_hook/submit_template.json",
+    "spec/fixtures/dialog360/configure_hook/submit_template_click.json",
+    "spec/fixtures/dialog360/configure_hook/submit_template_conversation_kind_custom.json",
+    "spec/fixtures/dialog360/configure_hook/submit_template_symbol_keys.json",
+    "spec/fixtures/dialog360/configure_hook/submit_template_without_components.json",
+    "spec/fixtures/dialog360/configure_hook/templates_error.json",
+    "spec/fixtures/dialog360/configure_hook/templates_error_no_message.json",
+    "spec/fixtures/dialog360/configure_hook/templates_not_json.json"
+  ],
+  "char_specs": [
+    "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+  ],
+  "spec_sources": {
+    "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb": "r10i_spec.rb"
+  },
+  "commits": [
+    {
+      "subject": "Pin dialog360 configure_hook output",
+      "patch": "r10i_snapshots.patch",
+      "added": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "subject": "Split dialog360 configure_hook",
+      "patch": "r10i_rewrite.patch"
+    },
+    {
+      "subject": "Drop R10i entries from RuboCop todo",
+      "todo": true
+    },
+    {
+      "subject": "Note fork-updates-r10i in changelog",
+      "changelog": true
+    }
+  ],
+  "snapshot_dir": "spec/fixtures/dialog360/configure_hook",
+  "mutants": [
+    {
+      "id": "I01",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "return 0 unless ctx.dig(\"field\", \"name\") == \"paginate-template\"",
+      "new": "return 0 unless ctx.dig(\"field\", \"name\") == \"paginate-templates\"",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I02",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "ctx.dig(\"field\", \"id\").gsub(\"paginate-template-\", \"\").to_i",
+      "new": "ctx.dig(\"field\", \"id\").to_s.gsub(\"paginate-template-\", \"\").to_i",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I03",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "offset_page = template_offset(ctx)\n        return search_participant(ctx: ctx) if participant_missing?(ctx)",
+      "new": "return search_participant(ctx: ctx) if participant_missing?(ctx)\n        offset_page = template_offset(ctx)",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I04",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "ctx.dig(\"field\", \"name\") != \"selected-user\" &&",
+      "new": "ctx.dig(\"field\", \"name\") != \"selected_user\" &&",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I05",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "ctx.dig(\"values\", \"selected_user\").blank?",
+      "new": "ctx.dig(:values, :selected_user).blank?",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I06",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "api.retrieve_templates(offset: offset_page)",
+      "new": "api.retrieve_templates(offset: 0)",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I07",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "if templates.dig(\"meta\", \"success\") == false",
+      "new": "if templates.dig(\"meta\", \"success\") != true",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I08",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "{ kind: kind, definitions: [",
+      "new": "{ kind: \"configure\", definitions: [",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I09",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "templates.dig('meta', 'developer_message')",
+      "new": "templates.dig('meta', 'message')",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I10",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "response || { kind: kind, definitions: definitions }",
+      "new": "response || { kind: \"configure\", definitions: definitions }",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I11",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "\"pick-template\" => :pick_template_response",
+      "new": "\"pick-template\" => :submit_template_response",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I12",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "return unless ctx.dig(:field, :action, :type) == \"submit\"",
+      "new": "return unless ctx.dig(:field, :action)",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I13",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "if next_page_value <= templates[\"total\"]",
+      "new": "if next_page_value < templates[\"total\"]",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I14",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "[prev_button, next_button]",
+      "new": "[next_button, prev_button]",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I15",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "TEMPLATES_PER_PAGE = 10",
+      "new": "TEMPLATES_PER_PAGE = 20",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I16",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": ".select { |o| o[\"status\"] == \"approved\" }",
+      "new": ".reject { |o| o[\"status\"] == \"rejected\" }",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I17",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "id: Base64.encode64(c.to_json),",
+      "new": "id: Base64.encode64(JSON.generate(c)),",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I18",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "definitions << selected_user_field(ctx.dig(\"field\", \"id\")) if ctx.dig(\"field\", \"name\") == \"selected-user\"",
+      "new": "definitions << selected_user_field(ctx.dig(\"field\", \"id\")) if ctx.dig(:field, :name) == \"selected-user\"",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I19",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "selected_user = ctx.dig(\"values\", \"selected_user\")",
+      "new": "selected_user = ctx.dig(:values, :selected_user)",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I20",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "scan(/{{\\d}}/)",
+      "new": "scan(/{{\\d+}}/)",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I21",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "decoded[\"components\"].each do |o|",
+      "new": "Array(decoded[\"components\"]).each do |o|",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I22",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "inputs << { type: \"spacer\", size: \"m\" }",
+      "new": "inputs.unshift({ type: \"spacer\", size: \"m\" })",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I23",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "selected_user: ctx[:values][\"selected_user\"],",
+      "new": "selected_user: ctx.dig(:values, :selected_user),",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I24",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "conversation_key: ctx[:conversation_key],",
+      "new": "conversation_key: ctx[\"conversation_key\"],",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I25",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "if body[\"errors\"].present?",
+      "new": "if body[\"errors\"]",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I26",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "sent_template_definitions(ctx, decoded, body) || definitions)",
+      "new": "sent_template_definitions(ctx, decoded, body) || [])",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I27",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "url: \"/apps/#{ctx['package'].app.key}/conversations/",
+      "new": "url: \"/apps/#{ctx[:package].app.key}/conversations/",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I28",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "label: ctx.dig(:field, :title)\n",
+      "new": "label: ctx.dig(:field, :name)\n",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I29",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "id: ctx[:field][:id],",
+      "new": "id: ctx.dig(:field, :name),",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I30",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": ".limit(15)",
+      "new": ".limit(10)",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "I31",
+      "file": "app/services/message_apis/dialog360/presenter.rb",
+      "old": "if collection.any?",
+      "new": "if collection",
+      "specs": [
+        "spec/services/message_apis/dialog360/configure_hook_snapshots_spec.rb"
+      ]
+    }
+  ],
+  "snapshots": [
+    {
+      "name": "search_no_field",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {},
+      "api": {}
+    },
+    {
+      "name": "search_blank_term",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "values": {
+          "search_contact": ""
+        }
+      },
+      "api": {}
+    },
+    {
+      "name": "search_no_results",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "values": {
+          "search_contact": "zed"
+        }
+      },
+      "api": {
+        "users": []
+      }
+    },
+    {
+      "name": "search_results",
+      "kind": "custom",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "values": {
+          "search_contact": "ann"
+        }
+      },
+      "api": {
+        "users": [
+          {
+            "id": 7,
+            "type": "AppUser",
+            "display_name": "Ann Lee",
+            "email": "ann@example.com",
+            "phone": "+15550001",
+            "label": "Dialog360 profile: 15550001"
+          },
+          {
+            "id": 9,
+            "type": "Lead",
+            "display_name": "Anna Visitor",
+            "email": null,
+            "phone": null,
+            "label": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "search_symbol_keys_term",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "values": {
+          "search_contact": "ann"
+        }
+      },
+      "api": {}
+    },
+    {
+      "name": "search_symbol_keys_selected_user",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "values": {
+          "selected_user": "7"
+        }
+      },
+      "api": {}
+    },
+    {
+      "name": "list_selected_user_field",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "field": {
+          "name": "selected-user",
+          "id": 7,
+          "action": {
+            "type": "submit"
+          }
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "list_selected_user_value",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "values": {
+          "selected_user": "7"
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "list_conversation",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-1"
+      },
+      "api": {
+        "templates_json": "{\"meta\":{\"success\":true},\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "list_symbol_keys_selected_user_field",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "conversation_key": "conv-1",
+        "field": {
+          "name": "selected-user",
+          "id": 7
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "page_next_at_total",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-1"
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":10,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "page_no_next",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-1"
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":9,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "page_middle",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-1",
+        "field": {
+          "name": "paginate-template",
+          "id": "paginate-template-10",
+          "action": {
+            "type": "submit"
+          }
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":10,\"sort\":[\"id\"],\"total\":25,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "page_last_kind_custom",
+      "kind": "custom",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-1",
+        "field": {
+          "name": "paginate-template",
+          "id": "paginate-template-20"
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":20,\"sort\":[\"id\"],\"total\":25,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "page_field_without_id",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "field": {
+          "name": "paginate-template"
+        }
+      },
+      "api": {}
+    },
+    {
+      "name": "templates_error",
+      "kind": "custom",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-1"
+      },
+      "api": {
+        "templates_json": "{\"meta\":{\"success\":false,\"developer_message\":\"Invalid api key\"},\"count\":0,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":0,\"waba_templates\":[]}"
+      }
+    },
+    {
+      "name": "templates_error_no_message",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-1"
+      },
+      "api": {
+        "templates_json": "{\"meta\": {\"success\": false}}"
+      }
+    },
+    {
+      "name": "templates_not_json",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-1"
+      },
+      "api": {
+        "templates_json": "<html>502</html>"
+      }
+    },
+    {
+      "name": "submit_template",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "field": {
+          "name": "submit-template",
+          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+          "title": "Template Name: form_tpl",
+          "action": {
+            "type": "submit"
+          }
+        },
+        "values": {
+          "selected_user": "7"
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "submit_template_conversation_kind_custom",
+      "kind": "custom",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-1",
+        "field": {
+          "name": "submit-template",
+          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+          "title": "Template Name: form_tpl",
+          "action": {
+            "type": "submit"
+          }
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "submit_template_click",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-1",
+        "field": {
+          "name": "submit-template",
+          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+          "title": "Template Name: form_tpl",
+          "action": {
+            "type": "click"
+          }
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "submit_template_without_components",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-1",
+        "field": {
+          "name": "submit-template",
+          "id": "eyJuYW1lIjoiYmFyZSIsImNhdGVnb3J5IjoiVVRJTElUWSIsInN0YXR1cyI6\nImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiJ9\n",
+          "title": "Template Name: form_tpl",
+          "action": {
+            "type": "submit"
+          }
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "submit_template_symbol_keys",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "conversation_key": "conv-1",
+        "field": {
+          "name": "submit-template",
+          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+          "title": "Template Name: form_tpl",
+          "action": {
+            "type": "submit"
+          }
+        },
+        "values": {
+          "selected_user": "7"
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "pick_sent",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "field": {
+          "name": "pick-template",
+          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+          "title": "Template Name: form_tpl",
+          "action": {
+            "type": "submit"
+          }
+        },
+        "values": {
+          "selected_user": "7",
+          "unsaved-1": [
+            "Ann",
+            "A-1"
+          ]
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}",
+        "send_json": "{\"conversation_key\": \"conv-9\", \"messages\": [{\"id\": \"wamid.1\"}]}"
+      }
+    },
+    {
+      "name": "pick_sent_empty_errors_kind_custom",
+      "kind": "custom",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-2",
+        "field": {
+          "name": "pick-template",
+          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+          "title": "Template Name: form_tpl",
+          "action": {
+            "type": "submit"
+          }
+        },
+        "values": {
+          "unsaved-1": "solo"
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}",
+        "send_json": "{\"errors\": [], \"conversation_key\": \"conv-2\"}"
+      }
+    },
+    {
+      "name": "pick_errors",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-2",
+        "field": {
+          "name": "pick-template",
+          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+          "title": "Template Name: form_tpl",
+          "action": {
+            "type": "submit"
+          }
+        },
+        "values": {
+          "unsaved-1": [
+            "x"
+          ]
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}",
+        "send_json": "{\"errors\": [{\"code\": 1000, \"details\": \"bad number\"}, {\"code\": 1001, \"details\": \"no template\"}]}"
+      }
+    },
+    {
+      "name": "pick_not_hash",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-2",
+        "field": {
+          "name": "pick-template",
+          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+          "title": "Template Name: form_tpl",
+          "action": {
+            "type": "submit"
+          }
+        },
+        "values": {}
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}",
+        "send_json": "null"
+      }
+    },
+    {
+      "name": "pick_without_values",
+      "kind": "configure",
+      "ctx_keys": "indifferent",
+      "ctx": {
+        "conversation_key": "conv-2",
+        "field": {
+          "name": "pick-template",
+          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+          "title": "Template Name: form_tpl",
+          "action": {
+            "type": "submit"
+          }
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+      }
+    },
+    {
+      "name": "pick_symbol_keys",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "conversation_key": "conv-2",
+        "field": {
+          "name": "pick-template",
+          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+          "title": "Template Name: form_tpl",
+          "action": {
+            "type": "submit"
+          }
+        },
+        "values": {
+          "selected_user": "7",
+          "unsaved-1": [
+            "Ann"
+          ]
+        }
+      },
+      "api": {
+        "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}",
+        "send_json": "{\"conversation_key\": \"conv-9\", \"messages\": [{\"id\": \"wamid.1\"}]}"
+      }
+    }
+  ]
+}
