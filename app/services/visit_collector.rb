@@ -17,34 +17,22 @@ class VisitCollector
 
   def add_web_sessions
     options = {}
-
-    if user.first_seen.blank?
-      options.merge!(
-        first_seen: Time.zone.now
-      )
-    end
-
-    options.merge!(
-      last_seen: Time.zone.now
-    )
-
-    if user.last_visited_at.blank?
-      return options.merge!(
-        web_sessions: user.web_sessions.to_i + 1,
-        last_visited_at: Time.zone.now
-      )
-    end
+    options[:first_seen] = Time.zone.now if user.first_seen.blank?
+    options[:last_seen] = Time.zone.now
+    return options.merge!(new_web_session) if user.last_visited_at.blank?
 
     # last visited more than 30 minutes
     diff = (Time.zone.now - user.last_visited_at) / 60
-
-    if diff >= 30
-      options.merge!(
-        web_sessions: user.web_sessions.to_i + 1,
-        last_visited_at: Time.zone.now
-      )
-    end
-
+    options.merge!(new_web_session) if diff >= 30
     options
+  end
+
+  private
+
+  def new_web_session
+    {
+      web_sessions: user.web_sessions.to_i + 1,
+      last_visited_at: Time.zone.now
+    }
   end
 end

@@ -41,17 +41,14 @@ Metrics/AbcSize:
     - 'app/controllers/graphql_controller.rb'
     - 'app/graphql/mutations/conversations/start_conversation.rb'
     - 'app/graphql/types/app_type.rb'
-    - 'app/graphql/types/messenger_type.rb'
     - 'app/mailers/chat_notifier_mailer.rb'
     - 'app/models/app_package_integration.rb'
     - 'app/models/plugin.rb'
     - 'app/models/segment.rb'
     - 'app/services/action_trigger.rb'
     - 'app/services/action_trigger_factory.rb'
-    - 'app/services/dante/converter.rb'
     - 'app/services/dante/migrator.rb'
     - 'app/services/dante/renderer.rb'
-    - 'app/services/fetch_link_card_service.rb'
     - 'app/services/message_apis/block_manager.rb'
     - 'app/services/message_apis/content_showcase/presenter.rb'
     - 'app/services/message_apis/csat/api.rb'
@@ -67,7 +64,6 @@ Metrics/AbcSize:
     - 'app/services/message_apis/twitter/api.rb'
     - 'app/services/message_apis/ui_catalog/presenter.rb'
     - 'app/services/message_apis/vonage/api.rb'
-    - 'app/services/visit_collector.rb'
 
 # Configuration parameters: CountComments, Max, CountAsOne, AllowedMethods, AllowedPatterns.
 # AllowedMethods: refine
@@ -93,7 +89,6 @@ Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/mailers/chat_notifier_mailer.rb'
     - 'app/models/segment.rb'
-    - 'app/models/segment_comparator.rb'
     - 'app/services/action_trigger_factory.rb'
     - 'app/services/dante/renderer.rb'
     - 'app/services/message_apis/block_manager.rb'
@@ -162,7 +157,6 @@ Metrics/PerceivedComplexity:
   Exclude:
     - 'app/mailers/chat_notifier_mailer.rb'
     - 'app/models/segment.rb'
-    - 'app/policies/app_policy.rb'
     - 'app/services/action_trigger_factory.rb'
     - 'app/services/message_apis/block_manager.rb'
     - 'app/services/message_apis/content_showcase/presenter.rb'

@@ -5,6 +5,8 @@ require "oembed"
 
 class FetchLinkCardService < BaseService
   URL_PATTERN = %r{https?://\S+}
+  # Text attributes copied from an oEmbed response to the card ("" when the response lacks one).
+  OEMBED_TEXT_FIELDS = %i[title author_name author_url provider_name provider_url].freeze
 
   def call(url)
     # Get first http/https URL that isn't local
@@ -51,23 +53,14 @@ class FetchLinkCardService < BaseService
 
     response = provider.get(url)
 
-    card.type          = response.type
-    card.title         = response.respond_to?(:title)         ? response.title         : ""
-    card.author_name   = response.respond_to?(:author_name)   ? response.author_name   : ""
-    card.author_url    = response.respond_to?(:author_url)    ? response.author_url    : ""
-    card.provider_name = response.respond_to?(:provider_name) ? response.provider_name : ""
-    card.provider_url  = response.respond_to?(:provider_url)  ? response.provider_url  : ""
+    card.type = response.type
+    OEMBED_TEXT_FIELDS.each do |field|
+      card.public_send("#{field}=", response.respond_to?(field) ? response.public_send(field) : "")
+    end
     card.width         = 0
     card.height        = 0
 
-    if response.respond_to?(:thumbnail_url)
-      image = begin
-        download_image(response.thumbnail_url)
-      rescue StandardError
-        nil
-      end
-      card.image.attach(image) if image.present?
-    end
+    attach_oembed_thumbnail(card, response)
     # card.url    = response.url
     card.width  = response.width.presence  || 0
     card.height = response.height.presence || 0
@@ -77,6 +70,17 @@ class FetchLinkCardService < BaseService
     card
   rescue OEmbed::NotFound
     false
+  end
+
+  def attach_oembed_thumbnail(card, response)
+    return unless response.respond_to?(:thumbnail_url)
+
+    image = begin
+      download_image(response.thumbnail_url)
+    rescue StandardError
+      nil
+    end
+    card.image.attach(image) if image.present?
   end
 
   def attempt_opengraph(card, body)
