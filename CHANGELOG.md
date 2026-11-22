@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10k
+
+- Changed: `MessageApis::Slack::Api` builds its Block Kit payloads in smaller methods without a
+  change in behaviour (Metrics outliers of R8a, milestone R10k of the R10 programme): the thread
+  head is assembled from intro, participant fields and agent picker blocks, `notify_message` picks
+  the replied/event section and posts through one helper, and `attachment_block` fetches each file
+  in its own method under the same rescue. A golden fixture (spec/fixtures/slack/block_kit_payloads.json,
+  50 cases generated on the old code with WebMock) pins the returned values and every request
+  (URI, headers, raw JSON body) and upload, and a new spec checks it. Its four todo lines are gone.
+
 ## 2026-11-22 — fork-updates-r10h2
 
 - Changed: `MessageApis::InboxSections::Presenter.content_hook` is split without a change in
