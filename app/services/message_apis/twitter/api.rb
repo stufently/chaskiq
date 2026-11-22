@@ -159,62 +159,61 @@ module MessageApis
         return unless params.keys.include?("direct_message_events")
 
         params["direct_message_events"].each do |message|
-          sender_id = message["message_create"]["sender_id"]
-          target_id = message["message_create"]["target"]["recipient_id"]
-          message_id = message["id"]
-          sender = params["users"][sender_id]
-          recipient = params["users"][target_id]
-
-          # determine the id of the user (channel)
-          cond = sender_id == params["for_user_id"]
-          channel_id = cond ? target_id : sender_id
-          twitter_user = cond ? recipient : sender
-          agent_sender = cond
-
-          conversation = find_conversation_by_channel(channel_id)
-
-          next if conversation && conversation.conversation_part_channel_sources
-                                              .find_by(message_source_id: message_id).present?
-
-          message_data = message["message_create"]["message_data"]
-          text = message_data["text"]
-
-          serialized_content = serialize_content(
-            message_data
-          )
-
-          participant = add_participant(twitter_user)
-
-          # conversation.conversation_channels.create({
-          #  provider: 'twitter',
-          #  provider_channel_id: channel_id
-          # }) if conversation.present?
-
-          if conversation.blank?
-            conversation = app.conversations.create(
-              main_participant: participant,
-              conversation_channels_attributes: [
-                {
-                  provider: PROVIDER,
-                  provider_channel_id: channel_id
-                }
-              ]
-            )
-          end
-
-          # TODO: serialize message
-          conversation.add_message(
-            from: agent_sender ? @package.app.agents.first : participant, # agent_required ? Agent.first : participant,
-            message: {
-              html_content: text,
-              serialized_content: serialized_content
-            },
-            provider: PROVIDER,
-            message_source_id: message_id,
-            check_assignment_rules: true
-          )
+          process_twitter_dm(message, params, app)
         end
       end
+
+      private
+
+      def process_twitter_dm(message, params, app)
+        sender_id = message["message_create"]["sender_id"]
+        target_id = message["message_create"]["target"]["recipient_id"]
+        message_id = message["id"]
+        sender = params["users"][sender_id]
+        recipient = params["users"][target_id]
+
+        cond = sender_id == params["for_user_id"]
+        channel_id = cond ? target_id : sender_id
+        twitter_user = cond ? recipient : sender
+        agent_sender = cond
+
+        conversation = find_conversation_by_channel(channel_id)
+
+        return if conversation && conversation.conversation_part_channel_sources
+                                              .find_by(message_source_id: message_id).present?
+
+        message_data = message["message_create"]["message_data"]
+        text = message_data["text"]
+        serialized_content = serialize_content(message_data)
+        participant = add_participant(twitter_user)
+
+        conversation = create_twitter_conversation(app, participant, channel_id) if conversation.blank?
+
+        conversation.add_message(
+          from: agent_sender ? @package.app.agents.first : participant,
+          message: {
+            html_content: text,
+            serialized_content: serialized_content
+          },
+          provider: PROVIDER,
+          message_source_id: message_id,
+          check_assignment_rules: true
+        )
+      end
+
+      def create_twitter_conversation(app, participant, channel_id)
+        app.conversations.create(
+          main_participant: participant,
+          conversation_channels_attributes: [
+            {
+              provider: PROVIDER,
+              provider_channel_id: channel_id
+            }
+          ]
+        )
+      end
+
+      public
 
       def get_message_id(response_data)
         response_data.dig("event", "id")
@@ -230,30 +229,35 @@ module MessageApis
         )
 
         blocks = MessageApis::BlockManager.get_blocks(message["serialized_content"])
-
         plain_message = MessageApis::BlockManager.plain_text(blocks)
 
-        message_data = {}
-        message_data["text"] = plain_message
+        message_data = { "text" => plain_message }
         event["event"]["message_create"]["message_data"] = message_data
-
-        image_block = blocks.grep(Hash).find { |block| block["type"] == "ImageBlock" }
-
-        if image_block.present?
-          attrs = MessageApis::BlockManager.block_data(image_block)
-          url = MessageApis::BlockManager.absolute_url(attrs["url"]) if attrs.is_a?(Hash)
-
-          if url && (uploaded_data = upload_media(url)).present?
-            attachment = {}
-            attachment["type"] = "media"
-            attachment["media"] = {}
-            attachment["media"]["id"] = uploaded_data["media_id_string"]
-            message_data["attachment"] = attachment
-          end
-        end
+        attach_twitter_image(message_data, blocks)
 
         make_post_request("/1.1/direct_messages/events/new.json", event.to_json)
       end
+
+      private
+
+      def attach_twitter_image(message_data, blocks)
+        image_block = blocks.grep(Hash).find { |block| block["type"] == "ImageBlock" }
+        return unless image_block.present?
+
+        attrs = MessageApis::BlockManager.block_data(image_block)
+        url = MessageApis::BlockManager.absolute_url(attrs["url"]) if attrs.is_a?(Hash)
+        return unless url
+
+        uploaded_data = upload_media(url)
+        return unless uploaded_data.present?
+
+        message_data["attachment"] = {
+          "type" => "media",
+          "media" => { "id" => uploaded_data["media_id_string"] }
+        }
+      end
+
+      public
 
       def add_participant(twitter_user)
         app = @package.app

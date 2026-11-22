@@ -87,36 +87,43 @@ module MessageApis
 
         message = part.message.as_json
         content = message["serialized_content"]
-        if content.blank?
-          text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
-          return if text.blank?
+        content = html_fallback_content(message) if content.blank?
+        return if content.blank?
 
-          content = MessageApis::BlockManager.serialized_text(text)
-        end
+        parsed = parse_blocks_and_text(content)
+        return if parsed.nil?
 
-        begin
-          blocks = MessageApis::BlockManager.get_blocks(content)
-          return unless blocks.is_a?(Array) && blocks.present?
-
-          plain_message = MessageApis::BlockManager.plain_text(blocks)
-        rescue JSON::ParserError, TypeError, NoMethodError
-          return
-        end
-
-        channel_id = conversation
-                     .conversation_channels
-                     .find_by(provider: "telegram")
-                     &.provider_channel_id
-
-        # TODO: maybe handle an error here ?
+        blocks, plain_message = parsed
+        channel_id = find_telegram_channel(conversation)
         return if channel_id.blank?
 
-        media_methods = {
-          "ImageBlock" => ["sendPhoto", :photo],
-          "VideoBlock" => ["sendVideo", :video],
-          "FileBlock" => ["sendDocument", :document],
-          "AudioRecorderBlock" => ["sendAudio", :audio]
-        }
+        deliver_telegram_blocks(channel_id, blocks, plain_message, conversation, part)
+      end
+
+      private
+
+      def html_fallback_content(message)
+        text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
+        return if text.blank?
+
+        MessageApis::BlockManager.serialized_text(text)
+      end
+
+      def parse_blocks_and_text(content)
+        blocks = MessageApis::BlockManager.get_blocks(content)
+        return nil unless blocks.is_a?(Array) && blocks.present?
+
+        plain_message = MessageApis::BlockManager.plain_text(blocks)
+        [blocks, plain_message]
+      rescue JSON::ParserError, TypeError, NoMethodError
+        nil
+      end
+
+      def find_telegram_channel(conversation)
+        conversation.conversation_channels.find_by(provider: "telegram")&.provider_channel_id
+      end
+
+      def deliver_telegram_blocks(channel_id, blocks, plain_message, conversation, part)
         send_text = ->(text) { @conn.post("#{@url}/sendMessage", { chat_id: channel_id, text: text }.to_json) }
         attachments = MessageApis::BlockManager.media_blocks(blocks)
         MessageApis::BlockManager.deliver_attachments(
@@ -128,6 +135,17 @@ module MessageApis
           upload_telegram(channel_id, data, method: method)
         end
       end
+
+      def media_methods
+        {
+          "ImageBlock" => ["sendPhoto", :photo],
+          "VideoBlock" => ["sendVideo", :video],
+          "FileBlock" => ["sendDocument", :document],
+          "AudioRecorderBlock" => ["sendAudio", :audio]
+        }
+      end
+
+      public
 
       def get_profile_for_participant(conversation)
         external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
