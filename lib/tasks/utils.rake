@@ -297,7 +297,8 @@ namespace :repo do
     end
   end
 
-  #  -s, --status string     Filter runs by status: {queued|completed|in_progress|requested|waiting|action_required|cancelled|failure|neutral|skipped|stale|startup_failure|success|timed_out}
+  #  -s, --status string     Filter runs by status: {queued|completed|in_progress|requested|waiting|action_required|
+  #                          cancelled|failure|neutral|skipped|stale|startup_failure|success|timed_out}
 
   task delete_cancelled_runs: :environment do
     handle_run(limit: 500, status: "cencelled", action: "delete")

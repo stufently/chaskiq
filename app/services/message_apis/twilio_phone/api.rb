@@ -120,7 +120,8 @@ module MessageApis::TwilioPhone
 
     def process_hold(params, package)
       conference_sid = MessageApis::TwilioPhone::Store.get_data(params[:conversation_key], :conference_sid)
-      participant_sid = package.app.conversations.find_by(key: params[:conversation_key]).conversation_channels.find_by(provider: "TwilioPhone").provider_channel_id
+      participant_sid = package.app.conversations.find_by(key: params[:conversation_key])
+                               .conversation_channels.find_by(provider: "TwilioPhone").provider_channel_id
 
       client.api.conferences(conference_sid).participants(participant_sid).update(hold: params[:hold_action])
 
@@ -543,7 +544,8 @@ module MessageApis::TwilioPhone
 
     def self.get_profile(conversation, _package)
       profile = conversation.main_participant.external_profiles.find_by(provider: "TwilioPhone")
-      # when a user has a phone number but not a profile , lets create a new conversation for the valid user or create a new profile in this conversation
+      # when a user has a phone number but not a profile , lets create a new conversation for the valid user
+      # or create a new profile in this conversation
       if profile.blank?
         raise "invalid phone" if conversation.main_participant.phone.blank?
         raise "invalid phone" unless Phonelib.valid?(conversation.main_participant.phone)
@@ -561,7 +563,8 @@ module MessageApis::TwilioPhone
           )
           @conversation_key = conversation.key
         else
-          profile = conversation.main_participant.external_profiles.create(provider: "TwilioPhone", profile_id: conversation.main_participant.phone)
+          profile = conversation.main_participant.external_profiles.create(provider: "TwilioPhone",
+                                                                           profile_id: conversation.main_participant.phone)
         end
       end
 

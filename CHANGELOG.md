@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10c
+
+- Changed: every line over 140 characters in the nine files fork-updates-r9b touched (Layout/LineLength
+  outliers of R8a) is wrapped: four comments, a `%w[]` list, form-field hashes, a block inside a hash,
+  a ternary turned into if/else, a condition, a method chain, a call with keywords and two string
+  literals split into adjacent pieces; the 232-character ransack symbol of the conversation search is
+  built from its field list.
+  Seven files compile to the same bytecode as before; the hooks controller, the conversation search
+  and the form-field and ransack lists are pinned by four new specs. Their 9 lines leave the
+  Layout/LineLength block of the todo.
+
 ## 2026-11-22 — fork-updates-r10cfg
 
 - Changed: Metrics/MethodLength, Metrics/ClassLength and Metrics/BlockLength count a multi-line array,

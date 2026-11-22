@@ -193,7 +193,8 @@ module MessageApis
 
       # {
       #  "blocks" => [
-      #    { "key" => key, "text" => text.to_s, "type" => "unstyled", "depth" => 0, "inlineStyleRanges" => [], "entityRanges" => [], "data" => {} }
+      #    { "key" => key, "text" => text.to_s, "type" => "unstyled", "depth" => 0,
+      #      "inlineStyleRanges" => [], "entityRanges" => [], "data" => {} }
       #  ],
       #  "entityMap" => {}
       # }

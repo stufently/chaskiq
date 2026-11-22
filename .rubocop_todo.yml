@@ -11,15 +11,6 @@
 # URISchemes: http, https
 Layout/LineLength:
   Exclude:
-    - 'app/controllers/api/v1/hooks_controller.rb'
-    - 'app/graphql/types/app_type.rb'
-    - 'app/models/app_user.rb'
-    - 'app/models/campaign.rb'
-    - 'app/models/concerns/globalize_accessors.rb'
-    - 'app/services/message_apis/block_manager.rb'
-    - 'app/services/message_apis/twilio/api.rb'
-    - 'app/services/message_apis/twilio_phone/api.rb'
-    - 'lib/tasks/utils.rake'
     - 'spec/controllers/api/v1/hooks/dialog_360_spec.rb'
     - 'spec/controllers/api/v1/hooks/message_bird_spec.rb'
     - 'spec/controllers/api/v1/hooks/pipedrive_spec.rb'

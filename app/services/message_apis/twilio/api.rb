@@ -37,7 +37,8 @@ module MessageApis
             {
               name: "new_conversations_after",
               label: "Count messages as new conversations",
-              hint: "After a conversation is closed new messages will create a new conversation if there are received after this time period",
+              hint: "After a conversation is closed new messages will create a new conversation " \
+                    "if there are received after this time period",
               type: "number",
               required: false,
               grid: { xs: "w-full", sm: "w-full" }
