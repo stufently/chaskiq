@@ -244,3 +244,28 @@ AC-002 сверяет не байты патча, а «изменены толь
 - Правило переноса BASE: каждая веха, которая вливается после другой, — перенос строки BASE_SHA на новый HEAD,
   `git apply --check` патча, мутанты (текст — ровно раз), `--write-base` снимков на чистом checkout нового
   `main`, sha256 в AC-008 — и только потом клон. Патч перегенерировать не нужно, пока `git apply --check` чист.
+
+## 7. Статус на 2026-11-22 (остановка по просьбе владельца)
+
+Принято и влито в main: R10a, R10b, R10cfg, R10c, R10e, R10g, R10h1, R10h2, R10i, R10k, R10l.
+Сняты: R10d, R10f, R10j. Панелей qw2 и клонов по R10 нет, дерево чистое.
+
+Осталось: R10m (telegram, twitter, twilio_phone), R10n (open_ai, csat, audits_reports; спека была
+в работе и НЕ закоммичена — писать заново от HEAD), R10o (block_manager, dante renderer/migrator),
+R10p (segment.rb), R10q (action_trigger + factory), R10r (controllers), R10s (start_conversation
+#resolve + ChatNotifierMailer), R10t (app_type.rb), R10u (models), R10v (user_handler), затем R9
+удаляет `.rubocop_todo.yml`. Офенсы и строки todo брать живыми (`.rubocop_todo.yml` сейчас 79 строк).
+
+Порядок на возобновление: спеку пишет субагент по шаблонам r10g/r10k (golden на BASE, мутанты,
+source-scan, 4 коммита), BASE двигать на HEAD (`--write-base`, пересчёт sha256, preflight), коммит
+«Add <X> spec», клон, граничные AC, запуск на qw2, Monitor. Раздел 8 спек до 2026-11-22 11:39Z —
+только agy; после сброса Codex — полный кросс-ревью.
+
+После 11:39Z: мутационные прогоны cx по тестам вех, написанных qw2 (R3b-2, R3b-3, fix-cleanup-3,
+R2b, R7b/c/d, R9a/b, R10a, R10b, R10c, R10e, R10g, R10h1, R10h2, R10i, R10k, R10l); удалить память
+codex-pause-2026-11-22.
+
+Находки вне бэклога (отдельная веха fixes): `Types::AppType#conversations(term:)` всегда падает на
+allowlist Ransack (у Conversation нет ransackable_attributes); конвертер Dante теряет стили,
+начинающиеся в середине текста; тип oEmbed-карточки не сохраняется. Оговорки: ctx как
+HashWithIndifferentAccess не закреплён в снимках презентеров; строки из фикстур не заморожены.

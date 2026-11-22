@@ -11,6 +11,7 @@
   110 cases generated on the old code with WebMock) pins the returned values, every request (URI,
   headers, raw body) and the conversation rows afterwards, and a new spec checks it. Their seven
   todo lines are gone.
+
 ## 2026-11-22 — fork-updates-r10k
 
 - Changed: `MessageApis::Slack::Api` builds its Block Kit payloads in smaller methods without a
