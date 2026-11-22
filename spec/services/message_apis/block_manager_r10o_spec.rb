@@ -56,6 +56,26 @@ RSpec.describe MessageApis::BlockManager, ".deliver_attachments" do
     end.to raise_error(LocalJumpError)
   end
 
+  it "chooses fallback text before computing its index" do
+    calls = []
+    text = double("plain text")
+    allow(text).to receive(:presence) do
+      calls << :presence
+      "fallback"
+    end
+    attachments = []
+    allow(attachments).to receive(:size) do
+      calls << :size
+      0
+    end
+
+    described_class.deliver_attachments(
+      attachments, text, send_text: ->(_text) { calls << :send }
+    )
+
+    expect(calls.last(3)).to eq(%i[presence size send])
+  end
+
   it "does not send text for a replayed fallback at the final index" do
     audio = attachment("AudioRecorderBlock", "https://cdn.example.com/voice.ogg")
     result = described_class.deliver_attachments(
