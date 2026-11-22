@@ -26,15 +26,11 @@ Metrics/AbcSize:
     - 'app/services/dante/renderer.rb'
     - 'app/services/message_apis/block_manager.rb'
     - 'app/services/message_apis/csat/api.rb'
-    - 'app/services/message_apis/dialog360/api.rb'
-    - 'app/services/message_apis/message_bird/api.rb'
     - 'app/services/message_apis/open_ai/api.rb'
     - 'app/services/message_apis/slack/api.rb'
     - 'app/services/message_apis/telegram/api.rb'
-    - 'app/services/message_apis/twilio/api.rb'
     - 'app/services/message_apis/twilio_phone/api.rb'
     - 'app/services/message_apis/twitter/api.rb'
-    - 'app/services/message_apis/vonage/api.rb'
 
 # Configuration parameters: CountComments, Max, CountAsOne, AllowedMethods, AllowedPatterns.
 # AllowedMethods: refine
@@ -69,11 +65,8 @@ Metrics/MethodLength:
     - 'app/services/action_trigger_factory.rb'
     - 'app/services/dante/renderer.rb'
     - 'app/services/message_apis/block_manager.rb'
-    - 'app/services/message_apis/dialog360/api.rb'
-    - 'app/services/message_apis/message_bird/api.rb'
     - 'app/services/message_apis/slack/api.rb'
     - 'app/services/message_apis/telegram/api.rb'
-    - 'app/services/message_apis/vonage/api.rb'
 
 # Configuration parameters: Max, CountKeywordArgs, MaxOptionalParameters.
 Metrics/ParameterLists:
