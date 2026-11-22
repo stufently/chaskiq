@@ -259,7 +259,7 @@ the change` / `is not BASE + r10a_rewrite.patch`); AC-003 красный (спе
 не найдены); AC-004 красный (`Layout/LineLength: 37 offenses left in the files of this milestone`); AC-006
 красный (`missing commits`).
 
-TRIAL_RESULTS_R10A
+Пробный прогон постановщика на 16682f02: все 9 критериев зелёные, бэклог 254 → 217. Приёмка 2026-11-22: исполнитель qw2, все 9 критериев зелёные на перезапуске постановщика, ISEQ совпал в 19 файлах, agy — без находок.
 
 ## 8. Авторевью и контракт отчёта
 
