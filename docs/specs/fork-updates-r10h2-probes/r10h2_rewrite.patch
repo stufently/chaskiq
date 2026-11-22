@@ -1,0 +1,319 @@
+diff --git a/app/services/message_apis/inbox_sections/presenter.rb b/app/services/message_apis/inbox_sections/presenter.rb
+index 119894cf..7965a0e8 100644
+--- a/app/services/message_apis/inbox_sections/presenter.rb
++++ b/app/services/message_apis/inbox_sections/presenter.rb
+@@ -182,234 +182,103 @@ module MessageApis
+         }
+       end
+ 
++      # Blocks of content_hook by values[:block_type]. A truthy values[:c] replaces an early block with
++      # a "foo" text, a late block is built after it and wins (the order of the former if chain).
++      EARLY_BLOCKS = {
++        "user-blocks" => :user_block,
++        "conversation-events" => :events_block,
++        "user-properties-block" => :user_properties_block,
++        "external-profiles" => :external_profiles_block
++      }.freeze
++      LATE_BLOCKS = { "assignee-block" => :assignee_block, "tag-blocks" => :tags_block }.freeze
++      USER_PROPERTIES = {
++        "Last Seen" => lambda do |u|
++          I18n.l(u.last_visited_at, format: :short)
++        rescue StandardError
++          nil
++        end,
++        "Location" => ->(u) { [u.region, u.city, u.country].compact.join(", ") },
++        "Ip" => ->(_u) {},
++        "Sessions" => ->(u) { u.web_sessions },
++        "Timezone" => ->(_u) {},
++        "Browser" => ->(u) { [u.browser, u.browser_version].join(", ") },
++        "OS" => ->(u) { [u.os, u.os_version].join(", ") },
++        "Language" => ->(u) { u.browser_language },
++        "Referrer" => ->(u) { u.referrer }
++      }.freeze
++
+       def self.content_hook(kind:, ctx:)
+         conversation = Conversation.find_by(key: ctx[:conversation_key])
+         user = conversation.main_participant
++        block_type = ctx.dig(:values, :block_type)
+ 
+-        if ctx.dig(:values, :block_type) == "user-blocks"
+-
+-          definitions = [
+-            {
+-              type: "text",
+-              text: user.display_name.presence || "---",
+-              style: "header",
+-              align: "center"
+-            },
+-
+-            {
+-              type: "image",
+-              url: user.avatar_url,
+-              height: 64,
+-              width: 64,
+-              align: "center",
+-              rounded: true
+-            }
+-          ]
+-
+-          if user.email.present?
+-            definitions << {
+-              type: "text",
+-              text: user.email,
+-              style: "muted",
+-              align: "center"
+-            }
+-          end
+-
+-          definitions << {
+-            type: "text",
+-            text: user.type,
+-            style: "muted",
+-            align: "center"
+-          }
+-
+-          definitions << {
+-            id: "visit-user-profile",
+-            label: I18n.t("common.visit"),
+-            type: "button",
+-            variant: "link",
+-            align: "right",
+-            action: {
+-              type: "link",
+-              url: "/apps/#{conversation.app.key}/users/#{user.id}"
+-            }
+-          }
+-
+-          definitions
+-        end
++        definitions = send(EARLY_BLOCKS[block_type], conversation, user) if EARLY_BLOCKS.key?(block_type)
++        definitions = [{ text: "foo", type: "text" }] if ctx.dig(:values, :c)
++        definitions = send(LATE_BLOCKS[block_type], conversation) if LATE_BLOCKS.key?(block_type)
+ 
+-        if ctx.dig(:values, :block_type) == "conversation-events"
+-          definitions = [
+-            {
+-              type: "text",
+-              text: "Events",
+-              style: "header"
+-            },
+-            {
+-              type: "list",
+-              items: conversation.events.order("events.id asc").map do |e|
+-                       {
+-                         type: "item",
+-                         id: "event-#{e.id}",
+-                         title: e.action,
+-                         subtitle: I18n.l(e.created_at, format: :short),
+-                         action: {
+-                           type: "submit"
+-                         }
+-                       }
+-                     end
+-            }
+-          ]
+-        end
++        { definitions: definitions }
++      end
+ 
+-        if ctx.dig(:values, :block_type) == "user-properties-block"
+-          items_attrs = [
+-            { label: "Last Seen", call: lambda { |u|
+-                                          begin
+-                                            I18n.l(u.last_visited_at, format: :short)
+-                                          rescue StandardError
+-                                            nil
+-                                          end
+-                                        } },
+-            { label: "Location", call: ->(u) { [u.region, u.city, u.country].compact.join(", ") } },
+-            { label: "Ip", call: ->(u) {} },
+-            { label: "Sessions", call: ->(u) { u.web_sessions } },
+-            { label: "Timezone", call: ->(u) {} },
+-            { label: "Browser", call: ->(u) { [u.browser, u.browser_version].join(", ") } },
+-            { label: "OS", call: ->(u) { [u.os, u.os_version].join(", ") } },
+-            { label: "Language", call: ->(u) { u.browser_language } },
+-            { label: "Referrer", call: ->(u) { u.referrer } }
+-          ]
++      def self.user_block(conversation, user)
++        definitions = [
++          { type: "text", text: user.display_name.presence || "---", style: "header", align: "center" },
++          { type: "image", url: user.avatar_url, height: 64, width: 64, align: "center", rounded: true }
++        ]
++        definitions << { type: "text", text: user.email, style: "muted", align: "center" } if user.email.present?
++        definitions << { type: "text", text: user.type, style: "muted", align: "center" }
++        definitions << visit_button("visit-user-profile", "/apps/#{conversation.app.key}/users/#{user.id}")
++      end
+ 
+-          definitions = [
+-            {
+-              type: "text",
+-              text: "Contact's browsing properties",
+-              style: "header"
+-            },
+-            { type: "data-table",
+-              items: items_attrs.map do |i|
+-                       {
+-                         type: "field-value",
+-                         field: i[:label],
+-                         value: i[:call].call(user)
+-                       }
+-                     end }
+-          ]
++      def self.events_block(conversation, _user)
++        items = conversation.events.order("events.id asc").map do |e|
++          { type: "item", id: "event-#{e.id}", title: e.action, subtitle: I18n.l(e.created_at, format: :short),
++            action: { type: "submit" } }
+         end
++        [{ type: "text", text: "Events", style: "header" }, { type: "list", items: items }]
++      end
+ 
+-        if ctx.dig(:values, :block_type) == "external-profiles"
+-
+-          tables = user.external_profiles.map do |o|
+-            { type: "data-table",
+-              items: [
+-                { type: "field-value", field: "Name", value: o["provider"] },
+-                { type: "field-value", field: "External id", value: o["profile_id"] }
+-              ] }
+-          end
+-
+-          if tables.empty?
+-            tables = {
+-              type: "text",
+-              text: "no external profiles found",
+-              style: "muted",
+-              align: "center"
+-            }
+-          end
+-
+-          definitions = [
+-            {
+-              type: "text",
+-              text: "Contact's External profiles",
+-              style: "header"
+-            },
+-            tables
+-          ].flatten
+-        end
++      def self.user_properties_block(_conversation, user)
++        items = USER_PROPERTIES.map { |label, call| { type: "field-value", field: label, value: call.call(user) } }
++        [{ type: "text", text: "Contact's browsing properties", style: "header" }, { type: "data-table", items: items }]
++      end
+ 
+-        if ctx.dig(:values, :c)
+-          definitions = [
+-            {
+-              text: "foo",
+-              type: "text"
+-            }
+-          ]
++      def self.external_profiles_block(_conversation, user)
++        tables = user.external_profiles.map do |o|
++          { type: "data-table",
++            items: [{ type: "field-value", field: "Name", value: o["provider"] },
++                    { type: "field-value", field: "External id", value: o["profile_id"] }] }
+         end
++        tables = { type: "text", text: "no external profiles found", style: "muted", align: "center" } if tables.empty?
++        [{ type: "text", text: "Contact's External profiles", style: "header" }, tables].flatten
++      end
+ 
+-        if ctx.dig(:values, :block_type) == "assignee-block"
+-          assignee = conversation&.assignee
+-
+-          definitions = [
+-            {
+-              type: "text",
+-              text: "Assignee",
+-              style: "header"
+-            }
+-          ]
+-
+-          if assignee.blank?
+-            definitions << {
+-              text: "unassigned",
+-              type: "text",
+-              style: "muted",
+-              align: "center"
+-            }
+-          end
+-
+-          if assignee.present?
+-            assignee_name = if assignee&.display_name&.empty?
+-                              assignee&.email
+-                            else
+-                              assignee&.display_name
+-                            end
+-
+-            definitions << {
+-              text: assignee_name,
+-              type: "text"
+-            }
+-
+-            definitions << {
+-              id: "visit-agent-profile",
+-              label: I18n.t("common.visit"),
+-              type: "button",
+-              variant: "link",
+-              align: "right",
+-              action: {
+-                type: "link",
+-                url: "/apps/#{conversation.app.key}/agents/#{assignee.id}"
+-              }
+-            }
+-          end
+-        end
++      def self.assignee_block(conversation)
++        assignee = conversation&.assignee
++        definitions = [{ type: "text", text: "Assignee", style: "header" }]
++        return definitions << { text: "unassigned", type: "text", style: "muted", align: "center" } if assignee.blank?
+ 
+-        if ctx.dig(:values, :block_type) == "tag-blocks"
+-          definitions = [
+-            {
+-              text: "Conversation Tags",
+-              type: "text",
+-              style: "header"
+-            }
+-          ]
++        name = assignee&.display_name&.empty? ? assignee.email : assignee.display_name
++        definitions << { text: name, type: "text" }
++        definitions << visit_button("visit-agent-profile", "/apps/#{conversation.app.key}/agents/#{assignee.id}")
++      end
+ 
+-          definitions << if conversation.tag_list.any?
+-                           {
+-                             text: conversation.tag_list.join(", "),
+-                             type: "text"
+-                           }
+-                         else
+-                           {
+-                             text: "no tags found",
+-                             type: "text",
+-                             style: "muted",
+-                             align: "center"
+-                           }
+-                         end
+-        end
++      def self.tags_block(conversation)
++        tags = if conversation.tag_list.any?
++                 { text: conversation.tag_list.join(", "), type: "text" }
++               else
++                 { text: "no tags found", type: "text", style: "muted", align: "center" }
++               end
++        [{ text: "Conversation Tags", type: "text", style: "header" }, tags]
++      end
+ 
+-        {
+-          definitions: definitions
+-        }
++      def self.visit_button(id, url)
++        { id: id, label: I18n.t("common.visit"), type: "button", variant: "link", align: "right",
++          action: { type: "link", url: url } }
+       end
+ 
++      private_class_method :user_block, :events_block, :user_properties_block, :external_profiles_block,
++                           :assignee_block, :tags_block, :visit_button
++
+       # Submit Sheet flow webhook URL (optional)
+       # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
+       # and submitted when the Submit Sheets JS method is called.

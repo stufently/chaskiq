@@ -1,0 +1,334 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Metrics/AbcSize": [
+      "app/services/message_apis/inbox_sections/presenter.rb"
+    ],
+    "Metrics/CyclomaticComplexity": [
+      "app/services/message_apis/inbox_sections/presenter.rb"
+    ],
+    "Metrics/MethodLength": [
+      "app/services/message_apis/inbox_sections/presenter.rb"
+    ],
+    "Metrics/PerceivedComplexity": [
+      "app/services/message_apis/inbox_sections/presenter.rb"
+    ]
+  },
+  "app_files": [
+    "app/services/message_apis/inbox_sections/presenter.rb"
+  ],
+  "new_files": [
+    "spec/fixtures/presenters/inbox_sections_hooks.json"
+  ],
+  "char_specs": [
+    "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+  ],
+  "golden": {
+    "fixture": "spec/fixtures/presenters/inbox_sections_hooks.json",
+    "spec": "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb",
+    "generator": "r10h2_golden_spec.rb",
+    "cases": "r10h2_cases.json"
+  },
+  "commits": [
+    {
+      "subject": "Pin inbox sections hooks",
+      "patch": "r10h2_golden.patch",
+      "added": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "subject": "Split inbox sections content hook",
+      "patch": "r10h2_rewrite.patch"
+    },
+    {
+      "subject": "Drop R10h2 entries from RuboCop todo",
+      "todo": true
+    },
+    {
+      "subject": "Note fork-updates-r10h2 in changelog",
+      "changelog": true
+    }
+  ],
+  "mutants": [
+    {
+      "id": "I01",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "\"user-blocks\" => :user_block,",
+      "new": "\"user-block\" => :user_block,",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I02",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "\"conversation-events\" => :events_block,",
+      "new": "\"conversation-events\" => :user_block,",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I03",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "LATE_BLOCKS = { \"assignee-block\" => :assignee_block, \"tag-blocks\" => :tags_block }",
+      "new": "LATE_BLOCKS = { \"assignee-block\" => :assignee_block }",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I04",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "\"external-profiles\" => :external_profiles_block\n      }.freeze\n      LATE_BLOCKS = { \"assignee-block\" => :assignee_block,",
+      "new": "\"external-profiles\" => :external_profiles_block,\n        \"assignee-block\" => :assignee_block\n      }.freeze\n      LATE_BLOCKS = {",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I05",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "Conversation.find_by(key: ctx[:conversation_key])",
+      "new": "Conversation.find_by(key: ctx.dig(:values, :conversation_key))",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I06",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "definitions = [{ text: \"foo\", type: \"text\" }] if ctx.dig(:values, :c)\n        definitions = send(LATE_BLOCKS[block_type], conversation) if LATE_BLOCKS.key?(block_type)",
+      "new": "definitions = send(LATE_BLOCKS[block_type], conversation) if LATE_BLOCKS.key?(block_type)\n        definitions = [{ text: \"foo\", type: \"text\" }] if ctx.dig(:values, :c)",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I07",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "definitions = send(EARLY_BLOCKS[block_type], conversation, user) if EARLY_BLOCKS.key?(block_type)\n        definitions = [{ text: \"foo\", type: \"text\" }] if ctx.dig(:values, :c)",
+      "new": "definitions = [{ text: \"foo\", type: \"text\" }] if ctx.dig(:values, :c)\n        definitions ||= send(EARLY_BLOCKS[block_type], conversation, user) if EARLY_BLOCKS.key?(block_type)",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I08",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "{ text: \"foo\", type: \"text\" }",
+      "new": "{ type: \"text\", text: \"foo\" }",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I09",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "user.display_name.presence || \"---\"",
+      "new": "user.display_name || \"---\"",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I10",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "if user.email.present?",
+      "new": "if user.email",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I11",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "text: user.type, style: \"muted\"",
+      "new": "text: user.type, style: \"header\"",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I12",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "\"/apps/#{conversation.app.key}/users/#{user.id}\"",
+      "new": "\"/apps/#{conversation.app.key}/users/#{conversation.app.key}\"",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I13",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "rounded: true }",
+      "new": "rounded: false }",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I14",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "order(\"events.id asc\")",
+      "new": "order(\"events.id desc\")",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I15",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "id: \"event-#{e.id}\"",
+      "new": "id: \"events-#{e.id}\"",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I16",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "subtitle: I18n.l(e.created_at, format: :short)",
+      "new": "subtitle: I18n.l(e.created_at, format: :long)",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I17",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "I18n.l(u.last_visited_at, format: :short)",
+      "new": "I18n.l(u.last_visited_at.to_date, format: :short)",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I18",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "[u.region, u.city, u.country].compact.join(\", \")",
+      "new": "[u.region, u.city, u.country].join(\", \")",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I19",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "\"Sessions\" => ->(u) { u.web_sessions }",
+      "new": "\"Sessions\" => ->(u) { u.web_sessions.to_i }",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I20",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "[u.os, u.os_version].join(\", \")",
+      "new": "[u.os_version, u.os].join(\", \")",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I21",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "\"Referrer\" => ->(u) { u.referrer }",
+      "new": "\"Referrer\" => ->(u) { u.browser_language }",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I22",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "value: o[\"profile_id\"]",
+      "new": "value: o[\"provider\"]",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I23",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "if tables.empty?",
+      "new": "if tables.one?",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I24",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "tables].flatten",
+      "new": "tables]",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I25",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "if assignee.blank?",
+      "new": "if assignee.nil? || assignee.display_name.nil?",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I26",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "assignee&.display_name&.empty? ? assignee.email : assignee.display_name",
+      "new": "assignee.display_name || assignee.email",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I27",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "\"/apps/#{conversation.app.key}/agents/#{assignee.id}\"",
+      "new": "\"/apps/#{conversation.app.key}/agent/#{assignee.id}\"",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I28",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "conversation.tag_list.join(\", \")",
+      "new": "conversation.tag_list.join(\",\")",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I29",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "if conversation.tag_list.any?",
+      "new": "if conversation.tag_list.many?",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I30",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "{ id: id, label:",
+      "new": "{ id: url, label:",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    },
+    {
+      "id": "I31",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "variant: \"link\", align: \"right\"",
+      "new": "variant: \"link\", align: \"left\"",
+      "specs": [
+        "spec/services/message_apis/inbox_sections/presenter_hooks_spec.rb"
+      ]
+    }
+  ]
+}
