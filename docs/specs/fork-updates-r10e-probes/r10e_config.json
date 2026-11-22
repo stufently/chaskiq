@@ -1,0 +1,242 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Layout/LineLength": [
+      "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+      "spec/controllers/api/v1/hooks/message_bird_spec.rb",
+      "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+      "spec/controllers/api/v1/hooks/twilio_spec.rb",
+      "spec/controllers/api/v1/hooks/twitter_spec.rb",
+      "spec/controllers/api/v1/hooks/vonage_spec.rb",
+      "spec/controllers/api/v1/hooks_controller_spec.rb",
+      "spec/models/app_package_spec.rb",
+      "spec/models/campaign_spec.rb",
+      "spec/services/dante_renderer_spec.rb"
+    ]
+  },
+  "app_files": [
+    "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+    "spec/controllers/api/v1/hooks/message_bird_spec.rb",
+    "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+    "spec/controllers/api/v1/hooks/twilio_spec.rb",
+    "spec/controllers/api/v1/hooks/twitter_spec.rb",
+    "spec/controllers/api/v1/hooks/vonage_spec.rb",
+    "spec/controllers/api/v1/hooks_controller_spec.rb",
+    "spec/models/app_package_spec.rb",
+    "spec/models/campaign_spec.rb",
+    "spec/services/dante_renderer_spec.rb"
+  ],
+  "new_files": [
+    "spec/fixtures/requests/amazon_ses/received_notification.json",
+    "spec/fixtures/requests/dante/draft_basic_styles.json",
+    "spec/fixtures/requests/dante/draft_custom_color.json",
+    "spec/fixtures/requests/dante/draft_images.json",
+    "spec/fixtures/requests/dante/draft_links.json",
+    "spec/fixtures/requests/dante/draft_lists.json",
+    "spec/fixtures/requests/dante/draft_styles.json",
+    "spec/fixtures/requests/dante/draft_video_embed.json",
+    "spec/fixtures/requests/dante/embed_block.json",
+    "spec/fixtures/requests/dante/link_marks.json",
+    "spec/fixtures/requests/dante/text_style_marks.json",
+    "spec/fixtures/requests/dante/video_block.json",
+    "spec/fixtures/requests/pipedrive/person_created.json",
+    "spec/fixtures/requests/pipedrive/person_deleted_meta.json",
+    "spec/fixtures/requests/pipedrive/person_deleted_previous.json",
+    "spec/fixtures/requests/pipedrive/person_renamed_current.json",
+    "spec/fixtures/requests/pipedrive/person_renamed_previous.json",
+    "spec/fixtures/requests/pipedrive/person_updated_current.json",
+    "spec/fixtures/requests/pipedrive/person_updated_meta.json",
+    "spec/fixtures/requests/pipedrive/person_updated_previous.json",
+    "spec/fixtures/requests/twitter/message_create_event.json"
+  ],
+  "commits": [
+    {
+      "subject": "Move long spec literals into fixtures",
+      "patch": "r10e_rewrite.patch",
+      "added": []
+    },
+    {
+      "subject": "Drop R10e entries from RuboCop todo",
+      "todo": true
+    },
+    {
+      "subject": "Note fork-updates-r10e in changelog",
+      "changelog": true
+    }
+  ],
+  "fixtures": [
+    {
+      "file": "spec/services/dante_renderer_spec.rb",
+      "line": 61,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/dante/embed_block.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/dante/embed_block.json\").read"
+    },
+    {
+      "file": "spec/services/dante_renderer_spec.rb",
+      "line": 73,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/dante/video_block.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/dante/video_block.json\").read"
+    },
+    {
+      "file": "spec/services/dante_renderer_spec.rb",
+      "line": 95,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/dante/link_marks.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/dante/link_marks.json\").read"
+    },
+    {
+      "file": "spec/services/dante_renderer_spec.rb",
+      "line": 106,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/dante/text_style_marks.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/dante/text_style_marks.json\").read"
+    },
+    {
+      "file": "spec/services/dante_renderer_spec.rb",
+      "line": 119,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/dante/draft_custom_color.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/dante/draft_custom_color.json\").read"
+    },
+    {
+      "file": "spec/services/dante_renderer_spec.rb",
+      "line": 128,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/dante/draft_styles.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/dante/draft_styles.json\").read"
+    },
+    {
+      "file": "spec/services/dante_renderer_spec.rb",
+      "line": 137,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/dante/draft_basic_styles.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/dante/draft_basic_styles.json\").read"
+    },
+    {
+      "file": "spec/services/dante_renderer_spec.rb",
+      "line": 153,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/dante/draft_lists.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/dante/draft_lists.json\").read"
+    },
+    {
+      "file": "spec/services/dante_renderer_spec.rb",
+      "line": 162,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/dante/draft_links.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/dante/draft_links.json\").read"
+    },
+    {
+      "file": "spec/services/dante_renderer_spec.rb",
+      "line": 173,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/dante/draft_images.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/dante/draft_images.json\").read"
+    },
+    {
+      "file": "spec/services/dante_renderer_spec.rb",
+      "line": 183,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/dante/draft_video_embed.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/dante/draft_video_embed.json\").read"
+    },
+    {
+      "file": "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+      "line": 22,
+      "kind": "hash",
+      "key": "meta",
+      "fixture": "spec/fixtures/requests/pipedrive/person_updated_meta.json",
+      "ref": "JSON.parse(Rails.root.join(\"spec/fixtures/requests/pipedrive/person_updated_meta.json\").read)"
+    },
+    {
+      "file": "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+      "line": 23,
+      "kind": "hash",
+      "key": "current",
+      "fixture": "spec/fixtures/requests/pipedrive/person_updated_current.json",
+      "ref": "JSON.parse(Rails.root.join(\"spec/fixtures/requests/pipedrive/person_updated_current.json\").read)"
+    },
+    {
+      "file": "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+      "line": 23,
+      "kind": "hash",
+      "key": "previous",
+      "fixture": "spec/fixtures/requests/pipedrive/person_updated_previous.json",
+      "ref": "JSON.parse(Rails.root.join(\"spec/fixtures/requests/pipedrive/person_updated_previous.json\").read)"
+    },
+    {
+      "file": "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+      "line": 43,
+      "kind": "hash",
+      "key": "current",
+      "fixture": "spec/fixtures/requests/pipedrive/person_renamed_current.json",
+      "ref": "{ \"id\" => profile_id }.merge(JSON.parse(Rails.root.join(\"spec/fixtures/requests/pipedrive/person_renamed_current.json\").read))",
+      "vars": [
+        "profile_id"
+      ],
+      "drop_keys": [
+        "id"
+      ]
+    },
+    {
+      "file": "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+      "line": 44,
+      "kind": "hash",
+      "key": "previous",
+      "fixture": "spec/fixtures/requests/pipedrive/person_renamed_previous.json",
+      "ref": "{ \"id\" => profile_id }.merge(JSON.parse(Rails.root.join(\"spec/fixtures/requests/pipedrive/person_renamed_previous.json\").read))",
+      "vars": [
+        "profile_id"
+      ],
+      "drop_keys": [
+        "id"
+      ]
+    },
+    {
+      "file": "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+      "line": 56,
+      "kind": "hash",
+      "key": "meta",
+      "fixture": "spec/fixtures/requests/pipedrive/person_deleted_meta.json",
+      "ref": "JSON.parse(Rails.root.join(\"spec/fixtures/requests/pipedrive/person_deleted_meta.json\").read)"
+    },
+    {
+      "file": "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+      "line": 58,
+      "kind": "hash",
+      "key": "previous",
+      "fixture": "spec/fixtures/requests/pipedrive/person_deleted_previous.json",
+      "ref": "JSON.parse(Rails.root.join(\"spec/fixtures/requests/pipedrive/person_deleted_previous.json\").read)"
+    },
+    {
+      "file": "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+      "line": 180,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/pipedrive/person_created.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/pipedrive/person_created.json\").read"
+    },
+    {
+      "file": "spec/controllers/api/v1/hooks/pipedrive_spec.rb",
+      "line": 196,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/pipedrive/person_created.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/pipedrive/person_created.json\").read"
+    },
+    {
+      "file": "spec/controllers/api/v1/hooks/twitter_spec.rb",
+      "line": 416,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/twitter/message_create_event.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/twitter/message_create_event.json\").read"
+    },
+    {
+      "file": "spec/controllers/api/v1/hooks_controller_spec.rb",
+      "line": 906,
+      "kind": "string",
+      "fixture": "spec/fixtures/requests/amazon_ses/received_notification.json",
+      "ref": "Rails.root.join(\"spec/fixtures/requests/amazon_ses/received_notification.json\").read"
+    }
+  ]
+}
