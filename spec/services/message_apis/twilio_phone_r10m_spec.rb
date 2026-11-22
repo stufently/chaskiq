@@ -180,6 +180,7 @@ RSpec.describe MessageApis::TwilioPhone::Api do
       expect(result).to include(format: :xml)
       agent.reload
       expect(agent.available).to eq(false)
+      expect(conversation.reload.assignee).to eq(agent)
     end
 
     it "routes to process_inbound_call when CallSid and CallStatus are present" do
@@ -240,6 +241,8 @@ RSpec.describe MessageApis::TwilioPhone::Api do
       conv = app.conversations.find_by(key: conversation.key)
       expect(conv).to be_present
       expect(conv.messages.where(messageable_type: "ConversationPartBlock").count).to eq(0)
+      profile = app.external_profiles.find_by!(provider: "TwilioPhone", profile_id: "+19402456692")
+      expect(profile.app_user.phone).to eq("+19402456692")
     end
 
     it "notifies agents via notify_agent_notification and excludes locked agents" do
@@ -264,8 +267,14 @@ RSpec.describe MessageApis::TwilioPhone::Api do
 
       expect(result[:format]).to eq(:xml)
       expect(result[:response]).to be_a(Twilio::TwiML::VoiceResponse)
-      xml = result[:response].to_xml
-      expect(xml).to include("<Conference")
+      xml = Nokogiri::XML(result[:response].to_xml)
+      expect(xml.at_xpath("/Response/Say").text).to eq("Thanks for calling to #{app.name}!")
+      conference = xml.at_xpath("/Response/Dial/Conference")
+      expect(conference.text).to eq(app.conversations.first.key)
+      expect(conference["endConferenceOnExit"]).to eq("true")
+      expect(conference["statusCallbackEvent"]).to eq("start end join leave mute hold")
+      expect(conference["statusCallback"])
+        .to eq(pkg.hook_url.gsub("http://localhost:3000", "https://chaskiq.ngrok.io"))
     end
 
     it "assigns agent and skips reassignment when already assigned" do

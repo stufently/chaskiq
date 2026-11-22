@@ -130,7 +130,10 @@ RSpec.describe MessageApis::Twitter::Api do
       api.process_event(params, pkg)
 
       expect(app.conversations.count).to eq(1)
-      expect(app.conversations.first.messages.count).to eq(2)
+      conversation = app.conversations.first
+      expect(conversation.messages.count).to eq(2)
+      expect(conversation.conversation_part_channel_sources.pluck(:message_source_id))
+        .to contain_exactly("42", "99")
     end
 
     it "creates an external_profile for a new twitter user" do
@@ -185,6 +188,22 @@ RSpec.describe MessageApis::Twitter::Api do
       part
     end
 
+    def expect_dm_request(twitter_api, text:, attachment: nil)
+      message_data = { text: text }
+      message_data[:attachment] = attachment if attachment
+      expected = {
+        event: {
+          type: "message_create",
+          message_create: { target: { recipient_id: twitter_user_id }, message_data: message_data }
+        }
+      }
+      expect(twitter_api).to have_received(:post).with(
+        "/1.1/direct_messages/events/new.json",
+        expected.to_json,
+        { "content-type" => "application/json" }
+      ).once
+    end
+
     it "returns nil for a private note without making any request" do
       sc = { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: "secret" }] }] }.to_json
       part = build_part(conversation, from: participant, html_content: "secret", serialized_content: sc, private_note: true)
@@ -205,18 +224,7 @@ RSpec.describe MessageApis::Twitter::Api do
 
       api.send_message(conversation, part)
 
-      expect(twitter_api).to have_received(:post).with(
-        "/1.1/direct_messages/events/new.json",
-        satisfy { |body|
-          parsed = JSON.parse(body)
-          event = parsed["event"]
-          event["type"] == "message_create" &&
-            event.dig("message_create", "target", "recipient_id") == twitter_user_id &&
-            event.dig("message_create", "message_data", "text") == "hello" &&
-            event.dig("message_create", "message_data", "attachment").nil?
-        },
-        anything
-      )
+      expect_dm_request(twitter_api, text: "hello")
     end
 
     it "attaches the first image when two ImageBlocks are present" do
@@ -263,15 +271,7 @@ RSpec.describe MessageApis::Twitter::Api do
 
       api.send_message(conversation, part)
 
-      expect(twitter_api).to have_received(:post).with(
-        "/1.1/direct_messages/events/new.json",
-        satisfy { |body|
-          parsed = JSON.parse(body)
-          attachment = parsed.dig("event", "message_create", "message_data", "attachment")
-          attachment && attachment["type"] == "media" && attachment.dig("media", "id") == "99"
-        },
-        anything
-      )
+      expect_dm_request(twitter_api, text: "check this", attachment: { type: "media", media: { id: "99" } })
       expect(MessageApis::SafeDownload).to have_received(:fetch).with("https://cdn.example.com/first.png").once
       expect(MessageApis::SafeDownload).not_to have_received(:fetch).with("https://cdn.example.com/second.png")
     end
@@ -302,14 +302,7 @@ RSpec.describe MessageApis::Twitter::Api do
 
       api.send_message(conversation, part)
 
-      expect(twitter_api).to have_received(:post).with(
-        "/1.1/direct_messages/events/new.json",
-        satisfy { |body|
-          parsed = JSON.parse(body)
-          parsed.dig("event", "message_create", "message_data", "attachment").nil?
-        },
-        anything
-      )
+      expect_dm_request(twitter_api, text: "no image")
     end
   end
 end
