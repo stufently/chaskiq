@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10cfg
+
+- Changed: Metrics/MethodLength, Metrics/ClassLength and Metrics/BlockLength count a multi-line array,
+  hash or heredoc literal as one line (`CountAsOne`, decision K1 of the R10 programme): plugin
+  definitions, messenger presenter schemas and provider fixtures are data, not complexity. No code
+  changes; 74 length outliers disappear and their 35 entries leave the todo.
+
 ## 2026-11-21 — fork-updates-r10b
 
 - Changed: six Metrics outliers of R8a are split without a change in behaviour:
