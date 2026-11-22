@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-21 — fork-updates-r10a
+
+- Changed: every line over 140 characters in 20 files of app/ (Layout/LineLength outliers of R8a) is
+  wrapped: 29 comments, a `%w[]` list, a hash, an argument list and five string literals split into
+  adjacent pieces. Nineteen files compile to the same bytecode as before; the twentieth (the GraphQL
+  schema error message) and every other method whose code was wrapped are pinned by seven new specs.
+  Their 20 lines leave the Layout/LineLength block of the todo.
+
 ## 2026-11-21 — fork-updates-r9b
 
 - Changed: the last one-off RuboCop Style offenses outside Metrics, behaviour kept: modifier if/unless

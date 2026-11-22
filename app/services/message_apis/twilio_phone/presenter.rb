@@ -17,7 +17,8 @@ module MessageApis::TwilioPhone
     end
 
     # Submit flow webhook URL
-    # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur multiple times as an end-user interacts with your app.
+    # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur
+    # multiple times as an end-user interacts with your app.
     def self.submit_hook(params)
       definitions = []
 
@@ -71,7 +72,8 @@ module MessageApis::TwilioPhone
     end
 
     # Configure flow webhook URL (optional)
-    # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s inserted. Leaving this option blank will skip configuration.
+    # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s
+    # inserted. Leaving this option blank will skip configuration.
     def self.configure_hook(kind:, ctx:)
       {
         kind: "initialize",
@@ -131,7 +133,8 @@ module MessageApis::TwilioPhone
     end
 
     # Submit Sheet flow webhook URL (optional)
-    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
+    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
+    # and submitted when the Submit Sheets JS method is called.
     def self.sheet_hook(_params)
       {}
     end
@@ -308,7 +311,8 @@ module MessageApis::TwilioPhone
               action: {
                 type: "url",
                 url: "#{Chaskiq::Config.get(:host)}/package_iframe/TwilioPhone?token=#{token}",
-                options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=270,left=200,top=100"
+                options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no," \
+                         "resizable=no,width=600,height=270,left=200,top=100"
                 # url: "/package_iframe_internal/TwilioPhone"
               }
             }
@@ -348,7 +352,8 @@ module MessageApis::TwilioPhone
         # action: {
         #  type: "url",
         #  url: "#{Chaskiq::Config.get(:host)}/package_iframe/TwilioPhone?token=#{token}",
-        #  options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=270,left=200,top=100"
+        #  options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no," \
+        #           "resizable=no,width=600,height=270,left=200,top=100"
         #  # url: "/package_iframe_internal/TwilioPhone"
         # }
       }
@@ -357,7 +362,8 @@ module MessageApis::TwilioPhone
         button.merge!({ action: {
                         type: "url",
                         url: "#{Chaskiq::Config.get(:host)}/package_iframe/TwilioPhone?token=#{token}",
-                        options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=270,left=200,top=100"
+                        options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no," \
+                                 "resizable=no,width=600,height=270,left=200,top=100"
                         # url: "/package_iframe_internal/TwilioPhone"
                       } })
       end
@@ -366,7 +372,8 @@ module MessageApis::TwilioPhone
         button.merge!({ action: {
                         type: "submit"
                         # url: "#{Chaskiq::Config.get(:host)}/package_iframe/TwilioPhone?token=#{token}",
-                        # options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=270,left=200,top=100"
+                        # options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no," \
+                        #          "resizable=no,width=600,height=270,left=200,top=100"
                         # url: "/package_iframe_internal/TwilioPhone"
                       } })
       end
