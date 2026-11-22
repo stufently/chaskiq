@@ -1,0 +1,390 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Metrics/AbcSize": [
+      "app/graphql/types/messenger_type.rb",
+      "app/services/dante/converter.rb",
+      "app/services/fetch_link_card_service.rb",
+      "app/services/visit_collector.rb"
+    ],
+    "Metrics/CyclomaticComplexity": [
+      "app/models/segment_comparator.rb"
+    ],
+    "Metrics/PerceivedComplexity": [
+      "app/policies/app_policy.rb"
+    ]
+  },
+  "app_files": [
+    "app/graphql/types/messenger_type.rb",
+    "app/models/segment_comparator.rb",
+    "app/policies/app_policy.rb",
+    "app/services/dante/converter.rb",
+    "app/services/fetch_link_card_service.rb",
+    "app/services/visit_collector.rb"
+  ],
+  "char_specs": [
+    "spec/graphql/types/messenger_browser_data_spec.rb",
+    "spec/models/segment_comparator_compare_with_spec.rb",
+    "spec/policies/app_policy_find_role_spec.rb",
+    "spec/services/dante/converter_inline_styles_spec.rb",
+    "spec/services/fetch_link_card_oembed_spec.rb",
+    "spec/services/visit_collector_web_sessions_spec.rb"
+  ],
+  "commits": [
+    {
+      "subject": "Split six complex methods",
+      "patch": "r10b_rewrite.patch",
+      "added": [
+        "spec/graphql/types/messenger_browser_data_spec.rb",
+        "spec/models/segment_comparator_compare_with_spec.rb",
+        "spec/policies/app_policy_find_role_spec.rb",
+        "spec/services/dante/converter_inline_styles_spec.rb",
+        "spec/services/fetch_link_card_oembed_spec.rb",
+        "spec/services/visit_collector_web_sessions_spec.rb"
+      ]
+    },
+    {
+      "subject": "Drop R10b entries from RuboCop todo",
+      "todo": true
+    },
+    {
+      "subject": "Note fork-updates-r10b in changelog",
+      "changelog": true
+    }
+  ],
+  "mutants": [
+    {
+      "id": "B01",
+      "file": "app/models/segment_comparator.rb",
+      "old": "\"contains_start\" => ->(input, value) { input.start_with?(value) }",
+      "new": "\"contains_start\" => ->(input, value) { input.end_with?(value) }",
+      "specs": [
+        "spec/models/segment_comparator_compare_with_spec.rb"
+      ]
+    },
+    {
+      "id": "B02",
+      "file": "app/models/segment_comparator.rb",
+      "old": "\"contains_ends\" => ->",
+      "new": "\"contains_end\" => ->",
+      "specs": [
+        "spec/models/segment_comparator_compare_with_spec.rb"
+      ]
+    },
+    {
+      "id": "B03",
+      "file": "app/models/segment_comparator.rb",
+      "old": "\"is_not_null\" => ->(input, _value) { input.present? }",
+      "new": "\"is_not_null\" => ->(input, _value) { input.blank? }",
+      "specs": [
+        "spec/models/segment_comparator_compare_with_spec.rb"
+      ]
+    },
+    {
+      "id": "B04",
+      "file": "app/models/segment_comparator.rb",
+      "old": "\"not_contains\" => ->(input, value) { input.exclude?(value) }",
+      "new": "\"not_contains\" => ->(input, value) { input.include?(value) }",
+      "specs": [
+        "spec/models/segment_comparator_compare_with_spec.rb"
+      ]
+    },
+    {
+      "id": "B05",
+      "file": "app/models/segment_comparator.rb",
+      "old": "\"lteq\" => ->(input, value) { input <= value }",
+      "new": "\"lteq\" => ->(input, value) { input < value }",
+      "specs": [
+        "spec/models/segment_comparator_compare_with_spec.rb"
+      ]
+    },
+    {
+      "id": "B06",
+      "file": "app/models/segment_comparator.rb",
+      "old": "\"gteq\" => ->(input, value) { input >= value }",
+      "new": "\"gteq\" => ->(input, value) { input > value }",
+      "specs": [
+        "spec/models/segment_comparator_compare_with_spec.rb"
+      ]
+    },
+    {
+      "id": "B07",
+      "file": "app/models/segment_comparator.rb",
+      "old": "\"in\" => ->(input, value) { input.in?(value) }",
+      "new": "\"in\" => ->(input, value) { !input.in?(value) }",
+      "specs": [
+        "spec/models/segment_comparator_compare_with_spec.rb"
+      ]
+    },
+    {
+      "id": "B08",
+      "file": "app/models/segment_comparator.rb",
+      "old": "COMPARISONS[comparison]&.call(user_input, predicate_value)",
+      "new": "COMPARISONS[comparison]&.call(predicate_value, user_input)",
+      "specs": [
+        "spec/models/segment_comparator_compare_with_spec.rb"
+      ]
+    },
+    {
+      "id": "B09",
+      "file": "app/models/segment_comparator.rb",
+      "old": "COMPARISONS[comparison]&.call(",
+      "new": "COMPARISONS[comparison].call(",
+      "specs": [
+        "spec/models/segment_comparator_compare_with_spec.rb"
+      ]
+    },
+    {
+      "id": "B10",
+      "file": "app/policies/app_policy.rb",
+      "old": "return @record if @record.is_a?(App)",
+      "new": "return @app if @record.is_a?(App)",
+      "specs": [
+        "spec/policies/app_policy_find_role_spec.rb"
+      ]
+    },
+    {
+      "id": "B11",
+      "file": "app/policies/app_policy.rb",
+      "old": "return @record.app if @record.respond_to?(:app)",
+      "new": "return @app if @record.respond_to?(:app)",
+      "specs": [
+        "spec/policies/app_policy_find_role_spec.rb"
+      ]
+    },
+    {
+      "id": "B12",
+      "file": "app/policies/app_policy.rb",
+      "old": "return @app if @app.present?",
+      "new": "return @app if @app.nil?",
+      "specs": [
+        "spec/policies/app_policy_find_role_spec.rb"
+      ]
+    },
+    {
+      "id": "B13",
+      "file": "app/policies/app_policy.rb",
+      "old": "\n    yield\n",
+      "new": "\n    nil\n",
+      "specs": [
+        "spec/policies/app_policy_find_role_spec.rb"
+      ]
+    },
+    {
+      "id": "B14",
+      "file": "app/policies/app_policy.rb",
+      "old": "if app.owner_id == @user.id",
+      "new": "if app.owner_id != @user.id",
+      "specs": [
+        "spec/policies/app_policy_find_role_spec.rb"
+      ]
+    },
+    {
+      "id": "B15",
+      "file": "app/policies/app_policy.rb",
+      "old": "@owner ||= true",
+      "new": "@owner ||= false",
+      "specs": [
+        "spec/policies/app_policy_find_role_spec.rb"
+      ]
+    },
+    {
+      "id": "B16",
+      "file": "app/policies/app_policy.rb",
+      "old": "@role ||= app.roles.find_by(agent_id: @user.id)",
+      "new": "@role = app.roles.find_by(agent_id: @user.id)",
+      "specs": [
+        "spec/policies/app_policy_find_role_spec.rb"
+      ]
+    },
+    {
+      "id": "B17",
+      "file": "app/services/dante/converter.rb",
+      "old": "ranges.select { |range| position >= range[:offset] && position < (range[:offset] + range[:length]) }",
+      "new": "ranges.select { |range| position >= range[:offset] && position <= (range[:offset] + range[:length]) }",
+      "specs": [
+        "spec/services/dante/converter_inline_styles_spec.rb"
+      ]
+    },
+    {
+      "id": "B18",
+      "file": "app/services/dante/converter.rb",
+      "old": "entity[:type] == \"LINK\" ?",
+      "new": "entity[:type] != \"LINK\" ?",
+      "specs": [
+        "spec/services/dante/converter_inline_styles_spec.rb"
+      ]
+    },
+    {
+      "id": "B19",
+      "file": "app/services/dante/converter.rb",
+      "old": "return [] unless entity_range",
+      "new": "return [] if entity_range",
+      "specs": [
+        "spec/services/dante/converter_inline_styles_spec.rb"
+      ]
+    },
+    {
+      "id": "B20",
+      "file": "app/services/dante/converter.rb",
+      "old": ".select { |pos| pos > position }.min",
+      "new": ".select { |pos| pos > position }.max",
+      "specs": [
+        "spec/services/dante/converter_inline_styles_spec.rb"
+      ]
+    },
+    {
+      "id": "B21",
+      "file": "app/services/dante/converter.rb",
+      "old": "next_range_end(style + entity_ranges, position)",
+      "new": "next_range_end(entity_ranges, position)",
+      "specs": [
+        "spec/services/dante/converter_inline_styles_spec.rb"
+      ]
+    },
+    {
+      "id": "B22",
+      "file": "app/services/dante/converter.rb",
+      "old": "marks.concat(link_marks(entity_ranges, entity_map, position))",
+      "new": "marks.unshift(*link_marks(entity_ranges, entity_map, position))",
+      "specs": [
+        "spec/services/dante/converter_inline_styles_spec.rb"
+      ]
+    },
+    {
+      "id": "B23",
+      "file": "app/services/dante/converter.rb",
+      "old": "entity_map[entity_range[:key].to_s.to_sym]",
+      "new": "entity_map[entity_range[:key]]",
+      "specs": [
+        "spec/services/dante/converter_inline_styles_spec.rb"
+      ]
+    },
+    {
+      "id": "B24",
+      "file": "app/services/visit_collector.rb",
+      "old": "options[:first_seen] = Time.zone.now if user.first_seen.blank?",
+      "new": "options[:first_seen] = Time.zone.now if user.first_seen.present?",
+      "specs": [
+        "spec/services/visit_collector_web_sessions_spec.rb"
+      ]
+    },
+    {
+      "id": "B25",
+      "file": "app/services/visit_collector.rb",
+      "old": "return options.merge!(new_web_session) if user.last_visited_at.blank?",
+      "new": "options.merge!(new_web_session) if user.last_visited_at.blank?",
+      "specs": [
+        "spec/services/visit_collector_web_sessions_spec.rb"
+      ]
+    },
+    {
+      "id": "B26",
+      "file": "app/services/visit_collector.rb",
+      "old": "options.merge!(new_web_session) if diff >= 30",
+      "new": "options.merge!(new_web_session) if diff > 30",
+      "specs": [
+        "spec/services/visit_collector_web_sessions_spec.rb"
+      ]
+    },
+    {
+      "id": "B27",
+      "file": "app/services/visit_collector.rb",
+      "old": "diff = (Time.zone.now - user.last_visited_at) / 60",
+      "new": "diff = (Time.zone.now - user.last_visited_at) / 3600",
+      "specs": [
+        "spec/services/visit_collector_web_sessions_spec.rb"
+      ]
+    },
+    {
+      "id": "B28",
+      "file": "app/services/visit_collector.rb",
+      "old": "web_sessions: user.web_sessions.to_i + 1,",
+      "new": "web_sessions: user.web_sessions.to_i + 2,",
+      "specs": [
+        "spec/services/visit_collector_web_sessions_spec.rb"
+      ]
+    },
+    {
+      "id": "B29",
+      "file": "app/services/visit_collector.rb",
+      "old": "options[:last_seen] = Time.zone.now\n",
+      "new": "options[:last_seen] = Time.zone.now - 1\n",
+      "specs": [
+        "spec/services/visit_collector_web_sessions_spec.rb"
+      ]
+    },
+    {
+      "id": "B30",
+      "file": "app/graphql/types/messenger_type.rb",
+      "old": "browser_params.merge!(location_params(request)) if request.location.present?",
+      "new": "browser_params.merge!(location_params(request)) unless request.location.present?",
+      "specs": [
+        "spec/graphql/types/messenger_browser_data_spec.rb"
+      ]
+    },
+    {
+      "id": "B31",
+      "file": "app/graphql/types/messenger_type.rb",
+      "old": "country: request.location&.country || COUNTRY_NAMES[request.location&.country_code&.to_sym],",
+      "new": "country: request.location&.country,",
+      "specs": [
+        "spec/graphql/types/messenger_browser_data_spec.rb"
+      ]
+    },
+    {
+      "id": "B32",
+      "file": "app/graphql/types/messenger_type.rb",
+      "old": "postal: request.location&.postal_code",
+      "new": "postal: request.location&.city",
+      "specs": [
+        "spec/graphql/types/messenger_browser_data_spec.rb"
+      ]
+    },
+    {
+      "id": "B33",
+      "file": "app/graphql/types/messenger_type.rb",
+      "old": "region: request.location.try(:region),",
+      "new": "region: nil,",
+      "specs": [
+        "spec/graphql/types/messenger_browser_data_spec.rb"
+      ]
+    },
+    {
+      "id": "B34",
+      "file": "app/services/fetch_link_card_service.rb",
+      "old": "%i[title author_name author_url provider_name provider_url]",
+      "new": "%i[title author_name provider_name provider_url]",
+      "specs": [
+        "spec/services/fetch_link_card_oembed_spec.rb"
+      ]
+    },
+    {
+      "id": "B35",
+      "file": "app/services/fetch_link_card_service.rb",
+      "old": "response.respond_to?(field) ? response.public_send(field) : \"\")",
+      "new": "response.respond_to?(field) ? response.public_send(field) : nil)",
+      "specs": [
+        "spec/services/fetch_link_card_oembed_spec.rb"
+      ]
+    },
+    {
+      "id": "B36",
+      "file": "app/services/fetch_link_card_service.rb",
+      "old": "return unless response.respond_to?(:thumbnail_url)",
+      "new": "return if response.respond_to?(:thumbnail_url)",
+      "specs": [
+        "spec/services/fetch_link_card_oembed_spec.rb"
+      ]
+    },
+    {
+      "id": "B37",
+      "file": "app/services/fetch_link_card_service.rb",
+      "old": "\n    attach_oembed_thumbnail(card, response)\n",
+      "new": "\n",
+      "specs": [
+        "spec/services/fetch_link_card_oembed_spec.rb"
+      ]
+    }
+  ]
+}

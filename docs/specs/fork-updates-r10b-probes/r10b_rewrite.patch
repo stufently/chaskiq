@@ -1,0 +1,283 @@
+diff --git a/app/graphql/types/messenger_type.rb b/app/graphql/types/messenger_type.rb
+index ad6cd630..8330dcb0 100644
+--- a/app/graphql/types/messenger_type.rb
++++ b/app/graphql/types/messenger_type.rb
+@@ -115,7 +115,14 @@ module Types
+         # lang: I18n.locale #user_data[:properties][:lang]
+       }
+ 
+-      location_params = {
++      browser_params.merge!(location_params(request)) if request.location.present?
++
++      user_data.slice(:name, :email, :properties).deep_merge(browser_params)
++      # #ap = object.add_visit(data)
++    end
++
++    def location_params(request)
++      {
+         city: request.location&.city,
+         # region_code:      request.location.region,
+         region: request.location.try(:region),
+@@ -125,11 +132,6 @@ module Types
+         lng: request.location&.longitude,
+         postal: request.location&.postal_code
+       }
+-
+-      browser_params.merge!(location_params) if request.location.present?
+-
+-      user_data.slice(:name, :email, :properties).deep_merge(browser_params)
+-      # #ap = object.add_visit(data)
+     end
+ 
+     def user_conversations
+diff --git a/app/models/segment_comparator.rb b/app/models/segment_comparator.rb
+index 5fe77d02..40edde7c 100644
+--- a/app/models/segment_comparator.rb
++++ b/app/models/segment_comparator.rb
+@@ -1,6 +1,23 @@
+ # frozen_string_literal: true
+ 
+ class SegmentComparator
++  # comparison name of a predicate => check of the user's value against the predicate's value
++  COMPARISONS = {
++    "contains_start" => ->(input, value) { input.start_with?(value) },
++    "contains_ends" => ->(input, value) { input.end_with?(value) },
++    "is_null" => ->(input, _value) { input.blank? },
++    "is_not_null" => ->(input, _value) { input.present? },
++    "contains" => ->(input, value) { input.include?(value) },
++    "not_contains" => ->(input, value) { input.exclude?(value) },
++    "not_eq" => ->(input, value) { input != value },
++    "eq" => ->(input, value) { input == value },
++    "lt" => ->(input, value) { input < value },
++    "lteq" => ->(input, value) { input <= value },
++    "gt" => ->(input, value) { input > value },
++    "in" => ->(input, value) { input.in?(value) },
++    "gteq" => ->(input, value) { input >= value }
++  }.freeze
++
+   attr_accessor :user, :predicates, :additional_fields
+ 
+   def initialize(user:, predicates:, additional_fields: {})
+@@ -56,21 +73,7 @@ class SegmentComparator
+   end
+ 
+   def compare_with(user_input, predicate_value, comparison)
+-    case comparison
+-    when "contains_start" then user_input.start_with?(predicate_value)
+-    when "contains_ends" then user_input.end_with?(predicate_value)
+-    when "is_null" then user_input.blank?
+-    when "is_not_null" then user_input.present?
+-    when "contains" then user_input.include?(predicate_value)
+-    when "not_contains" then user_input.exclude?(predicate_value)
+-    when "not_eq" then user_input != predicate_value
+-    when "eq" then user_input == predicate_value
+-    when "lt" then user_input < predicate_value
+-    when "lteq" then user_input <= predicate_value
+-    when "gt" then user_input > predicate_value
+-    when "in" then user_input.in?(predicate_value)
+-    when "gteq" then user_input >= predicate_value
+-    end
++    COMPARISONS[comparison]&.call(user_input, predicate_value)
+   end
+ 
+   def handle_comparison(field, predicate)
+diff --git a/app/policies/app_policy.rb b/app/policies/app_policy.rb
+index 6b314527..a4efb9c1 100644
+--- a/app/policies/app_policy.rb
++++ b/app/policies/app_policy.rb
+@@ -60,19 +60,22 @@ class AppPolicy < ActionPolicy::Base
+   end
+ 
+   def find_role_by_resource
+-    if @record.is_a?(App)
+-      return @owner ||= true if @record.owner_id == @user.id
+-
+-      @role ||= @record.roles.find_by(agent_id: @user.id)
+-    elsif @record.respond_to?(:app)
+-      return @owner ||= true if @record.app.owner_id == @user.id
++    app = resource_app { return }
++    if app.owner_id == @user.id
++      @owner ||= true
++    else
++      @role ||= app.roles.find_by(agent_id: @user.id)
++    end
++  end
+ 
+-      @role ||= @record.app.roles.find_by(agent_id: @user.id)
+-    elsif @app.present?
+-      return @owner ||= true if @app.owner_id == @user.id
++  # The app the record belongs to (the record itself, its #app, or the authorized app); yields when
++  # there is none. A record whose #app is nil is returned as nil, as before.
++  def resource_app
++    return @record if @record.is_a?(App)
++    return @record.app if @record.respond_to?(:app)
++    return @app if @app.present?
+ 
+-      @role ||= @app.roles.find_by(agent_id: @user.id)
+-    end
++    yield
+   end
+ 
+   def show?
+diff --git a/app/services/dante/converter.rb b/app/services/dante/converter.rb
+index 2145dd39..41cb4eae 100644
+--- a/app/services/dante/converter.rb
++++ b/app/services/dante/converter.rb
+@@ -43,17 +43,11 @@ module Dante
+       position = 0
+ 
+       while position < text.length
+-        style = inline_style_ranges.select { |range| position >= range[:offset] && position < (range[:offset] + range[:length]) }
++        style = ranges_at(inline_style_ranges, position)
+         marks = style.flat_map { |s| convert_style_to_marks(s[:style]) }
++        marks.concat(link_marks(entity_ranges, entity_map, position))
+ 
+-        entity_range = entity_ranges.find { |range| position >= range[:offset] && position < (range[:offset] + range[:length]) }
+-        if entity_range
+-          entity = entity_map[entity_range[:key].to_s.to_sym]
+-          marks << { type: "link", attrs: { href: entity[:data][:url] } } if entity[:type] == "LINK"
+-        end
+-
+-        next_position_ranges = style.map { |s| s[:offset] + s[:length] } + entity_ranges.map { |range| range[:offset] + range[:length] }
+-        next_position = next_position_ranges.select { |pos| pos > position }.min || text.length
++        next_position = next_range_end(style + entity_ranges, position) || text.length
+         nodes << {
+           type: "text",
+           text: text[position...next_position],
+@@ -65,6 +59,25 @@ module Dante
+       nodes
+     end
+ 
++    # The ranges ({offset:, length:}) that cover the character at position.
++    def self.ranges_at(ranges, position)
++      ranges.select { |range| position >= range[:offset] && position < (range[:offset] + range[:length]) }
++    end
++
++    # The link mark of the first entity range covering position, if its entity is a LINK.
++    def self.link_marks(entity_ranges, entity_map, position)
++      entity_range = entity_ranges.find { |range| position >= range[:offset] && position < (range[:offset] + range[:length]) }
++      return [] unless entity_range
++
++      entity = entity_map[entity_range[:key].to_s.to_sym]
++      entity[:type] == "LINK" ? [{ type: "link", attrs: { href: entity[:data][:url] } }] : []
++    end
++
++    # The nearest end of the given ranges after position (nil when none ends after it).
++    def self.next_range_end(ranges, position)
++      ranges.map { |range| range[:offset] + range[:length] }.select { |pos| pos > position }.min
++    end
++
+     def self.convert_block_type(draftjs_block_type)
+       case draftjs_block_type
+       when "header-one", "header-two", "header-three", "header-four", "header-five", "header-six"
+diff --git a/app/services/fetch_link_card_service.rb b/app/services/fetch_link_card_service.rb
+index 185df6c4..c0ffbf47 100755
+--- a/app/services/fetch_link_card_service.rb
++++ b/app/services/fetch_link_card_service.rb
+@@ -5,6 +5,8 @@ require "oembed"
+ 
+ class FetchLinkCardService < BaseService
+   URL_PATTERN = %r{https?://\S+}
++  # Text attributes copied from an oEmbed response to the card ("" when the response lacks one).
++  OEMBED_TEXT_FIELDS = %i[title author_name author_url provider_name provider_url].freeze
+ 
+   def call(url)
+     # Get first http/https URL that isn't local
+@@ -51,23 +53,14 @@ class FetchLinkCardService < BaseService
+ 
+     response = provider.get(url)
+ 
+-    card.type          = response.type
+-    card.title         = response.respond_to?(:title)         ? response.title         : ""
+-    card.author_name   = response.respond_to?(:author_name)   ? response.author_name   : ""
+-    card.author_url    = response.respond_to?(:author_url)    ? response.author_url    : ""
+-    card.provider_name = response.respond_to?(:provider_name) ? response.provider_name : ""
+-    card.provider_url  = response.respond_to?(:provider_url)  ? response.provider_url  : ""
++    card.type = response.type
++    OEMBED_TEXT_FIELDS.each do |field|
++      card.public_send("#{field}=", response.respond_to?(field) ? response.public_send(field) : "")
++    end
+     card.width         = 0
+     card.height        = 0
+ 
+-    if response.respond_to?(:thumbnail_url)
+-      image = begin
+-        download_image(response.thumbnail_url)
+-      rescue StandardError
+-        nil
+-      end
+-      card.image.attach(image) if image.present?
+-    end
++    attach_oembed_thumbnail(card, response)
+     # card.url    = response.url
+     card.width  = response.width.presence  || 0
+     card.height = response.height.presence || 0
+@@ -79,6 +72,17 @@ class FetchLinkCardService < BaseService
+     false
+   end
+ 
++  def attach_oembed_thumbnail(card, response)
++    return unless response.respond_to?(:thumbnail_url)
++
++    image = begin
++      download_image(response.thumbnail_url)
++    rescue StandardError
++      nil
++    end
++    card.image.attach(image) if image.present?
++  end
++
+   def attempt_opengraph(card, body)
+     page = parse_card_page(body)
+ 
+diff --git a/app/services/visit_collector.rb b/app/services/visit_collector.rb
+index 8cffb75b..58a1b412 100644
+--- a/app/services/visit_collector.rb
++++ b/app/services/visit_collector.rb
+@@ -17,34 +17,22 @@ class VisitCollector
+ 
+   def add_web_sessions
+     options = {}
+-
+-    if user.first_seen.blank?
+-      options.merge!(
+-        first_seen: Time.zone.now
+-      )
+-    end
+-
+-    options.merge!(
+-      last_seen: Time.zone.now
+-    )
+-
+-    if user.last_visited_at.blank?
+-      return options.merge!(
+-        web_sessions: user.web_sessions.to_i + 1,
+-        last_visited_at: Time.zone.now
+-      )
+-    end
++    options[:first_seen] = Time.zone.now if user.first_seen.blank?
++    options[:last_seen] = Time.zone.now
++    return options.merge!(new_web_session) if user.last_visited_at.blank?
+ 
+     # last visited more than 30 minutes
+     diff = (Time.zone.now - user.last_visited_at) / 60
++    options.merge!(new_web_session) if diff >= 30
++    options
++  end
+ 
+-    if diff >= 30
+-      options.merge!(
+-        web_sessions: user.web_sessions.to_i + 1,
+-        last_visited_at: Time.zone.now
+-      )
+-    end
++  private
+ 
+-    options
++  def new_web_session
++    {
++      web_sessions: user.web_sessions.to_i + 1,
++      last_visited_at: Time.zone.now
++    }
+   end
+ end

@@ -1,0 +1,223 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Layout/LineLength": [
+      "app/graphql/chaskiq_schema.rb",
+      "app/models/agent.rb",
+      "app/services/action_trigger_factory.rb",
+      "app/services/dante/migrator.rb",
+      "app/services/dante/renderer.rb",
+      "app/services/message_apis/article_search/presenter.rb",
+      "app/services/message_apis/calendly/presenter.rb",
+      "app/services/message_apis/contact_fields/presenter.rb",
+      "app/services/message_apis/content_showcase/presenter.rb",
+      "app/services/message_apis/csat/presenter.rb",
+      "app/services/message_apis/dialog360/presenter.rb",
+      "app/services/message_apis/full_contact/presenter.rb",
+      "app/services/message_apis/inbox_sections/presenter.rb",
+      "app/services/message_apis/open_ai/presenter.rb",
+      "app/services/message_apis/slack/api.rb",
+      "app/services/message_apis/telegram/presenter.rb",
+      "app/services/message_apis/twilio_phone/presenter.rb",
+      "app/services/message_apis/ui_catalog/presenter.rb",
+      "app/services/message_apis/zapier/presenter.rb",
+      "app/services/message_apis/zoom/presenter.rb"
+    ]
+  },
+  "iseq_same": {
+    "files": [
+      "app/models/agent.rb",
+      "app/services/action_trigger_factory.rb",
+      "app/services/dante/migrator.rb",
+      "app/services/dante/renderer.rb",
+      "app/services/message_apis/article_search/presenter.rb",
+      "app/services/message_apis/calendly/presenter.rb",
+      "app/services/message_apis/contact_fields/presenter.rb",
+      "app/services/message_apis/content_showcase/presenter.rb",
+      "app/services/message_apis/csat/presenter.rb",
+      "app/services/message_apis/dialog360/presenter.rb",
+      "app/services/message_apis/full_contact/presenter.rb",
+      "app/services/message_apis/inbox_sections/presenter.rb",
+      "app/services/message_apis/open_ai/presenter.rb",
+      "app/services/message_apis/slack/api.rb",
+      "app/services/message_apis/telegram/presenter.rb",
+      "app/services/message_apis/twilio_phone/presenter.rb",
+      "app/services/message_apis/ui_catalog/presenter.rb",
+      "app/services/message_apis/zapier/presenter.rb",
+      "app/services/message_apis/zoom/presenter.rb"
+    ]
+  },
+  "app_files": [
+    "app/graphql/chaskiq_schema.rb",
+    "app/models/agent.rb",
+    "app/services/action_trigger_factory.rb",
+    "app/services/dante/migrator.rb",
+    "app/services/dante/renderer.rb",
+    "app/services/message_apis/article_search/presenter.rb",
+    "app/services/message_apis/calendly/presenter.rb",
+    "app/services/message_apis/contact_fields/presenter.rb",
+    "app/services/message_apis/content_showcase/presenter.rb",
+    "app/services/message_apis/csat/presenter.rb",
+    "app/services/message_apis/dialog360/presenter.rb",
+    "app/services/message_apis/full_contact/presenter.rb",
+    "app/services/message_apis/inbox_sections/presenter.rb",
+    "app/services/message_apis/open_ai/presenter.rb",
+    "app/services/message_apis/slack/api.rb",
+    "app/services/message_apis/telegram/presenter.rb",
+    "app/services/message_apis/twilio_phone/presenter.rb",
+    "app/services/message_apis/ui_catalog/presenter.rb",
+    "app/services/message_apis/zapier/presenter.rb",
+    "app/services/message_apis/zoom/presenter.rb"
+  ],
+  "char_specs": [
+    "spec/graphql/chaskiq_schema_unauthorized_spec.rb",
+    "spec/models/agent_ransackable_attributes_spec.rb",
+    "spec/services/dante/migrator_conversation_parts_spec.rb",
+    "spec/services/dante/renderer_link_mark_spec.rb",
+    "spec/services/message_apis/inbox_sections_user_data_spec.rb",
+    "spec/services/message_apis/slack_oauth_authorize_spec.rb",
+    "spec/services/message_apis/twilio_phone/presenter_call_window_spec.rb"
+  ],
+  "commits": [
+    {
+      "subject": "Wrap long lines in app/",
+      "patch": "r10a_rewrite.patch",
+      "added": [
+        "spec/graphql/chaskiq_schema_unauthorized_spec.rb",
+        "spec/models/agent_ransackable_attributes_spec.rb",
+        "spec/services/dante/migrator_conversation_parts_spec.rb",
+        "spec/services/dante/renderer_link_mark_spec.rb",
+        "spec/services/message_apis/inbox_sections_user_data_spec.rb",
+        "spec/services/message_apis/slack_oauth_authorize_spec.rb",
+        "spec/services/message_apis/twilio_phone/presenter_call_window_spec.rb"
+      ]
+    },
+    {
+      "subject": "Drop R10a entries from RuboCop todo",
+      "todo": true
+    },
+    {
+      "subject": "Note fork-updates-r10a in changelog",
+      "changelog": true
+    }
+  ],
+  "mutants": [
+    {
+      "id": "A01",
+      "file": "app/models/agent.rb",
+      "old": "current_sign_in_ip email encrypted_password",
+      "new": "current_sign_in_ip encrypted_password",
+      "specs": [
+        "spec/models/agent_ransackable_attributes_spec.rb"
+      ]
+    },
+    {
+      "id": "A02",
+      "file": "app/models/agent.rb",
+      "old": "unconfirmed_email unlock_token updated_at]",
+      "new": "unconfirmed_email updated_at]",
+      "specs": [
+        "spec/models/agent_ransackable_attributes_spec.rb"
+      ]
+    },
+    {
+      "id": "A03",
+      "file": "app/graphql/chaskiq_schema.rb",
+      "old": "\"#{error.type.graphql_name} was hidden due to permissions\"",
+      "new": "\"#{error.field.graphql_name} was hidden due to permissions\"",
+      "specs": [
+        "spec/graphql/chaskiq_schema_unauthorized_spec.rb"
+      ]
+    },
+    {
+      "id": "A04",
+      "file": "app/graphql/chaskiq_schema.rb",
+      "old": "\"The field #{error.field.graphql_name} on an object of type \" \\",
+      "new": "\"The field #{error.field.graphql_name} on object of type \" \\",
+      "specs": [
+        "spec/graphql/chaskiq_schema_unauthorized_spec.rb"
+      ]
+    },
+    {
+      "id": "A05",
+      "file": "app/services/dante/migrator.rb",
+      "old": "\"conversation_parts.messageable_type = 'ConversationPartContent'\")",
+      "new": "\"conversation_parts.messageable_type = 'ConversationPart'\")",
+      "specs": [
+        "spec/services/dante/migrator_conversation_parts_spec.rb"
+      ]
+    },
+    {
+      "id": "A06",
+      "file": "app/services/dante/migrator.rb",
+      "old": "\"conversation_parts.messageable_id = conversation_part_contents.id AND \" \\",
+      "new": "\"conversation_parts.messageable_id <> conversation_part_contents.id AND \" \\",
+      "specs": [
+        "spec/services/dante/migrator_conversation_parts_spec.rb"
+      ]
+    },
+    {
+      "id": "A07",
+      "file": "app/services/dante/renderer.rb",
+      "old": "target: mark[:attrs][:target], rel: \"noopener noreferrer nofollow\")",
+      "new": "target: mark[:attrs][:target], rel: \"noopener noreferrer\")",
+      "specs": [
+        "spec/services/dante/renderer_link_mark_spec.rb"
+      ]
+    },
+    {
+      "id": "A08",
+      "file": "app/services/dante/renderer.rb",
+      "old": "href: mark[:attrs][:href], target: mark[:attrs][:target], rel:",
+      "new": "href: mark[:attrs][:href], target: mark[:attrs][:href], rel:",
+      "specs": [
+        "spec/services/dante/renderer_link_mark_spec.rb"
+      ]
+    },
+    {
+      "id": "A09",
+      "file": "app/services/message_apis/inbox_sections/presenter.rb",
+      "old": "value: \"Value 3 which is a very long value",
+      "new": "value: \"Value 4 which is a very long value",
+      "specs": [
+        "spec/services/message_apis/inbox_sections_user_data_spec.rb"
+      ]
+    },
+    {
+      "id": "A10",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "\"chat:write.customize,users:read,users:read.email\",",
+      "new": "\"chat:write.customize,users:read\",",
+      "specs": [
+        "spec/services/message_apis/slack_oauth_authorize_spec.rb"
+      ]
+    },
+    {
+      "id": "A11",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "scope: \"files:read,channels:history,channels:join,chat:write,",
+      "new": "scope: \"files:read,channels:history,chat:write,",
+      "specs": [
+        "spec/services/message_apis/slack_oauth_authorize_spec.rb"
+      ]
+    },
+    {
+      "id": "A12",
+      "file": "app/services/message_apis/twilio_phone/presenter.rb",
+      "old": "\n                                 \"resizable=no,width=600,height=270,left=200,top=100\"",
+      "new": "\n                                 \"resizable=no,width=601,height=270,left=200,top=100\"",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/presenter_call_window_spec.rb"
+      ]
+    },
+    {
+      "id": "A13",
+      "file": "app/services/message_apis/twilio_phone/presenter.rb",
+      "old": "\n                        options: \"directories=no,titlebar=no,toolbar=no,",
+      "new": "\n                        options: \"directories=no,titlebar=no,toolbar=yes,",
+      "specs": [
+        "spec/services/message_apis/twilio_phone/presenter_call_window_spec.rb"
+      ]
+    }
+  ]
+}

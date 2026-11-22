@@ -1,0 +1,451 @@
+diff --git a/app/graphql/chaskiq_schema.rb b/app/graphql/chaskiq_schema.rb
+index e7701757..78f6085d 100644
+--- a/app/graphql/chaskiq_schema.rb
++++ b/app/graphql/chaskiq_schema.rb
+@@ -22,7 +22,9 @@ class ChaskiqSchema < GraphQL::Schema
+ 
+   def self.unauthorized_field(error)
+     # Add a top-level error to the response instead of returning nil:
+-    raise GraphQL::ExecutionError, "The field #{error.field.graphql_name} on an object of type #{error.type.graphql_name} was hidden due to permissions"
++    raise GraphQL::ExecutionError,
++          "The field #{error.field.graphql_name} on an object of type " \
++          "#{error.type.graphql_name} was hidden due to permissions"
+   end
+ 
+   rescue_from(ActionPolicy::Unauthorized) do |exp|
+diff --git a/app/models/agent.rb b/app/models/agent.rb
+index a23f9614..a58aaabe 100644
+--- a/app/models/agent.rb
++++ b/app/models/agent.rb
+@@ -70,7 +70,11 @@ class Agent < ApplicationRecord
+   has_one_attached :avatar
+ 
+   def self.ransackable_attributes(_auth_object = nil)
+-    %w[available bot confirmation_sent_at confirmation_token confirmed_at created_at current_sign_in_at current_sign_in_ip email encrypted_password failed_attempts id id_value invitation_accepted_at invitation_created_at invitation_limit invitation_sent_at invitation_token invitations_count invited_by_id invited_by_type key last_sign_in_at last_sign_in_ip locked_at properties remember_created_at reset_password_sent_at reset_password_token sign_in_count unconfirmed_email unlock_token updated_at]
++    %w[available bot confirmation_sent_at confirmation_token confirmed_at created_at current_sign_in_at
++       current_sign_in_ip email encrypted_password failed_attempts id id_value invitation_accepted_at
++       invitation_created_at invitation_limit invitation_sent_at invitation_token invitations_count invited_by_id
++       invited_by_type key last_sign_in_at last_sign_in_ip locked_at properties remember_created_at
++       reset_password_sent_at reset_password_token sign_in_count unconfirmed_email unlock_token updated_at]
+   end
+ 
+   def self.from_omniauth(auth)
+diff --git a/app/services/action_trigger_factory.rb b/app/services/action_trigger_factory.rb
+index 6c792475..e9e0fa29 100644
+--- a/app/services/action_trigger_factory.rb
++++ b/app/services/action_trigger_factory.rb
+@@ -380,7 +380,8 @@ class ActionTriggerFactory
+             kind: "agent"
+           },
+           serialized_content: { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: text }] }] }.to_json,
+-          # serialized_content: "{\"blocks\":[{\"key\":\"9oe8n\",\"text\":\"#{text}\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
++          # serialized_content: "{\"blocks\":[{\"key\":\"9oe8n\",\"text\":\"#{text}\",\"type\":\"unstyled\",\"depth\":0," \
++          #                      "\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+           html_content: text
+         }
+       ]
+diff --git a/app/services/dante/migrator.rb b/app/services/dante/migrator.rb
+index 4d6046ce..0ec7aa5a 100644
+--- a/app/services/dante/migrator.rb
++++ b/app/services/dante/migrator.rb
+@@ -3,7 +3,9 @@
+ module Dante
+   class Migrator
+     def self.migrate_conversation_parts(id: nil)
+-      parts = ConversationPartContent.joins("INNER JOIN conversation_parts ON conversation_parts.messageable_id = conversation_part_contents.id AND conversation_parts.messageable_type = 'ConversationPartContent'")
++      parts = ConversationPartContent.joins("INNER JOIN conversation_parts ON " \
++                                            "conversation_parts.messageable_id = conversation_part_contents.id AND " \
++                                            "conversation_parts.messageable_type = 'ConversationPartContent'")
+                                      .joins("INNER JOIN conversations ON conversations.id = conversation_parts.conversation_id")
+                                      .where(conversations: { app_id: id })
+ 
+diff --git a/app/services/dante/renderer.rb b/app/services/dante/renderer.rb
+index 29bce8ce..e09aa2c3 100644
+--- a/app/services/dante/renderer.rb
++++ b/app/services/dante/renderer.rb
+@@ -95,7 +95,8 @@ module Dante
+       when "code"
+         create_element("code", "graf code", element)
+       when "link"
+-        create_element("a", "graf markup--anchor markup--anchor-readOnly", element, href: mark[:attrs][:href], target: mark[:attrs][:target], rel: "noopener noreferrer nofollow")
++        create_element("a", "graf markup--anchor markup--anchor-readOnly", element,
++                       href: mark[:attrs][:href], target: mark[:attrs][:target], rel: "noopener noreferrer nofollow")
+       else
+         Rails.logger.debug { "no handler for mark #{mark}" }
+         element
+diff --git a/app/services/message_apis/article_search/presenter.rb b/app/services/message_apis/article_search/presenter.rb
+index 1a6625b7..c56f8c64 100644
+--- a/app/services/message_apis/article_search/presenter.rb
++++ b/app/services/message_apis/article_search/presenter.rb
+@@ -155,7 +155,8 @@ module MessageApis::ArticleSearch
+     end
+ 
+     # Submit Sheet flow webhook URL (optional)
+-    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++    # and submitted when the Submit Sheets JS method is called.
+     def self.sheet_hook(_params)
+       []
+     end
+diff --git a/app/services/message_apis/calendly/presenter.rb b/app/services/message_apis/calendly/presenter.rb
+index 2d03ef9e..c4cc3eb9 100644
+--- a/app/services/message_apis/calendly/presenter.rb
++++ b/app/services/message_apis/calendly/presenter.rb
+@@ -41,7 +41,8 @@ module MessageApis::Calendly
+     end
+ 
+     # Submit flow webhook URL
+-    # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur multiple times as an end-user interacts with your app.
++    # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur
++    # multiple times as an end-user interacts with your app.
+     def self.submit_hook(params)
+       definitions = [
+         {
+@@ -72,7 +73,8 @@ module MessageApis::Calendly
+     end
+ 
+     # Configure flow webhook URL (optional)
+-    # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s inserted. Leaving this option blank will skip configuration.
++    # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s
++    # inserted. Leaving this option blank will skip configuration.
+     def self.configure_hook(kind:, ctx:)
+       calendar_input = {
+         name: "calendar",
+@@ -158,7 +160,8 @@ module MessageApis::Calendly
+     end
+ 
+     # Submit Sheet flow webhook URL (optional)
+-    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++    # and submitted when the Submit Sheets JS method is called.
+     def self.sheet_hook(_params)
+       { a: 11_111 }
+     end
+diff --git a/app/services/message_apis/contact_fields/presenter.rb b/app/services/message_apis/contact_fields/presenter.rb
+index b674b844..3dfe91f3 100644
+--- a/app/services/message_apis/contact_fields/presenter.rb
++++ b/app/services/message_apis/contact_fields/presenter.rb
+@@ -145,7 +145,8 @@ module MessageApis
+       end
+ 
+       # Submit Sheet flow webhook URL (optional)
+-      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++      # and submitted when the Submit Sheets JS method is called.
+       def self.sheet_view(params); end
+     end
+   end
+diff --git a/app/services/message_apis/content_showcase/presenter.rb b/app/services/message_apis/content_showcase/presenter.rb
+index 7e24146a..f2e8775d 100644
+--- a/app/services/message_apis/content_showcase/presenter.rb
++++ b/app/services/message_apis/content_showcase/presenter.rb
+@@ -288,7 +288,8 @@ module MessageApis
+       end
+ 
+       # Submit Sheet flow webhook URL (optional)
+-      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++      # and submitted when the Submit Sheets JS method is called.
+       def self.sheet_hook(_params)
+         []
+       end
+diff --git a/app/services/message_apis/csat/presenter.rb b/app/services/message_apis/csat/presenter.rb
+index 235835fa..ffb22894 100644
+--- a/app/services/message_apis/csat/presenter.rb
++++ b/app/services/message_apis/csat/presenter.rb
+@@ -113,7 +113,8 @@ module MessageApis
+       end
+ 
+       # Submit Sheet flow webhook URL (optional)
+-      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++      # and submitted when the Submit Sheets JS method is called.
+       def self.sheet_hook(_params)
+         []
+       end
+diff --git a/app/services/message_apis/dialog360/presenter.rb b/app/services/message_apis/dialog360/presenter.rb
+index 62d09851..0cb5d8ff 100644
+--- a/app/services/message_apis/dialog360/presenter.rb
++++ b/app/services/message_apis/dialog360/presenter.rb
+@@ -15,7 +15,8 @@ module MessageApis
+       end
+ 
+       # Submit flow webhook URL
+-      # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur multiple times as an end-user interacts with your app.
++      # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur
++      # multiple times as an end-user interacts with your app.
+       def self.submit_hook(_params)
+         definitions = []
+         {
+@@ -81,7 +82,8 @@ module MessageApis
+       end
+ 
+       # Configure flow webhook URL (optional)
+-      # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s inserted. Leaving this option blank will skip configuration.
++      # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s
++      # inserted. Leaving this option blank will skip configuration.
+       #
+       # rubocop:disable-next Metrics/PerceivedComplexity
+       def self.configure_hook(kind:, ctx:)
+@@ -352,7 +354,8 @@ module MessageApis
+       end
+ 
+       # Submit Sheet flow webhook URL (optional)
+-      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++      # and submitted when the Submit Sheets JS method is called.
+       def self.sheet_hook(_params)
+         { a: 11_111 }
+       end
+diff --git a/app/services/message_apis/full_contact/presenter.rb b/app/services/message_apis/full_contact/presenter.rb
+index b8d8ca92..1465d562 100644
+--- a/app/services/message_apis/full_contact/presenter.rb
++++ b/app/services/message_apis/full_contact/presenter.rb
+@@ -129,7 +129,8 @@ module MessageApis
+       end
+ 
+       # Submit Sheet flow webhook URL (optional)
+-      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++      # and submitted when the Submit Sheets JS method is called.
+       def self.sheet_view(params); end
+     end
+   end
+diff --git a/app/services/message_apis/inbox_sections/presenter.rb b/app/services/message_apis/inbox_sections/presenter.rb
+index 79611799..119894cf 100644
+--- a/app/services/message_apis/inbox_sections/presenter.rb
++++ b/app/services/message_apis/inbox_sections/presenter.rb
+@@ -9,7 +9,8 @@ module MessageApis
+             items: [
+               { type: "field-value", field: "Key", value: "Value 1" },
+               { type: "field-value", field: "Key", value: "Value 2" },
+-              { type: "field-value", field: "Key", value: "Value 3 which is a very long value that will exhibit different behaviours to the other values" }
++              { type: "field-value", field: "Key",
++                value: "Value 3 which is a very long value that will exhibit different behaviours to the other values" }
+             ] }
+         ]
+       end
+@@ -410,7 +411,8 @@ module MessageApis
+       end
+ 
+       # Submit Sheet flow webhook URL (optional)
+-      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++      # and submitted when the Submit Sheets JS method is called.
+       def self.sheet_view(params); end
+     end
+   end
+diff --git a/app/services/message_apis/open_ai/presenter.rb b/app/services/message_apis/open_ai/presenter.rb
+index f77ff9b5..a18cdf1e 100644
+--- a/app/services/message_apis/open_ai/presenter.rb
++++ b/app/services/message_apis/open_ai/presenter.rb
+@@ -99,7 +99,8 @@ module MessageApis
+       end
+ 
+       # Submit Sheet flow webhook URL (optional)
+-      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++      # and submitted when the Submit Sheets JS method is called.
+       def self.sheet_hook(_params)
+         []
+       end
+diff --git a/app/services/message_apis/slack/api.rb b/app/services/message_apis/slack/api.rb
+index aa9d76d6..dcc020b8 100644
+--- a/app/services/message_apis/slack/api.rb
++++ b/app/services/message_apis/slack/api.rb
+@@ -790,7 +790,8 @@ module MessageApis
+       def oauth_authorize(_app, package)
+         oauth_client.auth_code.authorize_url(
+           user_scope: "channels:history,channels:write,channels:read",
+-          scope: "files:read,channels:history,channels:join,chat:write,channels:read,channels:manage,chat:write.customize,users:read,users:read.email",
++          scope: "files:read,channels:history,channels:join,chat:write,channels:read,channels:manage," \
++                 "chat:write.customize,users:read,users:read.email",
+           redirect_uri: package.oauth_url
+         )
+       end
+diff --git a/app/services/message_apis/telegram/presenter.rb b/app/services/message_apis/telegram/presenter.rb
+index 6b006655..94b7fcfc 100644
+--- a/app/services/message_apis/telegram/presenter.rb
++++ b/app/services/message_apis/telegram/presenter.rb
+@@ -15,7 +15,8 @@ module MessageApis
+       end
+ 
+       # Submit flow webhook URL
+-      # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur multiple times as an end-user interacts with your app.
++      # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur
++      # multiple times as an end-user interacts with your app.
+       def self.submit_hook(_params)
+         definitions = []
+         {
+@@ -26,11 +27,13 @@ module MessageApis
+       end
+ 
+       # Configure flow webhook URL (optional)
+-      # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s inserted. Leaving this option blank will skip configuration.
++      # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s
++      # inserted. Leaving this option blank will skip configuration.
+       def self.configure_hook(kind:, ctx:); end
+ 
+       # Submit Sheet flow webhook URL (optional)
+-      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++      # and submitted when the Submit Sheets JS method is called.
+       def self.sheet_hook(_params)
+         { a: 11_111 }
+       end
+diff --git a/app/services/message_apis/twilio_phone/presenter.rb b/app/services/message_apis/twilio_phone/presenter.rb
+index 953b6f71..ca15d837 100644
+--- a/app/services/message_apis/twilio_phone/presenter.rb
++++ b/app/services/message_apis/twilio_phone/presenter.rb
+@@ -17,7 +17,8 @@ module MessageApis::TwilioPhone
+     end
+ 
+     # Submit flow webhook URL
+-    # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur multiple times as an end-user interacts with your app.
++    # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur
++    # multiple times as an end-user interacts with your app.
+     def self.submit_hook(params)
+       definitions = []
+ 
+@@ -71,7 +72,8 @@ module MessageApis::TwilioPhone
+     end
+ 
+     # Configure flow webhook URL (optional)
+-    # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s inserted. Leaving this option blank will skip configuration.
++    # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s
++    # inserted. Leaving this option blank will skip configuration.
+     def self.configure_hook(kind:, ctx:)
+       {
+         kind: "initialize",
+@@ -131,7 +133,8 @@ module MessageApis::TwilioPhone
+     end
+ 
+     # Submit Sheet flow webhook URL (optional)
+-    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++    # and submitted when the Submit Sheets JS method is called.
+     def self.sheet_hook(_params)
+       {}
+     end
+@@ -308,7 +311,8 @@ module MessageApis::TwilioPhone
+               action: {
+                 type: "url",
+                 url: "#{Chaskiq::Config.get(:host)}/package_iframe/TwilioPhone?token=#{token}",
+-                options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=270,left=200,top=100"
++                options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no," \
++                         "resizable=no,width=600,height=270,left=200,top=100"
+                 # url: "/package_iframe_internal/TwilioPhone"
+               }
+             }
+@@ -348,7 +352,8 @@ module MessageApis::TwilioPhone
+         # action: {
+         #  type: "url",
+         #  url: "#{Chaskiq::Config.get(:host)}/package_iframe/TwilioPhone?token=#{token}",
+-        #  options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=270,left=200,top=100"
++        #  options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no," \
++        #           "resizable=no,width=600,height=270,left=200,top=100"
+         #  # url: "/package_iframe_internal/TwilioPhone"
+         # }
+       }
+@@ -357,7 +362,8 @@ module MessageApis::TwilioPhone
+         button.merge!({ action: {
+                         type: "url",
+                         url: "#{Chaskiq::Config.get(:host)}/package_iframe/TwilioPhone?token=#{token}",
+-                        options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=270,left=200,top=100"
++                        options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no," \
++                                 "resizable=no,width=600,height=270,left=200,top=100"
+                         # url: "/package_iframe_internal/TwilioPhone"
+                       } })
+       end
+@@ -366,7 +372,8 @@ module MessageApis::TwilioPhone
+         button.merge!({ action: {
+                         type: "submit"
+                         # url: "#{Chaskiq::Config.get(:host)}/package_iframe/TwilioPhone?token=#{token}",
+-                        # options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=270,left=200,top=100"
++                        # options: "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no," \
++                        #          "resizable=no,width=600,height=270,left=200,top=100"
+                         # url: "/package_iframe_internal/TwilioPhone"
+                       } })
+       end
+diff --git a/app/services/message_apis/ui_catalog/presenter.rb b/app/services/message_apis/ui_catalog/presenter.rb
+index 054f4064..1fb3d3c9 100644
+--- a/app/services/message_apis/ui_catalog/presenter.rb
++++ b/app/services/message_apis/ui_catalog/presenter.rb
+@@ -932,7 +932,8 @@ module MessageApis::UiCatalog
+     end
+ 
+     # Submit Sheet flow webhook URL (optional)
+-    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++    # and submitted when the Submit Sheets JS method is called.
+     def self.sheet_view(params)
+       @user = params[:user]
+       @name = @user[:name]
+diff --git a/app/services/message_apis/zapier/presenter.rb b/app/services/message_apis/zapier/presenter.rb
+index 43f41412..59950742 100644
+--- a/app/services/message_apis/zapier/presenter.rb
++++ b/app/services/message_apis/zapier/presenter.rb
+@@ -29,7 +29,8 @@ module MessageApis
+       end
+ 
+       # Submit flow webhook URL
+-      # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur multiple times as an end-user interacts with your app.
++      # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur
++      # multiple times as an end-user interacts with your app.
+       def self.submit_hook(kind:, ctx:)
+         conversation = Conversation.find_by(key: ctx[:conversation_key])
+ 
+@@ -43,7 +44,8 @@ module MessageApis
+       end
+ 
+       # Configure flow webhook URL (optional)
+-      # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s inserted. Leaving this option blank will skip configuration.
++      # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s
++      # inserted. Leaving this option blank will skip configuration.
+       def self.configure_hook(kind:, ctx:)
+         results = {
+           url: "/ppupu",
+@@ -85,7 +87,8 @@ module MessageApis
+       end
+ 
+       # Submit Sheet flow webhook URL (optional)
+-      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++      # and submitted when the Submit Sheets JS method is called.
+       def self.sheet_hook(_params)
+         { a: 11_111 }
+       end
+diff --git a/app/services/message_apis/zoom/presenter.rb b/app/services/message_apis/zoom/presenter.rb
+index ec921f3e..488d187c 100644
+--- a/app/services/message_apis/zoom/presenter.rb
++++ b/app/services/message_apis/zoom/presenter.rb
+@@ -17,7 +17,8 @@ module MessageApis
+       end
+ 
+       # Submit flow webhook URL
+-      # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur multiple times as an end-user interacts with your app.
++      # Sent when an end-user interacts with your app, via a button, link, or text input. This flow can occur
++      # multiple times as an end-user interacts with your app.
+       def self.submit_hook(_params)
+         []
+       end
+@@ -47,7 +48,8 @@ module MessageApis
+       end
+ 
+       # Configure flow webhook URL (optional)
+-      # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s inserted. Leaving this option blank will skip configuration.
++      # Sent when a teammate wants to use your app, so that you can show them configuration options before it’s
++      # inserted. Leaving this option blank will skip configuration.
+       def self.configure_hook(kind:, ctx:)
+         definitions = definitions_for_configure_hook
+ 
+@@ -140,7 +142,8 @@ module MessageApis
+       end
+ 
+       # Submit Sheet flow webhook URL (optional)
+-      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
++      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
++      # and submitted when the Submit Sheets JS method is called.
+       def self.sheet_hook(params); end
+ 
+       def self.sheet_view(params); end
