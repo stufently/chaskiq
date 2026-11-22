@@ -1,0 +1,32 @@
+{
+  "case": "templates_error_no_message",
+  "kind": "configure",
+  "ctx_keys": "indifferent",
+  "ctx": {
+    "conversation_key": "conv-1"
+  },
+  "api": {
+    "templates_json": "{\"meta\": {\"success\": false}}"
+  },
+  "calls": [
+    {
+      "call": "retrieve_templates",
+      "args": [
+        {
+          "offset": 0
+        }
+      ]
+    }
+  ],
+  "outcome": {
+    "result": {
+      "kind": "configure",
+      "definitions": [
+        {
+          "type": "text",
+          "text": "Error retrieving templates "
+        }
+      ]
+    }
+  }
+}

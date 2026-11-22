@@ -1,0 +1,27 @@
+{
+  "case": "templates_not_json",
+  "kind": "configure",
+  "ctx_keys": "indifferent",
+  "ctx": {
+    "conversation_key": "conv-1"
+  },
+  "api": {
+    "templates_json": "<html>502</html>"
+  },
+  "calls": [
+    {
+      "call": "retrieve_templates",
+      "args": [
+        {
+          "offset": 0
+        }
+      ]
+    }
+  ],
+  "outcome": {
+    "raised": {
+      "class": "JSON::ParserError",
+      "message": "unexpected character: '<html>502</html>' at line 1 column 1"
+    }
+  }
+}

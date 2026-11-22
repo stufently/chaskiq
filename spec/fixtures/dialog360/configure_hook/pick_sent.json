@@ -1,0 +1,113 @@
+{
+  "case": "pick_sent",
+  "kind": "configure",
+  "ctx_keys": "indifferent",
+  "ctx": {
+    "field": {
+      "name": "pick-template",
+      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+      "title": "Template Name: form_tpl",
+      "action": {
+        "type": "submit"
+      }
+    },
+    "values": {
+      "selected_user": "7",
+      "unsaved-1": [
+        "Ann",
+        "A-1"
+      ]
+    }
+  },
+  "api": {
+    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}",
+    "send_json": "{\"conversation_key\": \"conv-9\", \"messages\": [{\"id\": \"wamid.1\"}]}"
+  },
+  "calls": [
+    {
+      "call": "retrieve_templates",
+      "args": [
+        {
+          "offset": 0
+        }
+      ]
+    },
+    {
+      "call": "send_template_message",
+      "args": [
+        {
+          "template": {
+            "name": "form_tpl",
+            "category": "UTILITY",
+            "status": "approved",
+            "language": "en",
+            "namespace": "ns-2",
+            "components": [
+              {
+                "type": "HEADER",
+                "format": "TEXT",
+                "text": "Hi {{1}}"
+              },
+              {
+                "type": "BODY",
+                "text": "Order {{1}} for {{2}} and {{10}}"
+              },
+              {
+                "type": "FOOTER",
+                "text": "no params"
+              },
+              {
+                "type": "BUTTONS",
+                "buttons": [
+                  {
+                    "type": "QUICK_REPLY",
+                    "text": "ok"
+                  }
+                ]
+              }
+            ]
+          },
+          "selected_user": "7",
+          "conversation_key": null,
+          "parameters": [
+            "Ann",
+            "A-1"
+          ]
+        }
+      ]
+    }
+  ],
+  "outcome": {
+    "result": {
+      "kind": "configure",
+      "definitions": [
+        {
+          "type": "text",
+          "text": "template sent!",
+          "style": "header",
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "text": "you can close this window",
+          "style": "header",
+          "align": "center"
+        },
+        {
+          "id": "visit-link",
+          "type": "button",
+          "label": "Visit conversation",
+          "action": {
+            "type": "link",
+            "url": "/apps/app-key-1/conversations/conv-9"
+          },
+          "align": "center"
+        }
+      ],
+      "results": {
+        "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+        "label": "Template Name: form_tpl"
+      }
+    }
+  }
+}

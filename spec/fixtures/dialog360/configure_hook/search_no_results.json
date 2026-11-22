@@ -1,0 +1,54 @@
+{
+  "case": "search_no_results",
+  "kind": "configure",
+  "ctx_keys": "indifferent",
+  "ctx": {
+    "values": {
+      "search_contact": "zed"
+    }
+  },
+  "api": {
+    "users": []
+  },
+  "calls": [
+    {
+      "call": "limit",
+      "args": [
+        15
+      ]
+    },
+    {
+      "call": "ransack",
+      "args": [
+        {
+          "last_name_or_first_name_or_name_or_email_or_phone_or_external_profiles_profile_id_i_cont_any": "zed"
+        }
+      ]
+    },
+    {
+      "call": "result",
+      "args": []
+    }
+  ],
+  "outcome": {
+    "result": {
+      "definitions": [
+        {
+          "type": "input",
+          "id": "unsaved-2",
+          "name": "search_contact",
+          "label": "Search contact by email, name or phone",
+          "placeholder": "Search for a contact...",
+          "save_state": "unsaved",
+          "action": {
+            "type": "submit"
+          }
+        },
+        {
+          "type": "spacer",
+          "size": "m"
+        }
+      ]
+    }
+  }
+}

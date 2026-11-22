@@ -1,0 +1,18 @@
+{
+  "case": "page_field_without_id",
+  "kind": "configure",
+  "ctx_keys": "indifferent",
+  "ctx": {
+    "field": {
+      "name": "paginate-template"
+    }
+  },
+  "api": {},
+  "calls": [],
+  "outcome": {
+    "raised": {
+      "class": "NoMethodError",
+      "message": "undefined method 'gsub' for nil"
+    }
+  }
+}
