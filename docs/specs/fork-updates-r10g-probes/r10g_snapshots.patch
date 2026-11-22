@@ -1,0 +1,2978 @@
+diff --git a/spec/fixtures/ui_catalog/configure_hook/catalog_a.json b/spec/fixtures/ui_catalog/configure_hook/catalog_a.json
+new file mode 100644
+index 00000000..bac67795
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/catalog_a.json
+@@ -0,0 +1,78 @@
++{
++  "case": "catalog_a",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "name": "a",
++      "label": "a separator",
++      "action": {},
++      "type": "separator",
++      "grid": {
++        "xs": "w-full",
++        "sm": "w-full"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/catalog_aaaaaaaa.json b/spec/fixtures/ui_catalog/configure_hook/catalog_aaaaaaaa.json
+new file mode 100644
+index 00000000..2f2fdadc
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/catalog_aaaaaaaa.json
+@@ -0,0 +1,85 @@
++{
++  "case": "catalog_aaaaaaaa",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "id": "aaaaaaaa",
++      "name": "aaaa",
++      "label": "a real submit for ya",
++      "type": "button",
++      "action": {
++        "type": "submit"
++      },
++      "grid": {
++        "xs": "w-full",
++        "sm": "w-full"
++      }
++    }
++  },
++  "result": {
++    "kind": "initialize",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ],
++    "results": {
++      "foo": "bar",
++      "baz": "baaz"
++    }
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/catalog_aaokokaaaaaa.json b/spec/fixtures/ui_catalog/configure_hook/catalog_aaokokaaaaaa.json
+new file mode 100644
+index 00000000..5fcd78cc
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/catalog_aaokokaaaaaa.json
+@@ -0,0 +1,114 @@
++{
++  "case": "catalog_aaokokaaaaaa",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "id": "aaokokaaaaaa",
++      "name": "bubu",
++      "label": "fuckya",
++      "type": "button",
++      "action": {
++        "type": "submit"
++      },
++      "grid": {
++        "xs": "w-full",
++        "sm": "w-full"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "name": "api_secret",
++        "type": "string",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        },
++        "errors": {
++          "api_secret": [
++            "what hahah"
++          ]
++        },
++        "value": "enter sandsman"
++      },
++      {
++        "name": "popis",
++        "label": "pipopo",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "type": "list",
++        "disabled": false,
++        "items": [
++          {
++            "type": "item",
++            "id": "list-item-1",
++            "title": "Item 1",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-4",
++            "title": "Item 4",
++            "subtitle": "With Action",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-2",
++            "title": "Item 2",
++            "subtitle": "Show Text areas",
++            "tertiary_text": "With Tertiary Text",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-6",
++            "title": "Item 6",
++            "subtitle": "Show dropdowns",
++            "tertiary_text": "With Tertiary Text",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-7",
++            "title": "Item 7",
++            "subtitle": "Checkboxes",
++            "tertiary_text": "With Tertiary Text",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-8",
++            "title": "Item 8",
++            "subtitle": "Inputs",
++            "tertiary_text": "With inputut pupx",
++            "action": {
++              "type": "submit"
++            }
++          }
++        ]
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/catalog_content_url.json b/spec/fixtures/ui_catalog/configure_hook/catalog_content_url.json
+new file mode 100644
+index 00000000..21812d66
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/catalog_content_url.json
+@@ -0,0 +1,24 @@
++{
++  "case": "catalog_content_url",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "id": "content-url",
++      "name": "content-url",
++      "label": "content-url",
++      "type": "button",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "initialize",
++    "definitions": [],
++    "results": {
++      "url": "/ppupu",
++      "type": "content"
++    }
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/catalog_sd.json b/spec/fixtures/ui_catalog/configure_hook/catalog_sd.json
+new file mode 100644
+index 00000000..ee0dc48d
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/catalog_sd.json
+@@ -0,0 +1,79 @@
++{
++  "case": "catalog_sd",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "id": "sd",
++      "name": "alooo",
++      "label": "a link",
++      "action": {},
++      "type": "button",
++      "grid": {
++        "xs": "w-full",
++        "sm": "w-full"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/click_aaaaaaaa.json b/spec/fixtures/ui_catalog/configure_hook/click_aaaaaaaa.json
+new file mode 100644
+index 00000000..5aa0ffb9
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/click_aaaaaaaa.json
+@@ -0,0 +1,74 @@
++{
++  "case": "click_aaaaaaaa",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "id": "aaaaaaaa",
++      "action": {
++        "type": "click"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/click_list_item_1.json b/spec/fixtures/ui_catalog/configure_hook/click_list_item_1.json
+new file mode 100644
+index 00000000..ce31242a
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/click_list_item_1.json
+@@ -0,0 +1,75 @@
++{
++  "case": "click_list_item_1",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-1",
++      "action": {
++        "type": "click"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/components_popis.json b/spec/fixtures/ui_catalog/configure_hook/components_popis.json
+new file mode 100644
+index 00000000..b513996f
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/components_popis.json
+@@ -0,0 +1,80 @@
++{
++  "case": "components_popis",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "name": "popis",
++      "label": "pipopo",
++      "type": "button",
++      "action": {
++        "type": "submit"
++      },
++      "grid": {
++        "xs": "w-full",
++        "sm": "w-full"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/element_failed_2_input.json b/spec/fixtures/ui_catalog/configure_hook/element_failed_2_input.json
+new file mode 100644
+index 00000000..0d8b0fb7
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/element_failed_2_input.json
+@@ -0,0 +1,79 @@
++{
++  "case": "element_failed_2_input",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "input",
++      "id": "failed-2",
++      "label": "Failed (Action)",
++      "placeholder": "Enter input here...",
++      "value": "Value is given in JSON",
++      "save_state": "failed",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/element_failed_3_input.json b/spec/fixtures/ui_catalog/configure_hook/element_failed_3_input.json
+new file mode 100644
+index 00000000..77b2e88c
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/element_failed_3_input.json
+@@ -0,0 +1,80 @@
++{
++  "case": "element_failed_3_input",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "input",
++      "id": "failed-3",
++      "label": "Failed (Disabled)",
++      "placeholder": "Enter input here...",
++      "value": "Value is given in JSON",
++      "save_state": "failed",
++      "disabled": true,
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/element_option_1_option.json b/spec/fixtures/ui_catalog/configure_hook/element_option_1_option.json
+new file mode 100644
+index 00000000..f8b3004a
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/element_option_1_option.json
+@@ -0,0 +1,76 @@
++{
++  "case": "element_option_1_option",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "option",
++      "id": "option-1",
++      "text": "Option 1",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/element_unsaved_2_input.json b/spec/fixtures/ui_catalog/configure_hook/element_unsaved_2_input.json
+new file mode 100644
+index 00000000..6e38024e
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/element_unsaved_2_input.json
+@@ -0,0 +1,78 @@
++{
++  "case": "element_unsaved_2_input",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "input",
++      "id": "unsaved-2",
++      "label": "Unsaved (Action)",
++      "placeholder": "Enter input here...",
++      "save_state": "unsaved",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/element_unsaved_3_input.json b/spec/fixtures/ui_catalog/configure_hook/element_unsaved_3_input.json
+new file mode 100644
+index 00000000..67c77e51
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/element_unsaved_3_input.json
+@@ -0,0 +1,79 @@
++{
++  "case": "element_unsaved_3_input",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "input",
++      "id": "unsaved-3",
++      "label": "Unsaved (Disabled)",
++      "placeholder": "Enter input here...",
++      "save_state": "unsaved",
++      "disabled": true,
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/no_field.json b/spec/fixtures/ui_catalog/configure_hook/no_field.json
+new file mode 100644
+index 00000000..a028d200
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/no_field.json
+@@ -0,0 +1,67 @@
++{
++  "case": "no_field",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {},
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/no_field_kind_custom.json b/spec/fixtures/ui_catalog/configure_hook/no_field_kind_custom.json
+new file mode 100644
+index 00000000..64e653d9
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/no_field_kind_custom.json
+@@ -0,0 +1,67 @@
++{
++  "case": "no_field_kind_custom",
++  "kind": "custom",
++  "ctx_keys": "symbol",
++  "ctx": {},
++  "result": {
++    "kind": "custom",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/string_keys_submit_aaaaaaaa.json b/spec/fixtures/ui_catalog/configure_hook/string_keys_submit_aaaaaaaa.json
+new file mode 100644
+index 00000000..8d4f4a68
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/string_keys_submit_aaaaaaaa.json
+@@ -0,0 +1,74 @@
++{
++  "case": "string_keys_submit_aaaaaaaa",
++  "kind": "configure",
++  "ctx_keys": "string",
++  "ctx": {
++    "field": {
++      "id": "aaaaaaaa",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/string_keys_submit_list_item_6.json b/spec/fixtures/ui_catalog/configure_hook/string_keys_submit_list_item_6.json
+new file mode 100644
+index 00000000..83dc6207
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/string_keys_submit_list_item_6.json
+@@ -0,0 +1,75 @@
++{
++  "case": "string_keys_submit_list_item_6",
++  "kind": "configure",
++  "ctx_keys": "string",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-6",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_aaaaaaaa_named_bubu.json b/spec/fixtures/ui_catalog/configure_hook/submit_aaaaaaaa_named_bubu.json
+new file mode 100644
+index 00000000..82a390e8
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_aaaaaaaa_named_bubu.json
+@@ -0,0 +1,80 @@
++{
++  "case": "submit_aaaaaaaa_named_bubu",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "id": "aaaaaaaa",
++      "name": "bubu",
++      "type": "item",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "initialize",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ],
++    "results": {
++      "foo": "bar",
++      "baz": "baaz"
++    }
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_content_url_named_bubu.json b/spec/fixtures/ui_catalog/configure_hook/submit_content_url_named_bubu.json
+new file mode 100644
+index 00000000..0a1d8393
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_content_url_named_bubu.json
+@@ -0,0 +1,22 @@
++{
++  "case": "submit_content_url_named_bubu",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "id": "content-url",
++      "name": "bubu",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "initialize",
++    "definitions": [],
++    "results": {
++      "url": "/ppupu",
++      "type": "content"
++    }
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_kind_custom_list_item_2.json b/spec/fixtures/ui_catalog/configure_hook/submit_kind_custom_list_item_2.json
+new file mode 100644
+index 00000000..268398ac
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_kind_custom_list_item_2.json
+@@ -0,0 +1,53 @@
++{
++  "case": "submit_kind_custom_list_item_2",
++  "kind": "custom",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-2",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "custom",
++    "definitions": [
++      {
++        "type": "textarea",
++        "id": "textarea-1",
++        "label": "Normal",
++        "placeholder": "Enter text here..."
++      },
++      {
++        "type": "textarea",
++        "id": "textarea-2",
++        "label": "With Value",
++        "placeholder": "Enter text here...",
++        "value": "Value entered in JSON."
++      },
++      {
++        "type": "textarea",
++        "id": "textarea-3",
++        "name": "textarea-3",
++        "label": "Error",
++        "placeholder": "Enter text here...",
++        "value": "Value entered in JSON.",
++        "error": true,
++        "errors": {
++          "textarea-3": [
++            "uno error"
++          ]
++        }
++      },
++      {
++        "type": "textarea",
++        "id": "textarea-4",
++        "label": "Disabled",
++        "placeholder": "Unable to enter text",
++        "disabled": true
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_list_item_1.json b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_1.json
+new file mode 100644
+index 00000000..637210d4
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_1.json
+@@ -0,0 +1,139 @@
++{
++  "case": "submit_list_item_1",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-1",
++      "title": "Item 1",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "type": "text",
++        "text": "This is a header",
++        "style": "header"
++      },
++      {
++        "type": "text",
++        "text": "This is paragraph text. Here's a [link](https://dev.chaskiq.io/). Here's some *bold text*. Lorem ipsum.",
++        "style": "paragraph"
++      },
++      {
++        "type": "text",
++        "text": "Left aligned",
++        "align": "left"
++      },
++      {
++        "type": "text",
++        "text": "Center aligned",
++        "align": "center"
++      },
++      {
++        "type": "text",
++        "text": "Right aligned",
++        "align": "right"
++      },
++      {
++        "type": "data-table",
++        "items": [
++          {
++            "type": "field-value",
++            "field": "Key",
++            "value": "Value 1"
++          },
++          {
++            "type": "field-value",
++            "field": "Key",
++            "value": "Value 2"
++          },
++          {
++            "type": "field-value",
++            "field": "Key",
++            "value": "Value 3 which is a very long value that will exhibit different behaviours to the other values"
++          }
++        ]
++      },
++      {
++        "type": "image",
++        "url": "https://via.placeholder.com/150",
++        "height": 50,
++        "width": 130
++      },
++      {
++        "type": "image",
++        "url": "https://via.placeholder.com/150",
++        "height": 64,
++        "width": 64,
++        "align": "left",
++        "rounded": true
++      },
++      {
++        "type": "image",
++        "url": "https://via.placeholder.com/150",
++        "height": 64,
++        "width": 64,
++        "align": "center",
++        "rounded": true
++      },
++      {
++        "type": "image",
++        "url": "https://via.placeholder.com/150",
++        "height": 64,
++        "width": 64,
++        "align": "right",
++        "rounded": true
++      },
++      {
++        "type": "text",
++        "text": "Size as *xs* is below."
++      },
++      {
++        "type": "spacer",
++        "size": "xs"
++      },
++      {
++        "type": "text",
++        "text": "Size as *s* is below."
++      },
++      {
++        "type": "spacer",
++        "size": "s"
++      },
++      {
++        "type": "text",
++        "text": "Size as *m* is below."
++      },
++      {
++        "type": "spacer",
++        "size": "m"
++      },
++      {
++        "type": "text",
++        "text": "Size as *l* is below."
++      },
++      {
++        "type": "spacer",
++        "size": "l"
++      },
++      {
++        "type": "text",
++        "text": "Size as *xl* is below."
++      },
++      {
++        "type": "spacer",
++        "size": "xl"
++      },
++      {
++        "type": "text",
++        "text": "This is the last component."
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_list_item_1_named_bubu.json b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_1_named_bubu.json
+new file mode 100644
+index 00000000..8a080888
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_1_named_bubu.json
+@@ -0,0 +1,139 @@
++{
++  "case": "submit_list_item_1_named_bubu",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-1",
++      "name": "bubu",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "type": "text",
++        "text": "This is a header",
++        "style": "header"
++      },
++      {
++        "type": "text",
++        "text": "This is paragraph text. Here's a [link](https://dev.chaskiq.io/). Here's some *bold text*. Lorem ipsum.",
++        "style": "paragraph"
++      },
++      {
++        "type": "text",
++        "text": "Left aligned",
++        "align": "left"
++      },
++      {
++        "type": "text",
++        "text": "Center aligned",
++        "align": "center"
++      },
++      {
++        "type": "text",
++        "text": "Right aligned",
++        "align": "right"
++      },
++      {
++        "type": "data-table",
++        "items": [
++          {
++            "type": "field-value",
++            "field": "Key",
++            "value": "Value 1"
++          },
++          {
++            "type": "field-value",
++            "field": "Key",
++            "value": "Value 2"
++          },
++          {
++            "type": "field-value",
++            "field": "Key",
++            "value": "Value 3 which is a very long value that will exhibit different behaviours to the other values"
++          }
++        ]
++      },
++      {
++        "type": "image",
++        "url": "https://via.placeholder.com/150",
++        "height": 50,
++        "width": 130
++      },
++      {
++        "type": "image",
++        "url": "https://via.placeholder.com/150",
++        "height": 64,
++        "width": 64,
++        "align": "left",
++        "rounded": true
++      },
++      {
++        "type": "image",
++        "url": "https://via.placeholder.com/150",
++        "height": 64,
++        "width": 64,
++        "align": "center",
++        "rounded": true
++      },
++      {
++        "type": "image",
++        "url": "https://via.placeholder.com/150",
++        "height": 64,
++        "width": 64,
++        "align": "right",
++        "rounded": true
++      },
++      {
++        "type": "text",
++        "text": "Size as *xs* is below."
++      },
++      {
++        "type": "spacer",
++        "size": "xs"
++      },
++      {
++        "type": "text",
++        "text": "Size as *s* is below."
++      },
++      {
++        "type": "spacer",
++        "size": "s"
++      },
++      {
++        "type": "text",
++        "text": "Size as *m* is below."
++      },
++      {
++        "type": "spacer",
++        "size": "m"
++      },
++      {
++        "type": "text",
++        "text": "Size as *l* is below."
++      },
++      {
++        "type": "spacer",
++        "size": "l"
++      },
++      {
++        "type": "text",
++        "text": "Size as *xl* is below."
++      },
++      {
++        "type": "spacer",
++        "size": "xl"
++      },
++      {
++        "type": "text",
++        "text": "This is the last component."
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_list_item_1_not_item.json b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_1_not_item.json
+new file mode 100644
+index 00000000..2ae9416d
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_1_not_item.json
+@@ -0,0 +1,74 @@
++{
++  "case": "submit_list_item_1_not_item",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "id": "list-item-1",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_list_item_2.json b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_2.json
+new file mode 100644
+index 00000000..7591e9ed
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_2.json
+@@ -0,0 +1,56 @@
++{
++  "case": "submit_list_item_2",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-2",
++      "title": "Item 2",
++      "subtitle": "Show Text areas",
++      "tertiary_text": "With Tertiary Text",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "type": "textarea",
++        "id": "textarea-1",
++        "label": "Normal",
++        "placeholder": "Enter text here..."
++      },
++      {
++        "type": "textarea",
++        "id": "textarea-2",
++        "label": "With Value",
++        "placeholder": "Enter text here...",
++        "value": "Value entered in JSON."
++      },
++      {
++        "type": "textarea",
++        "id": "textarea-3",
++        "name": "textarea-3",
++        "label": "Error",
++        "placeholder": "Enter text here...",
++        "value": "Value entered in JSON.",
++        "error": true,
++        "errors": {
++          "textarea-3": [
++            "uno error"
++          ]
++        }
++      },
++      {
++        "type": "textarea",
++        "id": "textarea-4",
++        "label": "Disabled",
++        "placeholder": "Unable to enter text",
++        "disabled": true
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_list_item_3_unknown.json b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_3_unknown.json
+new file mode 100644
+index 00000000..eeea5fee
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_3_unknown.json
+@@ -0,0 +1,75 @@
++{
++  "case": "submit_list_item_3_unknown",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-3",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_list_item_4.json b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_4.json
+new file mode 100644
+index 00000000..b4a4c734
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_4.json
+@@ -0,0 +1,164 @@
++{
++  "case": "submit_list_item_4",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-4",
++      "title": "Item 4",
++      "subtitle": "With Action",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "type": "single-select",
++        "id": "single-select-1",
++        "label": "Unsaved Options",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "single-select",
++        "id": "single-select-2",
++        "label": "Pre-selected Option",
++        "value": "option-1",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "single-select",
++        "id": "single-select-3",
++        "label": "Saved Options",
++        "save_state": "saved",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "single-select",
++        "id": "single-select-4",
++        "label": "Failed Options",
++        "save_state": "failed",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "single-select",
++        "id": "single-select-5",
++        "label": "Disabled Options",
++        "disabled": true,
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "single-select",
++        "id": "single-select-6",
++        "label": "Disabled Option",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Disabled",
++            "disabled": true
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_list_item_6.json b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_6.json
+new file mode 100644
+index 00000000..f2b6efcb
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_6.json
+@@ -0,0 +1,159 @@
++{
++  "case": "submit_list_item_6",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-6",
++      "title": "Item 6",
++      "subtitle": "Show dropdowns",
++      "tertiary_text": "With Tertiary Text",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "type": "dropdown",
++        "id": "dropdown-1",
++        "label": "Unsaved Options",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "dropdown",
++        "id": "dropdown-2",
++        "label": "Pre-selected Option",
++        "value": "option-1",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "dropdown",
++        "id": "dropdown-3",
++        "label": "Saved Options",
++        "save_state": "saved",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "dropdown",
++        "id": "dropdown-4",
++        "label": "Failed Options",
++        "save_state": "failed",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "dropdown",
++        "id": "dropdown-5",
++        "label": "Disabled Options",
++        "disabled": true,
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "dropdown",
++        "id": "dropdown-6",
++        "label": "Disabled Option",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Disabled",
++            "disabled": true
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_list_item_7.json b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_7.json
+new file mode 100644
+index 00000000..cb987e10
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_7.json
+@@ -0,0 +1,162 @@
++{
++  "case": "submit_list_item_7",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-7",
++      "title": "Item 7",
++      "subtitle": "Checkboxes",
++      "tertiary_text": "With Tertiary Text",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "type": "checkbox",
++        "id": "checkbox-1",
++        "label": "Unsaved Options",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "checkbox",
++        "id": "checkbox-2",
++        "label": "Pre-selected Option(s)",
++        "value": [
++          "option-1",
++          "option-2"
++        ],
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "checkbox",
++        "id": "checkbox-3",
++        "label": "Saved Options",
++        "save_state": "saved",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "checkbox",
++        "id": "checkbox-4",
++        "label": "Failed Options",
++        "save_state": "failed",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "checkbox",
++        "id": "checkbox-5",
++        "label": "Disabled Options",
++        "disabled": true,
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1"
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      },
++      {
++        "type": "checkbox",
++        "id": "checkbox-6",
++        "label": "Disabled Option",
++        "options": [
++          {
++            "type": "option",
++            "id": "option-1",
++            "text": "Option 1",
++            "disabled": true
++          },
++          {
++            "type": "option",
++            "id": "option-2",
++            "text": "Option 2"
++          },
++          {
++            "type": "option",
++            "id": "option-3",
++            "text": "Option 3"
++          }
++        ]
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_list_item_8.json b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_8.json
+new file mode 100644
+index 00000000..ab5a4637
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_8.json
+@@ -0,0 +1,89 @@
++{
++  "case": "submit_list_item_8",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-8",
++      "title": "Item 8",
++      "subtitle": "Inputs",
++      "tertiary_text": "With inputut pupx",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "type": "input",
++        "id": "unsaved-1",
++        "label": "Unsaved",
++        "placeholder": "Enter input here...",
++        "save_state": "unsaved"
++      },
++      {
++        "type": "input",
++        "id": "unsaved-2",
++        "label": "Unsaved (Action)",
++        "placeholder": "Enter input here...",
++        "save_state": "unsaved",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "type": "input",
++        "id": "unsaved-3",
++        "label": "Unsaved (Disabled)",
++        "placeholder": "Enter input here...",
++        "save_state": "unsaved",
++        "disabled": true,
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "type": "input",
++        "id": "failed-1",
++        "label": "Failed",
++        "placeholder": "Enter input here...",
++        "value": "Value is given in JSON",
++        "save_state": "failed"
++      },
++      {
++        "type": "input",
++        "id": "failed-2",
++        "label": "Failed (Action)",
++        "placeholder": "Enter input here...",
++        "value": "Value is given in JSON",
++        "save_state": "failed",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "type": "input",
++        "id": "failed-3",
++        "label": "Failed (Disabled)",
++        "placeholder": "Enter input here...",
++        "value": "Value is given in JSON",
++        "save_state": "failed",
++        "disabled": true,
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "type": "input",
++        "id": "saved-1",
++        "label": "Saved",
++        "placeholder": "Enter input here...",
++        "value": "Value is given in JSON",
++        "save_state": "saved"
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_list_item_9_named_bubu.json b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_9_named_bubu.json
+new file mode 100644
+index 00000000..28860eae
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_list_item_9_named_bubu.json
+@@ -0,0 +1,109 @@
++{
++  "case": "submit_list_item_9_named_bubu",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "type": "item",
++      "id": "list-item-9",
++      "name": "bubu",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "name": "api_secret",
++        "type": "string",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        },
++        "errors": {
++          "api_secret": [
++            "what hahah"
++          ]
++        },
++        "value": "enter sandsman"
++      },
++      {
++        "name": "popis",
++        "label": "pipopo",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "type": "list",
++        "disabled": false,
++        "items": [
++          {
++            "type": "item",
++            "id": "list-item-1",
++            "title": "Item 1",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-4",
++            "title": "Item 4",
++            "subtitle": "With Action",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-2",
++            "title": "Item 2",
++            "subtitle": "Show Text areas",
++            "tertiary_text": "With Tertiary Text",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-6",
++            "title": "Item 6",
++            "subtitle": "Show dropdowns",
++            "tertiary_text": "With Tertiary Text",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-7",
++            "title": "Item 7",
++            "subtitle": "Checkboxes",
++            "tertiary_text": "With Tertiary Text",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-8",
++            "title": "Item 8",
++            "subtitle": "Inputs",
++            "tertiary_text": "With inputut pupx",
++            "action": {
++              "type": "submit"
++            }
++          }
++        ]
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_name_bubu_only.json b/spec/fixtures/ui_catalog/configure_hook/submit_name_bubu_only.json
+new file mode 100644
+index 00000000..0c8db4b5
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_name_bubu_only.json
+@@ -0,0 +1,107 @@
++{
++  "case": "submit_name_bubu_only",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "name": "bubu",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "name": "api_secret",
++        "type": "string",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        },
++        "errors": {
++          "api_secret": [
++            "what hahah"
++          ]
++        },
++        "value": "enter sandsman"
++      },
++      {
++        "name": "popis",
++        "label": "pipopo",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "type": "list",
++        "disabled": false,
++        "items": [
++          {
++            "type": "item",
++            "id": "list-item-1",
++            "title": "Item 1",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-4",
++            "title": "Item 4",
++            "subtitle": "With Action",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-2",
++            "title": "Item 2",
++            "subtitle": "Show Text areas",
++            "tertiary_text": "With Tertiary Text",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-6",
++            "title": "Item 6",
++            "subtitle": "Show dropdowns",
++            "tertiary_text": "With Tertiary Text",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-7",
++            "title": "Item 7",
++            "subtitle": "Checkboxes",
++            "tertiary_text": "With Tertiary Text",
++            "action": {
++              "type": "submit"
++            }
++          },
++          {
++            "type": "item",
++            "id": "list-item-8",
++            "title": "Item 8",
++            "subtitle": "Inputs",
++            "tertiary_text": "With inputut pupx",
++            "action": {
++              "type": "submit"
++            }
++          }
++        ]
++      }
++    ]
++  }
++}
+diff --git a/spec/fixtures/ui_catalog/configure_hook/submit_unknown_id.json b/spec/fixtures/ui_catalog/configure_hook/submit_unknown_id.json
+new file mode 100644
+index 00000000..e91333f0
+--- /dev/null
++++ b/spec/fixtures/ui_catalog/configure_hook/submit_unknown_id.json
+@@ -0,0 +1,74 @@
++{
++  "case": "submit_unknown_id",
++  "kind": "configure",
++  "ctx_keys": "symbol",
++  "ctx": {
++    "field": {
++      "id": "nope",
++      "action": {
++        "type": "submit"
++      }
++    }
++  },
++  "result": {
++    "kind": "configure",
++    "definitions": [
++      {
++        "id": "aaokokaaaaaa",
++        "name": "bubu",
++        "label": "fuckya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "aaaaaaaa",
++        "name": "aaaa",
++        "label": "a real submit for ya",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        },
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "id": "content-url",
++        "name": "content-url",
++        "label": "content-url",
++        "type": "button",
++        "action": {
++          "type": "submit"
++        }
++      },
++      {
++        "id": "sd",
++        "name": "alooo",
++        "label": "a link",
++        "action": {},
++        "type": "button",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      },
++      {
++        "name": "a",
++        "label": "a separator",
++        "action": {},
++        "type": "separator",
++        "grid": {
++          "xs": "w-full",
++          "sm": "w-full"
++        }
++      }
++    ]
++  }
++}

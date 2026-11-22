@@ -1,0 +1,772 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Metrics/AbcSize": [
+      "app/services/message_apis/ui_catalog/presenter.rb"
+    ],
+    "Metrics/CyclomaticComplexity": [
+      "app/services/message_apis/ui_catalog/presenter.rb"
+    ],
+    "Metrics/MethodLength": [
+      "app/services/message_apis/ui_catalog/presenter.rb"
+    ],
+    "Metrics/PerceivedComplexity": [
+      "app/services/message_apis/ui_catalog/presenter.rb"
+    ]
+  },
+  "base_requires": [
+    "  CountAsOne: [array, hash, heredoc]"
+  ],
+  "app_files": [
+    "app/services/message_apis/ui_catalog/presenter.rb"
+  ],
+  "new_files": [
+    "spec/fixtures/ui_catalog/configure_hook/catalog_a.json",
+    "spec/fixtures/ui_catalog/configure_hook/catalog_aaaaaaaa.json",
+    "spec/fixtures/ui_catalog/configure_hook/catalog_aaokokaaaaaa.json",
+    "spec/fixtures/ui_catalog/configure_hook/catalog_content_url.json",
+    "spec/fixtures/ui_catalog/configure_hook/catalog_sd.json",
+    "spec/fixtures/ui_catalog/configure_hook/click_aaaaaaaa.json",
+    "spec/fixtures/ui_catalog/configure_hook/click_list_item_1.json",
+    "spec/fixtures/ui_catalog/configure_hook/components_popis.json",
+    "spec/fixtures/ui_catalog/configure_hook/element_failed_2_input.json",
+    "spec/fixtures/ui_catalog/configure_hook/element_failed_3_input.json",
+    "spec/fixtures/ui_catalog/configure_hook/element_option_1_option.json",
+    "spec/fixtures/ui_catalog/configure_hook/element_unsaved_2_input.json",
+    "spec/fixtures/ui_catalog/configure_hook/element_unsaved_3_input.json",
+    "spec/fixtures/ui_catalog/configure_hook/no_field.json",
+    "spec/fixtures/ui_catalog/configure_hook/no_field_kind_custom.json",
+    "spec/fixtures/ui_catalog/configure_hook/string_keys_submit_aaaaaaaa.json",
+    "spec/fixtures/ui_catalog/configure_hook/string_keys_submit_list_item_6.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_aaaaaaaa_named_bubu.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_content_url_named_bubu.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_kind_custom_list_item_2.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_list_item_1.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_list_item_1_named_bubu.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_list_item_1_not_item.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_list_item_2.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_list_item_3_unknown.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_list_item_4.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_list_item_6.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_list_item_7.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_list_item_8.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_list_item_9_named_bubu.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_name_bubu_only.json",
+    "spec/fixtures/ui_catalog/configure_hook/submit_unknown_id.json"
+  ],
+  "char_specs": [
+    "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+  ],
+  "commits": [
+    {
+      "subject": "Pin ui_catalog configure_hook output",
+      "patch": "r10g_snapshots.patch",
+      "added": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "subject": "Split ui_catalog configure_hook",
+      "patch": "r10g_rewrite.patch"
+    },
+    {
+      "subject": "Drop R10g entries from RuboCop todo",
+      "todo": true
+    },
+    {
+      "subject": "Note fork-updates-r10g in changelog",
+      "changelog": true
+    }
+  ],
+  "mutants": [
+    {
+      "id": "G01",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "} unless ctx.dig(:field, :action, :type) == \"submit\"",
+      "new": "} unless ctx.dig(:field, :action, :type) != \"submit\"",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G02",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "return { kind: kind, definitions: catalog_definitions }",
+      "new": "return { kind: \"configure\", definitions: catalog_definitions }",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G03",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "\"aaaaaaaa\" => :catalog_results_response,",
+      "new": "\"aaaaaaa\" => :catalog_results_response,",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G04",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "\"content-url\" => :content_url_response",
+      "new": "\"content_url\" => :content_url_response",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G05",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "return send(response) if response",
+      "new": "return send(response) if response && ctx.dig(:field, :name) != \"bubu\"",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G06",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "{ kind: kind, definitions: submitted_definitions(ctx) }",
+      "new": "{ kind: \"configure\", definitions: submitted_definitions(ctx) }",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G07",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "item = ITEM_DEFINITIONS[ctx.dig(:field, :id)] if ctx.dig(:field, :type) == \"item\"",
+      "new": "item = ITEM_DEFINITIONS[ctx.dig(:field, :id)]",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G08",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "return send(item) if item\n      return components_list_definitions if ctx.dig(:field, :name) == \"bubu\"",
+      "new": "return components_list_definitions if ctx.dig(:field, :name) == \"bubu\"\n      return send(item) if item",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G09",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "return components_list_definitions if ctx.dig(:field, :name) == \"bubu\"",
+      "new": "return components_list_definitions if ctx.dig(:field, :label) == \"bubu\"",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G10",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "\"list-item-1\" => :text_definitions,",
+      "new": "\"list-item-1\" => :textarea_definitions,",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G11",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "\"list-item-4\" => :single_select_definitions,",
+      "new": "\"list-item-4\" => :dropdown_definitions,",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G12",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "\"list-item-8\" => :input_definitions",
+      "new": "\"list-item-9\" => :input_definitions",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G13",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "item = ITEM_DEFINITIONS[ctx.dig(:field, :id)] if",
+      "new": "item = ITEM_DEFINITIONS[ctx.dig(:field, :name)] if",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G14",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "baz: \"baaz\"",
+      "new": "baz: \"baz\"",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G15",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "definitions: catalog_definitions,\n        results: results",
+      "new": "definitions: [],\n        results: results",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G16",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "definitions: [],\n        results: results",
+      "new": "definitions: catalog_definitions,\n        results: results",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G17",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "        kind: \"initialize\",\n        # ctx: ctx,",
+      "new": "        \"kind\" => \"initialize\",\n        # ctx: ctx,",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G18",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "          action: {},\n          type: \"button\",",
+      "new": "          type: \"button\",\n          action: {},",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G19",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "id: \"saved-1\",",
+      "new": "id: \"saved-2\",",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G20",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "text: \"Center aligned\",",
+      "new": "text: \"Centre aligned\",",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G21",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "tertiary_text: \"With inputut pupx\",",
+      "new": "tertiary_text: \"With input pupx\",",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    },
+    {
+      "id": "G22",
+      "file": "app/services/message_apis/ui_catalog/presenter.rb",
+      "old": "      \"list-item-2\" => :textarea_definitions,\n",
+      "new": "",
+      "specs": [
+        "spec/services/message_apis/ui_catalog/configure_hook_snapshots_spec.rb"
+      ]
+    }
+  ],
+  "snapshot_dir": "spec/fixtures/ui_catalog/configure_hook",
+  "snapshots": [
+    {
+      "name": "no_field",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {}
+    },
+    {
+      "name": "no_field_kind_custom",
+      "kind": "custom",
+      "ctx_keys": "symbol",
+      "ctx": {}
+    },
+    {
+      "name": "click_aaaaaaaa",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "id": "aaaaaaaa",
+          "action": {
+            "type": "click"
+          }
+        }
+      }
+    },
+    {
+      "name": "click_list_item_1",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-1",
+          "action": {
+            "type": "click"
+          }
+        }
+      }
+    },
+    {
+      "name": "catalog_aaokokaaaaaa",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "id": "aaokokaaaaaa",
+          "name": "bubu",
+          "label": "fuckya",
+          "type": "button",
+          "action": {
+            "type": "submit"
+          },
+          "grid": {
+            "xs": "w-full",
+            "sm": "w-full"
+          }
+        }
+      }
+    },
+    {
+      "name": "catalog_aaaaaaaa",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "id": "aaaaaaaa",
+          "name": "aaaa",
+          "label": "a real submit for ya",
+          "type": "button",
+          "action": {
+            "type": "submit"
+          },
+          "grid": {
+            "xs": "w-full",
+            "sm": "w-full"
+          }
+        }
+      }
+    },
+    {
+      "name": "catalog_content_url",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "id": "content-url",
+          "name": "content-url",
+          "label": "content-url",
+          "type": "button",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "catalog_sd",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "id": "sd",
+          "name": "alooo",
+          "label": "a link",
+          "action": {},
+          "type": "button",
+          "grid": {
+            "xs": "w-full",
+            "sm": "w-full"
+          }
+        }
+      }
+    },
+    {
+      "name": "catalog_a",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "name": "a",
+          "label": "a separator",
+          "action": {},
+          "type": "separator",
+          "grid": {
+            "xs": "w-full",
+            "sm": "w-full"
+          }
+        }
+      }
+    },
+    {
+      "name": "components_popis",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "name": "popis",
+          "label": "pipopo",
+          "type": "button",
+          "action": {
+            "type": "submit"
+          },
+          "grid": {
+            "xs": "w-full",
+            "sm": "w-full"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_list_item_1",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-1",
+          "title": "Item 1",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_list_item_4",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-4",
+          "title": "Item 4",
+          "subtitle": "With Action",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_list_item_2",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-2",
+          "title": "Item 2",
+          "subtitle": "Show Text areas",
+          "tertiary_text": "With Tertiary Text",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_list_item_6",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-6",
+          "title": "Item 6",
+          "subtitle": "Show dropdowns",
+          "tertiary_text": "With Tertiary Text",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_list_item_7",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-7",
+          "title": "Item 7",
+          "subtitle": "Checkboxes",
+          "tertiary_text": "With Tertiary Text",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_list_item_8",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-8",
+          "title": "Item 8",
+          "subtitle": "Inputs",
+          "tertiary_text": "With inputut pupx",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "element_option_1_option",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "option",
+          "id": "option-1",
+          "text": "Option 1",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "element_unsaved_2_input",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "input",
+          "id": "unsaved-2",
+          "label": "Unsaved (Action)",
+          "placeholder": "Enter input here...",
+          "save_state": "unsaved",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "element_unsaved_3_input",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "input",
+          "id": "unsaved-3",
+          "label": "Unsaved (Disabled)",
+          "placeholder": "Enter input here...",
+          "save_state": "unsaved",
+          "disabled": true,
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "element_failed_2_input",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "input",
+          "id": "failed-2",
+          "label": "Failed (Action)",
+          "placeholder": "Enter input here...",
+          "value": "Value is given in JSON",
+          "save_state": "failed",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "element_failed_3_input",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "input",
+          "id": "failed-3",
+          "label": "Failed (Disabled)",
+          "placeholder": "Enter input here...",
+          "value": "Value is given in JSON",
+          "save_state": "failed",
+          "disabled": true,
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_kind_custom_list_item_2",
+      "kind": "custom",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-2",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_aaaaaaaa_named_bubu",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "id": "aaaaaaaa",
+          "name": "bubu",
+          "type": "item",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_content_url_named_bubu",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "id": "content-url",
+          "name": "bubu",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_name_bubu_only",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "name": "bubu",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_list_item_1_not_item",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "id": "list-item-1",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_list_item_3_unknown",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-3",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_list_item_1_named_bubu",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-1",
+          "name": "bubu",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_list_item_9_named_bubu",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-9",
+          "name": "bubu",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_unknown_id",
+      "kind": "configure",
+      "ctx_keys": "symbol",
+      "ctx": {
+        "field": {
+          "id": "nope",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "string_keys_submit_aaaaaaaa",
+      "kind": "configure",
+      "ctx_keys": "string",
+      "ctx": {
+        "field": {
+          "id": "aaaaaaaa",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    },
+    {
+      "name": "string_keys_submit_list_item_6",
+      "kind": "configure",
+      "ctx_keys": "string",
+      "ctx": {
+        "field": {
+          "type": "item",
+          "id": "list-item-6",
+          "action": {
+            "type": "submit"
+          }
+        }
+      }
+    }
+  ]
+}
