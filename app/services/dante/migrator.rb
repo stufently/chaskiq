@@ -46,31 +46,35 @@ module Dante
       BotTask.where(app_id: id).find_each do |record|
         next if record.settings["paths"].blank?
 
-        begin
-          updated_paths = record.paths.map do |path|
-            path["steps"].map! do |step|
-              if step["type"] == "messages" && step.key?("messages")
-                step["messages"].each do |message|
-                  next unless message.key?("serialized_content")
-
-                  draft_content = message["serialized_content"]
-                  new_content = Dante::Converter.draftjs_to_prosemirror(draft_content).to_json
-                  message["serialized_content"] = new_content
-                end
-              end
-              step
-            end
-            path
-          end
-          record.update_column(:settings, record.settings.merge({ "paths" => updated_paths }))
-          # record.update_column(:serialized_content, new_content.to_json)
-          Rails.logger.info("OK content #{record.id}")
-        rescue StandardError => e
-          Rails.logger.error("Error converting part content #{record.id}")
-          Rails.logger.error(e)
-        end
+        migrate_bot_task(record)
       end
     end
+
+    def self.migrate_bot_task(record)
+      updated_paths = record.paths.map do |path|
+        path["steps"].map! { |step| migrate_bot_step(step) }
+        path
+      end
+      record.update_column(:settings, record.settings.merge({ "paths" => updated_paths }))
+      Rails.logger.info("OK content #{record.id}")
+    rescue StandardError => e
+      Rails.logger.error("Error converting part content #{record.id}")
+      Rails.logger.error(e)
+    end
+
+    def self.migrate_bot_step(step)
+      return step unless step["type"] == "messages" && step.key?("messages")
+
+      step["messages"].each do |message|
+        next unless message.key?("serialized_content")
+
+        draft_content = message["serialized_content"]
+        message["serialized_content"] = Dante::Converter.draftjs_to_prosemirror(draft_content).to_json
+      end
+      step
+    end
+
+    private_class_method :migrate_bot_task, :migrate_bot_step
 
     def self.migrate_banners(id: nil)
       return if id.blank?

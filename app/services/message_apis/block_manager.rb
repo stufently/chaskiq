@@ -8,7 +8,11 @@ module MessageApis
     include ActionView::Helpers::SanitizeHelper
 
     MEDIA_BLOCK_TYPES = %w[ImageBlock FileBlock AudioRecorderBlock VideoBlock].freeze
-    private_constant :MEDIA_BLOCK_TYPES
+    AttachmentDelivery = Struct.new(
+      :remaining, :delivered_indices, :caption, :media_delivered, :first_success, :last_response, :failures,
+      keyword_init: true
+    )
+    private_constant :MEDIA_BLOCK_TYPES, :AttachmentDelivery
 
     def self.get_blocks(serialized_content)
       document = JSON.parse(serialized_content)
@@ -39,66 +43,78 @@ module MessageApis
       blocks.grep(Hash).select { |block| MEDIA_BLOCK_TYPES.include?(block["type"]) }
     end
 
-    def self.deliver_attachments(attachments, plain_text, send_text:, captionless: [], **hooks)
+    def self.deliver_attachments(attachments, plain_text, send_text:, captionless: [], **hooks, &)
       hooks.assert_valid_keys(:on_success, :on_failure, :already_sent)
       already_sent = hooks.fetch(:already_sent, 0)
-      remaining, delivered_indices = already_sent.is_a?(Integer) ? [already_sent, []] : [0, already_sent]
+      delivery = attachment_delivery(already_sent)
       on_success = delivery_success_hook(hooks[:on_success], already_sent)
       on_failure = hooks[:on_failure]
-      failures = []
-      first_success = nil
-      last_response = nil
-      media_delivered = false
-      caption = plain_text.presence
+      delivery.caption = plain_text.presence
       omit_caption = captionless.respond_to?(:call) ? captionless : ->(type, _url) { captionless.include?(type) }
-      caption = nil if caption && caption_delivered?(attachments, delivered_indices, omit_caption)
+      caption_already_sent = delivery.caption && caption_delivered?(attachments, delivery.delivered_indices, omit_caption)
+      delivery.caption = nil if caption_already_sent
 
       attachments.each_with_index do |media, index|
-        url = delivery_url(media)
-        next unless url
-
-        type = media["type"]
-        media_caption = omit_caption.call(type, url) ? nil : caption
-        if delivered_indices.include?(index) || remaining.positive?
-          remaining -= 1 if remaining.positive?
-        else
-          last_response = yield(type, url, media_caption)
-          unless last_response.success?
-            failures << last_response
-            next
-          end
-
-          on_success&.call(last_response, index)
-          first_success ||= last_response
-        end
-        media_delivered = true
-        caption = nil if media_caption
+        deliver_attachment(delivery, media, index, omit_caption, on_success, &)
       end
 
-      text = media_delivered ? caption : plain_text.presence
-      text_index = attachments.size
-      text_response = send_text.call(text) if text && remaining.zero? && delivered_indices.exclude?(text_index)
-      if text_response.respond_to?(:success?)
-        if text_response.success?
-          on_success&.call(text_response, text_index)
-          successful_text = text_response
-        else
-          failures << text_response
-        end
-      end
-
-      result = if media_delivered
-                 first_success || successful_text
-               elsif text
-                 text_response
-               else
-                 last_response
-               end
+      result = finish_attachment_delivery(delivery, plain_text, attachments.size, send_text, on_success)
       completed = true
       result
     ensure
-      callback_error = report_failures(on_failure, failures, result) if on_failure
+      callback_error = report_failures(on_failure, delivery.failures, result) if on_failure
       raise callback_error if completed && callback_error
+    end
+
+    def self.attachment_delivery(already_sent)
+      remaining, indices = already_sent.is_a?(Integer) ? [already_sent, []] : [0, already_sent]
+      AttachmentDelivery.new(remaining: remaining, delivered_indices: indices, media_delivered: false, failures: [])
+    end
+
+    def self.deliver_attachment(delivery, media, index, omit_caption, on_success)
+      url = delivery_url(media)
+      return unless url
+
+      type = media["type"]
+      caption = omit_caption.call(type, url) ? nil : delivery.caption
+      if delivery.delivered_indices.include?(index) || delivery.remaining.positive?
+        delivery.remaining -= 1 if delivery.remaining.positive?
+      else
+        response = yield(type, url, caption)
+        delivery.last_response = response
+        unless response.success?
+          delivery.failures << response
+          return
+        end
+
+        on_success&.call(response, index)
+        delivery.first_success ||= response
+      end
+
+      delivery.media_delivered = true
+      delivery.caption = nil if caption
+    end
+
+    def self.finish_attachment_delivery(delivery, plain_text, index, send_text, on_success)
+      text = delivery.media_delivered ? delivery.caption : plain_text.presence
+      response = send_text.call(text) if text && delivery.remaining.zero? && delivery.delivered_indices.exclude?(index)
+      successful_text = record_text_delivery(delivery, response, index, on_success)
+
+      return delivery.first_success || successful_text if delivery.media_delivered
+
+      text ? response : delivery.last_response
+    end
+
+    def self.record_text_delivery(delivery, response, index, on_success)
+      return unless response.respond_to?(:success?)
+
+      unless response.success?
+        delivery.failures << response
+        return
+      end
+
+      on_success&.call(response, index)
+      response
     end
 
     def self.delivery_success_hook(callback, already_sent)
@@ -242,7 +258,8 @@ module MessageApis
       Array(node["content"]).grep(Hash).flat_map { |child| media_captions(child) }
     end
 
-    private_class_method :draft_block, :node_text, :media_captions,
-                         :delivery_success_hook, :caption_delivered?, :delivery_url, :report_failures
+    private_class_method :draft_block, :node_text, :media_captions, :attachment_delivery, :deliver_attachment,
+                         :finish_attachment_delivery, :record_text_delivery, :delivery_success_hook,
+                         :caption_delivered?, :delivery_url, :report_failures
   end
 end

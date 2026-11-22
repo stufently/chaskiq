@@ -5,6 +5,15 @@
 
 module Dante
   class Renderer
+    CONTAINER_ELEMENTS = {
+      "blockquote" => ["blockquote", nil],
+      "paragraph" => ["p", "graf graf--p"],
+      "bulletList" => ["ul", "graf graf--ul"],
+      "listItem" => ["li", "graf graf--li"],
+      "codeBlock" => ["pre", "graf graf--pre"]
+    }.freeze
+    private_constant :CONTAINER_ELEMENTS
+
     attr_accessor :raw, :html, :theme, :domain
 
     def initialize(raw:, html: nil, theme: nil, domain: Chaskiq::Config.get("HOST"))
@@ -15,51 +24,16 @@ module Dante
     end
 
     def convert_node_to_element(node)
-      case node[:type]
-      when "heading"
-        level = begin
-          node[:attrs][:level]
-        rescue StandardError
-          2
-        end
-        tag = "h#{level}"
-        create_element(tag, "graf graf--h", traverse_nodes(node[:content]))
-      when "blockquote"
-        create_element("blockquote", nil, traverse_nodes(node[:content]))
-      when "paragraph"
-        create_element("p", "graf graf--p", traverse_nodes(node[:content]))
-      when "bulletList"
-        create_element("ul", "graf graf--ul", traverse_nodes(node[:content]))
-      when "listItem"
-        create_element("li", "graf graf--li", traverse_nodes(node[:content]))
-      when "codeBlock"
-        create_element("pre", "graf graf--pre", traverse_nodes(node[:content]))
-      when "text"
+      type = node[:type]
+      if (container = CONTAINER_ELEMENTS[type])
+        tag, style = container
+        create_element(tag, style, traverse_nodes(node[:content]))
+      elsif type == "heading"
+        render_heading(node)
+      elsif type == "text"
         handle_text_node(node)
-
-      when "ImageBlock"
-        renderer = Dante::ImageBlockRenderer.new(block_key: node[:id], data: node[:attrs], domain: domain)
-        renderer.render
-
-      when "FileBlock"
-        renderer = Dante::FileBlockRenderer.new(block_key: node[:id], data: node[:attrs], domain: domain)
-        renderer.render
-
-      when "VideoBlock"
-        renderer = Dante::VideoBlockRenderer.new(block_key: node[:id], data: node[:attrs])
-        renderer.render
-
-      when "DividerBlock"
-        renderer = Dante::DividerBlockRenderer.new(block_key: node[:id], data: node[:attrs], domain: domain)
-        renderer.render
-
-      when "AudioRecorderBlock"
-        renderer = Dante::AudioRecorderRenderer.new(block_key: node[:id], data: node[:attrs], domain: domain)
-        renderer.render
-
-      when "EmbedBlock"
-        renderer = Dante::EmbedBlockRenderer.new(block_key: node[:id], data: node[:attrs])
-        renderer.render
+      elsif (renderer = media_renderer(type))
+        render_media(node, *renderer)
       else
         Rails.logger.debug { "no handler for node #{node}" }
         nil
@@ -111,6 +85,34 @@ module Dante
 
     def render
       traverse_nodes(raw[:content]).join(" ")
+    end
+
+    private
+
+    def render_heading(node)
+      level = begin
+        node[:attrs][:level]
+      rescue StandardError
+        2
+      end
+      create_element("h#{level}", "graf graf--h", traverse_nodes(node[:content]))
+    end
+
+    def media_renderer(type)
+      case type
+      when "ImageBlock" then [Dante::ImageBlockRenderer, true]
+      when "FileBlock" then [Dante::FileBlockRenderer, true]
+      when "VideoBlock" then [Dante::VideoBlockRenderer, false]
+      when "DividerBlock" then [Dante::DividerBlockRenderer, true]
+      when "AudioRecorderBlock" then [Dante::AudioRecorderRenderer, true]
+      when "EmbedBlock" then [Dante::EmbedBlockRenderer, false]
+      end
+    end
+
+    def render_media(node, renderer_class, pass_domain)
+      options = { block_key: node[:id], data: node[:attrs] }
+      options[:domain] = domain if pass_domain
+      renderer_class.new(**options).render
     end
   end
 end
