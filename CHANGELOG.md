@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10h2
+
+- Changed: `MessageApis::InboxSections::Presenter.content_hook` is split without a change in
+  behaviour (Metrics outliers of R8a, milestone R10h of the R10 programme): each block type is a
+  method, picked from two tables (blocks before and after the `c` flag, in the order of the old
+  chain), and the "Visit" button is one helper. A golden fixture
+  (spec/fixtures/presenters/inbox_sections_hooks.json, 43 cases generated on the old code, records
+  as fixed doubles) pins the full output of every block and hook, and a new spec checks it. Its four
+  todo lines are gone.
+
 ## 2026-11-22 — fork-updates-r10i
 
 - Changed: `MessageApis::Dialog360::Presenter.configure_hook` (the WhatsApp template wizard of the
