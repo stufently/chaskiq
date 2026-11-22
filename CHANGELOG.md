@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10m
+
+- Changed: the Telegram, Twitter and TwilioPhone adapters build their outgoing and incoming
+  flows in smaller methods without a change in behaviour (Metrics outliers of R8a, milestone
+  R10m of the R10 programme): Telegram `send_message` extracts the HTML fallback, the block
+  parse (with the original rescue boundary over `get_blocks` and `plain_text`), the channel
+  lookup and the attachment delivery; Twitter `process_event` moves each DM into
+  `process_twitter_dm` with the conversation creation in its own helper, and `send_message`
+  keeps the header before the block parse and adds the image attachment in
+  `attach_twitter_image`; TwilioPhone `process_message` keeps the original routing order and
+  the `external_profiles` probe, `process_incoming_call` splits the phone extraction, the
+  conversation lookup, the controls, the agent notification and the conference call, and
+  `process_incoming_event` splits the status recording, the SID store, the broadcast and the
+  per-event branch. Their four todo lines are gone.
+
 ## 2026-11-22 — fork-updates-r10l
 
 - Changed: the WhatsApp adapters (Twilio, Vonage, MessageBird, Dialog360) build their outgoing
