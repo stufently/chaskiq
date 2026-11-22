@@ -58,7 +58,7 @@ module MessageApis
         deliver_attachment(delivery, media, index, omit_caption, on_success, &)
       end
 
-      result = finish_attachment_delivery(delivery, plain_text, attachments.size, send_text, on_success)
+      result = finish_attachment_delivery(delivery, plain_text, attachments, send_text, on_success)
       completed = true
       result
     ensure
@@ -95,8 +95,9 @@ module MessageApis
       delivery.caption = nil if caption
     end
 
-    def self.finish_attachment_delivery(delivery, plain_text, index, send_text, on_success)
+    def self.finish_attachment_delivery(delivery, plain_text, attachments, send_text, on_success)
       text = delivery.media_delivered ? delivery.caption : plain_text.presence
+      index = attachments.size
       response = send_text.call(text) if text && delivery.remaining.zero? && delivery.delivered_indices.exclude?(index)
       successful_text = record_text_delivery(delivery, response, index, on_success)
 
