@@ -368,112 +368,70 @@ module MessageApis
           part.messageable_type == "ConversationPartBlock" ? replied_block(part) : blocks_transform(part)
         end
 
-        participant = conversation.main_participant
-
-        base = "#{Chaskiq::Config.get('HOST')}/apps/#{conversation.app.key}"
-        conversation_url = "#{base}/conversations/#{conversation.key}"
-        user_url = "#{base}/users/#{conversation.main_participant.id}"
-        links = "*<#{user_url}|#{format_user_name(conversation.main_participant)}>* <#{conversation_url}|view in chaskiq>"
-
         data = [
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: "Conversation initiated by #{links}"
-            }
-          },
-
-          {
-            type: "section",
-            fields: [
-              {
-                type: "mrkdwn",
-                text: "*Info:* #{participant.display_name} #{participant.email}"
-              },
-              {
-                type: "mrkdwn",
-                text: "*From:* #{participant.city}, #{participant.region} "
-              },
-              {
-                type: "mrkdwn",
-                text: "*When:* #{I18n.l(conversation.created_at, format: :short)}"
-              },
-              {
-                type: "mrkdwn",
-                text: "*Seen:* #{participant.last_visited_at ? I18n.l(participant.last_visited_at, format: :short) : 'unknown'}"
-              },
-              {
-                type: "mrkdwn",
-                text: "*Assignee:* #{assignee_display(conversation.assignee) || 'Unassigned'}"
-              },
-              {
-                type: "mrkdwn",
-                text: "*Device:*\n#{participant.browser} #{participant.browser_version} / #{participant.os}"
-              },
-
-              {
-                type: "mrkdwn",
-                text: "*From:*\n<#{participant.referrer} | URL: #{participant.referrer}>"
-              }
-
-            ]
-          },
-
+          thread_intro_block(conversation),
+          participant_fields_block(conversation),
           conversation_status_blocks(conversation),
-
-          {
-            type: "divider"
-          },
-
-          {
-            type: "section",
-            block_id: "section678",
-            text: {
-              type: "mrkdwn",
-              text: "Pick an agent and assign them to the conversation"
-            },
-            accessory: {
-              action_id: "pick-agent",
-              type: "external_select",
-              placeholder: {
-                type: "plain_text",
-                text: "Select an item"
-              },
-              min_query_length: 3
-            }
-          },
-
-          {
-            type: "context",
-            elements: [
-              {
-                type: "mrkdwn",
-                text: "Message"
-              }
-            ]
-          }
+          { type: "divider" },
+          pick_agent_block,
+          { type: "context", elements: [{ type: "mrkdwn", text: "Message" }] }
         ]
 
         data << text_blocks unless text_blocks.empty?
 
         data << [
-          {
-            type: "divider"
-          },
-
-          {
-            type: "context",
-            elements: [
-              {
-                type: "mrkdwn",
-                text: "To reply just reply on a thread"
-              }
-            ]
-          }
+          { type: "divider" },
+          { type: "context", elements: [{ type: "mrkdwn", text: "To reply just reply on a thread" }] }
         ]
 
         data.flatten!
+      end
+
+      def thread_intro_block(conversation)
+        base = "#{Chaskiq::Config.get('HOST')}/apps/#{conversation.app.key}"
+        conversation_url = "#{base}/conversations/#{conversation.key}"
+        user_url = "#{base}/users/#{conversation.main_participant.id}"
+        links = "*<#{user_url}|#{format_user_name(conversation.main_participant)}>* <#{conversation_url}|view in chaskiq>"
+
+        { type: "section", text: { type: "mrkdwn", text: "Conversation initiated by #{links}" } }
+      end
+
+      def participant_fields_block(conversation)
+        participant = conversation.main_participant
+        seen = participant.last_visited_at ? I18n.l(participant.last_visited_at, format: :short) : "unknown"
+
+        {
+          type: "section",
+          fields: [
+            "*Info:* #{participant.display_name} #{participant.email}",
+            "*From:* #{participant.city}, #{participant.region} ",
+            "*When:* #{I18n.l(conversation.created_at, format: :short)}",
+            "*Seen:* #{seen}",
+            "*Assignee:* #{assignee_display(conversation.assignee) || 'Unassigned'}",
+            "*Device:*\n#{participant.browser} #{participant.browser_version} / #{participant.os}",
+            "*From:*\n<#{participant.referrer} | URL: #{participant.referrer}>"
+          ].map { |text| { type: "mrkdwn", text: text } }
+        }
+      end
+
+      def pick_agent_block
+        {
+          type: "section",
+          block_id: "section678",
+          text: {
+            type: "mrkdwn",
+            text: "Pick an agent and assign them to the conversation"
+          },
+          accessory: {
+            action_id: "pick-agent",
+            type: "external_select",
+            placeholder: {
+              type: "plain_text",
+              text: "Select an item"
+            },
+            min_query_length: 3
+          }
+        }
       end
 
       def conversation_status_blocks(conversation)
@@ -841,74 +799,54 @@ module MessageApis
         return if part.conversation_part_channel_sources.find_by(provider: "slack").present?
 
         blocks = blocks_transform(part)
-
         messageable = part.messageable
+        # icon_url: part&.authorable&.avatar_url # bug when process external image
+        user_options = { username: format_user_name(part.authorable).to_s }
 
-        user_options = {
-          username: format_user_name(part.authorable).to_s
-          # icon_url: part&.authorable&.avatar_url # bug when process external image
-        }
-
-        if part.messageable.is_a?(ConversationPartBlock)
+        if messageable.is_a?(ConversationPartBlock)
           return unless messageable.replied?
 
-          data = messageable.data || {}
-
-          data_label = data["label"]
-
-          data_fmt = if data.is_a?(Hash)
-                       data.map { |k, v| "#{k.capitalize}: #{v}" }.join("\n")
-                     else
-                       ""
-                     end
-
-          blocks = [{
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: "*replied*: #{data_label || data_fmt}"
-            }
-            # block_id: 'replied-1'
-          }]
-
-          user = conversation.main_participant
-
-          user_options.merge!({
-                                username: format_user_name(user)
-                                # icon_url: user&.avatar_url # icon_url: part&.authorable&.avatar_url # bug when process external image
-                              })
+          blocks = [replied_section(messageable.data || {})]
+          user_options[:username] = format_user_name(conversation.main_participant)
         end
 
-        if part.messageable.is_a?(ConversationPartEvent)
-          data = messageable.data
-
-          data_fmt = if data.is_a?(Hash)
-                       data.reject { |k, v| v.blank? or ["id"].include?(k) }
-                           .map do |k, v|
-                         "*#{k.upcase}*: #{v}"
-                       end.join(" ")
-                     else
-                       ""
-                     end
-
-          # get slack user
-          if part&.message&.action == "assigned" && data.is_a?(Hash) && data["email"].present?
-            slack_user = get_slack_user_by_email(data["email"])
-            data_fmt << "\n <@#{slack_user['id']}>" if slack_user.present?
-          end
-
-          blocks = [{
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: "*event*: #{messageable.action} \n #{data_fmt}"
-            }
-            # block_id: 'replied-1'
-          }]
-        end
+        blocks = [event_section(part, messageable)] if messageable.is_a?(ConversationPartEvent)
 
         return if blocks.empty?
 
+        post_thread_message(conversation, part, blocks, user_options)
+      end
+
+      def event_section(part, event)
+        data = event.data
+
+        data_fmt = if data.is_a?(Hash)
+                     data.reject { |k, v| v.blank? or ["id"].include?(k) }
+                         .map do |k, v|
+                       "*#{k.upcase}*: #{v}"
+                     end.join(" ")
+                   else
+                     ""
+                   end
+
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "*event*: #{event.action} \n #{data_fmt}#{assignee_mention(part, data)}"
+          }
+        }
+      end
+
+      # get slack user
+      def assignee_mention(part, data)
+        return unless part&.message&.action == "assigned" && data.is_a?(Hash) && data["email"].present?
+
+        slack_user = get_slack_user_by_email(data["email"])
+        "\n <@#{slack_user['id']}>" if slack_user.present?
+      end
+
+      def post_thread_message(conversation, part, blocks, user_options)
         provider_channel_id = conversation.conversation_channels
                                           .find_by(provider: "slack")&.provider_channel_id
 
@@ -960,6 +898,10 @@ module MessageApis
         data = part.messageable.data
         return nil if data.blank?
 
+        replied_section(data)
+      end
+
+      def replied_section(data)
         data_label = data["label"]
         data_fmt = if data.is_a?(Hash)
                      data.map { |k, v| "#{k.capitalize}: #{v}" }.join("\n")
@@ -1098,30 +1040,11 @@ module MessageApis
       end
 
       def attachment_block(data)
-        err = nil
         files = data["files"].map do |o|
-          begin
-            file_data = get_file_data(o)
+          file = attachment_file(o)
+          return nil if file.nil?
 
-            file = handle_direct_upload(
-              file_data["url_private_download"],
-              file_data["mimetype"]
-            )
-          rescue StandardError => e
-            Rails.logger.info e.message
-            Rails.logger.info e.backtrace
-            err = true
-          end
-
-          return nil if err
-
-          {
-            url: file[:url],
-            w: file[:width],
-            h: file[:height],
-            text: file_data["title"],
-            mimetype: file_data["mimetype"]
-          }
+          file
         end
 
         serialized_blocks = files.compact.map do |o|
@@ -1135,6 +1058,34 @@ module MessageApis
           blocks: [text_blocks, serialized_blocks].flatten.compact,
           entityMap: {}
         }.to_json
+      end
+
+      # nil when the file could not be fetched or uploaded
+      def attachment_file(slack_file)
+        file_data, file = fetch_attachment(slack_file)
+        return nil if file_data.nil?
+
+        {
+          url: file[:url],
+          w: file[:width],
+          h: file[:height],
+          text: file_data["title"],
+          mimetype: file_data["mimetype"]
+        }
+      end
+
+      def fetch_attachment(slack_file)
+        file_data = get_file_data(slack_file)
+
+        file = handle_direct_upload(
+          file_data["url_private_download"],
+          file_data["mimetype"]
+        )
+        [file_data, file]
+      rescue StandardError => e
+        Rails.logger.info e.message
+        Rails.logger.info e.backtrace
+        nil
       end
 
       def media_block(data)
