@@ -95,7 +95,8 @@ module Dante
       when "code"
         create_element("code", "graf code", element)
       when "link"
-        create_element("a", "graf markup--anchor markup--anchor-readOnly", element, href: mark[:attrs][:href], target: mark[:attrs][:target], rel: "noopener noreferrer nofollow")
+        create_element("a", "graf markup--anchor markup--anchor-readOnly", element,
+                       href: mark[:attrs][:href], target: mark[:attrs][:target], rel: "noopener noreferrer nofollow")
       else
         Rails.logger.debug { "no handler for mark #{mark}" }
         element

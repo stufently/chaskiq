@@ -3,7 +3,9 @@
 module Dante
   class Migrator
     def self.migrate_conversation_parts(id: nil)
-      parts = ConversationPartContent.joins("INNER JOIN conversation_parts ON conversation_parts.messageable_id = conversation_part_contents.id AND conversation_parts.messageable_type = 'ConversationPartContent'")
+      parts = ConversationPartContent.joins("INNER JOIN conversation_parts ON " \
+                                            "conversation_parts.messageable_id = conversation_part_contents.id AND " \
+                                            "conversation_parts.messageable_type = 'ConversationPartContent'")
                                      .joins("INNER JOIN conversations ON conversations.id = conversation_parts.conversation_id")
                                      .where(conversations: { app_id: id })
 

@@ -932,7 +932,8 @@ module MessageApis::UiCatalog
     end
 
     # Submit Sheet flow webhook URL (optional)
-    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
+    # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
+    # and submitted when the Submit Sheets JS method is called.
     def self.sheet_view(params)
       @user = params[:user]
       @name = @user[:name]

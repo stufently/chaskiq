@@ -9,7 +9,8 @@ module MessageApis
             items: [
               { type: "field-value", field: "Key", value: "Value 1" },
               { type: "field-value", field: "Key", value: "Value 2" },
-              { type: "field-value", field: "Key", value: "Value 3 which is a very long value that will exhibit different behaviours to the other values" }
+              { type: "field-value", field: "Key",
+                value: "Value 3 which is a very long value that will exhibit different behaviours to the other values" }
             ] }
         ]
       end
@@ -410,7 +411,8 @@ module MessageApis
       end
 
       # Submit Sheet flow webhook URL (optional)
-      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed and submitted when the Submit Sheets JS method is called.
+      # Sent when a sheet has been submitted. A sheet is an iframe you’ve loaded in the Messenger that is closed
+      # and submitted when the Submit Sheets JS method is called.
       def self.sheet_view(params); end
     end
   end
