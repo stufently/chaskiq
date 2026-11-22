@@ -237,7 +237,7 @@ RSpec.describe MessageApis::Twitter::Api do
       api.instance_variable_set(:@twitter_media_api, media_api)
 
       allow(MessageApis::SafeDownload).to receive(:fetch)
-        .and_return(StringIO.new("\x89PNG\r\n\x1A\n" + ("\x00" * 32).b))
+        .and_return(StringIO.new("\x89PNG\r\n\x1A\n#{"\x00" * 32}".b))
       allow(MessageApis::BlockManager).to receive(:absolute_url)
         .and_call_original
       allow(MessageApis::BlockManager).to receive(:absolute_url)

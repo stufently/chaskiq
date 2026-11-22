@@ -221,10 +221,11 @@ RSpec.describe MessageApis::Telegram::Api do
 
       api.send_message(conversation, part)
 
-      expect(requests).to eq([
+      expected = [
         { "chat_id" => "12345", "photo" => "https://cdn.example.com/first.jpg", "caption" => "two photos" },
         { "chat_id" => "12345", "photo" => "https://cdn.example.com/second.jpg" }
-      ])
+      ]
+      expect(requests).to eq(expected)
     end
   end
 end

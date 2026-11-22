@@ -168,9 +168,7 @@ module MessageApis::TwilioPhone
       app = package.app
       Rails.logger.debug params
 
-      if params[:Caller] == "client:agent"
-        return process_agent_call(params, app)
-      end
+      return process_agent_call(params, app) if params[:Caller] == "client:agent"
 
       process_inbound_call(params) if params["CallSid"] && params["CallStatus"]
     end

@@ -169,13 +169,13 @@ module MessageApis
         sender_id = message["message_create"]["sender_id"]
         target_id = message["message_create"]["target"]["recipient_id"]
         message_id = message["id"]
-        sender = params["users"][sender_id]
-        recipient = params["users"][target_id]
+        users = params["users"]
+        sender = users[sender_id]
+        recipient = users[target_id]
 
-        cond = sender_id == params["for_user_id"]
-        channel_id = cond ? target_id : sender_id
-        twitter_user = cond ? recipient : sender
-        agent_sender = cond
+        agent_sender = sender_id == params["for_user_id"]
+        channel_id = agent_sender ? target_id : sender_id
+        twitter_user = agent_sender ? recipient : sender
 
         conversation = find_conversation_by_channel(channel_id)
 
@@ -242,14 +242,14 @@ module MessageApis
 
       def attach_twitter_image(message_data, blocks)
         image_block = blocks.grep(Hash).find { |block| block["type"] == "ImageBlock" }
-        return unless image_block.present?
+        return if image_block.blank?
 
         attrs = MessageApis::BlockManager.block_data(image_block)
         url = MessageApis::BlockManager.absolute_url(attrs["url"]) if attrs.is_a?(Hash)
         return unless url
 
         uploaded_data = upload_media(url)
-        return unless uploaded_data.present?
+        return if uploaded_data.blank?
 
         message_data["attachment"] = {
           "type" => "media",

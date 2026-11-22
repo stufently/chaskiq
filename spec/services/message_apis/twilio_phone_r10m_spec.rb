@@ -33,10 +33,16 @@ RSpec.describe MessageApis::TwilioPhone::Api do
   end
 
   def stub_kredis
-    @kredis_store = {}
-    kredis_store = @kredis_store
+    store = {}
+    hash_class = kredis_hash_class
+    list_class = kredis_list_class
 
-    hash_class = Class.new do
+    allow(Kredis).to receive(:hash) { |key| hash_class.new(store, key) }
+    allow(Kredis).to receive(:unique_list) { |key| list_class.new(store, key) }
+  end
+
+  def kredis_hash_class
+    Class.new do
       def initialize(store, key)
         @store = store
         @key = key
@@ -59,8 +65,10 @@ RSpec.describe MessageApis::TwilioPhone::Api do
         @store.delete(@key)
       end
     end
+  end
 
-    unique_list_class = Class.new do
+  def kredis_list_class
+    Class.new do
       def initialize(store, key)
         @store = store
         @key = key
@@ -78,14 +86,6 @@ RSpec.describe MessageApis::TwilioPhone::Api do
       def remove(vals)
         @store[@key] -= Array(vals)
       end
-    end
-
-    allow(Kredis).to receive(:hash) do |key|
-      hash_class.new(kredis_store, key)
-    end
-
-    allow(Kredis).to receive(:unique_list) do |key|
-      unique_list_class.new(kredis_store, key)
     end
   end
 
@@ -246,7 +246,7 @@ RSpec.describe MessageApis::TwilioPhone::Api do
       locked = MessageApis::TwilioPhone::Store.locked_agents(app.key)
       locked.append(agent.id.to_s)
 
-      other_agent_role = app.add_agent({ email: "other-tp@test.cl" })
+      app.add_agent({ email: "other-tp@test.cl" })
       other_agent = app.agents.find_by(email: "other-tp@test.cl")
 
       allow(app).to receive(:notify_agent_notification).and_call_original
@@ -270,7 +270,7 @@ RSpec.describe MessageApis::TwilioPhone::Api do
 
     it "assigns agent and skips reassignment when already assigned" do
       participant = app.add_anonymous_user(properties: { name: "Phone User" })
-      other_agent_role = app.add_agent({ email: "assigned-tp@test.cl" })
+      app.add_agent({ email: "assigned-tp@test.cl" })
       other_agent = app.agents.find_by(email: "assigned-tp@test.cl")
       conversation = app.conversations.create(
         main_participant: participant,
@@ -335,7 +335,7 @@ RSpec.describe MessageApis::TwilioPhone::Api do
       expect(event_part.messageable.action).to eq("participant-join")
       expect(event_part.messageable.data).to eq("status" => "participant-join")
       expect(event_part.conversation_part_channel_sources.pluck(:provider, :message_source_id))
-        .to eq([["TwilioPhone", "bypass-internal-CAsid123-0"]])
+        .to eq([%w[TwilioPhone bypass-internal-CAsid123-0]])
     end
 
     it "stores the ConferenceSid in the data store" do
