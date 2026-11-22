@@ -1,0 +1,24 @@
+{
+  "case": "catalog_content_url",
+  "kind": "configure",
+  "ctx_keys": "symbol",
+  "ctx": {
+    "field": {
+      "id": "content-url",
+      "name": "content-url",
+      "label": "content-url",
+      "type": "button",
+      "action": {
+        "type": "submit"
+      }
+    }
+  },
+  "result": {
+    "kind": "initialize",
+    "definitions": [],
+    "results": {
+      "url": "/ppupu",
+      "type": "content"
+    }
+  }
+}

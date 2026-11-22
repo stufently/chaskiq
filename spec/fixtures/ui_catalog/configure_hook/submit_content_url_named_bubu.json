@@ -1,0 +1,22 @@
+{
+  "case": "submit_content_url_named_bubu",
+  "kind": "configure",
+  "ctx_keys": "symbol",
+  "ctx": {
+    "field": {
+      "id": "content-url",
+      "name": "bubu",
+      "action": {
+        "type": "submit"
+      }
+    }
+  },
+  "result": {
+    "kind": "initialize",
+    "definitions": [],
+    "results": {
+      "url": "/ppupu",
+      "type": "content"
+    }
+  }
+}

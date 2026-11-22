@@ -1,0 +1,109 @@
+{
+  "case": "submit_list_item_9_named_bubu",
+  "kind": "configure",
+  "ctx_keys": "symbol",
+  "ctx": {
+    "field": {
+      "type": "item",
+      "id": "list-item-9",
+      "name": "bubu",
+      "action": {
+        "type": "submit"
+      }
+    }
+  },
+  "result": {
+    "kind": "configure",
+    "definitions": [
+      {
+        "name": "api_secret",
+        "type": "string",
+        "grid": {
+          "xs": "w-full",
+          "sm": "w-full"
+        },
+        "errors": {
+          "api_secret": [
+            "what hahah"
+          ]
+        },
+        "value": "enter sandsman"
+      },
+      {
+        "name": "popis",
+        "label": "pipopo",
+        "type": "button",
+        "action": {
+          "type": "submit"
+        },
+        "grid": {
+          "xs": "w-full",
+          "sm": "w-full"
+        }
+      },
+      {
+        "type": "list",
+        "disabled": false,
+        "items": [
+          {
+            "type": "item",
+            "id": "list-item-1",
+            "title": "Item 1",
+            "action": {
+              "type": "submit"
+            }
+          },
+          {
+            "type": "item",
+            "id": "list-item-4",
+            "title": "Item 4",
+            "subtitle": "With Action",
+            "action": {
+              "type": "submit"
+            }
+          },
+          {
+            "type": "item",
+            "id": "list-item-2",
+            "title": "Item 2",
+            "subtitle": "Show Text areas",
+            "tertiary_text": "With Tertiary Text",
+            "action": {
+              "type": "submit"
+            }
+          },
+          {
+            "type": "item",
+            "id": "list-item-6",
+            "title": "Item 6",
+            "subtitle": "Show dropdowns",
+            "tertiary_text": "With Tertiary Text",
+            "action": {
+              "type": "submit"
+            }
+          },
+          {
+            "type": "item",
+            "id": "list-item-7",
+            "title": "Item 7",
+            "subtitle": "Checkboxes",
+            "tertiary_text": "With Tertiary Text",
+            "action": {
+              "type": "submit"
+            }
+          },
+          {
+            "type": "item",
+            "id": "list-item-8",
+            "title": "Item 8",
+            "subtitle": "Inputs",
+            "tertiary_text": "With inputut pupx",
+            "action": {
+              "type": "submit"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

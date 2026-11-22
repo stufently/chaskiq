@@ -1,0 +1,53 @@
+{
+  "case": "submit_kind_custom_list_item_2",
+  "kind": "custom",
+  "ctx_keys": "symbol",
+  "ctx": {
+    "field": {
+      "type": "item",
+      "id": "list-item-2",
+      "action": {
+        "type": "submit"
+      }
+    }
+  },
+  "result": {
+    "kind": "custom",
+    "definitions": [
+      {
+        "type": "textarea",
+        "id": "textarea-1",
+        "label": "Normal",
+        "placeholder": "Enter text here..."
+      },
+      {
+        "type": "textarea",
+        "id": "textarea-2",
+        "label": "With Value",
+        "placeholder": "Enter text here...",
+        "value": "Value entered in JSON."
+      },
+      {
+        "type": "textarea",
+        "id": "textarea-3",
+        "name": "textarea-3",
+        "label": "Error",
+        "placeholder": "Enter text here...",
+        "value": "Value entered in JSON.",
+        "error": true,
+        "errors": {
+          "textarea-3": [
+            "uno error"
+          ]
+        }
+      },
+      {
+        "type": "textarea",
+        "id": "textarea-4",
+        "label": "Disabled",
+        "placeholder": "Unable to enter text",
+        "disabled": true
+      }
+    ]
+  }
+}

@@ -37,7 +37,6 @@ Metrics/AbcSize:
     - 'app/services/message_apis/twilio/api.rb'
     - 'app/services/message_apis/twilio_phone/api.rb'
     - 'app/services/message_apis/twitter/api.rb'
-    - 'app/services/message_apis/ui_catalog/presenter.rb'
     - 'app/services/message_apis/vonage/api.rb'
 
 # Configuration parameters: CountComments, Max, CountAsOne, AllowedMethods, AllowedPatterns.
@@ -65,7 +64,6 @@ Metrics/CyclomaticComplexity:
     - 'app/services/message_apis/dialog360/presenter.rb'
     - 'app/services/message_apis/inbox_sections/presenter.rb'
     - 'app/services/message_apis/slack/api.rb'
-    - 'app/services/message_apis/ui_catalog/presenter.rb'
     - 'app/services/plugin_schema_validator.rb'
 
 # Configuration parameters: CountComments, Max, CountAsOne, AllowedMethods, AllowedPatterns.
@@ -84,7 +82,6 @@ Metrics/MethodLength:
     - 'app/services/message_apis/message_bird/api.rb'
     - 'app/services/message_apis/slack/api.rb'
     - 'app/services/message_apis/telegram/api.rb'
-    - 'app/services/message_apis/ui_catalog/presenter.rb'
     - 'app/services/message_apis/vonage/api.rb'
 
 # Configuration parameters: Max, CountKeywordArgs, MaxOptionalParameters.
@@ -102,4 +99,3 @@ Metrics/PerceivedComplexity:
     - 'app/services/message_apis/content_showcase/presenter.rb'
     - 'app/services/message_apis/inbox_sections/presenter.rb'
     - 'app/services/message_apis/slack/api.rb'
-    - 'app/services/message_apis/ui_catalog/presenter.rb'

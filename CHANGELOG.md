@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10g
+
+- Changed: `MessageApis::UiCatalog::Presenter.configure_hook` (the messenger UI catalog demo) picks its
+  answer from two tables instead of a chain of nine `if`s: `SUBMIT_RESPONSES` (button id => response
+  method) and `ITEM_DEFINITIONS` (list item id => definitions method); each literal moved unchanged
+  into its own private method (decision K1 of the R10 programme counts it as one line). The order of
+  the checks is kept: a known list item still wins over the "bubu" button.
+  Its output is pinned by 32 JSON snapshots generated from the old code (spec/fixtures/ui_catalog/
+  configure_hook/, one per catalog element with an action, plus non-submit, precedence and string-key
+  cases) and a new spec that compares the full returned hash, key order included. The four Metrics
+  outliers of the method leave the todo.
+
 ## 2026-11-22 — fork-updates-r10e
 
 - Changed: no spec line is over 140 characters any more (Layout/LineLength outliers of R8a in ten spec

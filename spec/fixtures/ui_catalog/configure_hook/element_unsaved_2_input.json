@@ -1,0 +1,78 @@
+{
+  "case": "element_unsaved_2_input",
+  "kind": "configure",
+  "ctx_keys": "symbol",
+  "ctx": {
+    "field": {
+      "type": "input",
+      "id": "unsaved-2",
+      "label": "Unsaved (Action)",
+      "placeholder": "Enter input here...",
+      "save_state": "unsaved",
+      "action": {
+        "type": "submit"
+      }
+    }
+  },
+  "result": {
+    "kind": "configure",
+    "definitions": [
+      {
+        "id": "aaokokaaaaaa",
+        "name": "bubu",
+        "label": "fuckya",
+        "type": "button",
+        "action": {
+          "type": "submit"
+        },
+        "grid": {
+          "xs": "w-full",
+          "sm": "w-full"
+        }
+      },
+      {
+        "id": "aaaaaaaa",
+        "name": "aaaa",
+        "label": "a real submit for ya",
+        "type": "button",
+        "action": {
+          "type": "submit"
+        },
+        "grid": {
+          "xs": "w-full",
+          "sm": "w-full"
+        }
+      },
+      {
+        "id": "content-url",
+        "name": "content-url",
+        "label": "content-url",
+        "type": "button",
+        "action": {
+          "type": "submit"
+        }
+      },
+      {
+        "id": "sd",
+        "name": "alooo",
+        "label": "a link",
+        "action": {},
+        "type": "button",
+        "grid": {
+          "xs": "w-full",
+          "sm": "w-full"
+        }
+      },
+      {
+        "name": "a",
+        "label": "a separator",
+        "action": {},
+        "type": "separator",
+        "grid": {
+          "xs": "w-full",
+          "sm": "w-full"
+        }
+      }
+    ]
+  }
+}
