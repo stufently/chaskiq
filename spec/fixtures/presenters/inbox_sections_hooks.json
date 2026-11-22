@@ -1,0 +1,2893 @@
+[
+  {
+    "name": "content user-blocks",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "user-blocks"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Ana Diaz",
+          ":style": "header",
+          ":align": "center"
+        },
+        {
+          ":type": "image",
+          ":url": "https://avatars.example.com/ana.png",
+          ":height": 64,
+          ":width": 64,
+          ":align": "center",
+          ":rounded": true
+        },
+        {
+          ":type": "text",
+          ":text": "ana@example.com",
+          ":style": "muted",
+          ":align": "center"
+        },
+        {
+          ":type": "text",
+          ":text": "AppUser",
+          ":style": "muted",
+          ":align": "center"
+        },
+        {
+          ":id": "visit-user-profile",
+          ":label": "Visit",
+          ":type": "button",
+          ":variant": "link",
+          ":align": "right",
+          ":action": {
+            ":type": "link",
+            ":url": "/apps/app-key-1/users/501"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "content user-blocks blank name without email",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "user-blocks"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-2",
+      "user": {
+        "id": 502,
+        "display_name": "",
+        "avatar_url": "https://avatars.example.com/blank.png",
+        "email": null,
+        "type": "Lead",
+        "last_visited_at": null,
+        "region": null,
+        "city": null,
+        "country": null,
+        "web_sessions": null,
+        "browser": null,
+        "browser_version": null,
+        "os": null,
+        "os_version": null,
+        "browser_language": null,
+        "referrer": null,
+        "external_profiles": []
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "---",
+          ":style": "header",
+          ":align": "center"
+        },
+        {
+          ":type": "image",
+          ":url": "https://avatars.example.com/blank.png",
+          ":height": 64,
+          ":width": 64,
+          ":align": "center",
+          ":rounded": true
+        },
+        {
+          ":type": "text",
+          ":text": "Lead",
+          ":style": "muted",
+          ":align": "center"
+        },
+        {
+          ":id": "visit-user-profile",
+          ":label": "Visit",
+          ":type": "button",
+          ":variant": "link",
+          ":align": "right",
+          ":action": {
+            ":type": "link",
+            ":url": "/apps/app-key-2/users/502"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "content user-blocks nil name, empty email",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "user-blocks"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 503,
+        "display_name": null,
+        "avatar_url": "https://avatars.example.com/blank.png",
+        "email": "",
+        "type": "Visitor",
+        "last_visited_at": null,
+        "region": null,
+        "city": "Lima",
+        "country": "Peru",
+        "web_sessions": null,
+        "browser": "Firefox",
+        "browser_version": null,
+        "os": null,
+        "os_version": "11",
+        "browser_language": null,
+        "referrer": null,
+        "external_profiles": []
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "---",
+          ":style": "header",
+          ":align": "center"
+        },
+        {
+          ":type": "image",
+          ":url": "https://avatars.example.com/blank.png",
+          ":height": 64,
+          ":width": 64,
+          ":align": "center",
+          ":rounded": true
+        },
+        {
+          ":type": "text",
+          ":text": "Visitor",
+          ":style": "muted",
+          ":align": "center"
+        },
+        {
+          ":id": "visit-user-profile",
+          ":label": "Visit",
+          ":type": "button",
+          ":variant": "link",
+          ":align": "right",
+          ":action": {
+            ":type": "link",
+            ":url": "/apps/app-key-1/users/503"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "content user-blocks with c",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "user-blocks",
+        "c": "1"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":text": "foo",
+          ":type": "text"
+        }
+      ]
+    }
+  },
+  {
+    "name": "content user-blocks without a main participant",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "user-blocks"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": null,
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      "@raise": "NoMethodError"
+    }
+  },
+  {
+    "name": "content user-blocks with c without a main participant",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "user-blocks",
+        "c": "1"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": null,
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      "@raise": "NoMethodError"
+    }
+  },
+  {
+    "name": "content conversation-events",
+    "hook": "content",
+    "kind": "other-kind",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "conversation-events"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Events",
+          ":style": "header"
+        },
+        {
+          ":type": "list",
+          ":items": [
+            {
+              ":type": "item",
+              ":id": "event-31",
+              ":title": "conversations.started",
+              ":subtitle": "02 Jan 03:04",
+              ":action": {
+                ":type": "submit"
+              }
+            },
+            {
+              ":type": "item",
+              ":id": "event-32",
+              ":title": "conversations.assigned",
+              ":subtitle": "31 Dec 23:59",
+              ":action": {
+                ":type": "submit"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "content conversation-events none",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "conversation-events"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Events",
+          ":style": "header"
+        },
+        {
+          ":type": "list",
+          ":items": []
+        }
+      ]
+    }
+  },
+  {
+    "name": "content conversation-events with c",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "conversation-events",
+        "c": true
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":text": "foo",
+          ":type": "text"
+        }
+      ]
+    }
+  },
+  {
+    "name": "content user-properties-block",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "user-properties-block"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Contact's browsing properties",
+          ":style": "header"
+        },
+        {
+          ":type": "data-table",
+          ":items": [
+            {
+              ":type": "field-value",
+              ":field": "Last Seen",
+              ":value": "04 Mar 05:06"
+            },
+            {
+              ":type": "field-value",
+              ":field": "Location",
+              ":value": "RM, Santiago, Chile"
+            },
+            {
+              ":type": "field-value",
+              ":field": "Ip",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Sessions",
+              ":value": 7
+            },
+            {
+              ":type": "field-value",
+              ":field": "Timezone",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Browser",
+              ":value": "Chrome, 120"
+            },
+            {
+              ":type": "field-value",
+              ":field": "OS",
+              ":value": "macOS, 14.1"
+            },
+            {
+              ":type": "field-value",
+              ":field": "Language",
+              ":value": "es"
+            },
+            {
+              ":type": "field-value",
+              ":field": "Referrer",
+              ":value": "https://ref.example.com/"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "content user-properties-block empty user",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "user-properties-block"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 502,
+        "display_name": "",
+        "avatar_url": "https://avatars.example.com/blank.png",
+        "email": null,
+        "type": "Lead",
+        "last_visited_at": null,
+        "region": null,
+        "city": null,
+        "country": null,
+        "web_sessions": null,
+        "browser": null,
+        "browser_version": null,
+        "os": null,
+        "os_version": null,
+        "browser_language": null,
+        "referrer": null,
+        "external_profiles": []
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Contact's browsing properties",
+          ":style": "header"
+        },
+        {
+          ":type": "data-table",
+          ":items": [
+            {
+              ":type": "field-value",
+              ":field": "Last Seen",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Location",
+              ":value": ""
+            },
+            {
+              ":type": "field-value",
+              ":field": "Ip",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Sessions",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Timezone",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Browser",
+              ":value": ", "
+            },
+            {
+              ":type": "field-value",
+              ":field": "OS",
+              ":value": ", "
+            },
+            {
+              ":type": "field-value",
+              ":field": "Language",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Referrer",
+              ":value": null
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "content user-properties-block partial user",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "user-properties-block"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 503,
+        "display_name": null,
+        "avatar_url": "https://avatars.example.com/blank.png",
+        "email": "",
+        "type": "Visitor",
+        "last_visited_at": null,
+        "region": null,
+        "city": "Lima",
+        "country": "Peru",
+        "web_sessions": null,
+        "browser": "Firefox",
+        "browser_version": null,
+        "os": null,
+        "os_version": "11",
+        "browser_language": null,
+        "referrer": null,
+        "external_profiles": []
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Contact's browsing properties",
+          ":style": "header"
+        },
+        {
+          ":type": "data-table",
+          ":items": [
+            {
+              ":type": "field-value",
+              ":field": "Last Seen",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Location",
+              ":value": "Lima, Peru"
+            },
+            {
+              ":type": "field-value",
+              ":field": "Ip",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Sessions",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Timezone",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Browser",
+              ":value": "Firefox, "
+            },
+            {
+              ":type": "field-value",
+              ":field": "OS",
+              ":value": ", 11"
+            },
+            {
+              ":type": "field-value",
+              ":field": "Language",
+              ":value": null
+            },
+            {
+              ":type": "field-value",
+              ":field": "Referrer",
+              ":value": null
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "content user-properties-block with c",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "user-properties-block",
+        "c": "x"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":text": "foo",
+          ":type": "text"
+        }
+      ]
+    }
+  },
+  {
+    "name": "content external-profiles",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "external-profiles"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Contact's External profiles",
+          ":style": "header"
+        },
+        {
+          ":type": "data-table",
+          ":items": [
+            {
+              ":type": "field-value",
+              ":field": "Name",
+              ":value": "slack"
+            },
+            {
+              ":type": "field-value",
+              ":field": "External id",
+              ":value": "U123"
+            }
+          ]
+        },
+        {
+          ":type": "data-table",
+          ":items": [
+            {
+              ":type": "field-value",
+              ":field": "Name",
+              ":value": "twitter"
+            },
+            {
+              ":type": "field-value",
+              ":field": "External id",
+              ":value": "tw-9"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "content external-profiles none",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "external-profiles"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 502,
+        "display_name": "",
+        "avatar_url": "https://avatars.example.com/blank.png",
+        "email": null,
+        "type": "Lead",
+        "last_visited_at": null,
+        "region": null,
+        "city": null,
+        "country": null,
+        "web_sessions": null,
+        "browser": null,
+        "browser_version": null,
+        "os": null,
+        "os_version": null,
+        "browser_language": null,
+        "referrer": null,
+        "external_profiles": []
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Contact's External profiles",
+          ":style": "header"
+        },
+        {
+          ":type": "text",
+          ":text": "no external profiles found",
+          ":style": "muted",
+          ":align": "center"
+        }
+      ]
+    }
+  },
+  {
+    "name": "content external-profiles with c",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "external-profiles",
+        "c": "1"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":text": "foo",
+          ":type": "text"
+        }
+      ]
+    }
+  },
+  {
+    "name": "content assignee-block",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "assignee-block"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Assignee",
+          ":style": "header"
+        },
+        {
+          ":text": "Agent Smith",
+          ":type": "text"
+        },
+        {
+          ":id": "visit-agent-profile",
+          ":label": "Visit",
+          ":type": "button",
+          ":variant": "link",
+          ":align": "right",
+          ":action": {
+            ":type": "link",
+            ":url": "/apps/app-key-1/agents/77"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "content assignee-block blank name",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "assignee-block"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-3",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 78,
+        "display_name": "",
+        "email": "blank@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Assignee",
+          ":style": "header"
+        },
+        {
+          ":text": "blank@example.com",
+          ":type": "text"
+        },
+        {
+          ":id": "visit-agent-profile",
+          ":label": "Visit",
+          ":type": "button",
+          ":variant": "link",
+          ":align": "right",
+          ":action": {
+            ":type": "link",
+            ":url": "/apps/app-key-3/agents/78"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "content assignee-block nil name",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "assignee-block"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 79,
+        "display_name": null,
+        "email": "nil@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Assignee",
+          ":style": "header"
+        },
+        {
+          ":text": null,
+          ":type": "text"
+        },
+        {
+          ":id": "visit-agent-profile",
+          ":label": "Visit",
+          ":type": "button",
+          ":variant": "link",
+          ":align": "right",
+          ":action": {
+            ":type": "link",
+            ":url": "/apps/app-key-1/agents/79"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "content assignee-block unassigned",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "assignee-block"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": null
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Assignee",
+          ":style": "header"
+        },
+        {
+          ":text": "unassigned",
+          ":type": "text",
+          ":style": "muted",
+          ":align": "center"
+        }
+      ]
+    }
+  },
+  {
+    "name": "content assignee-block with c",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "assignee-block",
+        "c": "1"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Assignee",
+          ":style": "header"
+        },
+        {
+          ":text": "Agent Smith",
+          ":type": "text"
+        },
+        {
+          ":id": "visit-agent-profile",
+          ":label": "Visit",
+          ":type": "button",
+          ":variant": "link",
+          ":align": "right",
+          ":action": {
+            ":type": "link",
+            ":url": "/apps/app-key-1/agents/77"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "content assignee-block without a main participant",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "assignee-block"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": null,
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Assignee",
+          ":style": "header"
+        },
+        {
+          ":text": "Agent Smith",
+          ":type": "text"
+        },
+        {
+          ":id": "visit-agent-profile",
+          ":label": "Visit",
+          ":type": "button",
+          ":variant": "link",
+          ":align": "right",
+          ":action": {
+            ":type": "link",
+            ":url": "/apps/app-key-1/agents/77"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "content tag-blocks",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "tag-blocks"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":text": "Conversation Tags",
+          ":type": "text",
+          ":style": "header"
+        },
+        {
+          ":text": "vip, billing",
+          ":type": "text"
+        }
+      ]
+    }
+  },
+  {
+    "name": "content tag-blocks one tag",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "tag-blocks"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "solo"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":text": "Conversation Tags",
+          ":type": "text",
+          ":style": "header"
+        },
+        {
+          ":text": "solo",
+          ":type": "text"
+        }
+      ]
+    }
+  },
+  {
+    "name": "content tag-blocks none",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "tag-blocks"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":text": "Conversation Tags",
+          ":type": "text",
+          ":style": "header"
+        },
+        {
+          ":text": "no tags found",
+          ":type": "text",
+          ":style": "muted",
+          ":align": "center"
+        }
+      ]
+    }
+  },
+  {
+    "name": "content tag-blocks with c",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "tag-blocks",
+        "c": "1"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":text": "Conversation Tags",
+          ":type": "text",
+          ":style": "header"
+        },
+        {
+          ":text": "vip, billing",
+          ":type": "text"
+        }
+      ]
+    }
+  },
+  {
+    "name": "content c only",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "c": "1"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":text": "foo",
+          ":type": "text"
+        }
+      ]
+    }
+  },
+  {
+    "name": "content c false",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "user-blocks",
+        "c": false
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Ana Diaz",
+          ":style": "header",
+          ":align": "center"
+        },
+        {
+          ":type": "image",
+          ":url": "https://avatars.example.com/ana.png",
+          ":height": 64,
+          ":width": 64,
+          ":align": "center",
+          ":rounded": true
+        },
+        {
+          ":type": "text",
+          ":text": "ana@example.com",
+          ":style": "muted",
+          ":align": "center"
+        },
+        {
+          ":type": "text",
+          ":text": "AppUser",
+          ":style": "muted",
+          ":align": "center"
+        },
+        {
+          ":id": "visit-user-profile",
+          ":label": "Visit",
+          ":type": "button",
+          ":variant": "link",
+          ":align": "right",
+          ":action": {
+            ":type": "link",
+            ":url": "/apps/app-key-1/users/501"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "content unknown block",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1",
+      "values": {
+        "block_type": "conversation-block"
+      }
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": null
+    }
+  },
+  {
+    "name": "content without values",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "conv-1"
+    },
+    "conversation": {
+      "key": "conv-1",
+      "app_key": "app-key-1",
+      "user": {
+        "id": 501,
+        "display_name": "Ana Diaz",
+        "avatar_url": "https://avatars.example.com/ana.png",
+        "email": "ana@example.com",
+        "type": "AppUser",
+        "last_visited_at": "2026-03-04T05:06:07Z",
+        "region": "RM",
+        "city": "Santiago",
+        "country": "Chile",
+        "web_sessions": 7,
+        "browser": "Chrome",
+        "browser_version": "120",
+        "os": "macOS",
+        "os_version": "14.1",
+        "browser_language": "es",
+        "referrer": "https://ref.example.com/",
+        "external_profiles": [
+          {
+            "provider": "slack",
+            "profile_id": "U123"
+          },
+          {
+            "provider": "twitter",
+            "profile_id": "tw-9"
+          }
+        ]
+      },
+      "events": [
+        {
+          "id": 31,
+          "action": "conversations.started",
+          "created_at": "2026-01-02T03:04:05Z"
+        },
+        {
+          "id": 32,
+          "action": "conversations.assigned",
+          "created_at": "2026-12-31T23:59:00Z"
+        }
+      ],
+      "tags": [
+        "vip",
+        "billing"
+      ],
+      "assignee": {
+        "id": 77,
+        "display_name": "Agent Smith",
+        "email": "smith@example.com"
+      }
+    },
+    "outcome": {
+      ":definitions": null
+    }
+  },
+  {
+    "name": "content conversation not found",
+    "hook": "content",
+    "kind": "content",
+    "ctx": {
+      "conversation_key": "missing",
+      "values": {
+        "block_type": "user-blocks"
+      }
+    },
+    "conversation": null,
+    "outcome": {
+      "@raise": "NoMethodError"
+    }
+  },
+  {
+    "name": "configure user-properties-block",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "user-properties-block",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "conversation": null,
+    "outcome": {
+      ":kind": "initialize",
+      ":definitions": [],
+      ":results": {
+        ":url": "/ppupu",
+        ":type": "content",
+        ":block_type": "user-properties-block"
+      }
+    }
+  },
+  {
+    "name": "configure assignee-block",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "assignee-block",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "conversation": null,
+    "outcome": {
+      ":kind": "initialize",
+      ":definitions": [],
+      ":results": {
+        ":url": "/ppupu",
+        ":type": "content",
+        ":block_type": "assignee-block"
+      }
+    }
+  },
+  {
+    "name": "configure user-blocks",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "user-blocks",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "conversation": null,
+    "outcome": {
+      ":kind": "initialize",
+      ":definitions": [],
+      ":results": {
+        ":url": "/ppupu",
+        ":type": "content",
+        ":block_type": "user-blocks"
+      }
+    }
+  },
+  {
+    "name": "configure tag-blocks",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "tag-blocks",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "conversation": null,
+    "outcome": {
+      ":kind": "initialize",
+      ":definitions": [],
+      ":results": {
+        ":url": "/ppupu",
+        ":type": "content",
+        ":block_type": "tag-blocks"
+      }
+    }
+  },
+  {
+    "name": "configure conversation-block",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "conversation-block",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "conversation": null,
+    "outcome": {
+      ":kind": "initialize",
+      ":definitions": [],
+      ":results": {
+        ":url": "/ppupu",
+        ":type": "content",
+        ":block_type": "conversation-block"
+      }
+    }
+  },
+  {
+    "name": "configure conversation-events",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "conversation-events",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "conversation": null,
+    "outcome": {
+      ":kind": "initialize",
+      ":definitions": [],
+      ":results": {
+        ":url": "/ppupu",
+        ":type": "content",
+        ":block_type": "conversation-events"
+      }
+    }
+  },
+  {
+    "name": "configure external-profiles",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "external-profiles",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "conversation": null,
+    "outcome": {
+      ":kind": "initialize",
+      ":definitions": [],
+      ":results": {
+        ":url": "/ppupu",
+        ":type": "content",
+        ":block_type": "external-profiles"
+      }
+    }
+  },
+  {
+    "name": "configure pick-another",
+    "hook": "configure",
+    "kind": "configure",
+    "ctx": {
+      "field": {
+        "id": "pick-another",
+        "action": {
+          "type": "submit"
+        }
+      }
+    },
+    "conversation": null,
+    "outcome": {
+      ":kind": "configure",
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Pick a template",
+          ":style": "header"
+        },
+        {
+          ":type": "list",
+          ":disabled": false,
+          ":items": [
+            {
+              ":type": "item",
+              ":id": "user-blocks",
+              ":title": "UserBlock",
+              ":subtitle": "Put some user blocks",
+              ":action": {
+                ":type": "submit"
+              }
+            },
+            {
+              ":type": "item",
+              ":id": "tag-blocks",
+              ":title": "TagBlocks",
+              ":subtitle": "Put some TagBlocks",
+              ":action": {
+                ":type": "submit"
+              }
+            },
+            {
+              ":type": "item",
+              ":id": "user-properties-block",
+              ":title": "User Properties",
+              ":subtitle": "Put some ConversationBlock",
+              ":action": {
+                ":type": "submit"
+              }
+            },
+            {
+              ":type": "item",
+              ":id": "external-profiles",
+              ":title": "External Profiles",
+              ":subtitle": "Put some ConversationBlock",
+              ":action": {
+                ":type": "submit"
+              }
+            },
+            {
+              ":type": "item",
+              ":id": "assignee-block",
+              ":title": "AssigneeBlock",
+              ":subtitle": "Put some AssigneeBlock",
+              ":action": {
+                ":type": "submit"
+              }
+            },
+            {
+              ":type": "item",
+              ":id": "conversation-events",
+              ":title": "Conversation Events",
+              ":subtitle": "Put some Events on the sidebar",
+              ":action": {
+                ":type": "submit"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "configure without field",
+    "hook": "configure",
+    "kind": "configure-kind",
+    "ctx": {},
+    "conversation": null,
+    "outcome": {
+      ":kind": "configure-kind",
+      ":definitions": [
+        {
+          ":type": "text",
+          ":text": "Pick a template",
+          ":style": "header"
+        },
+        {
+          ":type": "list",
+          ":disabled": false,
+          ":items": [
+            {
+              ":type": "item",
+              ":id": "user-blocks",
+              ":title": "UserBlock",
+              ":subtitle": "Put some user blocks",
+              ":action": {
+                ":type": "submit"
+              }
+            },
+            {
+              ":type": "item",
+              ":id": "tag-blocks",
+              ":title": "TagBlocks",
+              ":subtitle": "Put some TagBlocks",
+              ":action": {
+                ":type": "submit"
+              }
+            },
+            {
+              ":type": "item",
+              ":id": "user-properties-block",
+              ":title": "User Properties",
+              ":subtitle": "Put some ConversationBlock",
+              ":action": {
+                ":type": "submit"
+              }
+            },
+            {
+              ":type": "item",
+              ":id": "external-profiles",
+              ":title": "External Profiles",
+              ":subtitle": "Put some ConversationBlock",
+              ":action": {
+                ":type": "submit"
+              }
+            },
+            {
+              ":type": "item",
+              ":id": "assignee-block",
+              ":title": "AssigneeBlock",
+              ":subtitle": "Put some AssigneeBlock",
+              ":action": {
+                ":type": "submit"
+              }
+            },
+            {
+              ":type": "item",
+              ":id": "conversation-events",
+              ":title": "Conversation Events",
+              ":subtitle": "Put some Events on the sidebar",
+              ":action": {
+                ":type": "submit"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "initialize content",
+    "hook": "initialize",
+    "kind": "initialize",
+    "ctx": {
+      "values": {
+        "type": "content",
+        "block_type": "tag-blocks"
+      }
+    },
+    "conversation": null,
+    "outcome": {
+      ":values": {
+        ":block_type": "tag-blocks"
+      },
+      ":definitions": [
+        {
+          ":type": "content"
+        }
+      ]
+    }
+  },
+  {
+    "name": "initialize other type",
+    "hook": "initialize",
+    "kind": "initialize",
+    "ctx": {
+      "values": {
+        "type": "other",
+        "block_type": "tag-blocks"
+      }
+    },
+    "conversation": null,
+    "outcome": {
+      ":definitions": [
+        {
+          ":id": "bubu",
+          ":label": "this is from initialize",
+          ":type": "button",
+          ":action": {
+            ":type": "submit"
+          }
+        },
+        {
+          ":type": "data-table",
+          ":items": [
+            {
+              ":type": "field-value",
+              ":field": "Key",
+              ":value": "Value 1"
+            },
+            {
+              ":type": "field-value",
+              ":field": "Key",
+              ":value": "Value 2"
+            },
+            {
+              ":type": "field-value",
+              ":field": "Key",
+              ":value": "Value 3 which is a very long value that will exhibit different behaviours to the other values"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "initialize without values",
+    "hook": "initialize",
+    "kind": "initialize",
+    "ctx": {},
+    "conversation": null,
+    "outcome": {
+      ":definitions": [
+        {
+          ":id": "bubu",
+          ":label": "this is from initialize",
+          ":type": "button",
+          ":action": {
+            ":type": "submit"
+          }
+        },
+        {
+          ":type": "data-table",
+          ":items": [
+            {
+              ":type": "field-value",
+              ":field": "Key",
+              ":value": "Value 1"
+            },
+            {
+              ":type": "field-value",
+              ":field": "Key",
+              ":value": "Value 2"
+            },
+            {
+              ":type": "field-value",
+              ":field": "Key",
+              ":value": "Value 3 which is a very long value that will exhibit different behaviours to the other values"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
