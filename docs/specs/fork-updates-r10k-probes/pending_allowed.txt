@@ -1,0 +1,31 @@
+# pending examples at BASE e05ceccf (30), LC_ALL=C sorted
+./spec/controllers/api/v1/hooks/twilio_phone_spec.rb :: Api::V1::Hooks::ProviderController hooks receive inbound conversation data
+./spec/controllers/client_tester_controller_spec.rb :: ClientTesterController text route
+./spec/generator/chaskiq_plugins_generator_spec.rb :: ChaskiqPlugins add some scenarios (or delete) /app/spec/generator/chaskiq_plugins_generator_spec.rb
+./spec/jobs/email_chat_notifier_job_spec.rb :: EmailChatNotifierJob add some examples to (or delete) /app/spec/jobs/email_chat_notifier_job_spec.rb
+./spec/jobs/list_importer_job_spec.rb :: ListImporterJob add some examples to (or delete) /app/spec/jobs/list_importer_job_spec.rb
+./spec/jobs/mail_importer_job_spec.rb :: MailImporterJob add some examples to (or delete) /app/spec/jobs/mail_importer_job_spec.rb
+./spec/jobs/offline_checker_job_spec.rb :: OfflineCheckerJob add some examples to (or delete) /app/spec/jobs/offline_checker_job_spec.rb
+./spec/jobs/ses_sender_job_spec.rb :: SesSenderJob add some examples to (or delete) /app/spec/jobs/ses_sender_job_spec.rb
+./spec/jobs/sns_receiver_job_spec.rb :: SnsReceiverJob add some examples to (or delete) /app/spec/jobs/sns_receiver_job_spec.rb
+./spec/mailers/chat_notifier_spec.rb :: ChatNotifierMailer add some examples to (or delete) /app/spec/mailers/chat_notifier_spec.rb
+./spec/models/agent_team_spec.rb :: AgentTeam add some examples to (or delete) /app/spec/models/agent_team_spec.rb
+./spec/models/article_collection_spec.rb :: ArticleCollection add some examples to (or delete) /app/spec/models/article_collection_spec.rb
+./spec/models/article_content_spec.rb :: ArticleContent add some examples to (or delete) /app/spec/models/article_content_spec.rb
+./spec/models/article_setting_spec.rb :: ArticleSetting add some examples to (or delete) /app/spec/models/article_setting_spec.rb
+./spec/models/assignment_rule_spec.rb :: AssignmentRule add some examples to (or delete) /app/spec/models/assignment_rule_spec.rb
+./spec/models/auth_identity_spec.rb :: AuthIdentity add some examples to (or delete) /app/spec/models/auth_identity_spec.rb
+./spec/models/collection_section_spec.rb :: CollectionSection add some examples to (or delete) /app/spec/models/collection_section_spec.rb
+./spec/models/conversation_channel_spec.rb :: ConversationChannel add some examples to (or delete) /app/spec/models/conversation_channel_spec.rb
+./spec/models/conversation_part_block_spec.rb :: ConversationPartBlock add some examples to (or delete) /app/spec/models/conversation_part_block_spec.rb
+./spec/models/conversation_part_channel_source_spec.rb :: ConversationPartChannelSource add some examples to (or delete) /app/spec/models/conversation_part_channel_source_spec.rb
+./spec/models/conversation_part_content_spec.rb :: ConversationPartContent add some examples to (or delete) /app/spec/models/conversation_part_content_spec.rb
+./spec/models/conversation_part_event_spec.rb :: ConversationPartEvent add some examples to (or delete) /app/spec/models/conversation_part_event_spec.rb
+./spec/models/conversation_source_spec.rb :: ConversationSource add some examples to (or delete) /app/spec/models/conversation_source_spec.rb
+./spec/models/event_spec.rb :: Event add some examples to (or delete) /app/spec/models/event_spec.rb
+./spec/models/external_profile_spec.rb :: ExternalProfile add some examples to (or delete) /app/spec/models/external_profile_spec.rb
+./spec/models/metric_spec.rb :: Metric add some examples to (or delete) /app/spec/models/metric_spec.rb
+./spec/models/preview_card_spec.rb :: PreviewCard add some examples to (or delete) /app/spec/models/preview_card_spec.rb
+./spec/models/quick_reply_spec.rb :: QuickReply add some examples to (or delete) /app/spec/models/quick_reply_spec.rb
+./spec/models/tour_spec.rb :: Tour add some examples to (or delete) /app/spec/models/tour_spec.rb
+./spec/models/visit_spec.rb :: Visit add some examples to (or delete) /app/spec/models/visit_spec.rb

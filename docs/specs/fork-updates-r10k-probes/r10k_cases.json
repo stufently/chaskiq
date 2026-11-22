@@ -1,0 +1,2463 @@
+[
+  {
+    "name": "thread_head opened unassigned without messages",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": []
+  },
+  {
+    "name": "thread_head closed prioritized assigned to a named agent",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "state": "closed",
+      "priority": true,
+      "assignee": "bob"
+    },
+    "messages": []
+  },
+  {
+    "name": "thread_head assigned to an agent without a name",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "assignee": "nameless"
+    },
+    "messages": []
+  },
+  {
+    "name": "thread_head lead never seen with blank location",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {},
+    "messages": []
+  },
+  {
+    "name": "thread_head anonymous lead",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": null
+    },
+    "conversation": {
+      "priority": true
+    },
+    "messages": []
+  },
+  {
+    "name": "thread_head with content, replied, blank and event messages",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      },
+      {
+        "kind": "content",
+        "author": "bob",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"heading\", \"content\": [{\"type\": \"text\", \"text\": \"Order 42\"}]}, {\"type\": \"DividerBlock\"}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo.jpg\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/doc.pdf\"}}]}"
+      },
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "label": "Yes",
+          "value": "y"
+        },
+        "state": "replied"
+      },
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "name": "Ana",
+          "email": "ana@example.com"
+        },
+        "state": "replied"
+      },
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": null,
+        "state": null
+      },
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "email": "bob@example.com"
+        }
+      },
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "",
+        "html_content": "<p><b>Hi</b> &amp; bye</p>"
+      }
+    ]
+  },
+  {
+    "name": "thread_head with only a blank block",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {},
+        "state": "replied"
+      }
+    ]
+  },
+  {
+    "name": "thread_head with a replied block holding an array",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": [
+          [
+            "label",
+            "x"
+          ]
+        ],
+        "state": "replied"
+      }
+    ]
+  },
+  {
+    "name": "notify_added app user stores the thread",
+    "call": "notify_added",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "assignee": "bob"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    }
+  },
+  {
+    "name": "notify_added lead rejected by slack",
+    "call": "notify_added",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {
+      "state": "closed"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "bob",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":false,\"error\":\"channel_not_found\"}"
+      }
+    }
+  },
+  {
+    "name": "update_thread_head uses the last slack thread",
+    "call": "update_thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": [
+        "1.1",
+        "2.2"
+      ],
+      "priority": true
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    }
+  },
+  {
+    "name": "update_thread_head with an explicit slack id",
+    "call": "update_thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {
+      "slack_ts": [
+        "1.1"
+      ],
+      "assignee": "nameless"
+    },
+    "messages": [],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "slack_id": "9.9"
+  },
+  {
+    "name": "update_thread_head without a slack thread",
+    "call": "update_thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    }
+  },
+  {
+    "name": "notify_message agent content",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "bob",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message app user rich content",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"heading\", \"content\": [{\"type\": \"text\", \"text\": \"Order 42\"}]}, {\"type\": \"DividerBlock\"}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo.jpg\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/doc.pdf\"}}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message lead content goes to the leads channel",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message html only content",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "",
+        "html_content": "<p>Plain &amp; <i>simple</i></p>"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message already delivered",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}",
+        "delivered": "8.8"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message without a slack thread",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message blank content",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "",
+        "html_content": ""
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message rejected by slack",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":false,\"error\":\"channel_not_found\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message unreplied block",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "label": "x"
+        },
+        "state": "pending"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message replied block with a label",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "label": "Yes",
+          "value": "y"
+        },
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message replied block without a label",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "name": "Ana",
+          "email": "ana@example.com"
+        },
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message replied block without data",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": null,
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message replied block from a lead",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "label": "No"
+        },
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message replied block holding a string",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": "plain text",
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message replied block holding an array",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": [
+          [
+            "label",
+            "x"
+          ]
+        ],
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message replied block without a slack thread",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "label": "Yes"
+        },
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message event with blank and id fields",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "closed",
+        "data": {
+          "id": 7,
+          "label": "Done",
+          "status": "",
+          "by": "Bob"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message event holding an array",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "closed",
+        "data": [
+          [
+            "label",
+            "Done"
+          ]
+        ]
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message event without data",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "reopened",
+        "data": null
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message assignment mentions the slack user",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "email": "bob@example.com",
+          "name": "Bob"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      },
+      "GET https://slack.com/api/users.lookupByEmail": {
+        "body": "{\"ok\":true,\"user\":{\"id\":\"U42\",\"name\":\"bob\"}}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message assignment with an unknown slack user",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "email": "ghost@example.com"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      },
+      "GET https://slack.com/api/users.lookupByEmail": {
+        "body": "{\"ok\":false,\"error\":\"users_not_found\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message assignment without an email",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "name": "Bob"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message assignment with a blank email",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "email": "",
+          "name": "Bob"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message other event with an email",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "closed",
+        "data": {
+          "email": "bob@example.com"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message assignment without a slack thread",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "email": "bob@example.com"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      },
+      "GET https://slack.com/api/users.lookupByEmail": {
+        "body": "{\"ok\":true,\"user\":{\"id\":\"U42\"}}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "notify_message event from the participant",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "participant",
+        "action": "closed",
+        "data": {
+          "label": "x"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0
+  },
+  {
+    "name": "serialize_content hosted image",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png",
+        "width": 2000,
+        "height": 1000
+      }
+    }
+  },
+  {
+    "name": "serialize_content file checked through files.info",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "see attached",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F2",
+          "mode": "file_access",
+          "file_access": "check_file_info"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      },
+      "GET https://slack.com/api/files.info": {
+        "body": "{\"ok\": true, \"file\": {\"id\": \"F2\", \"title\": \"Report\", \"mimetype\": \"application/pdf\", \"url_private_download\": \"https://files.slack.com/files-pri/T1-F2/report.pdf\"}}"
+      }
+    },
+    "uploads": {
+      "report.pdf": {
+        "url": "/rails/blobs/report.pdf"
+      }
+    }
+  },
+  {
+    "name": "serialize_content two files",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        },
+        {
+          "id": "F2",
+          "mode": "file_access",
+          "file_access": "check_file_info"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      },
+      "GET https://slack.com/api/files.info": {
+        "body": "{\"ok\": true, \"file\": {\"id\": \"F2\", \"title\": \"Report\", \"mimetype\": \"application/pdf\", \"url_private_download\": \"https://files.slack.com/files-pri/T1-F2/report.pdf\"}}"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png",
+        "width": 2000,
+        "height": 1000
+      },
+      "report.pdf": {
+        "url": "/rails/blobs/report.pdf"
+      }
+    }
+  },
+  {
+    "name": "serialize_content image without size",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png"
+      }
+    }
+  },
+  {
+    "name": "serialize_content second file without a download url",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        },
+        {
+          "id": "F3",
+          "mode": "hosted",
+          "title": "x"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png",
+        "width": 2000,
+        "height": 1000
+      }
+    }
+  },
+  {
+    "name": "serialize_content files.info refuses",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F2",
+          "mode": "file_access",
+          "file_access": "check_file_info"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      },
+      "GET https://slack.com/api/files.info": {
+        "body": "{\"ok\":false}"
+      }
+    },
+    "uploads": {
+      "report.pdf": {
+        "url": "/rails/blobs/report.pdf"
+      }
+    }
+  },
+  {
+    "name": "serialize_content upload returns nothing",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {}
+  },
+  {
+    "name": "serialize_content file without a mimetype",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F4",
+          "mode": "hosted",
+          "title": "blob",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png",
+        "width": 2000,
+        "height": 1000
+      }
+    }
+  },
+  {
+    "name": "serialize_content files without text",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": null,
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png",
+        "width": 2000,
+        "height": 1000
+      }
+    }
+  },
+  {
+    "name": "serialize_content empty file list",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "only\ntext",
+      "ts": "5.5",
+      "files": []
+    }
+  },
+  {
+    "name": "serialize_content without files",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "hi <https://example.com|link> :smile:",
+      "blocks": [
+        {
+          "type": "image",
+          "image_url": "https://img.example.com/a.png",
+          "image_width": 10,
+          "image_height": 20,
+          "alt_text": "a"
+        }
+      ]
+    }
+  }
+]

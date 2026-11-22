@@ -1,0 +1,439 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Metrics/AbcSize": [
+      "app/services/message_apis/slack/api.rb"
+    ],
+    "Metrics/CyclomaticComplexity": [
+      "app/services/message_apis/slack/api.rb"
+    ],
+    "Metrics/MethodLength": [
+      "app/services/message_apis/slack/api.rb"
+    ],
+    "Metrics/PerceivedComplexity": [
+      "app/services/message_apis/slack/api.rb"
+    ]
+  },
+  "base_requires": [
+    "  CountAsOne: [array, hash, heredoc]"
+  ],
+  "app_files": [
+    "app/services/message_apis/slack/api.rb"
+  ],
+  "new_files": [
+    "spec/fixtures/slack/block_kit_payloads.json"
+  ],
+  "char_specs": [
+    "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+  ],
+  "spec_sources": {
+    "spec/services/message_apis/slack_block_kit_payloads_spec.rb": "r10k_spec.rb"
+  },
+  "golden": {
+    "fixture": "spec/fixtures/slack/block_kit_payloads.json",
+    "spec": "spec/services/message_apis/slack_block_kit_payloads_spec.rb",
+    "generator": "r10k_golden_spec.rb",
+    "cases": "r10k_cases.json"
+  },
+  "commits": [
+    {
+      "subject": "Pin Slack Block Kit payloads",
+      "patch": "r10k_golden.patch",
+      "added": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "subject": "Split Slack thread and message builders",
+      "patch": "r10k_rewrite.patch"
+    },
+    {
+      "subject": "Drop R10k entries from RuboCop todo",
+      "todo": true
+    },
+    {
+      "subject": "Note fork-updates-r10k in changelog",
+      "changelog": true
+    }
+  ],
+  "mutants": [
+    {
+      "id": "K01",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "\"Conversation initiated by #{links}\"",
+      "new": "\"Conversation started by #{links}\"",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K02",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "user_url = \"#{base}/users/",
+      "new": "user_url = \"#{base}/user/",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K03",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "|view in chaskiq>\"",
+      "new": "|view in Chaskiq>\"",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K04",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "\"*From:* #{participant.city}, #{participant.region} \"",
+      "new": "\"*From:* #{participant.city}, #{participant.region}\"",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K05",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "format: :short) : \"unknown\"",
+      "new": "format: :short) : \"never\"",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K06",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "I18n.l(conversation.created_at, format: :short)",
+      "new": "I18n.l(conversation.created_at, format: :long)",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K07",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "assignee_display(conversation.assignee) || 'Unassigned'}\",",
+      "new": "assignee_display(conversation.assignee) || 'Nobody'}\",",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K08",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "#{participant.browser_version} / #{participant.os}",
+      "new": "#{participant.browser_version} - #{participant.os}",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K09",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "<#{participant.referrer} | URL: ",
+      "new": "<#{participant.referrer}|URL: ",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K10",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "].map { |text| { type: \"mrkdwn\", text: text } }",
+      "new": "].map { |text| { type: \"plain_text\", text: text } }",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K11",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "          { type: \"divider\" },\n          pick_agent_block,\n",
+      "new": "          pick_agent_block,\n",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K12",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "block_id: \"section678\"",
+      "new": "block_id: \"section679\"",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K13",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "data << text_blocks unless text_blocks.empty?",
+      "new": "data << text_blocks if text_blocks.empty?",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K14",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "\"To reply just reply on a thread\"",
+      "new": "\"To reply, reply on a thread\"",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K15",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "        data.flatten!\n",
+      "new": "        data.flatten!.compact\n",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K16",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "        return nil if data.blank?\n\n        replied_section(data)",
+      "new": "        return nil if data.nil?\n\n        replied_section(data)",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K17",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "find_by(provider: \"slack\").present?",
+      "new": "find_by(provider: \"slack\").blank?",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K18",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "user_options = { username: format_user_name(part.authorable).to_s }",
+      "new": "user_options = { username: format_user_name(conversation.main_participant).to_s }",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K19",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "return unless messageable.replied?",
+      "new": "return if messageable.replied?",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K20",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "replied_section(messageable.data || {})",
+      "new": "replied_section(messageable.data || [])",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K21",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "user_options[:username] = format_user_name(conversation.main_participant)",
+      "new": "user_options[:username] = format_user_name(part.authorable)",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K22",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "if messageable.is_a?(ConversationPartEvent)",
+      "new": "if messageable.is_a?(ConversationPartContent)",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K23",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "        return if blocks.empty?\n",
+      "new": "        return if blocks.nil?\n",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K24",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "v.blank? or [\"id\"].include?(k)",
+      "new": "v.blank? or [\"key\"].include?(k)",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K25",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "\"*#{k.upcase}*: #{v}\"",
+      "new": "\"*#{k}*: #{v}\"",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K26",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "end.join(\" \")",
+      "new": "end.join(\", \")",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K27",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "#{data_fmt}#{assignee_mention(part, data)}\"",
+      "new": "#{data_fmt}\"",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K28",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "part&.message&.action == \"assigned\"",
+      "new": "part&.message&.action != \"assigned\"",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K29",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "data.is_a?(Hash) && data[\"email\"].present?",
+      "new": "data.is_a?(Hash) && !data[\"email\"].nil?",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K30",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "<@#{slack_user['id']}>",
+      "new": "<@#{slack_user['name']}>",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K31",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "          \"new message\",\n",
+      "new": "          \"New message\",\n",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K32",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "thread_ts: provider_channel_id",
+      "new": "ts: provider_channel_id",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K33",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "channel: resolve_channel_id(conversation.main_participant), # @keys[\"channel\"],\n                                thread_ts:",
+      "new": "channel: @keys[\"slack_channel_id\"], # @keys[\"channel\"],\n                                thread_ts:",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K34",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "message_source_id: response_data[\"ts\"]\n        )\n      end\n\n      def format_user_name",
+      "new": "message_source_id: response_data[\"channel\"]\n        )\n      end\n\n      def format_user_name",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K35",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "          return nil if file.nil?\n",
+      "new": "          next if file.nil?\n",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K36",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "[text_blocks, serialized_blocks].flatten.compact",
+      "new": "[serialized_blocks, text_blocks].flatten.compact",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K37",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "        return nil if file_data.nil?\n",
+      "new": "        return {} if file_data.nil?\n",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K38",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "          w: file[:width],",
+      "new": "          w: file[:height],",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K39",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "text: file_data[\"title\"],",
+      "new": "text: file_data[\"name\"],",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K40",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "mimetype: file_data[\"mimetype\"]",
+      "new": "mimetype: \"image/png\"",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K41",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "          file_data[\"url_private_download\"],\n",
+      "new": "          file_data[\"url_private\"],\n",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    },
+    {
+      "id": "K42",
+      "file": "app/services/message_apis/slack/api.rb",
+      "old": "        [file_data, file]\n",
+      "new": "        [file_data, file_data]\n",
+      "specs": [
+        "spec/services/message_apis/slack_block_kit_payloads_spec.rb"
+      ]
+    }
+  ]
+}
