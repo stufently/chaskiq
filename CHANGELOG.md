@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-21 — fork-updates-r10b
+
+- Changed: six Metrics outliers of R8a are split without a change in behaviour:
+  `SegmentComparator#compare_with` (a table of comparisons), `AppPolicy#find_role_by_resource`
+  (`resource_app`), `Dante::Converter.convert_inline_styles` (three helpers), `VisitCollector#add_web_sessions`,
+  `Types::MessengerType#browser_data` and `FetchLinkCardService#attempt_oembed` (extracted helpers). Six specs
+  pin every branch, including two defects kept as they are (styles that start mid-text are dropped by the
+  draft converter; the oEmbed card type is never stored). Their six todo lines are gone.
+
 ## 2026-11-21 — fork-updates-r9b
 
 - Changed: the last one-off RuboCop Style offenses outside Metrics, behaviour kept: modifier if/unless
