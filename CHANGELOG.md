@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10n
+
+- Changed: `MessageApis::OpenAi::Api#notify_message` and `MessageApis::Csat::Api#report` are split
+  into smaller private helpers without a change in behaviour (Metrics/AbcSize outliers of R8a,
+  milestone R10n of the R10 programme): OpenAI builds the prompt messages in `build_prompt_messages`
+  and saves the GPT reply in `save_gpt_reply` (early exits, cache write before HTTP and the rescue
+  boundary for response extraction are kept); CSAT dispatches `report` to `report_general` and
+  `report_events_table` (filter, serialisation, pagination and percentages are preserved). Their two
+  AbcSize lines leave the todo.
+
 ## 2026-11-22 — fork-updates-r10m
 
 - Changed: the Telegram, Twitter and TwilioPhone adapters build their outgoing and incoming
