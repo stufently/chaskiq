@@ -1,0 +1,14 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Metrics/AbcSize": [
+      "app/services/message_apis/telegram/api.rb",
+      "app/services/message_apis/twilio_phone/api.rb",
+      "app/services/message_apis/twitter/api.rb"
+    ],
+    "Metrics/MethodLength": [
+      "app/services/message_apis/telegram/api.rb"
+    ]
+  },
+  "base_requires": ["  CountAsOne: [array, hash, heredoc]"]
+}
