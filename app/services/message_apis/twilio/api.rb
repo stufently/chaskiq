@@ -156,23 +156,7 @@ module MessageApis
         # TODO: maybe handle an error here ?
         return if profile_id.blank?
 
-        message_params = { From: "whatsapp:#{@phone}", To: profile_id }
-        send_text = ->(text) { @conn.post(@url, message_params.merge(Body: text)) }
-        plain_message = MessageApis::BlockManager.plain_text(blocks)
-        attachments = MessageApis::BlockManager.media_blocks(blocks)
-
-        response = if attachments.empty?
-                     send_text.call(plain_message)
-                   else
-                     MessageApis::BlockManager.deliver_attachments(
-                       attachments, plain_message,
-                       send_text: send_text, captionless: method(:captionless_attachment?), **delivery_hooks(conversation, part)
-                     ) do |_type, url, caption|
-                       params = message_params.merge(MediaUrl: url)
-                       params[:Body] = caption if caption
-                       @conn.post(@url, params)
-                     end
-                   end
+        response = deliver_blocks(conversation, part, blocks, { From: "whatsapp:#{@phone}", To: profile_id })
         return unless response
 
         unless response.success?
@@ -182,6 +166,23 @@ module MessageApis
 
         response
       end
+
+      def deliver_blocks(conversation, part, blocks, message_params)
+        send_text = ->(text) { @conn.post(@url, message_params.merge(Body: text)) }
+        plain_message = MessageApis::BlockManager.plain_text(blocks)
+        attachments = MessageApis::BlockManager.media_blocks(blocks)
+        return send_text.call(plain_message) if attachments.empty?
+
+        MessageApis::BlockManager.deliver_attachments(
+          attachments, plain_message,
+          send_text: send_text, captionless: method(:captionless_attachment?), **delivery_hooks(conversation, part)
+        ) do |_type, url, caption|
+          params = message_params.merge(MediaUrl: url)
+          params[:Body] = caption if caption
+          @conn.post(@url, params)
+        end
+      end
+      private :deliver_blocks
 
       def captionless_attachment?(type, url)
         type != "ImageBlock" || !URI.parse(url).path.to_s.match?(/\.(?:jpe?g|png)\z/i)

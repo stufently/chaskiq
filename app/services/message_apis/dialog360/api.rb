@@ -165,6 +165,10 @@ module MessageApis
         # TODO: maybe handle an error here ?
         return if profile_id.blank?
 
+        deliver_blocks(conversation, part, blocks, plain_message, profile_id)
+      end
+
+      def deliver_blocks(conversation, part, blocks, plain_message, profile_id)
         message_params = {
           from: { type: "whatsapp", number: @phone },
           to: profile_id
@@ -186,6 +190,7 @@ module MessageApis
           post_message.call(type: type, type => media)
         end
       end
+      private :deliver_blocks
 
       def upload_media(media)
         # conn = @conn do |f|
@@ -265,37 +270,61 @@ module MessageApis
       def send_template_message(template:, conversation_key:, parameters:, selected_user:)
         parameters = [parameters] unless parameters.is_a?(Array)
 
-        conversation = @package.app.conversations.find_by(key: conversation_key)
-        profile_id = nil
-
-        if conversation.blank? && conversation_key.blank? && selected_user.present?
-          participant = @package.app.app_users.find(selected_user)
-
-          profile_id = get_profile_for_participant(participant)
-
-          conversation = find_conversation_by_channel(PROVIDER, profile_id) if profile_id.present?
-
-          options = {
-            # from: author,
-            participant: participant,
-            initiator_channel: PROVIDER
-          }
-
-          conversation = @package.app.start_conversation(options) if conversation.blank?
-        end
-
-        profile_id = get_profile_for_participant(conversation.main_participant) if profile_id.blank?
-
-        if profile_id.blank?
-          profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
-        end
+        conversation, profile_id = template_conversation(conversation_key, selected_user)
+        profile_id = template_profile_id(conversation, profile_id)
 
         Rails.logger.debug template
         return if profile_id.blank?
 
-        paramters_list = parameters.compact
+        data = template_payload(template, profile_id, parameters.compact)
 
-        data = {
+        Rails.logger.debug "***************"
+        Rails.logger.debug data
+
+        s = @conn.post(
+          "#{@url}/messages",
+          data.to_json
+        )
+
+        json = JSON.parse(s.body)
+
+        if s.success?
+          json_message = json["messages"].first
+          return if json_message.blank?
+
+          add_template_message(conversation, template, json_message["id"])
+        end
+        json.merge({ "conversation_key" => conversation.key })
+      end
+
+      def template_conversation(conversation_key, selected_user)
+        conversation = @package.app.conversations.find_by(key: conversation_key)
+        return [conversation, nil] unless conversation.blank? && conversation_key.blank? && selected_user.present?
+
+        participant = @package.app.app_users.find(selected_user)
+        profile_id = get_profile_for_participant(participant)
+        conversation = find_conversation_by_channel(PROVIDER, profile_id) if profile_id.present?
+
+        options = {
+          # from: author,
+          participant: participant,
+          initiator_channel: PROVIDER
+        }
+        conversation = @package.app.start_conversation(options) if conversation.blank?
+        [conversation, profile_id]
+      end
+      private :template_conversation
+
+      def template_profile_id(conversation, profile_id)
+        profile_id = get_profile_for_participant(conversation.main_participant) if profile_id.blank?
+        return profile_id if profile_id.present?
+
+        add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
+      end
+      private :template_profile_id
+
+      def template_payload(template, profile_id, parameters)
+        {
           to: profile_id,
           type: "template",
           template: {
@@ -307,44 +336,26 @@ module MessageApis
             },
             components: [{
               type: "body",
-              parameters: paramters_list.map { |o| { type: "text", text: o } }
+              parameters: parameters.map { |o| { type: "text", text: o } }
             }]
           }
         }
-
-        Rails.logger.debug "***************"
-        Rails.logger.debug data
-
-        s = @conn.post(
-          "#{@url}/messages",
-          data.to_json
-        )
-
-        # puts "TEMPLATE ******* "
-        # puts template
-
-        json = JSON.parse(s.body)
-
-        if s.success?
-          json_message = json["messages"].first
-          return if json_message.blank?
-
-          message_id = json_message["id"]
-
-          conversation.add_message(
-            from: @package.app.agents.first,
-            message: {
-              html_content: "WHATSAPP TEMPLATE SENT: #{template['name']}"
-              # serialized_content: serialized_content
-            },
-            provider: PROVIDER,
-            message_source_id: message_id,
-            check_assignment_rules: false
-          )
-
-        end
-        json.merge({ "conversation_key" => conversation.key })
       end
+      private :template_payload
+
+      def add_template_message(conversation, template, message_id)
+        conversation.add_message(
+          from: @package.app.agents.first,
+          message: {
+            html_content: "WHATSAPP TEMPLATE SENT: #{template['name']}"
+            # serialized_content: serialized_content
+          },
+          provider: PROVIDER,
+          message_source_id: message_id,
+          check_assignment_rules: false
+        )
+      end
+      private :add_template_message
 
       # not used fro now
       def mark_as_read(id)

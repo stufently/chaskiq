@@ -47,6 +47,10 @@ module MessageApis
 
       PROVIDER = "vonage"
       RESUMABLE_DELIVERY = true
+      MEDIA_TYPES = {
+        "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
+      }.freeze
+      private_constant :MEDIA_TYPES
 
       attr_accessor :url, :api_token, :api_key, :conn
 
@@ -100,23 +104,8 @@ module MessageApis
       def send_message(conversation, part)
         return if part.private_note?
 
-        message = part.message.as_json
-        content = message["serialized_content"]
-        if content.blank?
-          text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
-          return if text.blank?
-
-          content = MessageApis::BlockManager.serialized_text(text)
-        end
-
-        begin
-          blocks = MessageApis::BlockManager.get_blocks(content)
-          return unless blocks.is_a?(Array) && blocks.present?
-
-          plain_message = MessageApis::BlockManager.plain_text(blocks)
-        rescue JSON::ParserError, TypeError, NoMethodError
-          return
-        end
+        blocks, plain_message = outgoing_blocks(part.message.as_json)
+        return if blocks.nil?
 
         external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
         profile_id = external_profile&.profile_id
@@ -124,9 +113,10 @@ module MessageApis
         # TODO: maybe handle an error here ?
         return if profile_id.blank?
 
-        media_types = {
-          "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
-        }
+        deliver_blocks(conversation, part, blocks, plain_message, profile_id)
+      end
+
+      def deliver_blocks(conversation, part, blocks, plain_message, profile_id)
         addressing = {
           from: { type: "whatsapp", number: @phone },
           to: { type: "whatsapp", number: profile_id }
@@ -137,12 +127,35 @@ module MessageApis
         MessageApis::BlockManager.deliver_attachments(
           attachments, plain_message, send_text: send_text, **delivery_hooks(conversation, part)
         ) do |block_type, url, caption|
-          type = media_types.fetch(block_type)
+          type = MEDIA_TYPES.fetch(block_type)
           data = { url: url }
           data[:caption] = caption if caption
           post_content.call(type: type, type => data)
         end
       end
+      private :deliver_blocks
+
+      def outgoing_blocks(message)
+        content = message["serialized_content"]
+        if content.blank?
+          text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
+          return if text.blank?
+
+          content = MessageApis::BlockManager.serialized_text(text)
+        end
+        parse_blocks(content)
+      end
+      private :outgoing_blocks
+
+      def parse_blocks(content)
+        blocks = MessageApis::BlockManager.get_blocks(content)
+        return unless blocks.is_a?(Array) && blocks.present?
+
+        [blocks, MessageApis::BlockManager.plain_text(blocks)]
+      rescue JSON::ParserError, TypeError, NoMethodError
+        nil
+      end
+      private :parse_blocks
 
       def process_message(params, package)
         @package = package
