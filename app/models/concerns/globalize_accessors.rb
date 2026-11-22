@@ -33,7 +33,11 @@ module GlobalizeAccessors
 
     def self.define_getter(attr_name, locale)
       define_method localized_attr_name_for(attr_name, locale) do
-        globalize.stash.contains?(locale, attr_name) ? globalize.send(:fetch_stash, locale, attr_name) : globalize.send(:fetch_attribute, locale, attr_name)
+        if globalize.stash.contains?(locale, attr_name)
+          globalize.send(:fetch_stash, locale, attr_name)
+        else
+          globalize.send(:fetch_attribute, locale, attr_name)
+        end
       end
     end
 

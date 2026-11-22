@@ -136,7 +136,11 @@ class AppUser < ApplicationRecord
   end
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[app_id browser browser_language browser_version city company_name company_size country country_code created_at email facebook first_name first_seen full_name gender id id_value ip job_title key lang last_contacted last_heard_from last_name last_seen last_visited_at lat linkedin lng name organization os os_version phone postal privacy_consent properties referrer region region_code session_id signed_up state subscription_state timezone twitter type updated_at web_sessions]
+    %w[app_id browser browser_language browser_version city company_name company_size country country_code
+       created_at email facebook first_name first_seen full_name gender id id_value ip job_title key lang
+       last_contacted last_heard_from last_name last_seen last_visited_at lat linkedin lng name organization os
+       os_version phone postal privacy_consent properties referrer region region_code session_id signed_up state
+       subscription_state timezone twitter type updated_at web_sessions]
   end
 
   def self.ransackable_associations(_auth_object = nil)
@@ -360,7 +364,9 @@ class AppUser < ApplicationRecord
                              ALLOWED_PROPERTIES.map { |o| { o => send(o) } }.reduce({}, :merge)
                              .merge(
                                {
-                                 external_profiles: external_profiles&.map { |o| { "profile_id" => o.profile_id, "provider" => o.provider } },
+                                 external_profiles: external_profiles&.map do |o|
+                                   { "profile_id" => o.profile_id, "provider" => o.provider }
+                                 end,
                                  custom_attributes: app.custom_fields&.map { |o| { "name" => o["name"], "value" => properties[o["name"]] } }
                                }
                              )
