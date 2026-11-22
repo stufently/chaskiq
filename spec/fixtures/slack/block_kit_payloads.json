@@ -1,0 +1,4496 @@
+[
+  {
+    "name": "thread_head opened unassigned without messages",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [],
+    "outcome": {
+      "result": [
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Conversation initiated by *<https://chat.example.com/apps/app-key/users/1|Ana Lima · ana@example.com · (App user)>* <https://chat.example.com/apps/app-key/conversations/conversation-key|view in chaskiq>"
+          }
+        },
+        {
+          ":type": "section",
+          ":fields": [
+            {
+              ":type": "mrkdwn",
+              ":text": "*Info:* Ana Lima ana@example.com"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:* Lima, LIM "
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*When:* 02 Jan 03:04"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Seen:* 01 Jan 10:20"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Assignee:* Unassigned"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Device:*\nFirefox 140.0 / Linux"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:*\n<https://shop.example.com/pricing | URL: https://shop.example.com/pricing>"
+            }
+          ]
+        },
+        {
+          ":type": "actions",
+          ":elements": [
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Close"
+              },
+              ":value": "close",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              }
+            },
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Prioritize"
+              },
+              ":value": "prioritize",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              },
+              ":style": "primary"
+            }
+          ]
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Priority: NO"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "State: opened"
+            },
+            {
+              ":type": "image",
+              ":image_url": "https://api.slack.com/img/blocks/bkb_template_images/task-icon.png",
+              ":alt_text": "Task Icon"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Task"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Unassigned"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "section",
+          ":block_id": "section678",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Pick an agent and assign them to the conversation"
+          },
+          ":accessory": {
+            ":action_id": "pick-agent",
+            ":type": "external_select",
+            ":placeholder": {
+              ":type": "plain_text",
+              ":text": "Select an item"
+            },
+            ":min_query_length": 3
+          }
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Message"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "To reply just reply on a thread"
+            }
+          ]
+        }
+      ],
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "thread_head closed prioritized assigned to a named agent",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "state": "closed",
+      "priority": true,
+      "assignee": "bob"
+    },
+    "messages": [],
+    "outcome": {
+      "result": [
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Conversation initiated by *<https://chat.example.com/apps/app-key/users/1|Ana Lima · ana@example.com · (App user)>* <https://chat.example.com/apps/app-key/conversations/conversation-key|view in chaskiq>"
+          }
+        },
+        {
+          ":type": "section",
+          ":fields": [
+            {
+              ":type": "mrkdwn",
+              ":text": "*Info:* Ana Lima ana@example.com"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:* Lima, LIM "
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*When:* 02 Jan 03:04"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Seen:* 01 Jan 10:20"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Assignee:* Bob Agent"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Device:*\nFirefox 140.0 / Linux"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:*\n<https://shop.example.com/pricing | URL: https://shop.example.com/pricing>"
+            }
+          ]
+        },
+        {
+          ":type": "actions",
+          ":elements": [
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Open"
+              },
+              ":value": "open",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              }
+            },
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "UnPrioritize"
+              },
+              ":value": "unprioritize",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              },
+              ":style": "danger"
+            }
+          ]
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Priority: YES"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "State: closed"
+            },
+            {
+              ":type": "image",
+              ":image_url": "https://api.slack.com/img/blocks/bkb_template_images/task-icon.png",
+              ":alt_text": "Task Icon"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Task"
+            },
+            {
+              ":type": "image",
+              ":image_url": "https://www.gravatar.com/avatar/4b9bb80620f03eb3719e0a061c14283d?d=https://ui-avatars.com/api/Bob+Agent/128",
+              ":alt_text": "Bob Agent"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Bob Agent"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "section",
+          ":block_id": "section678",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Pick an agent and assign them to the conversation"
+          },
+          ":accessory": {
+            ":action_id": "pick-agent",
+            ":type": "external_select",
+            ":placeholder": {
+              ":type": "plain_text",
+              ":text": "Select an item"
+            },
+            ":min_query_length": 3
+          }
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Message"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "To reply just reply on a thread"
+            }
+          ]
+        }
+      ],
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "thread_head assigned to an agent without a name",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "assignee": "nameless"
+    },
+    "messages": [],
+    "outcome": {
+      "result": [
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Conversation initiated by *<https://chat.example.com/apps/app-key/users/1|Ana Lima · ana@example.com · (App user)>* <https://chat.example.com/apps/app-key/conversations/conversation-key|view in chaskiq>"
+          }
+        },
+        {
+          ":type": "section",
+          ":fields": [
+            {
+              ":type": "mrkdwn",
+              ":text": "*Info:* Ana Lima ana@example.com"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:* Lima, LIM "
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*When:* 02 Jan 03:04"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Seen:* 01 Jan 10:20"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Assignee:* nameless@example.com"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Device:*\nFirefox 140.0 / Linux"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:*\n<https://shop.example.com/pricing | URL: https://shop.example.com/pricing>"
+            }
+          ]
+        },
+        {
+          ":type": "actions",
+          ":elements": [
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Close"
+              },
+              ":value": "close",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              }
+            },
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Prioritize"
+              },
+              ":value": "prioritize",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              },
+              ":style": "primary"
+            }
+          ]
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Priority: NO"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "State: opened"
+            },
+            {
+              ":type": "image",
+              ":image_url": "https://api.slack.com/img/blocks/bkb_template_images/task-icon.png",
+              ":alt_text": "Task Icon"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Task"
+            },
+            {
+              ":type": "image",
+              ":image_url": "https://www.gravatar.com/avatar/0004ffb72d5a6c923c928f79bd7e7705?d=https://ui-avatars.com/api//128",
+              ":alt_text": "nameless@example.com"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "nameless@example.com"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "section",
+          ":block_id": "section678",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Pick an agent and assign them to the conversation"
+          },
+          ":accessory": {
+            ":action_id": "pick-agent",
+            ":type": "external_select",
+            ":placeholder": {
+              ":type": "plain_text",
+              ":text": "Select an item"
+            },
+            ":min_query_length": 3
+          }
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Message"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "To reply just reply on a thread"
+            }
+          ]
+        }
+      ],
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "thread_head lead never seen with blank location",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {},
+    "messages": [],
+    "outcome": {
+      "result": [
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Conversation initiated by *<https://chat.example.com/apps/app-key/users/1|Leo Ray · leo@example.com · (Lead)>* <https://chat.example.com/apps/app-key/conversations/conversation-key|view in chaskiq>"
+          }
+        },
+        {
+          ":type": "section",
+          ":fields": [
+            {
+              ":type": "mrkdwn",
+              ":text": "*Info:* Leo Ray leo@example.com"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:* ,  "
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*When:* 02 Jan 03:04"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Seen:* unknown"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Assignee:* Unassigned"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Device:*\nSafari 18 / macOS"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:*\n< | URL: >"
+            }
+          ]
+        },
+        {
+          ":type": "actions",
+          ":elements": [
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Close"
+              },
+              ":value": "close",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              }
+            },
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Prioritize"
+              },
+              ":value": "prioritize",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              },
+              ":style": "primary"
+            }
+          ]
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Priority: NO"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "State: opened"
+            },
+            {
+              ":type": "image",
+              ":image_url": "https://api.slack.com/img/blocks/bkb_template_images/task-icon.png",
+              ":alt_text": "Task Icon"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Task"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Unassigned"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "section",
+          ":block_id": "section678",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Pick an agent and assign them to the conversation"
+          },
+          ":accessory": {
+            ":action_id": "pick-agent",
+            ":type": "external_select",
+            ":placeholder": {
+              ":type": "plain_text",
+              ":text": "Select an item"
+            },
+            ":min_query_length": 3
+          }
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Message"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "To reply just reply on a thread"
+            }
+          ]
+        }
+      ],
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "thread_head anonymous lead",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": null
+    },
+    "conversation": {
+      "priority": true
+    },
+    "messages": [],
+    "outcome": {
+      "result": [
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Conversation initiated by *<https://chat.example.com/apps/app-key/users/1| ·  · (Lead)>* <https://chat.example.com/apps/app-key/conversations/conversation-key|view in chaskiq>"
+          }
+        },
+        {
+          ":type": "section",
+          ":fields": [
+            {
+              ":type": "mrkdwn",
+              ":text": "*Info:*  "
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:* ,  "
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*When:* 02 Jan 03:04"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Seen:* unknown"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Assignee:* Unassigned"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Device:*\n  / "
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:*\n< | URL: >"
+            }
+          ]
+        },
+        {
+          ":type": "actions",
+          ":elements": [
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Close"
+              },
+              ":value": "close",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              }
+            },
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "UnPrioritize"
+              },
+              ":value": "unprioritize",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              },
+              ":style": "danger"
+            }
+          ]
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Priority: YES"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "State: opened"
+            },
+            {
+              ":type": "image",
+              ":image_url": "https://api.slack.com/img/blocks/bkb_template_images/task-icon.png",
+              ":alt_text": "Task Icon"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Task"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Unassigned"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "section",
+          ":block_id": "section678",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Pick an agent and assign them to the conversation"
+          },
+          ":accessory": {
+            ":action_id": "pick-agent",
+            ":type": "external_select",
+            ":placeholder": {
+              ":type": "plain_text",
+              ":text": "Select an item"
+            },
+            ":min_query_length": 3
+          }
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Message"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "To reply just reply on a thread"
+            }
+          ]
+        }
+      ],
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "thread_head with content, replied, blank and event messages",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      },
+      {
+        "kind": "content",
+        "author": "bob",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"heading\", \"content\": [{\"type\": \"text\", \"text\": \"Order 42\"}]}, {\"type\": \"DividerBlock\"}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo.jpg\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/doc.pdf\"}}]}"
+      },
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "label": "Yes",
+          "value": "y"
+        },
+        "state": "replied"
+      },
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "name": "Ana",
+          "email": "ana@example.com"
+        },
+        "state": "replied"
+      },
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": null,
+        "state": null
+      },
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "email": "bob@example.com"
+        }
+      },
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "",
+        "html_content": "<p><b>Hi</b> &amp; bye</p>"
+      }
+    ],
+    "outcome": {
+      "result": [
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Conversation initiated by *<https://chat.example.com/apps/app-key/users/1|Ana Lima · ana@example.com · (App user)>* <https://chat.example.com/apps/app-key/conversations/conversation-key|view in chaskiq>"
+          }
+        },
+        {
+          ":type": "section",
+          ":fields": [
+            {
+              ":type": "mrkdwn",
+              ":text": "*Info:* Ana Lima ana@example.com"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:* Lima, LIM "
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*When:* 02 Jan 03:04"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Seen:* 01 Jan 10:20"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Assignee:* Unassigned"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Device:*\nFirefox 140.0 / Linux"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:*\n<https://shop.example.com/pricing | URL: https://shop.example.com/pricing>"
+            }
+          ]
+        },
+        {
+          ":type": "actions",
+          ":elements": [
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Close"
+              },
+              ":value": "close",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              }
+            },
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Prioritize"
+              },
+              ":value": "prioritize",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              },
+              ":style": "primary"
+            }
+          ]
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Priority: NO"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "State: opened"
+            },
+            {
+              ":type": "image",
+              ":image_url": "https://api.slack.com/img/blocks/bkb_template_images/task-icon.png",
+              ":alt_text": "Task Icon"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Task"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Unassigned"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "section",
+          ":block_id": "section678",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Pick an agent and assign them to the conversation"
+          },
+          ":accessory": {
+            ":action_id": "pick-agent",
+            ":type": "external_select",
+            ":placeholder": {
+              ":type": "plain_text",
+              ":text": "Select an item"
+            },
+            ":min_query_length": 3
+          }
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Message"
+            }
+          ]
+        },
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Hello &lt;team&gt; &amp; co",
+            ":verbatim": true
+          }
+        },
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Order 42",
+            ":verbatim": true
+          }
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "image",
+          ":image_url": "https://chat.example.com/uploads/photo.jpg",
+          ":alt_text": "Image"
+        },
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "<https://cdn.example.com/doc.pdf|View attachment>",
+            ":verbatim": true
+          }
+        },
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "*replied*: Yes"
+          }
+        },
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "*replied*: Name: Ana\nEmail: ana@example.com"
+          }
+        },
+        null,
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Hi &amp; bye",
+            ":verbatim": true
+          }
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "To reply just reply on a thread"
+            }
+          ]
+        }
+      ],
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "thread_head with only a blank block",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {},
+        "state": "replied"
+      }
+    ],
+    "outcome": {
+      "result": [
+        {
+          ":type": "section",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Conversation initiated by *<https://chat.example.com/apps/app-key/users/1|Ana Lima · ana@example.com · (App user)>* <https://chat.example.com/apps/app-key/conversations/conversation-key|view in chaskiq>"
+          }
+        },
+        {
+          ":type": "section",
+          ":fields": [
+            {
+              ":type": "mrkdwn",
+              ":text": "*Info:* Ana Lima ana@example.com"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:* Lima, LIM "
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*When:* 02 Jan 03:04"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Seen:* 01 Jan 10:20"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Assignee:* Unassigned"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*Device:*\nFirefox 140.0 / Linux"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "*From:*\n<https://shop.example.com/pricing | URL: https://shop.example.com/pricing>"
+            }
+          ]
+        },
+        {
+          ":type": "actions",
+          ":elements": [
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Close"
+              },
+              ":value": "close",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              }
+            },
+            {
+              ":type": "button",
+              ":text": {
+                ":type": "plain_text",
+                ":emoji": true,
+                ":text": "Prioritize"
+              },
+              ":value": "prioritize",
+              ":confirm": {
+                ":title": {
+                  ":type": "plain_text",
+                  ":text": "Are you sure?"
+                },
+                ":text": {
+                  ":type": "mrkdwn",
+                  ":text": "This action will change the state of the conversation"
+                },
+                ":confirm": {
+                  ":type": "plain_text",
+                  ":text": "Do it"
+                },
+                ":deny": {
+                  ":type": "plain_text",
+                  ":text": "Stop, I've changed my mind!"
+                }
+              },
+              ":style": "primary"
+            }
+          ]
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Priority: NO"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "State: opened"
+            },
+            {
+              ":type": "image",
+              ":image_url": "https://api.slack.com/img/blocks/bkb_template_images/task-icon.png",
+              ":alt_text": "Task Icon"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Task"
+            },
+            {
+              ":type": "mrkdwn",
+              ":text": "Unassigned"
+            }
+          ]
+        },
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "section",
+          ":block_id": "section678",
+          ":text": {
+            ":type": "mrkdwn",
+            ":text": "Pick an agent and assign them to the conversation"
+          },
+          ":accessory": {
+            ":action_id": "pick-agent",
+            ":type": "external_select",
+            ":placeholder": {
+              ":type": "plain_text",
+              ":text": "Select an item"
+            },
+            ":min_query_length": 3
+          }
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "Message"
+            }
+          ]
+        },
+        null,
+        {
+          ":type": "divider"
+        },
+        {
+          ":type": "context",
+          ":elements": [
+            {
+              ":type": "mrkdwn",
+              ":text": "To reply just reply on a thread"
+            }
+          ]
+        }
+      ],
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "thread_head with a replied block holding an array",
+    "call": "thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": [
+          [
+            "label",
+            "x"
+          ]
+        ],
+        "state": "replied"
+      }
+    ],
+    "outcome": {
+      "result": {
+        "@raise": "TypeError"
+      },
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_added app user stores the thread",
+    "call": "notify_added",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "assignee": "bob"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "outcome": {
+      "result": {
+        "@record": "ConversationChannel",
+        "attributes": {
+          "id": 1,
+          "provider": "slack",
+          "provider_channel_id": "1700000000.000100",
+          "conversation_id": 1,
+          "data": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"New conversation from Chaskiq\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Conversation initiated by *\\u003chttps://chat.example.com/apps/app-key/users/1|Ana Lima · ana@example.com · (App user)\\u003e* \\u003chttps://chat.example.com/apps/app-key/conversations/conversation-key|view in chaskiq\\u003e\"}},{\"type\":\"section\",\"fields\":[{\"type\":\"mrkdwn\",\"text\":\"*Info:* Ana Lima ana@example.com\"},{\"type\":\"mrkdwn\",\"text\":\"*From:* Lima, LIM \"},{\"type\":\"mrkdwn\",\"text\":\"*When:* 02 Jan 03:04\"},{\"type\":\"mrkdwn\",\"text\":\"*Seen:* 01 Jan 10:20\"},{\"type\":\"mrkdwn\",\"text\":\"*Assignee:* Bob Agent\"},{\"type\":\"mrkdwn\",\"text\":\"*Device:*\\nFirefox 140.0 / Linux\"},{\"type\":\"mrkdwn\",\"text\":\"*From:*\\n\\u003chttps://shop.example.com/pricing | URL: https://shop.example.com/pricing\\u003e\"}]},{\"type\":\"actions\",\"elements\":[{\"type\":\"button\",\"text\":{\"type\":\"plain_text\",\"emoji\":true,\"text\":\"Close\"},\"value\":\"close\",\"confirm\":{\"title\":{\"type\":\"plain_text\",\"text\":\"Are you sure?\"},\"text\":{\"type\":\"mrkdwn\",\"text\":\"This action will change the state of the conversation\"},\"confirm\":{\"type\":\"plain_text\",\"text\":\"Do it\"},\"deny\":{\"type\":\"plain_text\",\"text\":\"Stop, I've changed my mind!\"}}},{\"type\":\"button\",\"text\":{\"type\":\"plain_text\",\"emoji\":true,\"text\":\"Prioritize\"},\"value\":\"prioritize\",\"confirm\":{\"title\":{\"type\":\"plain_text\",\"text\":\"Are you sure?\"},\"text\":{\"type\":\"mrkdwn\",\"text\":\"This action will change the state of the conversation\"},\"confirm\":{\"type\":\"plain_text\",\"text\":\"Do it\"},\"deny\":{\"type\":\"plain_text\",\"text\":\"Stop, I've changed my mind!\"}},\"style\":\"primary\"}]},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"Priority: NO\"},{\"type\":\"mrkdwn\",\"text\":\"State: opened\"},{\"type\":\"image\",\"image_url\":\"https://api.slack.com/img/blocks/bkb_template_images/task-icon.png\",\"alt_text\":\"Task Icon\"},{\"type\":\"mrkdwn\",\"text\":\"Task\"},{\"type\":\"image\",\"image_url\":\"https://www.gravatar.com/avatar/4b9bb80620f03eb3719e0a061c14283d?d=https://ui-avatars.com/api/Bob+Agent/128\",\"alt_text\":\"Bob Agent\"},{\"type\":\"mrkdwn\",\"text\":\"Bob Agent\"}]},{\"type\":\"divider\"},{\"type\":\"section\",\"block_id\":\"section678\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Pick an agent and assign them to the conversation\"},\"accessory\":{\"action_id\":\"pick-agent\",\"type\":\"external_select\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Select an item\"},\"min_query_length\":3}},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"Message\"}]},{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Hello \\u0026lt;team\\u0026gt; \\u0026amp; co\",\"verbatim\":true}},{\"type\":\"divider\"},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"To reply just reply on a thread\"}]}]}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_added lead rejected by slack",
+    "call": "notify_added",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {
+      "state": "closed"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "bob",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":false,\"error\":\"channel_not_found\"}"
+      }
+    },
+    "outcome": {
+      "result": null,
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-LEADS\",\"text\":\"New conversation from Chaskiq\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Conversation initiated by *\\u003chttps://chat.example.com/apps/app-key/users/1|Leo Ray · leo@example.com · (Lead)\\u003e* \\u003chttps://chat.example.com/apps/app-key/conversations/conversation-key|view in chaskiq\\u003e\"}},{\"type\":\"section\",\"fields\":[{\"type\":\"mrkdwn\",\"text\":\"*Info:* Leo Ray leo@example.com\"},{\"type\":\"mrkdwn\",\"text\":\"*From:* ,  \"},{\"type\":\"mrkdwn\",\"text\":\"*When:* 02 Jan 03:04\"},{\"type\":\"mrkdwn\",\"text\":\"*Seen:* unknown\"},{\"type\":\"mrkdwn\",\"text\":\"*Assignee:* Unassigned\"},{\"type\":\"mrkdwn\",\"text\":\"*Device:*\\nSafari 18 / macOS\"},{\"type\":\"mrkdwn\",\"text\":\"*From:*\\n\\u003c | URL: \\u003e\"}]},{\"type\":\"actions\",\"elements\":[{\"type\":\"button\",\"text\":{\"type\":\"plain_text\",\"emoji\":true,\"text\":\"Open\"},\"value\":\"open\",\"confirm\":{\"title\":{\"type\":\"plain_text\",\"text\":\"Are you sure?\"},\"text\":{\"type\":\"mrkdwn\",\"text\":\"This action will change the state of the conversation\"},\"confirm\":{\"type\":\"plain_text\",\"text\":\"Do it\"},\"deny\":{\"type\":\"plain_text\",\"text\":\"Stop, I've changed my mind!\"}}},{\"type\":\"button\",\"text\":{\"type\":\"plain_text\",\"emoji\":true,\"text\":\"Prioritize\"},\"value\":\"prioritize\",\"confirm\":{\"title\":{\"type\":\"plain_text\",\"text\":\"Are you sure?\"},\"text\":{\"type\":\"mrkdwn\",\"text\":\"This action will change the state of the conversation\"},\"confirm\":{\"type\":\"plain_text\",\"text\":\"Do it\"},\"deny\":{\"type\":\"plain_text\",\"text\":\"Stop, I've changed my mind!\"}},\"style\":\"primary\"}]},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"Priority: NO\"},{\"type\":\"mrkdwn\",\"text\":\"State: closed\"},{\"type\":\"image\",\"image_url\":\"https://api.slack.com/img/blocks/bkb_template_images/task-icon.png\",\"alt_text\":\"Task Icon\"},{\"type\":\"mrkdwn\",\"text\":\"Task\"},{\"type\":\"mrkdwn\",\"text\":\"Unassigned\"}]},{\"type\":\"divider\"},{\"type\":\"section\",\"block_id\":\"section678\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Pick an agent and assign them to the conversation\"},\"accessory\":{\"action_id\":\"pick-agent\",\"type\":\"external_select\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Select an item\"},\"min_query_length\":3}},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"Message\"}]},{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Hello \\u0026lt;team\\u0026gt; \\u0026amp; co\",\"verbatim\":true}},{\"type\":\"divider\"},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"To reply just reply on a thread\"}]}]}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "update_thread_head uses the last slack thread",
+    "call": "update_thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": [
+        "1.1",
+        "2.2"
+      ],
+      "priority": true
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "outcome": {
+      "result": {
+        "ok": true,
+        "ts": "2.2",
+        "channel": "C-USERS"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.update",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"New conversation from Chaskiq\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Conversation initiated by *\\u003chttps://chat.example.com/apps/app-key/users/1|Ana Lima · ana@example.com · (App user)\\u003e* \\u003chttps://chat.example.com/apps/app-key/conversations/conversation-key|view in chaskiq\\u003e\"}},{\"type\":\"section\",\"fields\":[{\"type\":\"mrkdwn\",\"text\":\"*Info:* Ana Lima ana@example.com\"},{\"type\":\"mrkdwn\",\"text\":\"*From:* Lima, LIM \"},{\"type\":\"mrkdwn\",\"text\":\"*When:* 02 Jan 03:04\"},{\"type\":\"mrkdwn\",\"text\":\"*Seen:* 01 Jan 10:20\"},{\"type\":\"mrkdwn\",\"text\":\"*Assignee:* Unassigned\"},{\"type\":\"mrkdwn\",\"text\":\"*Device:*\\nFirefox 140.0 / Linux\"},{\"type\":\"mrkdwn\",\"text\":\"*From:*\\n\\u003chttps://shop.example.com/pricing | URL: https://shop.example.com/pricing\\u003e\"}]},{\"type\":\"actions\",\"elements\":[{\"type\":\"button\",\"text\":{\"type\":\"plain_text\",\"emoji\":true,\"text\":\"Close\"},\"value\":\"close\",\"confirm\":{\"title\":{\"type\":\"plain_text\",\"text\":\"Are you sure?\"},\"text\":{\"type\":\"mrkdwn\",\"text\":\"This action will change the state of the conversation\"},\"confirm\":{\"type\":\"plain_text\",\"text\":\"Do it\"},\"deny\":{\"type\":\"plain_text\",\"text\":\"Stop, I've changed my mind!\"}}},{\"type\":\"button\",\"text\":{\"type\":\"plain_text\",\"emoji\":true,\"text\":\"UnPrioritize\"},\"value\":\"unprioritize\",\"confirm\":{\"title\":{\"type\":\"plain_text\",\"text\":\"Are you sure?\"},\"text\":{\"type\":\"mrkdwn\",\"text\":\"This action will change the state of the conversation\"},\"confirm\":{\"type\":\"plain_text\",\"text\":\"Do it\"},\"deny\":{\"type\":\"plain_text\",\"text\":\"Stop, I've changed my mind!\"}},\"style\":\"danger\"}]},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"Priority: YES\"},{\"type\":\"mrkdwn\",\"text\":\"State: opened\"},{\"type\":\"image\",\"image_url\":\"https://api.slack.com/img/blocks/bkb_template_images/task-icon.png\",\"alt_text\":\"Task Icon\"},{\"type\":\"mrkdwn\",\"text\":\"Task\"},{\"type\":\"mrkdwn\",\"text\":\"Unassigned\"}]},{\"type\":\"divider\"},{\"type\":\"section\",\"block_id\":\"section678\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Pick an agent and assign them to the conversation\"},\"accessory\":{\"action_id\":\"pick-agent\",\"type\":\"external_select\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Select an item\"},\"min_query_length\":3}},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"Message\"}]},{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Hello \\u0026lt;team\\u0026gt; \\u0026amp; co\",\"verbatim\":true}},{\"type\":\"divider\"},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"To reply just reply on a thread\"}]}],\"ts\":\"2.2\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "update_thread_head with an explicit slack id",
+    "call": "update_thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {
+      "slack_ts": [
+        "1.1"
+      ],
+      "assignee": "nameless"
+    },
+    "messages": [],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "slack_id": "9.9",
+    "outcome": {
+      "result": {
+        "ok": true,
+        "ts": "2.2",
+        "channel": "C-USERS"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.update",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-LEADS\",\"text\":\"New conversation from Chaskiq\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Conversation initiated by *\\u003chttps://chat.example.com/apps/app-key/users/1|Leo Ray · leo@example.com · (Lead)\\u003e* \\u003chttps://chat.example.com/apps/app-key/conversations/conversation-key|view in chaskiq\\u003e\"}},{\"type\":\"section\",\"fields\":[{\"type\":\"mrkdwn\",\"text\":\"*Info:* Leo Ray leo@example.com\"},{\"type\":\"mrkdwn\",\"text\":\"*From:* ,  \"},{\"type\":\"mrkdwn\",\"text\":\"*When:* 02 Jan 03:04\"},{\"type\":\"mrkdwn\",\"text\":\"*Seen:* unknown\"},{\"type\":\"mrkdwn\",\"text\":\"*Assignee:* nameless@example.com\"},{\"type\":\"mrkdwn\",\"text\":\"*Device:*\\nSafari 18 / macOS\"},{\"type\":\"mrkdwn\",\"text\":\"*From:*\\n\\u003c | URL: \\u003e\"}]},{\"type\":\"actions\",\"elements\":[{\"type\":\"button\",\"text\":{\"type\":\"plain_text\",\"emoji\":true,\"text\":\"Close\"},\"value\":\"close\",\"confirm\":{\"title\":{\"type\":\"plain_text\",\"text\":\"Are you sure?\"},\"text\":{\"type\":\"mrkdwn\",\"text\":\"This action will change the state of the conversation\"},\"confirm\":{\"type\":\"plain_text\",\"text\":\"Do it\"},\"deny\":{\"type\":\"plain_text\",\"text\":\"Stop, I've changed my mind!\"}}},{\"type\":\"button\",\"text\":{\"type\":\"plain_text\",\"emoji\":true,\"text\":\"Prioritize\"},\"value\":\"prioritize\",\"confirm\":{\"title\":{\"type\":\"plain_text\",\"text\":\"Are you sure?\"},\"text\":{\"type\":\"mrkdwn\",\"text\":\"This action will change the state of the conversation\"},\"confirm\":{\"type\":\"plain_text\",\"text\":\"Do it\"},\"deny\":{\"type\":\"plain_text\",\"text\":\"Stop, I've changed my mind!\"}},\"style\":\"primary\"}]},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"Priority: NO\"},{\"type\":\"mrkdwn\",\"text\":\"State: opened\"},{\"type\":\"image\",\"image_url\":\"https://api.slack.com/img/blocks/bkb_template_images/task-icon.png\",\"alt_text\":\"Task Icon\"},{\"type\":\"mrkdwn\",\"text\":\"Task\"},{\"type\":\"image\",\"image_url\":\"https://www.gravatar.com/avatar/0004ffb72d5a6c923c928f79bd7e7705?d=https://ui-avatars.com/api//128\",\"alt_text\":\"nameless@example.com\"},{\"type\":\"mrkdwn\",\"text\":\"nameless@example.com\"}]},{\"type\":\"divider\"},{\"type\":\"section\",\"block_id\":\"section678\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Pick an agent and assign them to the conversation\"},\"accessory\":{\"action_id\":\"pick-agent\",\"type\":\"external_select\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Select an item\"},\"min_query_length\":3}},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"Message\"}]},{\"type\":\"divider\"},{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"To reply just reply on a thread\"}]}],\"ts\":\"9.9\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "update_thread_head without a slack thread",
+    "call": "update_thread_head",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "outcome": {
+      "result": null,
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message agent content",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "bob",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Hello \\u0026lt;team\\u0026gt; \\u0026amp; co\",\"verbatim\":true}}],\"username\":\"Bob Agent · bob@example.com · (Agent)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message app user rich content",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"heading\", \"content\": [{\"type\": \"text\", \"text\": \"Order 42\"}]}, {\"type\": \"DividerBlock\"}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo.jpg\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/doc.pdf\"}}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Order 42\",\"verbatim\":true}},{\"type\":\"divider\"},{\"type\":\"image\",\"image_url\":\"https://chat.example.com/uploads/photo.jpg\",\"alt_text\":\"Image\"},{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"\\u003chttps://cdn.example.com/doc.pdf|View attachment\\u003e\",\"verbatim\":true}}],\"username\":\"Ana Lima · ana@example.com · (App user)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message lead content goes to the leads channel",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-LEADS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Hello \\u0026lt;team\\u0026gt; \\u0026amp; co\",\"verbatim\":true}}],\"username\":\"Leo Ray · leo@example.com · (Lead)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message html only content",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "",
+        "html_content": "<p>Plain &amp; <i>simple</i></p>"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Plain \\u0026amp; simple\",\"verbatim\":true}}],\"username\":\"Ana Lima · ana@example.com · (App user)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message already delivered",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}",
+        "delivered": "8.8"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": null,
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message without a slack thread",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": null,
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message blank content",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "",
+        "html_content": ""
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": null,
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message rejected by slack",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "content",
+        "author": "participant",
+        "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello <team> & co\"}]}]}"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":false,\"error\":\"channel_not_found\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": null,
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"Hello \\u0026lt;team\\u0026gt; \\u0026amp; co\",\"verbatim\":true}}],\"username\":\"Ana Lima · ana@example.com · (App user)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message unreplied block",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "label": "x"
+        },
+        "state": "pending"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": null,
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message replied block with a label",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "label": "Yes",
+          "value": "y"
+        },
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*replied*: Yes\"}}],\"username\":\"Ana Lima · ana@example.com · (App user)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message replied block without a label",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "name": "Ana",
+          "email": "ana@example.com"
+        },
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*replied*: Name: Ana\\nEmail: ana@example.com\"}}],\"username\":\"Ana Lima · ana@example.com · (App user)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message replied block without data",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": null,
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*replied*: \"}}],\"username\":\"Ana Lima · ana@example.com · (App user)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message replied block from a lead",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "label": "No"
+        },
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-LEADS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*replied*: No\"}}],\"username\":\"Leo Ray · leo@example.com · (Lead)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message replied block holding a string",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": "plain text",
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*replied*: \"}}],\"username\":\"Ana Lima · ana@example.com · (App user)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message replied block holding an array",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": [
+          [
+            "label",
+            "x"
+          ]
+        ],
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@raise": "TypeError"
+      },
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message replied block without a slack thread",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "block",
+        "author": "bob",
+        "data": {
+          "label": "Yes"
+        },
+        "state": "replied"
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": null,
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message event with blank and id fields",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "closed",
+        "data": {
+          "id": 7,
+          "label": "Done",
+          "status": "",
+          "by": "Bob"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*event*: closed \\n *LABEL*: Done *BY*: Bob\"}}],\"username\":\"Bob Agent · bob@example.com · (Agent)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message event holding an array",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "closed",
+        "data": [
+          [
+            "label",
+            "Done"
+          ]
+        ]
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*event*: closed \\n \"}}],\"username\":\"Bob Agent · bob@example.com · (Agent)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message event without data",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "reopened",
+        "data": null
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*event*: reopened \\n \"}}],\"username\":\"Bob Agent · bob@example.com · (Agent)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message assignment mentions the slack user",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "email": "bob@example.com",
+          "name": "Bob"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      },
+      "GET https://slack.com/api/users.lookupByEmail": {
+        "body": "{\"ok\":true,\"user\":{\"id\":\"U42\",\"name\":\"bob\"}}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://slack.com/api/users.lookupByEmail?email=bob@example.com",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        },
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*event*: assigned \\n *EMAIL*: bob@example.com *NAME*: Bob\\n \\u003c@U42\\u003e\"}}],\"username\":\"Bob Agent · bob@example.com · (Agent)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message assignment with an unknown slack user",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "email": "ghost@example.com"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      },
+      "GET https://slack.com/api/users.lookupByEmail": {
+        "body": "{\"ok\":false,\"error\":\"users_not_found\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://slack.com/api/users.lookupByEmail?email=ghost@example.com",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        },
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*event*: assigned \\n *EMAIL*: ghost@example.com\"}}],\"username\":\"Bob Agent · bob@example.com · (Agent)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message assignment without an email",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "name": "Bob"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*event*: assigned \\n *NAME*: Bob\"}}],\"username\":\"Bob Agent · bob@example.com · (Agent)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message assignment with a blank email",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "email": "",
+          "name": "Bob"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*event*: assigned \\n *NAME*: Bob\"}}],\"username\":\"Bob Agent · bob@example.com · (Agent)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message other event with an email",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "closed",
+        "data": {
+          "email": "bob@example.com"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-USERS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*event*: closed \\n *EMAIL*: bob@example.com\"}}],\"username\":\"Bob Agent · bob@example.com · (Agent)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message assignment without a slack thread",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "AppUser",
+      "email": "ana@example.com",
+      "properties": {
+        "name": "Ana Lima"
+      },
+      "columns": {
+        "city": "Lima",
+        "region": "LIM",
+        "browser": "Firefox",
+        "browser_version": "140.0",
+        "os": "Linux",
+        "referrer": "https://shop.example.com/pricing",
+        "last_visited_at": "2026-01-01T10:20:30Z"
+      }
+    },
+    "conversation": {},
+    "messages": [
+      {
+        "kind": "event",
+        "author": "bob",
+        "action": "assigned",
+        "data": {
+          "email": "bob@example.com"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      },
+      "GET https://slack.com/api/users.lookupByEmail": {
+        "body": "{\"ok\":true,\"user\":{\"id\":\"U42\"}}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": null,
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://slack.com/api/users.lookupByEmail?email=bob@example.com",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "notify_message event from the participant",
+    "call": "notify_message",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "agents": {
+      "bob": {
+        "email": "bob@example.com",
+        "name": "Bob Agent"
+      },
+      "nameless": {
+        "email": "nameless@example.com"
+      }
+    },
+    "participant": {
+      "type": "Lead",
+      "email": "leo@example.com",
+      "properties": {
+        "first_name": "Leo",
+        "last_name": "Ray"
+      },
+      "columns": {
+        "browser": "Safari",
+        "browser_version": "18",
+        "os": "macOS"
+      }
+    },
+    "conversation": {
+      "slack_ts": "171.1"
+    },
+    "messages": [
+      {
+        "kind": "event",
+        "author": "participant",
+        "action": "closed",
+        "data": {
+          "label": "x"
+        }
+      }
+    ],
+    "replies": {
+      "POST https://slack.com/api/chat.postMessage": {
+        "body": "{\"ok\":true,\"ts\":\"1700000000.000100\"}"
+      },
+      "POST https://slack.com/api/chat.update": {
+        "body": "{\"ok\":true,\"ts\":\"2.2\",\"channel\":\"C-USERS\"}"
+      }
+    },
+    "part": 0,
+    "outcome": {
+      "result": {
+        "@record": "ConversationPartChannelSource",
+        "attributes": {
+          "id": 1,
+          "conversation_part_id": 1,
+          "provider": "slack",
+          "message_source_id": "1700000000.000100",
+          "delivery_index": null
+        }
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "uri": "https://slack.com/api/chat.postMessage",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/json; charset=utf-8",
+          "body": "{\"channel\":\"C-LEADS\",\"text\":\"new message\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*event*: closed \\n *LABEL*: x\"}}],\"username\":\"Leo Ray · leo@example.com · (Lead)\",\"thread_ts\":\"171.1\"}"
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "serialize_content hosted image",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png",
+        "width": 2000,
+        "height": 1000
+      }
+    },
+    "outcome": {
+      "result": "{\"blocks\":[{\"type\":\"text\",\"text\":\"first line\"},{\"type\":\"text\",\"text\":\"second line\"},{\"type\":\"ImageBlock\",\"content\":[],\"attrs\":{\"caption\":\"photo.png\",\"forceUpload\":false,\"url\":\"/rails/blobs/photo.png\",\"width\":2000,\"height\":1000,\"loading_progress\":0,\"selected\":false,\"loading\":true,\"file\":{},\"direction\":\"center\",\"aspect_ratio\":{\"width\":1000.0,\"height\":500.0,\"ratio\":50.0}}}],\"entityMap\":{}}",
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://files.slack.com/files-pri/T1-F1/photo.png",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        }
+      ],
+      "uploads": [
+        {
+          "filename": "photo.png",
+          "content_type": "image/png",
+          "data": "PNG-BYTES"
+        }
+      ]
+    }
+  },
+  {
+    "name": "serialize_content file checked through files.info",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "see attached",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F2",
+          "mode": "file_access",
+          "file_access": "check_file_info"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      },
+      "GET https://slack.com/api/files.info": {
+        "body": "{\"ok\": true, \"file\": {\"id\": \"F2\", \"title\": \"Report\", \"mimetype\": \"application/pdf\", \"url_private_download\": \"https://files.slack.com/files-pri/T1-F2/report.pdf\"}}"
+      }
+    },
+    "uploads": {
+      "report.pdf": {
+        "url": "/rails/blobs/report.pdf"
+      }
+    },
+    "outcome": {
+      "result": "{\"blocks\":[{\"type\":\"text\",\"text\":\"see attached\"},{\"type\":\"FileBlock\",\"content\":[],\"attrs\":{\"caption\":\"Report\",\"forceUpload\":false,\"url\":\"/rails/blobs/report.pdf\",\"loading_progress\":0,\"selected\":false,\"loading\":true,\"file\":{},\"direction\":\"center\"}}],\"entityMap\":{}}",
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://slack.com/api/files.info?file=F2&token=xoxb-bot",
+          "authorization": null,
+          "content_type": "application/x-www-form-urlencoded",
+          "body": null
+        },
+        {
+          "method": "GET",
+          "uri": "https://files.slack.com/files-pri/T1-F2/report.pdf",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        }
+      ],
+      "uploads": [
+        {
+          "filename": "report.pdf",
+          "content_type": "application/pdf",
+          "data": "PDF-BYTES"
+        }
+      ]
+    }
+  },
+  {
+    "name": "serialize_content two files",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        },
+        {
+          "id": "F2",
+          "mode": "file_access",
+          "file_access": "check_file_info"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      },
+      "GET https://slack.com/api/files.info": {
+        "body": "{\"ok\": true, \"file\": {\"id\": \"F2\", \"title\": \"Report\", \"mimetype\": \"application/pdf\", \"url_private_download\": \"https://files.slack.com/files-pri/T1-F2/report.pdf\"}}"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png",
+        "width": 2000,
+        "height": 1000
+      },
+      "report.pdf": {
+        "url": "/rails/blobs/report.pdf"
+      }
+    },
+    "outcome": {
+      "result": "{\"blocks\":[{\"type\":\"text\",\"text\":\"first line\"},{\"type\":\"text\",\"text\":\"second line\"},{\"type\":\"ImageBlock\",\"content\":[],\"attrs\":{\"caption\":\"photo.png\",\"forceUpload\":false,\"url\":\"/rails/blobs/photo.png\",\"width\":2000,\"height\":1000,\"loading_progress\":0,\"selected\":false,\"loading\":true,\"file\":{},\"direction\":\"center\",\"aspect_ratio\":{\"width\":1000.0,\"height\":500.0,\"ratio\":50.0}}},{\"type\":\"FileBlock\",\"content\":[],\"attrs\":{\"caption\":\"Report\",\"forceUpload\":false,\"url\":\"/rails/blobs/report.pdf\",\"loading_progress\":0,\"selected\":false,\"loading\":true,\"file\":{},\"direction\":\"center\"}}],\"entityMap\":{}}",
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://files.slack.com/files-pri/T1-F1/photo.png",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        },
+        {
+          "method": "GET",
+          "uri": "https://slack.com/api/files.info?file=F2&token=xoxb-bot",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": "application/x-www-form-urlencoded",
+          "body": null
+        },
+        {
+          "method": "GET",
+          "uri": "https://files.slack.com/files-pri/T1-F2/report.pdf",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        }
+      ],
+      "uploads": [
+        {
+          "filename": "photo.png",
+          "content_type": "image/png",
+          "data": "PNG-BYTES"
+        },
+        {
+          "filename": "report.pdf",
+          "content_type": "application/pdf",
+          "data": "PDF-BYTES"
+        }
+      ]
+    }
+  },
+  {
+    "name": "serialize_content image without size",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png"
+      }
+    },
+    "outcome": {
+      "result": "{\"blocks\":[{\"type\":\"text\",\"text\":\"first line\"},{\"type\":\"text\",\"text\":\"second line\"},{\"type\":\"ImageBlock\",\"content\":[],\"attrs\":{\"caption\":\"photo.png\",\"forceUpload\":false,\"url\":\"/rails/blobs/photo.png\",\"width\":100,\"height\":100,\"loading_progress\":0,\"selected\":false,\"loading\":true,\"file\":{},\"direction\":\"center\"}}],\"entityMap\":{}}",
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://files.slack.com/files-pri/T1-F1/photo.png",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        }
+      ],
+      "uploads": [
+        {
+          "filename": "photo.png",
+          "content_type": "image/png",
+          "data": "PNG-BYTES"
+        }
+      ]
+    }
+  },
+  {
+    "name": "serialize_content second file without a download url",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        },
+        {
+          "id": "F3",
+          "mode": "hosted",
+          "title": "x"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png",
+        "width": 2000,
+        "height": 1000
+      }
+    },
+    "outcome": {
+      "result": null,
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://files.slack.com/files-pri/T1-F1/photo.png",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        }
+      ],
+      "uploads": [
+        {
+          "filename": "photo.png",
+          "content_type": "image/png",
+          "data": "PNG-BYTES"
+        }
+      ]
+    }
+  },
+  {
+    "name": "serialize_content files.info refuses",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F2",
+          "mode": "file_access",
+          "file_access": "check_file_info"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      },
+      "GET https://slack.com/api/files.info": {
+        "body": "{\"ok\":false}"
+      }
+    },
+    "uploads": {
+      "report.pdf": {
+        "url": "/rails/blobs/report.pdf"
+      }
+    },
+    "outcome": {
+      "result": null,
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://slack.com/api/files.info?file=F2&token=xoxb-bot",
+          "authorization": null,
+          "content_type": "application/x-www-form-urlencoded",
+          "body": null
+        }
+      ],
+      "uploads": []
+    }
+  },
+  {
+    "name": "serialize_content upload returns nothing",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {},
+    "outcome": {
+      "result": {
+        "@raise": "NoMethodError"
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://files.slack.com/files-pri/T1-F1/photo.png",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        }
+      ],
+      "uploads": [
+        {
+          "filename": "photo.png",
+          "content_type": "image/png",
+          "data": "PNG-BYTES"
+        }
+      ]
+    }
+  },
+  {
+    "name": "serialize_content file without a mimetype",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "first line\n\nsecond line\n",
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F4",
+          "mode": "hosted",
+          "title": "blob",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png",
+        "width": 2000,
+        "height": 1000
+      }
+    },
+    "outcome": {
+      "result": {
+        "@raise": "NoMethodError"
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://files.slack.com/files-pri/T1-F1/photo.png",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        }
+      ],
+      "uploads": [
+        {
+          "filename": "photo.png",
+          "content_type": "image/jpeg",
+          "data": "PNG-BYTES"
+        }
+      ]
+    }
+  },
+  {
+    "name": "serialize_content files without text",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": null,
+      "ts": "5.5",
+      "files": [
+        {
+          "id": "F1",
+          "mode": "hosted",
+          "title": "photo.png",
+          "mimetype": "image/png",
+          "url_private_download": "https://files.slack.com/files-pri/T1-F1/photo.png"
+        }
+      ]
+    },
+    "replies": {
+      "GET https://files.slack.com/files-pri/T1-F1/photo.png": {
+        "body": "PNG-BYTES"
+      },
+      "GET https://files.slack.com/files-pri/T1-F2/report.pdf": {
+        "body": "PDF-BYTES"
+      }
+    },
+    "uploads": {
+      "photo.png": {
+        "url": "/rails/blobs/photo.png",
+        "width": 2000,
+        "height": 1000
+      }
+    },
+    "outcome": {
+      "result": {
+        "@raise": "NoMethodError"
+      },
+      "requests": [
+        {
+          "method": "GET",
+          "uri": "https://files.slack.com/files-pri/T1-F1/photo.png",
+          "authorization": "Bearer xoxb-bot",
+          "content_type": null,
+          "body": null
+        }
+      ],
+      "uploads": [
+        {
+          "filename": "photo.png",
+          "content_type": "image/png",
+          "data": "PNG-BYTES"
+        }
+      ]
+    }
+  },
+  {
+    "name": "serialize_content empty file list",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "only\ntext",
+      "ts": "5.5",
+      "files": []
+    },
+    "outcome": {
+      "result": "{\"blocks\":[{\"type\":\"text\",\"text\":\"only\"},{\"type\":\"text\",\"text\":\"text\"}],\"entityMap\":{}}",
+      "requests": [],
+      "uploads": []
+    }
+  },
+  {
+    "name": "serialize_content without files",
+    "call": "serialize_content",
+    "config": {
+      "access_token": "xoxb-bot",
+      "access_token_secret": "xoxp-user",
+      "slack_channel_id": "C-USERS",
+      "slack_channel_id_leads": "C-LEADS"
+    },
+    "event": {
+      "type": "message",
+      "text": "hi <https://example.com|link> :smile:",
+      "blocks": [
+        {
+          "type": "image",
+          "image_url": "https://img.example.com/a.png",
+          "image_width": 10,
+          "image_height": 20,
+          "alt_text": "a"
+        }
+      ]
+    },
+    "outcome": {
+      "result": "{\"blocks\":[{\"type\":\"text\",\"text\":\"hi https://example.com 😄\"},{\"type\":\"ImageBlock\",\"content\":[],\"attrs\":{\"caption\":\"a\",\"forceUpload\":false,\"url\":\"https://img.example.com/a.png\",\"width\":10,\"height\":20,\"loading_progress\":0,\"selected\":false,\"loading\":true,\"file\":{},\"direction\":\"center\",\"aspect_ratio\":{\"width\":10.0,\"height\":20.0,\"ratio\":200.0}}}]}",
+      "requests": [],
+      "uploads": []
+    }
+  }
+]
