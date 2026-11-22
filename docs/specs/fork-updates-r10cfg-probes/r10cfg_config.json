@@ -1,0 +1,64 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Metrics/BlockLength": [
+      "app/services/message_apis/dialog360/api.rb",
+      "app/services/message_apis/twitter/api.rb"
+    ],
+    "Metrics/ClassLength": [
+      "app/models/app.rb",
+      "app/models/app_user.rb",
+      "app/models/segment.rb",
+      "app/services/action_trigger_factory.rb"
+    ],
+    "Metrics/MethodLength": [
+      "app/controllers/api/graphql_controller.rb",
+      "app/controllers/api/v1/hooks_controller.rb",
+      "app/controllers/concerns/package_iframe_behavior.rb",
+      "app/controllers/graphql_controller.rb",
+      "app/graphql/types/app_type.rb",
+      "app/models/app.rb",
+      "app/models/bot_task.rb",
+      "app/services/action_trigger.rb",
+      "app/services/message_apis/article_search/presenter.rb",
+      "app/services/message_apis/audits_reports/api.rb",
+      "app/services/message_apis/calendly/api.rb",
+      "app/services/message_apis/calendly/presenter.rb",
+      "app/services/message_apis/contact_fields/presenter.rb",
+      "app/services/message_apis/csat/api.rb",
+      "app/services/message_apis/csat/presenter.rb",
+      "app/services/message_apis/full_contact/presenter.rb",
+      "app/services/message_apis/open_ai/api.rb",
+      "app/services/message_apis/telnyx_sms/api.rb",
+      "app/services/message_apis/twilio/api.rb",
+      "app/services/message_apis/twilio_phone/api.rb",
+      "app/services/message_apis/twilio_phone/presenter.rb",
+      "app/services/message_apis/twitter/api.rb",
+      "app/services/message_apis/zoom/api.rb",
+      "lib/app_packages_catalog.rb",
+      "spec/controllers/api/v1/hooks/calendly_spec.rb",
+      "spec/controllers/api/v1/hooks/dialog_360_spec.rb",
+      "spec/controllers/api/v1/hooks/telegram_spec.rb",
+      "spec/controllers/api/v1/hooks/telnyx_sms_spec.rb",
+      "spec/controllers/api/v1/hooks/twitter_spec.rb"
+    ]
+  },
+  "app_files": [
+    ".rubocop.yml"
+  ],
+  "commits": [
+    {
+      "subject": "Count literals as one line in Metrics",
+      "patch": "r10cfg_rewrite.patch",
+      "added": []
+    },
+    {
+      "subject": "Drop R10cfg entries from RuboCop todo",
+      "todo": true
+    },
+    {
+      "subject": "Note fork-updates-r10cfg in changelog",
+      "changelog": true
+    }
+  ]
+}

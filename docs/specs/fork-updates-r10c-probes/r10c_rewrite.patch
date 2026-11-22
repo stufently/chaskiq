@@ -1,0 +1,196 @@
+diff --git a/app/controllers/api/v1/hooks_controller.rb b/app/controllers/api/v1/hooks_controller.rb
+index 2f65f5e2..4efaed69 100644
+--- a/app/controllers/api/v1/hooks_controller.rb
++++ b/app/controllers/api/v1/hooks_controller.rb
+@@ -233,7 +233,8 @@ module Api
+           handle_inbound_recipient(mail)
+         elsif recipient.starts_with?("campaigns+")
+           handle_campaigns_recipient(mail)
+-        elsif (val = json_message["mail"]["headers"].find { |o| o["name"] == "X-Forwarded-To" }&.dig("value")) && val.present? && val.starts_with?("inbound+")
++        elsif (val = json_message["mail"]["headers"].find { |o| o["name"] == "X-Forwarded-To" }&.dig("value")) &&
++              val.present? && val.starts_with?("inbound+")
+           handle_inbound_recipient_from_forwarded(mail, val)
+         end
+       end
+@@ -262,7 +263,8 @@ module Api
+       def process_attachment(attachment, message)
+         uploaded_data = handle_direct_upload(attachment)
+         attachment_string_pattern = "[image: #{attachment.filename}]"
+-        image_mark = "<img src='#{uploaded_data[:url]}' title='#{attachment.filename}' width='#{uploaded_data[:width]}' height='#{uploaded_data[:height]}' />"
++        image_mark = "<img src='#{uploaded_data[:url]}' title='#{attachment.filename}' " \
++                     "width='#{uploaded_data[:width]}' height='#{uploaded_data[:height]}' />"
+ 
+         # replace for inline attachments or append for attachments
+         if message.include?(attachment_string_pattern)
+diff --git a/app/graphql/types/app_type.rb b/app/graphql/types/app_type.rb
+index 8b805c42..939c57db 100644
+--- a/app/graphql/types/app_type.rb
++++ b/app/graphql/types/app_type.rb
+@@ -268,7 +268,11 @@ module Types
+       sort_conversations(sort)
+       @collection = @collection.tagged_with(tag) if tag.present?
+       if term
+-        query_term = :main_participant_full_name_or_main_participant_name_or_main_participant_email_or_main_participant_postal_or_main_participant_phone_or_messages_messageable_of_ConversationPartContent_type_text_content_i_cont_any
++        query_fields = %w[
++          main_participant_full_name main_participant_name main_participant_email main_participant_postal
++          main_participant_phone messages_messageable_of_ConversationPartContent_type_text_content
++        ]
++        query_term = :"#{query_fields.join('_or_')}_i_cont_any"
+         @collection = @collection.ransack(
+           query_term => term
+         ).result
+diff --git a/app/models/app_user.rb b/app/models/app_user.rb
+index cedec849..a157b803 100644
+--- a/app/models/app_user.rb
++++ b/app/models/app_user.rb
+@@ -136,7 +136,11 @@ class AppUser < ApplicationRecord
+   end
+ 
+   def self.ransackable_attributes(_auth_object = nil)
+-    %w[app_id browser browser_language browser_version city company_name company_size country country_code created_at email facebook first_name first_seen full_name gender id id_value ip job_title key lang last_contacted last_heard_from last_name last_seen last_visited_at lat linkedin lng name organization os os_version phone postal privacy_consent properties referrer region region_code session_id signed_up state subscription_state timezone twitter type updated_at web_sessions]
++    %w[app_id browser browser_language browser_version city company_name company_size country country_code
++       created_at email facebook first_name first_seen full_name gender id id_value ip job_title key lang
++       last_contacted last_heard_from last_name last_seen last_visited_at lat linkedin lng name organization os
++       os_version phone postal privacy_consent properties referrer region region_code session_id signed_up state
++       subscription_state timezone twitter type updated_at web_sessions]
+   end
+ 
+   def self.ransackable_associations(_auth_object = nil)
+@@ -360,7 +364,9 @@ class AppUser < ApplicationRecord
+                              ALLOWED_PROPERTIES.map { |o| { o => send(o) } }.reduce({}, :merge)
+                              .merge(
+                                {
+-                                 external_profiles: external_profiles&.map { |o| { "profile_id" => o.profile_id, "provider" => o.provider } },
++                                 external_profiles: external_profiles&.map do |o|
++                                   { "profile_id" => o.profile_id, "provider" => o.provider }
++                                 end,
+                                  custom_attributes: app.custom_fields&.map { |o| { "name" => o["name"], "value" => properties[o["name"]] } }
+                                }
+                              )
+diff --git a/app/models/campaign.rb b/app/models/campaign.rb
+index e5ab95de..bea24af6 100644
+--- a/app/models/campaign.rb
++++ b/app/models/campaign.rb
+@@ -12,19 +12,24 @@ class Campaign < Message
+ 
+   def config_fields
+     [
+-      { name: "name", label: I18n.t("definitions.campaigns.campaign_name.label"), hint: I18n.t("definitions.campaigns.campaign_name.hint"), type: "string", grid: { xs: "w-full", sm: "w-full" } },
++      { name: "name", label: I18n.t("definitions.campaigns.campaign_name.label"),
++        hint: I18n.t("definitions.campaigns.campaign_name.hint"), type: "string", grid: { xs: "w-full", sm: "w-full" } },
+       { name: "fromName", label: I18n.t("definitions.campaigns.from_name.label"), type: "string", grid: { xs: "w-full", sm: "w-1/2" } },
+-      { name: "subject", label: I18n.t("definitions.campaigns.email_subject.label"), hint: I18n.t("definitions.campaigns.email_subject.hint"), type: "text", grid: { xs: "w-full", sm: "w-full" } },
++      { name: "subject", label: I18n.t("definitions.campaigns.email_subject.label"),
++        hint: I18n.t("definitions.campaigns.email_subject.hint"), type: "text", grid: { xs: "w-full", sm: "w-full" } },
+       # { name: 'fromEmail', label: I18n.t('definitions.campaigns.from_email.label'), type: 'string', grid: { xs: 'w-full', sm: 'w-1/2' } },
+-      # { name: "replyEmail", label: I18n.t("definitions.campaigns.reply_email.label"), type: "string", grid: { xs: "w-full", sm: "w-1/2" } },
++      # { name: "replyEmail", label: I18n.t("definitions.campaigns.reply_email.label"), type: "string",
++      #   grid: { xs: "w-full", sm: "w-1/2" } },
+       { name: "description", type: "textarea", grid: { xs: "w-full", sm: "w-full" } },
+       { name: "timezone", type: "timezone",
+         options: ActiveSupport::TimeZone.all.map { |o| o.tzinfo.name },
+         multiple: false,
+         grid: { xs: "w-full", sm: "w-full" } },
+       # {name: "settings", type: 'string'} ,
+-      { name: "scheduledAt", label: I18n.t("definitions.campaigns.scheduled_at.label"), type: "datetime", grid: { xs: "w-full", sm: "w-1/2" } },
+-      { name: "scheduledTo", label: I18n.t("definitions.campaigns.scheduled_to.label"), type: "datetime", grid: { xs: "w-full", sm: "w-1/2" } }
++      { name: "scheduledAt", label: I18n.t("definitions.campaigns.scheduled_at.label"), type: "datetime",
++        grid: { xs: "w-full", sm: "w-1/2" } },
++      { name: "scheduledTo", label: I18n.t("definitions.campaigns.scheduled_to.label"), type: "datetime",
++        grid: { xs: "w-full", sm: "w-1/2" } }
+     ]
+   end
+ 
+diff --git a/app/models/concerns/globalize_accessors.rb b/app/models/concerns/globalize_accessors.rb
+index 0fe18397..a732134f 100644
+--- a/app/models/concerns/globalize_accessors.rb
++++ b/app/models/concerns/globalize_accessors.rb
+@@ -33,7 +33,11 @@ module GlobalizeAccessors
+ 
+     def self.define_getter(attr_name, locale)
+       define_method localized_attr_name_for(attr_name, locale) do
+-        globalize.stash.contains?(locale, attr_name) ? globalize.send(:fetch_stash, locale, attr_name) : globalize.send(:fetch_attribute, locale, attr_name)
++        if globalize.stash.contains?(locale, attr_name)
++          globalize.send(:fetch_stash, locale, attr_name)
++        else
++          globalize.send(:fetch_attribute, locale, attr_name)
++        end
+       end
+     end
+ 
+diff --git a/app/services/message_apis/block_manager.rb b/app/services/message_apis/block_manager.rb
+index 24b3f40d..f4eb4a30 100644
+--- a/app/services/message_apis/block_manager.rb
++++ b/app/services/message_apis/block_manager.rb
+@@ -193,7 +193,8 @@ module MessageApis
+ 
+       # {
+       #  "blocks" => [
+-      #    { "key" => key, "text" => text.to_s, "type" => "unstyled", "depth" => 0, "inlineStyleRanges" => [], "entityRanges" => [], "data" => {} }
++      #    { "key" => key, "text" => text.to_s, "type" => "unstyled", "depth" => 0,
++      #      "inlineStyleRanges" => [], "entityRanges" => [], "data" => {} }
+       #  ],
+       #  "entityMap" => {}
+       # }
+diff --git a/app/services/message_apis/twilio/api.rb b/app/services/message_apis/twilio/api.rb
+index 4c737d47..2180bda9 100644
+--- a/app/services/message_apis/twilio/api.rb
++++ b/app/services/message_apis/twilio/api.rb
+@@ -37,7 +37,8 @@ module MessageApis
+             {
+               name: "new_conversations_after",
+               label: "Count messages as new conversations",
+-              hint: "After a conversation is closed new messages will create a new conversation if there are received after this time period",
++              hint: "After a conversation is closed new messages will create a new conversation " \
++                    "if there are received after this time period",
+               type: "number",
+               required: false,
+               grid: { xs: "w-full", sm: "w-full" }
+diff --git a/app/services/message_apis/twilio_phone/api.rb b/app/services/message_apis/twilio_phone/api.rb
+index c96a5cbb..9fe675c6 100644
+--- a/app/services/message_apis/twilio_phone/api.rb
++++ b/app/services/message_apis/twilio_phone/api.rb
+@@ -120,7 +120,8 @@ module MessageApis::TwilioPhone
+ 
+     def process_hold(params, package)
+       conference_sid = MessageApis::TwilioPhone::Store.get_data(params[:conversation_key], :conference_sid)
+-      participant_sid = package.app.conversations.find_by(key: params[:conversation_key]).conversation_channels.find_by(provider: "TwilioPhone").provider_channel_id
++      participant_sid = package.app.conversations.find_by(key: params[:conversation_key])
++                               .conversation_channels.find_by(provider: "TwilioPhone").provider_channel_id
+ 
+       client.api.conferences(conference_sid).participants(participant_sid).update(hold: params[:hold_action])
+ 
+@@ -543,7 +544,8 @@ module MessageApis::TwilioPhone
+ 
+     def self.get_profile(conversation, _package)
+       profile = conversation.main_participant.external_profiles.find_by(provider: "TwilioPhone")
+-      # when a user has a phone number but not a profile , lets create a new conversation for the valid user or create a new profile in this conversation
++      # when a user has a phone number but not a profile , lets create a new conversation for the valid user
++      # or create a new profile in this conversation
+       if profile.blank?
+         raise "invalid phone" if conversation.main_participant.phone.blank?
+         raise "invalid phone" unless Phonelib.valid?(conversation.main_participant.phone)
+@@ -561,7 +563,8 @@ module MessageApis::TwilioPhone
+           )
+           @conversation_key = conversation.key
+         else
+-          profile = conversation.main_participant.external_profiles.create(provider: "TwilioPhone", profile_id: conversation.main_participant.phone)
++          profile = conversation.main_participant.external_profiles.create(provider: "TwilioPhone",
++                                                                           profile_id: conversation.main_participant.phone)
+         end
+       end
+ 
+diff --git a/lib/tasks/utils.rake b/lib/tasks/utils.rake
+index ede07354..016bc040 100644
+--- a/lib/tasks/utils.rake
++++ b/lib/tasks/utils.rake
+@@ -297,7 +297,8 @@ namespace :repo do
+     end
+   end
+ 
+-  #  -s, --status string     Filter runs by status: {queued|completed|in_progress|requested|waiting|action_required|cancelled|failure|neutral|skipped|stale|startup_failure|success|timed_out}
++  #  -s, --status string     Filter runs by status: {queued|completed|in_progress|requested|waiting|action_required|
++  #                          cancelled|failure|neutral|skipped|stale|startup_failure|success|timed_out}
+ 
+   task delete_cancelled_runs: :environment do
+     handle_run(limit: 500, status: "cencelled", action: "delete")

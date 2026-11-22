@@ -1,0 +1,37 @@
+diff --git a/.rubocop.yml b/.rubocop.yml
+index 70e8c402..e68efb47 100644
+--- a/.rubocop.yml
++++ b/.rubocop.yml
+@@ -40,7 +40,9 @@ Lint/EmptyBlock:
+ # R8 (docs/specs/fork-updates-rubocop-plan.md, owner decisions 2026-11-20, second batch): rake task
+ # files and the routes file are DSL blocks whose length is the list of tasks or routes they declare.
+ # config/** is outside AllCops too; the entry keeps the decision if config/ is ever linted.
++# CountAsOne: see Metrics/MethodLength.
+ Metrics/BlockLength:
++  CountAsOne: [array, hash, heredoc]
+   Exclude:
+   - 'spec/**/*'
+   - 'lib/tasks/**/*'
+@@ -125,8 +127,14 @@ Naming/MemoizedInstanceVariableName:
+ # R8 (same plan and decisions): metric limits at the level common in Rails projects, chosen from the
+ # distribution measured in the plan. Methods and classes above them are outliers: they stay listed in
+ # .rubocop_todo.yml and get refactor milestones with tests (docs/specs/fork-updates-r8a.md).
++# R10cfg (docs/specs/fork-updates-r10-programme.md, decision K1 2026-11-22): a multi-line array, hash
++# or heredoc literal counts as one line in MethodLength, ClassLength and BlockLength. Those literals
++# are declarative data (plugin definition_info, messenger presenter schemas, provider fixtures);
++# their length is not complexity, and splitting a schema into methods only scatters it. AbcSize and
++# the complexity cops still measure the logic. Multi-line method calls still count line by line.
+ Metrics/MethodLength:
+   Max: 30
++  CountAsOne: [array, hash, heredoc]
+ Metrics/AbcSize:
+   Max: 30
+ Metrics/CyclomaticComplexity:
+@@ -139,6 +147,7 @@ Metrics/ParameterLists:
+ # follows the API they wrap.
+ Metrics/ClassLength:
+   Max: 300
++  CountAsOne: [array, hash, heredoc]
+   Exclude:
+     - 'app/services/message_apis/**/*'
+ # A URL or a base64 blob cannot be wrapped. A line may run past Max only when such a token starts

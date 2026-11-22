@@ -1,0 +1,192 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Layout/LineLength": [
+      "app/controllers/api/v1/hooks_controller.rb",
+      "app/graphql/types/app_type.rb",
+      "app/models/app_user.rb",
+      "app/models/campaign.rb",
+      "app/models/concerns/globalize_accessors.rb",
+      "app/services/message_apis/block_manager.rb",
+      "app/services/message_apis/twilio/api.rb",
+      "app/services/message_apis/twilio_phone/api.rb",
+      "lib/tasks/utils.rake"
+    ]
+  },
+  "iseq_same": {
+    "files": [
+      "app/models/app_user.rb",
+      "app/models/campaign.rb",
+      "app/models/concerns/globalize_accessors.rb",
+      "app/services/message_apis/block_manager.rb",
+      "app/services/message_apis/twilio/api.rb",
+      "app/services/message_apis/twilio_phone/api.rb",
+      "lib/tasks/utils.rake"
+    ]
+  },
+  "app_files": [
+    "app/controllers/api/v1/hooks_controller.rb",
+    "app/graphql/types/app_type.rb",
+    "app/models/app_user.rb",
+    "app/models/campaign.rb",
+    "app/models/concerns/globalize_accessors.rb",
+    "app/services/message_apis/block_manager.rb",
+    "app/services/message_apis/twilio/api.rb",
+    "app/services/message_apis/twilio_phone/api.rb",
+    "lib/tasks/utils.rake"
+  ],
+  "char_specs": [
+    "spec/controllers/api/v1/hooks_controller_wrapped_lines_spec.rb",
+    "spec/graphql/types/app_type_conversations_term_spec.rb",
+    "spec/models/app_user_ransackable_attributes_spec.rb",
+    "spec/models/campaign_config_fields_spec.rb"
+  ],
+  "commits": [
+    {
+      "subject": "Wrap long lines in files r9b touched",
+      "patch": "r10c_rewrite.patch",
+      "added": [
+        "spec/controllers/api/v1/hooks_controller_wrapped_lines_spec.rb",
+        "spec/graphql/types/app_type_conversations_term_spec.rb",
+        "spec/models/app_user_ransackable_attributes_spec.rb",
+        "spec/models/campaign_config_fields_spec.rb"
+      ]
+    },
+    {
+      "subject": "Drop R10c entries from RuboCop todo",
+      "todo": true
+    },
+    {
+      "subject": "Note fork-updates-r10c in changelog",
+      "changelog": true
+    }
+  ],
+  "mutants": [
+    {
+      "id": "C01",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "old": "o[\"name\"] == \"X-Forwarded-To\" }&.dig(\"value\")) &&",
+      "new": "o[\"name\"] != \"X-Forwarded-To\" }&.dig(\"value\")) &&",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_wrapped_lines_spec.rb"
+      ]
+    },
+    {
+      "id": "C02",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "old": "val.present? && val.starts_with?(\"inbound+\")",
+      "new": "val.present? || val.starts_with?(\"inbound+\")",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_wrapped_lines_spec.rb"
+      ]
+    },
+    {
+      "id": "C03",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "old": "title='#{attachment.filename}' \" \\",
+      "new": "title='#{attachment.filename}'\" \\",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_wrapped_lines_spec.rb"
+      ]
+    },
+    {
+      "id": "C04",
+      "file": "app/controllers/api/v1/hooks_controller.rb",
+      "old": "\"width='#{uploaded_data[:width]}' height=",
+      "new": "\"width='#{uploaded_data[:height]}' height=",
+      "specs": [
+        "spec/controllers/api/v1/hooks_controller_wrapped_lines_spec.rb"
+      ]
+    },
+    {
+      "id": "C05",
+      "file": "app/graphql/types/app_type.rb",
+      "old": "%w[\n          main_participant_full_name main_participant_name",
+      "new": "%w[\n          main_participant_name",
+      "specs": [
+        "spec/graphql/types/app_type_conversations_term_spec.rb"
+      ]
+    },
+    {
+      "id": "C06",
+      "file": "app/graphql/types/app_type.rb",
+      "old": "main_participant_name main_participant_email main_participant_postal",
+      "new": "main_participant_name main_participant_postal",
+      "specs": [
+        "spec/graphql/types/app_type_conversations_term_spec.rb"
+      ]
+    },
+    {
+      "id": "C07",
+      "file": "app/graphql/types/app_type.rb",
+      "old": "main_participant_phone messages_messageable_of_ConversationPartContent_type_text_content\n",
+      "new": "main_participant_phone\n",
+      "specs": [
+        "spec/graphql/types/app_type_conversations_term_spec.rb"
+      ]
+    },
+    {
+      "id": "C08",
+      "file": "app/graphql/types/app_type.rb",
+      "old": "query_fields.join('_or_')",
+      "new": "query_fields.join('_and_')",
+      "specs": [
+        "spec/graphql/types/app_type_conversations_term_spec.rb"
+      ]
+    },
+    {
+      "id": "C09",
+      "file": "app/graphql/types/app_type.rb",
+      "old": "_i_cont_any\"",
+      "new": "_cont_any\"",
+      "specs": [
+        "spec/graphql/types/app_type_conversations_term_spec.rb"
+      ]
+    },
+    {
+      "id": "C10",
+      "file": "app/models/campaign.rb",
+      "old": "hint: I18n.t(\"definitions.campaigns.campaign_name.hint\"), type: \"string\"",
+      "new": "hint: I18n.t(\"definitions.campaigns.campaign_name.hint\"), type: \"text\"",
+      "specs": [
+        "spec/models/campaign_config_fields_spec.rb"
+      ]
+    },
+    {
+      "id": "C11",
+      "file": "app/models/campaign.rb",
+      "old": "I18n.t(\"definitions.campaigns.scheduled_to.label\"), type: \"datetime\",",
+      "new": "I18n.t(\"definitions.campaigns.scheduled_at.label\"), type: \"datetime\",",
+      "specs": [
+        "spec/models/campaign_config_fields_spec.rb"
+      ]
+    },
+    {
+      "id": "C12",
+      "file": "app/models/campaign.rb",
+      "old": "grid: { xs: \"w-full\", sm: \"w-1/2\" } }\n    ]",
+      "new": "grid: { xs: \"w-full\", sm: \"w-full\" } }\n    ]",
+      "specs": [
+        "spec/models/campaign_config_fields_spec.rb"
+      ]
+    },
+    {
+      "id": "C13",
+      "file": "app/models/app_user.rb",
+      "old": "company_size country country_code\n",
+      "new": "company_size country\n",
+      "specs": [
+        "spec/models/app_user_ransackable_attributes_spec.rb"
+      ]
+    },
+    {
+      "id": "C14",
+      "file": "app/models/app_user.rb",
+      "old": "signed_up state\n",
+      "new": "signed_up\n",
+      "specs": [
+        "spec/models/app_user_ransackable_attributes_spec.rb"
+      ]
+    }
+  ]
+}
