@@ -1,0 +1,743 @@
+{
+  "cops_whole": [],
+  "cops_partial": {
+    "Metrics/AbcSize": [
+      "app/services/message_apis/dialog360/api.rb",
+      "app/services/message_apis/message_bird/api.rb",
+      "app/services/message_apis/twilio/api.rb",
+      "app/services/message_apis/vonage/api.rb"
+    ],
+    "Metrics/MethodLength": [
+      "app/services/message_apis/dialog360/api.rb",
+      "app/services/message_apis/message_bird/api.rb",
+      "app/services/message_apis/vonage/api.rb"
+    ]
+  },
+  "base_requires": [
+    "  CountAsOne: [array, hash, heredoc]"
+  ],
+  "app_files": [
+    "app/services/message_apis/twilio/api.rb",
+    "app/services/message_apis/vonage/api.rb",
+    "app/services/message_apis/message_bird/api.rb",
+    "app/services/message_apis/dialog360/api.rb"
+  ],
+  "new_files": [
+    "spec/fixtures/whatsapp/provider_payloads.json"
+  ],
+  "char_specs": [
+    "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+  ],
+  "spec_sources": {
+    "spec/services/message_apis/whatsapp_provider_payloads_spec.rb": "r10l_spec.rb"
+  },
+  "golden": {
+    "fixture": "spec/fixtures/whatsapp/provider_payloads.json",
+    "spec": "spec/services/message_apis/whatsapp_provider_payloads_spec.rb",
+    "generator": "r10l_golden_spec.rb",
+    "cases": "r10l_cases.json"
+  },
+  "commits": [
+    {
+      "subject": "Pin WhatsApp adapter payloads",
+      "patch": "r10l_golden.patch",
+      "added": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ]
+    },
+    {
+      "subject": "Split WhatsApp send_message builders",
+      "patch": "r10l_rewrite.patch"
+    },
+    {
+      "subject": "Drop R10l entries from RuboCop todo",
+      "todo": true
+    },
+    {
+      "subject": "Note fork-updates-r10l in changelog",
+      "changelog": true
+    }
+  ],
+  "mutants": [
+    {
+      "id": "L01",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "old": "{ From: \"whatsapp:#{@phone}\", To: profile_id }",
+      "new": "{ From: @phone, To: profile_id }",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "twilio send_message"
+    },
+    {
+      "id": "L02",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "old": "message_params.merge(Body: text)",
+      "new": "message_params.merge(body: text)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "twilio send_message"
+    },
+    {
+      "id": "L03",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "old": "return send_text.call(plain_message) if attachments.empty?",
+      "new": "return send_text.call(plain_message) unless attachments.empty?",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "twilio send_message"
+    },
+    {
+      "id": "L04",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "old": "captionless: method(:captionless_attachment?)",
+      "new": "captionless: []",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "twilio send_message"
+    },
+    {
+      "id": "L05",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "old": "send_text: send_text, captionless: method(:captionless_attachment?), **delivery_hooks(conversation, part)",
+      "new": "send_text: send_text, captionless: method(:captionless_attachment?)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "twilio send_message"
+    },
+    {
+      "id": "L06",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "old": "params = message_params.merge(MediaUrl: url)",
+      "new": "params = message_params.merge(MediaUrl: url.sub(\"https:\", \"http:\"))",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "twilio send_message"
+    },
+    {
+      "id": "L07",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "old": "params[:Body] = caption if caption",
+      "new": "params[:Body] = caption.to_s",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "twilio send_message"
+    },
+    {
+      "id": "L08",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "old": "@conn.post(@url, params)",
+      "new": "@conn.post(\"#{@url}?media=1\", params)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "twilio send_message"
+    },
+    {
+      "id": "L09",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "old": "plain_message = MessageApis::BlockManager.plain_text(blocks)",
+      "new": "plain_message = MessageApis::BlockManager.plain_text(blocks).upcase",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "twilio send_message"
+    },
+    {
+      "id": "L10",
+      "file": "app/services/message_apis/twilio/api.rb",
+      "old": "response = deliver_blocks(conversation, part, blocks,",
+      "new": "response = deliver_blocks(conversation, part, blocks.reverse,",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "twilio send_message"
+    },
+    {
+      "id": "L11",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "\"FileBlock\" => \"file\"",
+      "new": "\"FileBlock\" => \"document\"",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L12",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "        return if blocks.nil?\n",
+      "new": "        return if plain_message.blank?\n",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L13",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": ".to_text(encode_special_chars: false).strip",
+      "new": ".to_text(encode_special_chars: true).strip",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L14",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "content = MessageApis::BlockManager.serialized_text(text)",
+      "new": "content = MessageApis::BlockManager.serialized_text(text.upcase)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L15",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "[blocks, MessageApis::BlockManager.plain_text(blocks)]",
+      "new": "[blocks, \"\"]",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L16",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "rescue JSON::ParserError, TypeError, NoMethodError",
+      "new": "rescue TypeError, NoMethodError",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L17",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "data[:caption] = caption if caption",
+      "new": "data[:text] = caption if caption",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L18",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "attachments, plain_message, send_text: send_text, **delivery_hooks(conversation, part)",
+      "new": "attachments, plain_message, send_text: send_text",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L19",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "        deliver_blocks(conversation, part, blocks, plain_message, profile_id)\n",
+      "new": "        deliver_blocks(conversation, part, blocks.reverse, plain_message, profile_id)\n",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L20",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "        if content.blank?\n",
+      "new": "        if content.nil?\n",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L21",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "\"FileBlock\" => \"file\"",
+      "new": "\"FileBlock\" => \"document\"",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L22",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "        return if blocks.nil?\n",
+      "new": "        return if plain_message.blank?\n",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L23",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": ".to_text(encode_special_chars: false).strip",
+      "new": ".to_text(encode_special_chars: true).strip",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L24",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "content = MessageApis::BlockManager.serialized_text(text)",
+      "new": "content = MessageApis::BlockManager.serialized_text(text.upcase)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L25",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "[blocks, MessageApis::BlockManager.plain_text(blocks)]",
+      "new": "[blocks, \"\"]",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L26",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "rescue JSON::ParserError, TypeError, NoMethodError",
+      "new": "rescue TypeError, NoMethodError",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L27",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "data[:caption] = caption if caption",
+      "new": "data[:text] = caption if caption",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L28",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "attachments, plain_message, send_text: send_text, **delivery_hooks(conversation, part)",
+      "new": "attachments, plain_message, send_text: send_text",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L29",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "        deliver_blocks(conversation, part, blocks, plain_message, profile_id)\n",
+      "new": "        deliver_blocks(conversation, part, blocks.reverse, plain_message, profile_id)\n",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L30",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "        if content.blank?\n",
+      "new": "        if content.nil?\n",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L31",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "to: { type: \"whatsapp\", number: profile_id }",
+      "new": "to: { type: \"sms\", number: profile_id }",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L32",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "addressing.merge(message: { content: data })",
+      "new": "addressing.merge(content: data)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L33",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "post_content.call(type: \"text\", text: text)",
+      "new": "post_content.call(type: \"plain\", text: text)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L34",
+      "file": "app/services/message_apis/vonage/api.rb",
+      "old": "post_content.call(type: type, type => data)",
+      "new": "post_content.call(type: type, \"media\" => data)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "vonage send_message"
+    },
+    {
+      "id": "L35",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "to: profile_id.gsub(\"+\", \"\")",
+      "new": "to: profile_id",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L36",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "@conn.post(\"#{@url}send\", addressing.merge(data).to_json)",
+      "new": "@conn.post(\"#{@url}messages\", addressing.merge(data).to_json)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L37",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "content: { text: text }",
+      "new": "content: { body: text }",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L38",
+      "file": "app/services/message_apis/message_bird/api.rb",
+      "old": "content: { type => data }",
+      "new": "content: { \"media\" => data }",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "message_bird send_message"
+    },
+    {
+      "id": "L39",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "          to: profile_id\n",
+      "new": "          to: \"+#{profile_id}\"\n",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_message"
+    },
+    {
+      "id": "L40",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "from: { type: \"whatsapp\", number: @phone },",
+      "new": "from: { type: \"whatsapp\", number: \"+#{@phone}\" },",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_message"
+    },
+    {
+      "id": "L41",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "post_message = ->(content) { @conn.post(\"#{@url}/messages\",",
+      "new": "post_message = ->(content) { @conn.post(\"#{@url}/message\",",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_message"
+    },
+    {
+      "id": "L42",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "text: { body: text }",
+      "new": "text: { content: text }",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_message"
+    },
+    {
+      "id": "L43",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "return send_text.call(plain_message) if attachments.empty?",
+      "new": "return send_text.call(plain_message) if attachments.size < 2",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_message"
+    },
+    {
+      "id": "L44",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "captionless: %w[AudioRecorderBlock]",
+      "new": "captionless: %w[]",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_message"
+    },
+    {
+      "id": "L45",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "media = { link: url }",
+      "new": "media = { url: url }",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_message"
+    },
+    {
+      "id": "L46",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "media[:caption] = caption if caption",
+      "new": "media[:text] = caption if caption",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_message"
+    },
+    {
+      "id": "L47",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "post_message.call(type: type, type => media)",
+      "new": "post_message.call(type: type, \"media\" => media)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_message"
+    },
+    {
+      "id": "L48",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "send_text: send_text, captionless: %w[AudioRecorderBlock], **delivery_hooks(conversation, part)",
+      "new": "send_text: send_text, captionless: %w[AudioRecorderBlock]",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_message"
+    },
+    {
+      "id": "L49",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "        deliver_blocks(conversation, part, blocks, plain_message, profile_id)\n",
+      "new": "        deliver_blocks(conversation, part, blocks.reverse, plain_message, profile_id)\n",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_message"
+    },
+    {
+      "id": "L50",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "conversation, profile_id = template_conversation(conversation_key, selected_user)",
+      "new": "conversation, = template_conversation(conversation_key, selected_user)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L51",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "unless conversation.blank? && conversation_key.blank? && selected_user.present?",
+      "new": "unless conversation.blank? && selected_user.present?",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L52",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "return [conversation, nil] unless",
+      "new": "return [conversation, conversation_key] unless",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L53",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "        profile_id = get_profile_for_participant(participant)\n",
+      "new": "        profile_id = participant.phone\n",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L54",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "conversation = find_conversation_by_channel(PROVIDER, profile_id) if profile_id.present?",
+      "new": "conversation = find_conversation_by_channel(\"dialog360\", profile_id) if profile_id.present?",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L55",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "conversation = @package.app.start_conversation(options) if conversation.blank?",
+      "new": "conversation = @package.app.start_conversation(options)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L56",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "          participant: participant,\n",
+      "new": "          participant: @package.app.app_users.first,\n",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L57",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "        [conversation, profile_id]\n",
+      "new": "        [conversation, nil]\n",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L58",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "profile_id = get_profile_for_participant(conversation.main_participant) if profile_id.blank?",
+      "new": "profile_id = get_profile_for_participant(conversation.main_participant)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L59",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "return profile_id if profile_id.present?",
+      "new": "return profile_id if profile_id.nil?",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L60",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)\n      end\n      private :template_profile_id",
+      "new": "add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.email)\n      end\n      private :template_profile_id",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L61",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "parameters: parameters.map { |o| { type: \"text\", text: o } }",
+      "new": "parameters: parameters.map { |o| { type: \"text\", text: o.to_s } }",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L62",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "data = template_payload(template, profile_id, parameters.compact)",
+      "new": "data = template_payload(template, profile_id, parameters)",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L63",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "code: template[\"language\"]",
+      "new": "code: template[\"language\"] || \"en\"",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L64",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "namespace: template[\"namespace\"],",
+      "new": "namespace: template[\"name\"],",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L65",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "add_template_message(conversation, template, json_message[\"id\"])",
+      "new": "add_template_message(conversation, template, json_message[\"wamid\"])",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L66",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "html_content: \"WHATSAPP TEMPLATE SENT: #{template['name']}\"",
+      "new": "html_content: \"WHATSAPP TEMPLATE SENT: #{template['namespace']}\"",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L67",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "          message_source_id: message_id,\n          check_assignment_rules: false",
+      "new": "          message_source_id: \"x#{message_id}\",\n          check_assignment_rules: false",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    },
+    {
+      "id": "L68",
+      "file": "app/services/message_apis/dialog360/api.rb",
+      "old": "          provider: PROVIDER,\n          message_source_id: message_id,\n          check_assignment_rules",
+      "new": "          provider: \"dialog360\",\n          message_source_id: message_id,\n          check_assignment_rules",
+      "specs": [
+        "spec/services/message_apis/whatsapp_provider_payloads_spec.rb"
+      ],
+      "example": "dialog360 send_template_message"
+    }
+  ]
+}

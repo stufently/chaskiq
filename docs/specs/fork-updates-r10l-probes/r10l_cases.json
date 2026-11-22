@@ -1,0 +1,3881 @@
+[
+  {
+    "name": "twilio send_message private note",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"secret\"}]}]}",
+      "private_note": true
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message without a profile",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "telegram",
+            "profile_id": "tg-1"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"hello\"}]}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message text",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello & welcome\"}]}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message text rejected",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello\"}]}]}"
+    },
+    "reply": {
+      "status": 400,
+      "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+    }
+  },
+  {
+    "name": "twilio send_message four attachments with a caption",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"See the files\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"//cdn.example.com/voice.ogg\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message attachments without text",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message second attachment rejected",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Two files\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    },
+    "replies": [
+      {
+        "status": 201,
+        "body": "{\"sid\": \"SM-ok\"}"
+      },
+      {
+        "status": 400,
+        "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+      },
+      {
+        "status": 201,
+        "body": "{\"sid\": \"SM-ok\"}"
+      }
+    ]
+  },
+  {
+    "name": "twilio send_message first attachment already sent",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Again\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}]}",
+      "sent": [
+        0
+      ]
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message unsaved part with an attachment",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Draft\"}]}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}]}",
+      "persist": false
+    },
+    "reply": {
+      "status": 400,
+      "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+    }
+  },
+  {
+    "name": "twilio send_message attachment without a url",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message gif image and audio",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Look\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/anim.gif\"}}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"/uploads/v.ogg\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message audio before an image",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Listen\"}]}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"/uploads/v.ogg\"}}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/b.png\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message jpeg image",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Photo\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/a.JPG?x=1\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message html only",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "html_content": "<p>Hi <b>there</b> &amp; bye</p>"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message empty content with html",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "",
+      "html_content": "<p>Fallback</p>"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message blank html",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "html_content": "<p> </p>"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message content not a document",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "[1, 2]"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message content invalid json",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{not json"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message empty draft blocks",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"blocks\": []}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message draft blocks",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"blocks\": [{\"key\": \"k1\", \"text\": \"Draft text\", \"type\": \"unstyled\", \"inlineStyleRanges\": [], \"entityRanges\": [], \"data\": {}}], \"entityMap\": {}}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "twilio send_message plain text of a broken node",
+    "provider": "twilio",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "AC0001",
+      "api_secret": "tw-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "twilio",
+            "profile_id": "whatsapp:+5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": \"oops\"}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"sid\": \"SM-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message private note",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"secret\"}]}]}",
+      "private_note": true
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message without a profile",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "telegram",
+            "profile_id": "tg-1"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"hello\"}]}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message text",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello & welcome\"}]}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message text rejected",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello\"}]}]}"
+    },
+    "reply": {
+      "status": 400,
+      "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+    }
+  },
+  {
+    "name": "vonage send_message four attachments with a caption",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"See the files\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"//cdn.example.com/voice.ogg\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message attachments without text",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message second attachment rejected",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Two files\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    },
+    "replies": [
+      {
+        "status": 202,
+        "body": "{\"message_uuid\": \"uuid-ok\"}"
+      },
+      {
+        "status": 400,
+        "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+      },
+      {
+        "status": 202,
+        "body": "{\"message_uuid\": \"uuid-ok\"}"
+      }
+    ]
+  },
+  {
+    "name": "vonage send_message first attachment already sent",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Again\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}]}",
+      "sent": [
+        0
+      ]
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message unsaved part with an attachment",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Draft\"}]}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}]}",
+      "persist": false
+    },
+    "reply": {
+      "status": 400,
+      "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+    }
+  },
+  {
+    "name": "vonage send_message attachment without a url",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message gif image and audio",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Look\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/anim.gif\"}}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"/uploads/v.ogg\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message audio before an image",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Listen\"}]}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"/uploads/v.ogg\"}}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/b.png\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message jpeg image",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Photo\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/a.JPG?x=1\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message html only",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "html_content": "<p>Hi <b>there</b> &amp; bye</p>"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message empty content with html",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "",
+      "html_content": "<p>Fallback</p>"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message blank html",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "html_content": "<p> </p>"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message content not a document",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "[1, 2]"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message content invalid json",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{not json"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message empty draft blocks",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"blocks\": []}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message draft blocks",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"blocks\": [{\"key\": \"k1\", \"text\": \"Draft text\", \"type\": \"unstyled\", \"inlineStyleRanges\": [], \"entityRanges\": [], \"data\": {}}], \"entityMap\": {}}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "vonage send_message plain text of a broken node",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": \"oops\"}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message private note",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"secret\"}]}]}",
+      "private_note": true
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message without a profile",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "telegram",
+            "profile_id": "tg-1"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"hello\"}]}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message text",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello & welcome\"}]}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message text rejected",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello\"}]}]}"
+    },
+    "reply": {
+      "status": 400,
+      "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+    }
+  },
+  {
+    "name": "message_bird send_message four attachments with a caption",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"See the files\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"//cdn.example.com/voice.ogg\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message attachments without text",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message second attachment rejected",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Two files\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    },
+    "replies": [
+      {
+        "status": 202,
+        "body": "{\"id\": \"mb-ok\"}"
+      },
+      {
+        "status": 400,
+        "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+      },
+      {
+        "status": 202,
+        "body": "{\"id\": \"mb-ok\"}"
+      }
+    ]
+  },
+  {
+    "name": "message_bird send_message first attachment already sent",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Again\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}]}",
+      "sent": [
+        0
+      ]
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message unsaved part with an attachment",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Draft\"}]}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}]}",
+      "persist": false
+    },
+    "reply": {
+      "status": 400,
+      "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+    }
+  },
+  {
+    "name": "message_bird send_message attachment without a url",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message gif image and audio",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Look\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/anim.gif\"}}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"/uploads/v.ogg\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message audio before an image",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Listen\"}]}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"/uploads/v.ogg\"}}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/b.png\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message jpeg image",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Photo\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/a.JPG?x=1\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message html only",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "html_content": "<p>Hi <b>there</b> &amp; bye</p>"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message empty content with html",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "",
+      "html_content": "<p>Fallback</p>"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message blank html",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "html_content": "<p> </p>"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message content not a document",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "[1, 2]"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message content invalid json",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{not json"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message empty draft blocks",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"blocks\": []}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message draft blocks",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"blocks\": [{\"key\": \"k1\", \"text\": \"Draft text\", \"type\": \"unstyled\", \"inlineStyleRanges\": [], \"entityRanges\": [], \"data\": {}}], \"entityMap\": {}}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message plain text of a broken node",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": \"oops\"}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "dialog360 send_message private note",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"secret\"}]}]}",
+      "private_note": true
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message without a profile",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "telegram",
+            "profile_id": "tg-1"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"hello\"}]}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message text",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello & welcome\"}]}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message text rejected",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Hello\"}]}]}"
+    },
+    "reply": {
+      "status": 400,
+      "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message four attachments with a caption",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"See the files\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"//cdn.example.com/voice.ogg\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message attachments without text",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message second attachment rejected",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Two files\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    },
+    "replies": [
+      {
+        "status": 201,
+        "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+      },
+      {
+        "status": 400,
+        "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+      },
+      {
+        "status": 201,
+        "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+      }
+    ]
+  },
+  {
+    "name": "dialog360 send_message first attachment already sent",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Again\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}, {\"type\": \"VideoBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/clip.mp4\"}}]}",
+      "sent": [
+        0
+      ]
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message unsaved part with an attachment",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Draft\"}]}, {\"type\": \"FileBlock\", \"attrs\": {\"url\": \"/uploads/report.pdf\"}}]}",
+      "persist": false
+    },
+    "reply": {
+      "status": 400,
+      "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message attachment without a url",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message gif image and audio",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Look\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/anim.gif\"}}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"/uploads/v.ogg\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message audio before an image",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Listen\"}]}, {\"type\": \"AudioRecorderBlock\", \"attrs\": {\"url\": \"/uploads/v.ogg\"}}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/b.png\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message jpeg image",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Photo\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"https://cdn.example.com/a.JPG?x=1\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message html only",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "html_content": "<p>Hi <b>there</b> &amp; bye</p>"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message empty content with html",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "",
+      "html_content": "<p>Fallback</p>"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message blank html",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "html_content": "<p> </p>"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message content not a document",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "[1, 2]"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message content invalid json",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{not json"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message empty draft blocks",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"blocks\": []}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message draft blocks",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"blocks\": [{\"key\": \"k1\", \"text\": \"Draft text\", \"type\": \"unstyled\", \"inlineStyleRanges\": [], \"entityRanges\": [], \"data\": {}}], \"entityMap\": {}}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_message plain text of a broken node",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": \"oops\"}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "vonage send_message sandbox",
+    "provider": "vonage",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "vn-key",
+      "api_secret": "vn-secret",
+      "sandbox": true
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "vonage",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Sandbox hello\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"message_uuid\": \"uuid-ok\"}"
+    }
+  },
+  {
+    "name": "message_bird send_message sandbox",
+    "provider": "message_bird",
+    "call": "send_message",
+    "config": {
+      "user_id": "+14155550100",
+      "api_key": "mb-key",
+      "sandbox": true
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "message_bird",
+            "profile_id": "+55 11+99999"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Sandbox hello\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}]}"
+    },
+    "reply": {
+      "status": 202,
+      "body": "{\"id\": \"mb-ok\"}"
+    }
+  },
+  {
+    "name": "dialog360 send_message sandbox",
+    "provider": "dialog360",
+    "call": "send_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key",
+      "sandbox": true
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "part": {
+      "serialized_content": "{\"type\": \"doc\", \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"Sandbox hello\"}]}, {\"type\": \"ImageBlock\", \"attrs\": {\"url\": \"/uploads/photo one.png\"}}]}"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message existing conversation one parameter",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": "Ana"
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message existing conversation parameter list",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": [
+        "Ana",
+        null,
+        "42"
+      ]
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message existing conversation without a profile",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000"
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": []
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message existing conversation without a profile or phone",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com"
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": [
+        "x"
+      ]
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message phone already taken by another user",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511777"
+      },
+      {
+        "email": "bob@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511777"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": [
+        "x"
+      ]
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message unknown conversation key",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "missing",
+      "parameters": [
+        "x"
+      ]
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message selected user with a channel conversation",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com"
+      },
+      {
+        "email": "bob@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5522"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      },
+      {
+        "key": "bob-channel",
+        "user": 1,
+        "channels": [
+          {
+            "provider": "dialog_360",
+            "provider_channel_id": "5522"
+          }
+        ]
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "",
+      "parameters": [
+        "x"
+      ],
+      "selected_index": 1
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message selected user whose channel conversation has another participant",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511"
+          }
+        ]
+      },
+      {
+        "email": "bob@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5522"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key",
+        "channels": [
+          {
+            "provider": "dialog_360",
+            "provider_channel_id": "5522"
+          }
+        ]
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "",
+      "parameters": [
+        "x"
+      ],
+      "selected_index": 1
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message selected user without a conversation",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com"
+      },
+      {
+        "email": "bob@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5522"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": null,
+      "parameters": [
+        "x"
+      ],
+      "selected_index": 1
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message selected user without a profile",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com"
+      },
+      {
+        "email": "bob@example.com",
+        "phone": "5533"
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": null,
+      "parameters": [
+        "x"
+      ],
+      "selected_index": 1
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message selected user without a profile or phone",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com"
+      },
+      {
+        "email": "bob@example.com"
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": null,
+      "parameters": [
+        "x"
+      ],
+      "selected_index": 1
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message selected user and an existing key",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511"
+          }
+        ]
+      },
+      {
+        "email": "bob@example.com",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5522"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": [
+        "x"
+      ],
+      "selected_index": 1
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message selected user and an unknown key",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "missing",
+      "parameters": [
+        "x"
+      ],
+      "selected_index": 0
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message unknown selected user",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "",
+      "parameters": [
+        "x"
+      ],
+      "selected_user": 999
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message no key and no user",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": null,
+      "parameters": [
+        "x"
+      ],
+      "selected_user": null
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message rejected",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": [
+        "x"
+      ]
+    },
+    "reply": {
+      "status": 400,
+      "body": "{\"code\": 1013, \"title\": \"User is not valid\", \"errors\": [{\"code\": 1013, \"title\": \"Recipient not on WhatsApp\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message accepted without messages",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": [
+        "x"
+      ]
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": []}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message accepted without a messages key",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": [
+        "x"
+      ]
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"meta\": {}}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message message without an id",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": [
+        "x"
+      ]
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"status\": \"sent\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message non-json reply",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": [
+        "x"
+      ]
+    },
+    "reply": {
+      "status": 502,
+      "body": "<html>bad gateway</html>"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message template without a language",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "name": "hello"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": [
+        1,
+        2.5
+      ]
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message sandbox",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key",
+      "sandbox": "1"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": [
+        "x"
+      ]
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  },
+  {
+    "name": "dialog360 send_template_message hash parameters",
+    "provider": "dialog360",
+    "call": "send_template_message",
+    "config": {
+      "user_id": "14155550100",
+      "api_key": "d360-key"
+    },
+    "users": [
+      {
+        "email": "ana@example.com",
+        "phone": "5511000",
+        "profiles": [
+          {
+            "provider": "dialog_360",
+            "profile_id": "5511999990000"
+          }
+        ]
+      }
+    ],
+    "conversations": [
+      {
+        "key": "conversation-key"
+      }
+    ],
+    "args": {
+      "template": {
+        "namespace": "ns-1",
+        "name": "order_update",
+        "language": "es"
+      },
+      "conversation_key": "conversation-key",
+      "parameters": {
+        "a": 1
+      }
+    },
+    "reply": {
+      "status": 201,
+      "body": "{\"messages\": [{\"id\": \"wamid.ok\"}]}"
+    }
+  }
+]

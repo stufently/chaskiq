@@ -1,0 +1,402 @@
+diff --git a/app/services/message_apis/dialog360/api.rb b/app/services/message_apis/dialog360/api.rb
+index f4cd2b27..afa0f2f6 100644
+--- a/app/services/message_apis/dialog360/api.rb
++++ b/app/services/message_apis/dialog360/api.rb
+@@ -165,6 +165,10 @@ module MessageApis
+         # TODO: maybe handle an error here ?
+         return if profile_id.blank?
+ 
++        deliver_blocks(conversation, part, blocks, plain_message, profile_id)
++      end
++
++      def deliver_blocks(conversation, part, blocks, plain_message, profile_id)
+         message_params = {
+           from: { type: "whatsapp", number: @phone },
+           to: profile_id
+@@ -186,6 +190,7 @@ module MessageApis
+           post_message.call(type: type, type => media)
+         end
+       end
++      private :deliver_blocks
+ 
+       def upload_media(media)
+         # conn = @conn do |f|
+@@ -265,37 +270,61 @@ module MessageApis
+       def send_template_message(template:, conversation_key:, parameters:, selected_user:)
+         parameters = [parameters] unless parameters.is_a?(Array)
+ 
+-        conversation = @package.app.conversations.find_by(key: conversation_key)
+-        profile_id = nil
++        conversation, profile_id = template_conversation(conversation_key, selected_user)
++        profile_id = template_profile_id(conversation, profile_id)
+ 
+-        if conversation.blank? && conversation_key.blank? && selected_user.present?
+-          participant = @package.app.app_users.find(selected_user)
++        Rails.logger.debug template
++        return if profile_id.blank?
+ 
+-          profile_id = get_profile_for_participant(participant)
++        data = template_payload(template, profile_id, parameters.compact)
+ 
+-          conversation = find_conversation_by_channel(PROVIDER, profile_id) if profile_id.present?
++        Rails.logger.debug "***************"
++        Rails.logger.debug data
+ 
+-          options = {
+-            # from: author,
+-            participant: participant,
+-            initiator_channel: PROVIDER
+-          }
++        s = @conn.post(
++          "#{@url}/messages",
++          data.to_json
++        )
+ 
+-          conversation = @package.app.start_conversation(options) if conversation.blank?
+-        end
++        json = JSON.parse(s.body)
+ 
+-        profile_id = get_profile_for_participant(conversation.main_participant) if profile_id.blank?
++        if s.success?
++          json_message = json["messages"].first
++          return if json_message.blank?
+ 
+-        if profile_id.blank?
+-          profile_id = add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
++          add_template_message(conversation, template, json_message["id"])
+         end
++        json.merge({ "conversation_key" => conversation.key })
++      end
+ 
+-        Rails.logger.debug template
+-        return if profile_id.blank?
++      def template_conversation(conversation_key, selected_user)
++        conversation = @package.app.conversations.find_by(key: conversation_key)
++        return [conversation, nil] unless conversation.blank? && conversation_key.blank? && selected_user.present?
+ 
+-        paramters_list = parameters.compact
++        participant = @package.app.app_users.find(selected_user)
++        profile_id = get_profile_for_participant(participant)
++        conversation = find_conversation_by_channel(PROVIDER, profile_id) if profile_id.present?
+ 
+-        data = {
++        options = {
++          # from: author,
++          participant: participant,
++          initiator_channel: PROVIDER
++        }
++        conversation = @package.app.start_conversation(options) if conversation.blank?
++        [conversation, profile_id]
++      end
++      private :template_conversation
++
++      def template_profile_id(conversation, profile_id)
++        profile_id = get_profile_for_participant(conversation.main_participant) if profile_id.blank?
++        return profile_id if profile_id.present?
++
++        add_participant_to_existing_user(conversation.main_participant, conversation.main_participant.phone)
++      end
++      private :template_profile_id
++
++      def template_payload(template, profile_id, parameters)
++        {
+           to: profile_id,
+           type: "template",
+           template: {
+@@ -307,44 +336,26 @@ module MessageApis
+             },
+             components: [{
+               type: "body",
+-              parameters: paramters_list.map { |o| { type: "text", text: o } }
++              parameters: parameters.map { |o| { type: "text", text: o } }
+             }]
+           }
+         }
+-
+-        Rails.logger.debug "***************"
+-        Rails.logger.debug data
+-
+-        s = @conn.post(
+-          "#{@url}/messages",
+-          data.to_json
++      end
++      private :template_payload
++
++      def add_template_message(conversation, template, message_id)
++        conversation.add_message(
++          from: @package.app.agents.first,
++          message: {
++            html_content: "WHATSAPP TEMPLATE SENT: #{template['name']}"
++            # serialized_content: serialized_content
++          },
++          provider: PROVIDER,
++          message_source_id: message_id,
++          check_assignment_rules: false
+         )
+-
+-        # puts "TEMPLATE ******* "
+-        # puts template
+-
+-        json = JSON.parse(s.body)
+-
+-        if s.success?
+-          json_message = json["messages"].first
+-          return if json_message.blank?
+-
+-          message_id = json_message["id"]
+-
+-          conversation.add_message(
+-            from: @package.app.agents.first,
+-            message: {
+-              html_content: "WHATSAPP TEMPLATE SENT: #{template['name']}"
+-              # serialized_content: serialized_content
+-            },
+-            provider: PROVIDER,
+-            message_source_id: message_id,
+-            check_assignment_rules: false
+-          )
+-
+-        end
+-        json.merge({ "conversation_key" => conversation.key })
+       end
++      private :add_template_message
+ 
+       # not used fro now
+       def mark_as_read(id)
+diff --git a/app/services/message_apis/message_bird/api.rb b/app/services/message_apis/message_bird/api.rb
+index f2f109f9..a2f6ccea 100644
+--- a/app/services/message_apis/message_bird/api.rb
++++ b/app/services/message_apis/message_bird/api.rb
+@@ -38,6 +38,10 @@ module MessageApis
+ 
+       PROVIDER = "message_bird"
+       RESUMABLE_DELIVERY = true
++      MEDIA_TYPES = {
++        "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
++      }.freeze
++      private_constant :MEDIA_TYPES
+       include MessageApis::Helpers
+ 
+       attr_accessor :url, :api_key, :conn
+@@ -114,23 +118,8 @@ module MessageApis
+       def send_message(conversation, part)
+         return if part.private_note?
+ 
+-        message = part.message.as_json
+-        content = message["serialized_content"]
+-        if content.blank?
+-          text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
+-          return if text.blank?
+-
+-          content = MessageApis::BlockManager.serialized_text(text)
+-        end
+-
+-        begin
+-          blocks = MessageApis::BlockManager.get_blocks(content)
+-          return unless blocks.is_a?(Array) && blocks.present?
+-
+-          plain_message = MessageApis::BlockManager.plain_text(blocks)
+-        rescue JSON::ParserError, TypeError, NoMethodError
+-          return
+-        end
++        blocks, plain_message = outgoing_blocks(part.message.as_json)
++        return if blocks.nil?
+ 
+         external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
+         profile_id = external_profile&.profile_id
+@@ -138,9 +127,10 @@ module MessageApis
+         # TODO: maybe handle an error here ?
+         return if profile_id.blank?
+ 
+-        media_types = {
+-          "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
+-        }
++        deliver_blocks(conversation, part, blocks, plain_message, profile_id)
++      end
++
++      def deliver_blocks(conversation, part, blocks, plain_message, profile_id)
+         addressing = {
+           from: @phone,
+           to: profile_id.gsub("+", "")
+@@ -151,12 +141,35 @@ module MessageApis
+         MessageApis::BlockManager.deliver_attachments(
+           attachments, plain_message, send_text: send_text, **delivery_hooks(conversation, part)
+         ) do |block_type, url, caption|
+-          type = media_types.fetch(block_type)
++          type = MEDIA_TYPES.fetch(block_type)
+           data = { url: url }
+           data[:caption] = caption if caption
+           post_content.call(type: type, content: { type => data })
+         end
+       end
++      private :deliver_blocks
++
++      def outgoing_blocks(message)
++        content = message["serialized_content"]
++        if content.blank?
++          text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
++          return if text.blank?
++
++          content = MessageApis::BlockManager.serialized_text(text)
++        end
++        parse_blocks(content)
++      end
++      private :outgoing_blocks
++
++      def parse_blocks(content)
++        blocks = MessageApis::BlockManager.get_blocks(content)
++        return unless blocks.is_a?(Array) && blocks.present?
++
++        [blocks, MessageApis::BlockManager.plain_text(blocks)]
++      rescue JSON::ParserError, TypeError, NoMethodError
++        nil
++      end
++      private :parse_blocks
+ 
+       # not used fro now
+       def mark_as_read(id)
+diff --git a/app/services/message_apis/twilio/api.rb b/app/services/message_apis/twilio/api.rb
+index 2180bda9..9eecceb8 100644
+--- a/app/services/message_apis/twilio/api.rb
++++ b/app/services/message_apis/twilio/api.rb
+@@ -156,23 +156,7 @@ module MessageApis
+         # TODO: maybe handle an error here ?
+         return if profile_id.blank?
+ 
+-        message_params = { From: "whatsapp:#{@phone}", To: profile_id }
+-        send_text = ->(text) { @conn.post(@url, message_params.merge(Body: text)) }
+-        plain_message = MessageApis::BlockManager.plain_text(blocks)
+-        attachments = MessageApis::BlockManager.media_blocks(blocks)
+-
+-        response = if attachments.empty?
+-                     send_text.call(plain_message)
+-                   else
+-                     MessageApis::BlockManager.deliver_attachments(
+-                       attachments, plain_message,
+-                       send_text: send_text, captionless: method(:captionless_attachment?), **delivery_hooks(conversation, part)
+-                     ) do |_type, url, caption|
+-                       params = message_params.merge(MediaUrl: url)
+-                       params[:Body] = caption if caption
+-                       @conn.post(@url, params)
+-                     end
+-                   end
++        response = deliver_blocks(conversation, part, blocks, { From: "whatsapp:#{@phone}", To: profile_id })
+         return unless response
+ 
+         unless response.success?
+@@ -183,6 +167,23 @@ module MessageApis
+         response
+       end
+ 
++      def deliver_blocks(conversation, part, blocks, message_params)
++        send_text = ->(text) { @conn.post(@url, message_params.merge(Body: text)) }
++        plain_message = MessageApis::BlockManager.plain_text(blocks)
++        attachments = MessageApis::BlockManager.media_blocks(blocks)
++        return send_text.call(plain_message) if attachments.empty?
++
++        MessageApis::BlockManager.deliver_attachments(
++          attachments, plain_message,
++          send_text: send_text, captionless: method(:captionless_attachment?), **delivery_hooks(conversation, part)
++        ) do |_type, url, caption|
++          params = message_params.merge(MediaUrl: url)
++          params[:Body] = caption if caption
++          @conn.post(@url, params)
++        end
++      end
++      private :deliver_blocks
++
+       def captionless_attachment?(type, url)
+         type != "ImageBlock" || !URI.parse(url).path.to_s.match?(/\.(?:jpe?g|png)\z/i)
+       end
+diff --git a/app/services/message_apis/vonage/api.rb b/app/services/message_apis/vonage/api.rb
+index 6e717b1d..a77759f9 100644
+--- a/app/services/message_apis/vonage/api.rb
++++ b/app/services/message_apis/vonage/api.rb
+@@ -47,6 +47,10 @@ module MessageApis
+ 
+       PROVIDER = "vonage"
+       RESUMABLE_DELIVERY = true
++      MEDIA_TYPES = {
++        "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
++      }.freeze
++      private_constant :MEDIA_TYPES
+ 
+       attr_accessor :url, :api_token, :api_key, :conn
+ 
+@@ -100,23 +104,8 @@ module MessageApis
+       def send_message(conversation, part)
+         return if part.private_note?
+ 
+-        message = part.message.as_json
+-        content = message["serialized_content"]
+-        if content.blank?
+-          text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
+-          return if text.blank?
+-
+-          content = MessageApis::BlockManager.serialized_text(text)
+-        end
+-
+-        begin
+-          blocks = MessageApis::BlockManager.get_blocks(content)
+-          return unless blocks.is_a?(Array) && blocks.present?
+-
+-          plain_message = MessageApis::BlockManager.plain_text(blocks)
+-        rescue JSON::ParserError, TypeError, NoMethodError
+-          return
+-        end
++        blocks, plain_message = outgoing_blocks(part.message.as_json)
++        return if blocks.nil?
+ 
+         external_profile = conversation.main_participant&.external_profiles&.find_by(provider: PROVIDER)
+         profile_id = external_profile&.profile_id
+@@ -124,9 +113,10 @@ module MessageApis
+         # TODO: maybe handle an error here ?
+         return if profile_id.blank?
+ 
+-        media_types = {
+-          "ImageBlock" => "image", "VideoBlock" => "video", "FileBlock" => "file", "AudioRecorderBlock" => "audio"
+-        }
++        deliver_blocks(conversation, part, blocks, plain_message, profile_id)
++      end
++
++      def deliver_blocks(conversation, part, blocks, plain_message, profile_id)
+         addressing = {
+           from: { type: "whatsapp", number: @phone },
+           to: { type: "whatsapp", number: profile_id }
+@@ -137,12 +127,35 @@ module MessageApis
+         MessageApis::BlockManager.deliver_attachments(
+           attachments, plain_message, send_text: send_text, **delivery_hooks(conversation, part)
+         ) do |block_type, url, caption|
+-          type = media_types.fetch(block_type)
++          type = MEDIA_TYPES.fetch(block_type)
+           data = { url: url }
+           data[:caption] = caption if caption
+           post_content.call(type: type, type => data)
+         end
+       end
++      private :deliver_blocks
++
++      def outgoing_blocks(message)
++        content = message["serialized_content"]
++        if content.blank?
++          text = Loofah.fragment(message["html_content"].to_s).to_text(encode_special_chars: false).strip
++          return if text.blank?
++
++          content = MessageApis::BlockManager.serialized_text(text)
++        end
++        parse_blocks(content)
++      end
++      private :outgoing_blocks
++
++      def parse_blocks(content)
++        blocks = MessageApis::BlockManager.get_blocks(content)
++        return unless blocks.is_a?(Array) && blocks.present?
++
++        [blocks, MessageApis::BlockManager.plain_text(blocks)]
++      rescue JSON::ParserError, TypeError, NoMethodError
++        nil
++      end
++      private :parse_blocks
+ 
+       def process_message(params, package)
+         @package = package
