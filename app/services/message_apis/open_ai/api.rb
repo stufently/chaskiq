@@ -107,45 +107,15 @@ module MessageApis
         return if part.conversation_part_channel_sources.where(provider: "open_ai").any?
 
         Rails.logger.info "NOTIFY MESSAGE OPEN AI #{part.id}"
-
         return if part.authorable.is_a?(Agent)
 
-        previous = previous_messages(conversation, part)
-
-        parsed_content = part&.message&.parsed_content
-        human_input = parsed_content["blocks"]
-        human_input = human_input&.pluck("text")&.join(" ")
-
-        messages = previous << { role: "user", content: human_input }
+        messages = build_prompt_messages(conversation, part)
 
         Rails.cache.write("/conversation/#{conversation.key}/openai", messages)
-
         Rails.logger.info "PROMPT: #{messages}"
 
         gpt_result = get_gpt_response(gpt_channel.data["prompt"], messages, part.authorable.id.to_s)
-
-        Rails.logger.info(gpt_result)
-        text = begin
-          gpt_result["choices"].first["message"]["content"]
-        rescue StandardError
-          nil
-        end
-
-        return if text.nil?
-
-        blocks = {
-          blocks: [
-            serialized_block(text)
-          ].flatten.compact
-        }.to_json
-
-        add_message(
-          conversation: conversation,
-          from: conversation.app.agents.bots.first,
-          text: text,
-          blocks: blocks,
-          message_id: gpt_result[:id]
-        )
+        save_gpt_reply(conversation, gpt_result)
       end
 
       def previous_messages(conversation, part)
@@ -213,6 +183,40 @@ module MessageApis
 
       # for display in replied message
       def self.display_data(data); end
+
+      private
+
+      def build_prompt_messages(conversation, part)
+        previous = previous_messages(conversation, part)
+        parsed_content = part&.message&.parsed_content
+        human_input = parsed_content["blocks"]
+        human_input = human_input&.pluck("text")&.join(" ")
+        previous << { role: "user", content: human_input }
+      end
+
+      def save_gpt_reply(conversation, gpt_result)
+        Rails.logger.info(gpt_result)
+        text = begin
+          gpt_result["choices"].first["message"]["content"]
+        rescue StandardError
+          nil
+        end
+        return if text.nil?
+
+        blocks = {
+          blocks: [
+            serialized_block(text)
+          ].flatten.compact
+        }.to_json
+
+        add_message(
+          conversation: conversation,
+          from: conversation.app.agents.bots.first,
+          text: text,
+          blocks: blocks,
+          message_id: gpt_result[:id]
+        )
+      end
     end
   end
 end
