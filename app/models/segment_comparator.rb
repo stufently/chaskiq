@@ -1,6 +1,23 @@
 # frozen_string_literal: true
 
 class SegmentComparator
+  # comparison name of a predicate => check of the user's value against the predicate's value
+  COMPARISONS = {
+    "contains_start" => ->(input, value) { input.start_with?(value) },
+    "contains_ends" => ->(input, value) { input.end_with?(value) },
+    "is_null" => ->(input, _value) { input.blank? },
+    "is_not_null" => ->(input, _value) { input.present? },
+    "contains" => ->(input, value) { input.include?(value) },
+    "not_contains" => ->(input, value) { input.exclude?(value) },
+    "not_eq" => ->(input, value) { input != value },
+    "eq" => ->(input, value) { input == value },
+    "lt" => ->(input, value) { input < value },
+    "lteq" => ->(input, value) { input <= value },
+    "gt" => ->(input, value) { input > value },
+    "in" => ->(input, value) { input.in?(value) },
+    "gteq" => ->(input, value) { input >= value }
+  }.freeze
+
   attr_accessor :user, :predicates, :additional_fields
 
   def initialize(user:, predicates:, additional_fields: {})
@@ -56,21 +73,7 @@ class SegmentComparator
   end
 
   def compare_with(user_input, predicate_value, comparison)
-    case comparison
-    when "contains_start" then user_input.start_with?(predicate_value)
-    when "contains_ends" then user_input.end_with?(predicate_value)
-    when "is_null" then user_input.blank?
-    when "is_not_null" then user_input.present?
-    when "contains" then user_input.include?(predicate_value)
-    when "not_contains" then user_input.exclude?(predicate_value)
-    when "not_eq" then user_input != predicate_value
-    when "eq" then user_input == predicate_value
-    when "lt" then user_input < predicate_value
-    when "lteq" then user_input <= predicate_value
-    when "gt" then user_input > predicate_value
-    when "in" then user_input.in?(predicate_value)
-    when "gteq" then user_input >= predicate_value
-    end
+    COMPARISONS[comparison]&.call(user_input, predicate_value)
   end
 
   def handle_comparison(field, predicate)

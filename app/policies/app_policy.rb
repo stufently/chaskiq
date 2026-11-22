@@ -60,19 +60,22 @@ class AppPolicy < ActionPolicy::Base
   end
 
   def find_role_by_resource
-    if @record.is_a?(App)
-      return @owner ||= true if @record.owner_id == @user.id
-
-      @role ||= @record.roles.find_by(agent_id: @user.id)
-    elsif @record.respond_to?(:app)
-      return @owner ||= true if @record.app.owner_id == @user.id
-
-      @role ||= @record.app.roles.find_by(agent_id: @user.id)
-    elsif @app.present?
-      return @owner ||= true if @app.owner_id == @user.id
-
-      @role ||= @app.roles.find_by(agent_id: @user.id)
+    app = resource_app { return }
+    if app.owner_id == @user.id
+      @owner ||= true
+    else
+      @role ||= app.roles.find_by(agent_id: @user.id)
     end
+  end
+
+  # The app the record belongs to (the record itself, its #app, or the authorized app); yields when
+  # there is none. A record whose #app is nil is returned as nil, as before.
+  def resource_app
+    return @record if @record.is_a?(App)
+    return @record.app if @record.respond_to?(:app)
+    return @app if @app.present?
+
+    yield
   end
 
   def show?

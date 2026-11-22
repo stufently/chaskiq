@@ -115,7 +115,14 @@ module Types
         # lang: I18n.locale #user_data[:properties][:lang]
       }
 
-      location_params = {
+      browser_params.merge!(location_params(request)) if request.location.present?
+
+      user_data.slice(:name, :email, :properties).deep_merge(browser_params)
+      # #ap = object.add_visit(data)
+    end
+
+    def location_params(request)
+      {
         city: request.location&.city,
         # region_code:      request.location.region,
         region: request.location.try(:region),
@@ -125,11 +132,6 @@ module Types
         lng: request.location&.longitude,
         postal: request.location&.postal_code
       }
-
-      browser_params.merge!(location_params) if request.location.present?
-
-      user_data.slice(:name, :email, :properties).deep_merge(browser_params)
-      # #ap = object.add_visit(data)
     end
 
     def user_conversations

@@ -43,17 +43,11 @@ module Dante
       position = 0
 
       while position < text.length
-        style = inline_style_ranges.select { |range| position >= range[:offset] && position < (range[:offset] + range[:length]) }
+        style = ranges_at(inline_style_ranges, position)
         marks = style.flat_map { |s| convert_style_to_marks(s[:style]) }
+        marks.concat(link_marks(entity_ranges, entity_map, position))
 
-        entity_range = entity_ranges.find { |range| position >= range[:offset] && position < (range[:offset] + range[:length]) }
-        if entity_range
-          entity = entity_map[entity_range[:key].to_s.to_sym]
-          marks << { type: "link", attrs: { href: entity[:data][:url] } } if entity[:type] == "LINK"
-        end
-
-        next_position_ranges = style.map { |s| s[:offset] + s[:length] } + entity_ranges.map { |range| range[:offset] + range[:length] }
-        next_position = next_position_ranges.select { |pos| pos > position }.min || text.length
+        next_position = next_range_end(style + entity_ranges, position) || text.length
         nodes << {
           type: "text",
           text: text[position...next_position],
@@ -63,6 +57,25 @@ module Dante
       end
 
       nodes
+    end
+
+    # The ranges ({offset:, length:}) that cover the character at position.
+    def self.ranges_at(ranges, position)
+      ranges.select { |range| position >= range[:offset] && position < (range[:offset] + range[:length]) }
+    end
+
+    # The link mark of the first entity range covering position, if its entity is a LINK.
+    def self.link_marks(entity_ranges, entity_map, position)
+      entity_range = entity_ranges.find { |range| position >= range[:offset] && position < (range[:offset] + range[:length]) }
+      return [] unless entity_range
+
+      entity = entity_map[entity_range[:key].to_s.to_sym]
+      entity[:type] == "LINK" ? [{ type: "link", attrs: { href: entity[:data][:url] } }] : []
+    end
+
+    # The nearest end of the given ranges after position (nil when none ends after it).
+    def self.next_range_end(ranges, position)
+      ranges.map { |range| range[:offset] + range[:length] }.select { |pos| pos > position }.min
     end
 
     def self.convert_block_type(draftjs_block_type)
