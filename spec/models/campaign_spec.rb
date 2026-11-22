@@ -34,7 +34,9 @@ RSpec.describe Campaign, type: :model do
   end
 
   let(:campaign) { FactoryBot.create(:campaign, app: app) }
-  let(:premailer_template) { "<p>{{name}} {{last_name}} {{email}} {{campaign_url}} {{campaign_subscribe}} {{campaign_unsubscribe}}this is the template</p>" }
+  let(:premailer_template) do
+    "<p>{{name}} {{last_name}} {{email}} {{campaign_url}} {{campaign_subscribe}} {{campaign_unsubscribe}}this is the template</p>"
+  end
 
   describe "creation" do
     it "will create a pending campaign by default" do

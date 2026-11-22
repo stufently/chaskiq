@@ -1,0 +1,58 @@
+{
+  "id": 11,
+  "company_id": 7468915,
+  "owner_id": 11379745,
+  "org_id": null,
+  "name": "test users",
+  "first_name": "test",
+  "last_name": "users",
+  "open_deals_count": 0,
+  "related_open_deals_count": 0,
+  "closed_deals_count": 0,
+  "related_closed_deals_count": 0,
+  "participant_open_deals_count": 0,
+  "participant_closed_deals_count": 0,
+  "email_messages_count": 0,
+  "activities_count": 0,
+  "done_activities_count": 0,
+  "undone_activities_count": 0,
+  "reference_activities_count": 0,
+  "files_count": 0,
+  "notes_count": 0,
+  "followers_count": 1,
+  "won_deals_count": 0,
+  "related_won_deals_count": 0,
+  "lost_deals_count": 0,
+  "related_lost_deals_count": 0,
+  "active_flag": true,
+  "phone": [
+    {
+      "value": "",
+      "primary": true
+    }
+  ],
+  "email": [
+    {
+      "label": "work",
+      "value": "aa@aa.cl",
+      "primary": true
+    }
+  ],
+  "first_char": "t",
+  "update_time": "2020-02-13 17:03:54",
+  "add_time": "2020-02-13 17:03:53",
+  "visible_to": "3",
+  "google_contact_id": null,
+  "picture_id": null,
+  "next_activity_date": null,
+  "next_activity_time": null,
+  "next_activity_id": null,
+  "last_activity_id": null,
+  "last_activity_date": null,
+  "last_incoming_mail_time": null,
+  "last_outgoing_mail_time": null,
+  "label": null,
+  "org_name": null,
+  "cc_email": "michelson@pipedrivemail.com",
+  "owner_name": "miguel"
+}

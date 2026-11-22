@@ -404,7 +404,9 @@ RSpec.describe Api::V1::Hooks::ProviderController, type: :controller do
     end
 
     def expect_delivery(text)
-      stub = stub_request(:post, endpoint).with(headers: { "Authorization" => "Basic #{Base64.strict_encode64('test-sid:test-token')}" }) do |request|
+      stub = stub_request(:post, endpoint).with(
+        headers: { "Authorization" => "Basic #{Base64.strict_encode64('test-sid:test-token')}" }
+      ) do |request|
         Rack::Utils.parse_query(request.body)["Body"] == text
       end
       stub.to_return(status: 200, body: "{}")
