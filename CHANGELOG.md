@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10i
+
+- Changed: `MessageApis::Dialog360::Presenter.configure_hook` (the WhatsApp template wizard of the
+  Dialog360 app) is split into one private method per step: contact search gate, template list
+  with pagination buttons, parameters form (`submit-template`) and send (`pick-template`), picked
+  from the `TEMPLATE_STEPS` table. The order of the checks, the key forms read from `ctx` and the
+  calls to the Dialog360 API are kept; the stray in-file disable comment for PerceivedComplexity is gone.
+  Its output is pinned by 29 JSON snapshots generated from the old code with a stubbed API
+  (spec/fixtures/dialog360/configure_hook/, one per branch, including raised errors and the API
+  calls made) and a new spec that compares the full returned value, key order included. The
+  three Metrics outliers of the method leave the todo.
+
 ## 2026-11-22 — fork-updates-r10h1
 
 - Changed: `MessageApis::ContentShowcase::Presenter.configure_hook` is split without a change in

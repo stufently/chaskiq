@@ -1,0 +1,33 @@
+{
+  "case": "search_symbol_keys_term",
+  "kind": "configure",
+  "ctx_keys": "symbol",
+  "ctx": {
+    "values": {
+      "search_contact": "ann"
+    }
+  },
+  "api": {},
+  "calls": [],
+  "outcome": {
+    "result": {
+      "definitions": [
+        {
+          "type": "input",
+          "id": "unsaved-2",
+          "name": "search_contact",
+          "label": "Search contact by email, name or phone",
+          "placeholder": "Search for a contact...",
+          "save_state": "unsaved",
+          "action": {
+            "type": "submit"
+          }
+        },
+        {
+          "type": "spacer",
+          "size": "m"
+        }
+      ]
+    }
+  }
+}

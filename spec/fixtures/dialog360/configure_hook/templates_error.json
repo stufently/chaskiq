@@ -1,0 +1,32 @@
+{
+  "case": "templates_error",
+  "kind": "custom",
+  "ctx_keys": "indifferent",
+  "ctx": {
+    "conversation_key": "conv-1"
+  },
+  "api": {
+    "templates_json": "{\"meta\":{\"success\":false,\"developer_message\":\"Invalid api key\"},\"count\":0,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":0,\"waba_templates\":[]}"
+  },
+  "calls": [
+    {
+      "call": "retrieve_templates",
+      "args": [
+        {
+          "offset": 0
+        }
+      ]
+    }
+  ],
+  "outcome": {
+    "result": {
+      "kind": "custom",
+      "definitions": [
+        {
+          "type": "text",
+          "text": "Error retrieving templates Invalid api key"
+        }
+      ]
+    }
+  }
+}

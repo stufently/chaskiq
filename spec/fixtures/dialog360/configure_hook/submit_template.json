@@ -1,0 +1,115 @@
+{
+  "case": "submit_template",
+  "kind": "configure",
+  "ctx_keys": "indifferent",
+  "ctx": {
+    "field": {
+      "name": "submit-template",
+      "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+      "title": "Template Name: form_tpl",
+      "action": {
+        "type": "submit"
+      }
+    },
+    "values": {
+      "selected_user": "7"
+    }
+  },
+  "api": {
+    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":0,\"sort\":[\"id\"],\"total\":4,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+  },
+  "calls": [
+    {
+      "call": "retrieve_templates",
+      "args": [
+        {
+          "offset": 0
+        }
+      ]
+    }
+  ],
+  "outcome": {
+    "result": {
+      "kind": "configure",
+      "definitions": [
+        {
+          "type": "text",
+          "text": "Whatsapp template",
+          "style": "header",
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "text": "Template Name: form_tpl",
+          "style": "muted",
+          "align": "center"
+        },
+        {
+          "type": "spacer",
+          "size": "m"
+        },
+        {
+          "type": "input",
+          "id": "unsaved-1",
+          "label": "parameter: {{1}}",
+          "placeholder": "{{1}}",
+          "save_state": "unsaved"
+        },
+        {
+          "type": "spacer",
+          "size": "m"
+        },
+        {
+          "type": "text",
+          "text": "Hi {{1}}",
+          "style": "muted"
+        },
+        {
+          "type": "input",
+          "id": "unsaved-1",
+          "label": "parameter: {{1}}",
+          "placeholder": "{{1}}",
+          "save_state": "unsaved"
+        },
+        {
+          "type": "input",
+          "id": "unsaved-1",
+          "label": "parameter: {{2}}",
+          "placeholder": "{{2}}",
+          "save_state": "unsaved"
+        },
+        {
+          "type": "spacer",
+          "size": "m"
+        },
+        {
+          "type": "text",
+          "text": "Order {{1}} for {{2}} and {{10}}",
+          "style": "muted"
+        },
+        {
+          "type": "button",
+          "name": "pick-template",
+          "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+          "variant": "success",
+          "size": "large",
+          "align": "center",
+          "label": "confirm",
+          "action": {
+            "type": "submit"
+          }
+        },
+        {
+          "value": "7",
+          "name": "selected_user",
+          "type": "hidden",
+          "id": "selected_user"
+        }
+      ],
+      "results": {
+        "id": "eyJuYW1lIjoiZm9ybV90cGwiLCJjYXRlZ29yeSI6IlVUSUxJVFkiLCJzdGF0\ndXMiOiJhcHByb3ZlZCIsImxhbmd1YWdlIjoiZW4iLCJuYW1lc3BhY2UiOiJu\ncy0yIiwiY29tcG9uZW50cyI6W3sidHlwZSI6IkhFQURFUiIsImZvcm1hdCI6\nIlRFWFQiLCJ0ZXh0IjoiSGkge3sxfX0ifSx7InR5cGUiOiJCT0RZIiwidGV4\ndCI6Ik9yZGVyIHt7MX19IGZvciB7ezJ9fSBhbmQge3sxMH19In0seyJ0eXBl\nIjoiRk9PVEVSIiwidGV4dCI6Im5vIHBhcmFtcyJ9LHsidHlwZSI6IkJVVFRP\nTlMiLCJidXR0b25zIjpbeyJ0eXBlIjoiUVVJQ0tfUkVQTFkiLCJ0ZXh0Ijoi\nb2sifV19XX0=\n",
+        "label": "Template Name: form_tpl"
+      }
+    }
+  }
+}

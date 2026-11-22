@@ -1,0 +1,89 @@
+{
+  "case": "page_last_kind_custom",
+  "kind": "custom",
+  "ctx_keys": "indifferent",
+  "ctx": {
+    "conversation_key": "conv-1",
+    "field": {
+      "name": "paginate-template",
+      "id": "paginate-template-20"
+    }
+  },
+  "api": {
+    "templates_json": "{\"count\":4,\"filters\":{},\"limit\":10,\"offset\":20,\"sort\":[\"id\"],\"total\":25,\"waba_templates\":[{\"name\":\"order_update\",\"category\":\"ACCOUNT_UPDATE\",\"status\":\"approved\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Order {{1}} shipped\"}]},{\"name\":\"promo\",\"category\":\"MARKETING\",\"status\":\"rejected\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"BODY\",\"text\":\"Sale {{1}}\"}]},{\"name\":\"welcome & co\",\"category\":\"MARKETING\",\"status\":\"approved\",\"language\":\"es\",\"namespace\":\"ns-1\",\"components\":[{\"type\":\"HEADER\",\"format\":\"TEXT\",\"text\":\"Hola\"},{\"type\":\"BODY\",\"text\":\"Hi {{1}}, code <{{2}}>\"}]},{\"name\":\"later\",\"category\":\"UTILITY\",\"status\":\"pending\",\"language\":\"en\",\"namespace\":\"ns-1\",\"components\":[]}]}"
+  },
+  "calls": [
+    {
+      "call": "retrieve_templates",
+      "args": [
+        {
+          "offset": 20
+        }
+      ]
+    }
+  ],
+  "outcome": {
+    "result": {
+      "kind": "custom",
+      "definitions": [
+        {
+          "type": "text",
+          "text": "Whatsapp templates",
+          "style": "header",
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "text": "Whatsapp templates",
+          "style": "paragraph",
+          "align": "center"
+        },
+        {
+          "type": "spacer",
+          "size": "xs"
+        },
+        {
+          "type": "separator"
+        },
+        {
+          "type": "list",
+          "disabled": false,
+          "items": [
+            {
+              "type": "item",
+              "id": "eyJuYW1lIjoib3JkZXJfdXBkYXRlIiwiY2F0ZWdvcnkiOiJBQ0NPVU5UX1VQ\nREFURSIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlbiIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiQk9EWSIs\nInRleHQiOiJPcmRlciB7ezF9fSBzaGlwcGVkIn1dfQ==\n",
+              "name": "submit-template",
+              "title": "Template Name: order_update",
+              "subtitle": "Category: ACCOUNT_UPDATE",
+              "action": {
+                "type": "submit"
+              }
+            },
+            {
+              "type": "item",
+              "id": "eyJuYW1lIjoid2VsY29tZSBcdTAwMjYgY28iLCJjYXRlZ29yeSI6Ik1BUktF\nVElORyIsInN0YXR1cyI6ImFwcHJvdmVkIiwibGFuZ3VhZ2UiOiJlcyIsIm5h\nbWVzcGFjZSI6Im5zLTEiLCJjb21wb25lbnRzIjpbeyJ0eXBlIjoiSEVBREVS\nIiwiZm9ybWF0IjoiVEVYVCIsInRleHQiOiJIb2xhIn0seyJ0eXBlIjoiQk9E\nWSIsInRleHQiOiJIaSB7ezF9fSwgY29kZSBcdTAwM2N7ezJ9fVx1MDAzZSJ9\nXX0=\n",
+              "name": "submit-template",
+              "title": "Template Name: welcome & co",
+              "subtitle": "Category: MARKETING",
+              "action": {
+                "type": "submit"
+              }
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "name": "paginate-template",
+          "id": "paginate-template-10",
+          "variant": "success",
+          "size": "small",
+          "align": "center",
+          "label": "<- Prev",
+          "action": {
+            "type": "submit"
+          }
+        }
+      ]
+    }
+  }
+}

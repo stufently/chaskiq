@@ -1,0 +1,29 @@
+{
+  "case": "search_no_field",
+  "kind": "configure",
+  "ctx_keys": "indifferent",
+  "ctx": {},
+  "api": {},
+  "calls": [],
+  "outcome": {
+    "result": {
+      "definitions": [
+        {
+          "type": "input",
+          "id": "unsaved-2",
+          "name": "search_contact",
+          "label": "Search contact by email, name or phone",
+          "placeholder": "Search for a contact...",
+          "save_state": "unsaved",
+          "action": {
+            "type": "submit"
+          }
+        },
+        {
+          "type": "spacer",
+          "size": "m"
+        }
+      ]
+    }
+  }
+}

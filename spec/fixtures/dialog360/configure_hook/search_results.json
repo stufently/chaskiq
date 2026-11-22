@@ -1,0 +1,109 @@
+{
+  "case": "search_results",
+  "kind": "custom",
+  "ctx_keys": "indifferent",
+  "ctx": {
+    "values": {
+      "search_contact": "ann"
+    }
+  },
+  "api": {
+    "users": [
+      {
+        "id": 7,
+        "type": "AppUser",
+        "display_name": "Ann Lee",
+        "email": "ann@example.com",
+        "phone": "+15550001",
+        "label": "Dialog360 profile: 15550001"
+      },
+      {
+        "id": 9,
+        "type": "Lead",
+        "display_name": "Anna Visitor",
+        "email": null,
+        "phone": null,
+        "label": null
+      }
+    ]
+  },
+  "calls": [
+    {
+      "call": "limit",
+      "args": [
+        15
+      ]
+    },
+    {
+      "call": "ransack",
+      "args": [
+        {
+          "last_name_or_first_name_or_name_or_email_or_phone_or_external_profiles_profile_id_i_cont_any": "ann"
+        }
+      ]
+    },
+    {
+      "call": "result",
+      "args": []
+    },
+    {
+      "call": "get_profile_for_participant_label",
+      "args": [
+        7
+      ]
+    },
+    {
+      "call": "get_profile_for_participant_label",
+      "args": [
+        9
+      ]
+    }
+  ],
+  "outcome": {
+    "result": {
+      "definitions": [
+        {
+          "type": "input",
+          "id": "unsaved-2",
+          "name": "search_contact",
+          "label": "Search contact by email, name or phone",
+          "placeholder": "Search for a contact...",
+          "save_state": "unsaved",
+          "action": {
+            "type": "submit"
+          }
+        },
+        {
+          "type": "spacer",
+          "size": "m"
+        },
+        {
+          "type": "list",
+          "disabled": false,
+          "items": [
+            {
+              "type": "item",
+              "id": 7,
+              "name": "selected-user",
+              "title": "AppUser: Ann Lee ann@example.com",
+              "subtitle": "Phone: +15550001 | Dialog360 profile: 15550001",
+              "action": {
+                "type": "submit"
+              }
+            },
+            {
+              "type": "item",
+              "id": 9,
+              "name": "selected-user",
+              "title": "Lead: Anna Visitor ",
+              "subtitle": "Phone:  | ",
+              "action": {
+                "type": "submit"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
