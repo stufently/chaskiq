@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-22 — fork-updates-r10o
+
+- Changed: attachment delivery separates media attempts, text fallback and failure reporting.
+  Dante renders HTML nodes through smaller dispatch methods and migrates bot-task messages
+  one record at a time. Tests cover attachment replay indices, HTML and renderer arguments,
+  and migration failures. Eight RuboCop exclusions were removed.
+
 ## 2026-11-22 — fork-updates-r10n
 
 - Changed: `MessageApis::OpenAi::Api#notify_message` and `MessageApis::Csat::Api#report` are split
