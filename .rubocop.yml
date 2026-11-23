@@ -36,6 +36,9 @@ Lint/EmptyBlock:
 # config/** is outside AllCops too; the entry keeps the decision if config/ is ever linted.
 # CountAsOne: see Metrics/MethodLength.
 Metrics/BlockLength:
+  # Preserve the default exclusions alongside the project-specific ones.
+  inherit_mode:
+    merge: [Exclude]
   CountAsOne: [array, hash, heredoc]
   Exclude:
   - 'spec/**/*'
@@ -88,6 +91,9 @@ Style/CaseEquality:
 # PluginSchemaValidator is one validator built from 21 small schema node classes; a file per class
 # would scatter it without making it clearer.
 Style/OneClassPerFile:
+  # Preserve the default exclusions alongside the project-specific ones.
+  inherit_mode:
+    merge: [Exclude]
   Exclude:
     - 'app/services/plugin_schema_validator.rb'
 # Owner decision 2026-11-20 (docs/specs/fork-updates-rubocop-plan.md, R7): stub class comments
@@ -150,6 +156,9 @@ Layout/LineLength:
     - '\A.{0,139}https?://[^\s"''`<>]+["''`]?[\s,;)\]}]*\z'
     - '\A.{0,139}(?=[A-Za-z0-9+/]*\d)(?=[A-Za-z0-9+/]*[A-Z])(?=[A-Za-z0-9+/]*[a-z])[A-Za-z0-9+/]{40,}={0,2}["'']?[\s,;)\]}]*\z'
 AllCops:
+  # Preserve the default exclusions alongside the project-specific ones.
+  inherit_mode:
+    merge: [Exclude]
   NewCops: enable
   Exclude:
     - 'node_modules/**/*'

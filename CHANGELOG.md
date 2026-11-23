@@ -4,7 +4,7 @@
 
 - Remove the RuboCop backlog file and its inheritance settings after resolving
   the remaining exclusions. The local and GitHub checks use the main RuboCop
-  configuration directly.
+  configuration directly, preserving the existing default exclusions.
 
 ## 2026-11-23 — fork-updates-r10r
 
