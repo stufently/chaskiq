@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-23 — fork-updates-r10u
+
+- Refactored four RuboCop outliers: `AppPackageIntegration#call_hook` and
+  `Plugin.save_plugin_files_to_folder` (AbcSize), `GlobalizeAccessors` included
+  block (BlockLength), and `BaseSchema#initialize` (CyclomaticComplexity). Each
+  method was split into smaller helpers without changing behaviour. Removed the
+  four corresponding exclusions from .rubocop_todo.yml. Tests cover hook dispatch,
+  plugin file writing, localized accessor generation, and schema validation.
+
 ## 2026-11-23 — fork-updates-r10s
 
 - Split conversation creation and notification email delivery into smaller methods.

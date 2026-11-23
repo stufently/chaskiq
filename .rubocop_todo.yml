@@ -15,14 +15,11 @@ Metrics/AbcSize:
     - 'app/controllers/concerns/package_iframe_behavior.rb'
     - 'app/controllers/graphql_controller.rb'
     - 'app/graphql/types/app_type.rb'
-    - 'app/models/app_package_integration.rb'
-    - 'app/models/plugin.rb'
 
 # Configuration parameters: CountComments, Max, CountAsOne, AllowedMethods, AllowedPatterns.
 # AllowedMethods: refine
 Metrics/BlockLength:
-  Exclude:
-    - 'app/models/concerns/globalize_accessors.rb'
+  Exclude: []
 
 # Configuration parameters: CountComments, Max, CountAsOne.
 Metrics/ClassLength:
@@ -31,8 +28,7 @@ Metrics/ClassLength:
 
 # Configuration parameters: AllowedMethods, AllowedPatterns, Max.
 Metrics/CyclomaticComplexity:
-  Exclude:
-    - 'app/services/plugin_schema_validator.rb'
+  Exclude: []
 
 # Configuration parameters: CountComments, Max, CountAsOne, AllowedMethods, AllowedPatterns.
 Metrics/MethodLength:
