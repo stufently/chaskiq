@@ -3,7 +3,6 @@
 class ActionTrigger
   def self.trigger_step(data, app, current_user)
     conversation = app.conversations.find_by(key: data["conversation_key"])
-
     message = conversation.messages.find_by(key: data["message_key"])
 
     trigger, path = ActionTriggerFactory.find_task(
@@ -14,40 +13,12 @@ class ActionTrigger
 
     return if path.blank?
 
-    next_step = path["steps"].find do |o|
-      o["step_uid"] == data["step"]
-    end
+    next_step = find_step(path, data["step"])
 
     author = app.agent_bots.first
-
-    m = next_step["messages"].first
-
-    if m.present?
-      conversation.add_message(
-        step_id: next_step[:step_uid],
-        trigger_id: trigger.id,
-        from: author,
-        message: {
-          html_content: m[:html_content],
-          serialized_content: m[:serialized_content],
-          text_content: m[:html_content]
-        }
-      )
-    end
-
-    if message.from_bot? && data["reply"].present?
-      data_submit(data["reply"], message)
-      if trigger.respond_to?(:register_metric)
-        trigger.register_metric(
-          current_user,
-          data: data["reply"],
-          options: {
-            message_key: message.key,
-            conversation_key: conversation.key
-          }
-        )
-      end
-    end
+    content = next_step["messages"].first
+    add_step_message(conversation, next_step, trigger, author, content) if content.present?
+    handle_trigger_step_reply(trigger, current_user, message, conversation, data)
 
     return if next_step["controls"].blank?
 
@@ -77,23 +48,7 @@ class ActionTrigger
       app_user: current_user
     )
 
-    # for factory triggers this is needed, as they are dynamic
-    if path
-      next_index = path["steps"].index do |o|
-        o["step_uid"].to_s == message.step_id
-      end + 1
-      next_step = path["steps"][next_index]
-    else
-      # normal flow , get next step from next index on the static trigger
-      paths = trigger.paths.map do |o|
-        o[:steps].find do |s|
-          step_uid = s[:step_uid].to_s
-          blocks = message&.message&.blocks
-          step_uid == blocks&.dig("next_step_uuid")
-        end
-      end
-      next_step = paths.find { |o| o }.with_indifferent_access
-    end
+    next_step = resolve_next_step(path, trigger, message)
 
     if next_step.blank?
       handle_follow_actions(app, path, message)
@@ -101,25 +56,12 @@ class ActionTrigger
     end
 
     author = app.agent_bots.first
-
-    m = next_step["messages"].first
-
-    if m.present?
-      message = message.conversation.add_message(
-        step_id: next_step[:step_uid],
-        trigger_id: trigger.id,
-        from: author,
-        message: {
-          html_content: m[:html_content],
-          serialized_content: m[:serialized_content],
-          text_content: m[:html_content]
-        }
-      )
-    end
+    content = next_step["messages"].first
+    message = add_step_message(message.conversation, next_step, trigger, author, content) if content.present?
 
     return if next_step["controls"].blank?
 
-    message = message.conversation.add_message(
+    message.conversation.add_message(
       step_id: next_step[:step_uid],
       trigger_id: trigger.id,
       from: author,
@@ -140,7 +82,6 @@ class ActionTrigger
     conversation = message.conversation
     case action["key"]
     when "assign"
-      # assign_user
       return if action["value"].blank?
 
       agent = app.agents.find_by(id: action["value"])
@@ -156,8 +97,6 @@ class ActionTrigger
     conversation = app.conversations.find_by(key: data["conversation_key"])
     message = conversation.messages.find_by(key: data["message_key"])
 
-    # if the message was read skip processing
-    # this will avoid message duplication
     return if message.read?
 
     message.read! if message.authorable != current_user
@@ -169,10 +108,64 @@ class ActionTrigger
     #### TODO: to be deprecated in favor of app packages
     if data["submit"].present? && message.message&.blocks&.dig("type") == "data_retrieval"
       opts = app.searcheable_fields_list
-      current_user.update(data["submit"].slice(*opts)) # some condition from settings here?
+      current_user.update(data["submit"].slice(*opts))
       data_submit(data["submit"], message)
     end
 
     data_submit(data["reply"], message) if data["reply"].present?
+  end
+
+  class << self
+    private
+
+    def find_step(path, step_key)
+      path["steps"].find { |o| o["step_uid"] == step_key }
+    end
+
+    def add_step_message(conversation, step, trigger, author, content)
+      conversation.add_message(
+        step_id: step[:step_uid],
+        trigger_id: trigger.id,
+        from: author,
+        message: {
+          html_content: content[:html_content],
+          serialized_content: content[:serialized_content],
+          text_content: content[:html_content]
+        }
+      )
+    end
+
+    def handle_trigger_step_reply(trigger, current_user, message, conversation, data)
+      return unless message.from_bot? && data["reply"].present?
+
+      data_submit(data["reply"], message)
+      return unless trigger.respond_to?(:register_metric)
+
+      trigger.register_metric(
+        current_user,
+        data: data["reply"],
+        options: {
+          message_key: message.key,
+          conversation_key: conversation.key
+        }
+      )
+    end
+
+    def resolve_next_step(path, trigger, message)
+      if path
+        next_index = path["steps"].index { |o| o["step_uid"].to_s == message.step_id } + 1
+        return path["steps"][next_index]
+      end
+
+      paths = trigger.paths.map do |o|
+        o[:steps].find do |s|
+          step_uid = s[:step_uid].to_s
+          blocks = message&.message&.blocks
+          step_uid == blocks&.dig("next_step_uuid")
+        end
+      end
+      found = paths.find { |o| o }
+      found.with_indifferent_access
+    end
   end
 end

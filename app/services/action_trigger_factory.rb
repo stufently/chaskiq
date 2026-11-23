@@ -24,29 +24,7 @@ class ActionTriggerFactory
       c.after_delay = 2
       c.path(
         title: "request_for_email",
-        steps: [
-          c.message(
-            text: I18n.t("task_bots.email_requirement.message"),
-            uuid: 1,
-            agent: bot_agent
-          ),
-          c.controls(
-            uuid: 2,
-            type: "data_retrieval",
-            schema: [
-              c.input(
-                label: I18n.t("task_bots.email_requirement.input_label"),
-                name: "email",
-                placeholder: I18n.t("task_bots.email_requirement.placeholder")
-              )
-            ]
-          ),
-          c.message(
-            text: I18n.t("task_bots.email_requirement.ack"),
-            uuid: 3,
-            agent: bot_agent
-          )
-        ],
+        steps: request_email_steps(c, bot_agent),
         follow_actions: [c.assign(app.lead_tasks_settings["assignee"])]
       )
     end
@@ -64,27 +42,7 @@ class ActionTriggerFactory
 
       c.path(
         title: "route_support",
-        steps: [
-          c.message(
-            text: I18n.t("task_bots.support.ask", name: app.name),
-            uuid: 1,
-            agent: bot_agent
-          ),
-          c.controls(
-            uuid: 2,
-            type: "ask_option",
-            schema: [
-              c.button(
-                label: I18n.t("task_bots.support.options.op1"),
-                next_uuid: 3
-              ),
-              c.button(
-                label: I18n.t("task_bots.support.options.op2"),
-                next_uuid: 4
-              )
-            ]
-          )
-        ]
+        steps: route_support_steps(c, app, bot_agent, 1)
       )
       c.path(
         title: "yes",
@@ -128,166 +86,15 @@ class ActionTriggerFactory
 
   def self.infer_for(app:, user:)
     kind = user.model_name.name
-
     I18n.locale = user.lang
-
     subject = ActionTriggerFactory.new
-
     bot_agent = app.agents.bots.first
 
     subject.config do |c|
       c.id = "infer"
       c.after_delay = 2
-
-      path_messages = []
-      follow_actions = []
-
-      email_requirement = [
-        c.message(
-          text: I18n.t("task_bots.email_requirement.message"),
-          uuid: 2,
-          agent: bot_agent
-        ),
-
-        c.controls(
-          uuid: 3,
-          # type: 'data_retrieval',
-          type: "app_package",
-          app_package: "Qualifier",
-          next_step_uuid: "4",
-          schema: [
-            {
-              "type" => "input",
-              "id" => "email",
-              "placeholder" => I18n.t("task_bots.email_requirement.placeholder"),
-              "label" => I18n.t("task_bots.email_requirement.input_label"),
-              "value" => nil,
-              "errors" => "",
-              "action" => { "type" => "submit" }
-            }
-          ]
-        )
-      ]
-
-      route_support = [
-        c.message(
-          text: I18n.t("task_bots.support.ask", name: app.name),
-          uuid: 5,
-          agent: bot_agent
-        ),
-        c.controls(
-          uuid: 6,
-          type: "ask_option",
-          schema: [
-            c.button(
-              label: I18n.t("task_bots.support.options.op1"),
-              next_uuid: 7
-            ),
-            c.button(
-              label: I18n.t("task_bots.support.options.op2"),
-              next_uuid: 8
-            )
-          ]
-        )
-      ]
-
-      if kind == "AppUser"
-        path_messages << [
-          c.message(
-            text: I18n.t("task_bots.reply_soon", name: app.name),
-            uuid: 1,
-            agent: bot_agent
-          )
-        ]
-      end
-
-      if (kind == "Lead") || (kind == "Visitor")
-
-        if app.lead_tasks_settings["share_typical_time"]
-          path_messages << c.message(
-            text: I18n.t("task_bots.reply_soon", name: app.name),
-            uuid: 1,
-            agent: bot_agent
-          )
-        end
-
-        if user.email.blank?
-          path_messages << route_support
-          path_messages.flatten!
-        end
-
-        routing = app.lead_tasks_settings["routing"]
-
-        if routing.present?
-
-          follow_actions << c.close if routing == "close"
-
-          if routing == "assign" && app.lead_tasks_settings["assignee"].present?
-            follow_actions << c.assign(app.lead_tasks_settings["assignee"])
-          end
-        end
-
-      end
-
-      path_options = {
-        title: "typical_reply_time",
-        steps: path_messages.flatten
-      }
-
-      path_options.merge!(
-        follow_actions: follow_actions
-      )
-
-      c.path(**path_options)
-
-      step7 = [c.message(
-        text: I18n.t("task_bots.reply_agent", name: app.name),
-        uuid: 7,
-        agent: bot_agent
-      )]
-
-      if user.email.blank?
-
-        if app.email_requirement == "Always"
-          step7 << email_requirement
-          step7.flatten!
-        end
-
-        if app.email_requirement == "office" && !app.in_business_hours?(Time.current)
-          step7 << email_requirement
-          step7.flatten!
-        end
-
-      end
-
-      step7 << c.message(
-        text: I18n.t("task_bots.email_requirement.ack"),
-        uuid: 4,
-        agent: bot_agent
-      )
-
-      # puts 'STEP 7'
-      # puts step7
-
-      c.path(
-        title: "yes",
-        steps: step7,
-        follow_actions: [c.assign(app.lead_tasks_settings["assignee"])]
-      )
-
-      c.path(
-        title: "no",
-        steps: [
-          c.message(
-            text: I18n.t("task_bots.support.reply.op2"),
-            uuid: 8,
-            agent: bot_agent
-          )
-        ],
-        follow_actions: []
-      )
+      add_inferred_paths(c, app, user, kind, bot_agent)
     end
-
     subject
   end
 
@@ -439,5 +246,136 @@ class ActionTriggerFactory
 
   def to_obj
     JSON.parse(to_json, object_class: OpenStruct)
+  end
+
+  class << self
+    private
+
+    def add_inferred_paths(factory, app, user, kind, bot_agent)
+      email_steps = infer_email_steps(factory, bot_agent)
+      support_steps = route_support_steps(factory, app, bot_agent, 5)
+      first_steps = inferred_first_steps(factory, app, user, kind, bot_agent, support_steps)
+      follow_actions = %w[Lead Visitor].include?(kind) ? inferred_follow_actions(factory, app) : []
+      factory.path(title: "typical_reply_time", steps: first_steps.flatten, follow_actions: follow_actions)
+
+      yes_steps = inferred_yes_steps(factory, app, user, bot_agent, email_steps)
+      factory.path(title: "yes", steps: yes_steps, follow_actions: [factory.assign(app.lead_tasks_settings["assignee"])])
+      no_message = factory.message(
+        text: I18n.t("task_bots.support.reply.op2"),
+        uuid: 8,
+        agent: bot_agent
+      )
+      factory.path(title: "no", steps: [no_message], follow_actions: [])
+    end
+
+    def inferred_first_steps(factory, app, user, kind, bot_agent, support_steps)
+      return [inferred_reply_soon(factory, app, bot_agent)] if kind == "AppUser"
+      return [] unless %w[Lead Visitor].include?(kind)
+
+      steps = []
+      steps << inferred_reply_soon(factory, app, bot_agent) if app.lead_tasks_settings["share_typical_time"]
+      steps.concat(support_steps) if user.email.blank?
+      steps
+    end
+
+    def inferred_reply_soon(factory, app, bot_agent)
+      factory.message(text: I18n.t("task_bots.reply_soon", name: app.name), uuid: 1, agent: bot_agent)
+    end
+
+    def inferred_follow_actions(factory, app)
+      routing = app.lead_tasks_settings["routing"]
+      return [] if routing.blank?
+
+      actions = []
+      actions << factory.close if routing == "close"
+      actions << factory.assign(app.lead_tasks_settings["assignee"]) if routing == "assign" && app.lead_tasks_settings["assignee"].present?
+      actions
+    end
+
+    def inferred_yes_steps(factory, app, user, bot_agent, email_steps)
+      steps = [factory.message(text: I18n.t("task_bots.reply_agent", name: app.name), uuid: 7, agent: bot_agent)]
+      if user.email.blank?
+        steps.concat(email_steps) if app.email_requirement == "Always"
+        steps.concat(email_steps) if app.email_requirement == "office" && !app.in_business_hours?(Time.current)
+      end
+      steps << factory.message(text: I18n.t("task_bots.email_requirement.ack"), uuid: 4, agent: bot_agent)
+    end
+
+    def request_email_steps(c, bot_agent)
+      [
+        c.message(
+          text: I18n.t("task_bots.email_requirement.message"),
+          uuid: 1,
+          agent: bot_agent
+        ),
+        c.controls(
+          uuid: 2,
+          type: "data_retrieval",
+          schema: [
+            c.input(
+              label: I18n.t("task_bots.email_requirement.input_label"),
+              name: "email",
+              placeholder: I18n.t("task_bots.email_requirement.placeholder")
+            )
+          ]
+        ),
+        c.message(
+          text: I18n.t("task_bots.email_requirement.ack"),
+          uuid: 3,
+          agent: bot_agent
+        )
+      ]
+    end
+
+    def route_support_steps(c, app, bot_agent, first_uuid)
+      [
+        c.message(
+          text: I18n.t("task_bots.support.ask", name: app.name),
+          uuid: first_uuid,
+          agent: bot_agent
+        ),
+        c.controls(
+          uuid: first_uuid + 1,
+          type: "ask_option",
+          schema: [
+            c.button(
+              label: I18n.t("task_bots.support.options.op1"),
+              next_uuid: first_uuid + 2
+            ),
+            c.button(
+              label: I18n.t("task_bots.support.options.op2"),
+              next_uuid: first_uuid + 3
+            )
+          ]
+        )
+      ]
+    end
+
+    def infer_email_steps(c, bot_agent)
+      [
+        c.message(
+          text: I18n.t("task_bots.email_requirement.message"),
+          uuid: 2,
+          agent: bot_agent
+        ),
+        c.controls(
+          uuid: 3,
+          type: "app_package",
+          app_package: "Qualifier",
+          next_step_uuid: "4",
+          schema: [
+            {
+              "type" => "input",
+              "id" => "email",
+              "placeholder" => I18n.t("task_bots.email_requirement.placeholder"),
+              "label" => I18n.t("task_bots.email_requirement.input_label"),
+              "value" => nil,
+              "errors" => "",
+              "action" => { "type" => "submit" }
+            }
+          ]
+        )
+      ]
+    end
   end
 end
