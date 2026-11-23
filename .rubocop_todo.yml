@@ -9,11 +9,7 @@
 
 # Configuration parameters: AllowedMethods, AllowedPatterns, CountRepeatedAttributes, Max.
 Metrics/AbcSize:
-  Exclude:
-    - 'app/controllers/api/graphql_controller.rb'
-    - 'app/controllers/api/v1/hooks_controller.rb'
-    - 'app/controllers/concerns/package_iframe_behavior.rb'
-    - 'app/controllers/graphql_controller.rb'
+  Exclude: []
 
 # Configuration parameters: CountComments, Max, CountAsOne, AllowedMethods, AllowedPatterns.
 # AllowedMethods: refine

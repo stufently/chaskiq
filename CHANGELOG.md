@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-23 — fork-updates-r10r
+
+- Split GraphQL execution, package iframe handling, and inbound email processing into
+  smaller methods. Preserve request contexts, responses, and multipart handling.
+  Remove four RuboCop exclusions for the affected controllers and concern.
+
 ## 2026-11-23 — fork-updates-r10t
 
 - Split AppType resolvers by domain while keeping GraphQL field declarations and
