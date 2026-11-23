@@ -31,6 +31,14 @@ function refreshAuth(auth): Promise<boolean> {
   return pendingRefresh;
 }
 
+// Still 401 with a fresh token: the session is gone. A late answer to a
+// request of an earlier session must not sign out the agent who logged in again.
+function expireIfSameSession(auth) {
+  if (store.getState().auth.accessToken !== auth.accessToken) return;
+  //@ts-ignore
+  store.dispatch(expireAuthentication());
+}
+
 const graphql = (query, variables, callbacks, retried = false) => {
   const { auth, current_user } = store.getState();
 
@@ -104,8 +112,7 @@ const graphql = (query, variables, callbacks, retried = false) => {
             if (!retried) return refreshAndRetry();
             //@ts-ignore
             store.dispatch(errorMessage('session expired'));
-            // still 401 with a fresh token: the session is gone
-            store.dispatch(expireAuthentication());
+            expireIfSameSession(auth);
             break;
           default:
             break;
@@ -138,8 +145,7 @@ const graphql = (query, variables, callbacks, retried = false) => {
         case 401:
           //@ts-ignore
           store.dispatch(errorMessage('session expired'));
-          // still 401 with a fresh token: the session is gone
-          store.dispatch(expireAuthentication());
+          expireIfSameSession(auth);
           break;
         default:
           break;

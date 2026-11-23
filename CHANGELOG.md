@@ -29,6 +29,9 @@
   (falling back to the connection's app), so switching apps in the dashboard
   no longer keeps streaming the first app's events.
 
+- GraphQL refuses revoked access tokens as well as expired ones, matching the
+  websocket check.
+
 ## 2026-11-23 — Review fixes (frontend)
 
 - Agent inbox: a late response for a conversation the agent already left no
@@ -52,6 +55,9 @@
 
 - The dashboard websocket now reconnects with the current access token after
   a token refresh (the server refuses revoked and expired tokens).
+
+- A second 401 signs out only if the agent is still on the session the
+  request was sent with.
 
 ## 2026-11-23 — Review fixes (release and deploy)
 

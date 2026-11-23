@@ -122,7 +122,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_resource_owner
-    return unless doorkeeper_token && !doorkeeper_token.expired?
+    # revoked tokens (logout, refresh) are refused like expired ones, as on the websocket
+    return unless doorkeeper_token&.accessible?
 
     agent = Agent.find(doorkeeper_token.resource_owner_id)
     sign_in(agent, scope: "agent")
