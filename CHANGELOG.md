@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-23 — fork-updates-r10v
+
+- Move app agent and administrator methods into a dedicated concern.
+  Restore RuboCop's default module length limit. Tests cover user, lead,
+  and visitor handling, plus bot and administrator roles.
+
 ## 2026-11-23 — fork-updates-r10p1
 
 - Split Segment's tag matching, joins, and exclusions into smaller methods.
