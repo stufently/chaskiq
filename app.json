@@ -15,10 +15,7 @@
     "graphql"
   ],
   "success_url": "/",
-  "scripts": {
-    "postdeploy": "bundle exec rake db:schema:load && bundle exec rake db:seed"
-  },
-  "stack": "heroku-20",
+  "stack": "heroku-26",
   "env": {
     "ADMIN_EMAIL": {
       "description": "An admin email to be generated on db:seed task",
@@ -80,7 +77,7 @@
   "formation": {
     "web": {
       "quantity": 1,
-      "size": "FREE"
+      "size": "basic"
     }
   },
   "image": "heroku/ruby",
