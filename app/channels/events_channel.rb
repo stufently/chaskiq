@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class EventsChannel < ApplicationCable::Channel
+  # The stream carries metadata of every conversation of the app (internal
+  # notes included), so only agents of that app may subscribe.
   def subscribed
-    # self.app = App.find_by(key: params[:app])
+    return reject unless app_agent?
+
     stream_from "events:#{app.key}"
-    # @app_user = @app.agents.find_by(email: @user_data[:email])
   end
 
   def unsubscribed
@@ -35,5 +37,13 @@ class EventsChannel < ApplicationCable::Channel
     conversation = app.conversations.find_by(key: data["conversation_key"])
     message = conversation.messages.find_by(key: data["message_key"])
     message.read! if message.authorable_type == "AppUser" # read anyway #!= @app_user
+  end
+
+  private
+
+  def app_agent?
+    return false unless app.present? && current_user.is_a?(Agent)
+
+    app.owner_id == current_user.id || app.roles.exists?(agent_id: current_user.id)
   end
 end
