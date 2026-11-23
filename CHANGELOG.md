@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-23 — fork-updates-r10p1
+
+- Split Segment's tag matching, joins, and exclusions into smaller methods.
+  Each exclusion still builds its EXCEPT subquery from the original app scope.
+  Tests cover matching, scoping, duplicate rows, and the shape of exclusion SQL.
+  Removed the BlockLength and PerceivedComplexity exclusions for Segment.
+
 ## 2026-11-22 — fork-updates-r10o
 
 - Changed: attachment delivery separates media attempts, text fallback and failure reporting.
