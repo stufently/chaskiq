@@ -69,7 +69,8 @@ def main():
     finally:
         TARGET.write_text(original)
     out = run.stdout + run.stderr
-    failed = re.findall(r"^rspec \./(\S+?):\d+", out, re.M)
+    # rerun lines: "rspec ./path:LINE" or, for examples built in a loop, "rspec './path[1:NN]'"
+    failed = re.findall(r"^rspec '?\./([^\s'\[:]+)[\[:]", out, re.M)
     if run.returncode == 0:
         print(out[-3000:])
         sys.exit(f"{name}: SURVIVED (specs green with the mutant)")
