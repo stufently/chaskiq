@@ -23,7 +23,8 @@ jobs:
        github.event.workflow_run.event == 'push' &&
        github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # up to 75 minutes waiting for CI (releases) plus the image build
+    timeout-minutes: 120
     permissions:
       contents: read
       actions: read
@@ -74,7 +75,26 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           SHA: ${{ steps.vars.outputs.sha }}
+        # A release is often published right after the push, while CI for the
+        # commit is still queued or running (or not created yet): wait for it.
+        timeout-minutes: 80
         run: |
+          runs="repos/$GITHUB_REPOSITORY/actions/workflows/ruby.yml/runs?head_sha=$SHA&event=push&per_page=100"
+          start=$(date +%s)
+          while :; do
+            total=$(gh api "$runs" --jq '.total_count')
+            pending=$(gh api "$runs" --jq '[.workflow_runs[] | select(.status != "completed")] | length')
+            elapsed=$(( $(date +%s) - start ))
+            if [ "$pending" -eq 0 ] && { [ "$total" -gt 0 ] || [ "$elapsed" -ge 300 ]; }; then
+              break
+            fi
+            if [ "$elapsed" -ge 4500 ]; then
+              echo "::error::CI for $SHA still not finished after 75 minutes"
+              exit 1
+            fi
+            echo "waiting for CI on $SHA (runs: $total, unfinished: $pending)"
+            sleep 30
+          done
           passed=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ruby.yml/runs?head_sha=$SHA&status=success&event=push&per_page=1" --jq '.total_count')
           if [ "$passed" -lt 1 ]; then
             echo "::error::no successful CI run for $SHA; push the commit to a branch and let CI pass first"

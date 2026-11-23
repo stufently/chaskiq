@@ -44,6 +44,9 @@
   (`workflow_run` of CI for branches; releases and manual runs check for a
   successful CI run). GitHub releases `vX.Y.Z` add `X.Y.Z`, `X.Y` and `X`
   tags on GHCR.
+- Releases and manual image runs wait (up to 75 minutes) for a queued or
+  running CI run of the commit instead of failing at once; the GHCR branch
+  tag replaces characters Docker does not allow with `-`.
 - Heroku: move `app.json` from the retired heroku-20 stack to heroku-26, replace
   the removed free dyno size with `basic`, and run `rails db:prepare` in a
   `release` phase (it also replaces the postdeploy schema load and seed).
