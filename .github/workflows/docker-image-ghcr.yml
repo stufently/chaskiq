@@ -1,7 +1,12 @@
 name: Create and publish a Docker image to ghcr.io
 
+# The image is published only for commits that passed the test suite:
+# - branch pushes: after the CI workflow (ruby.yml) completes successfully;
+# - releases and manual runs: after checking that CI passed for the same commit.
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches:
       - master
       - main
@@ -16,15 +21,60 @@ env:
 
 jobs:
   build-and-push-image:
+    # CI runs on every push; only a successful push run of this repository
+    # (not a fork) publishes an image
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
       contents: read
       packages: write
+      actions: read
 
     steps:
+      # In a workflow_run event github.sha and github.ref point at the default
+      # branch head, not at the tested commit, so the source is resolved here.
+      - name: Resolve source commit
+        id: src
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+          RUN_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          if [ "$EVENT_NAME" = workflow_run ]; then
+            sha="$RUN_SHA"; branch="$RUN_BRANCH"
+          else
+            sha="$GITHUB_SHA"; branch=""
+            if [ "$REF_TYPE" = branch ]; then branch="$REF_NAME"; fi
+          fi
+          {
+            echo "sha=$sha"
+            echo "short_sha=${sha:0:7}"
+            echo "branch=$branch"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Require a successful CI run for the commit
+        if: github.event_name != 'workflow_run'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.src.outputs.sha }}
+        run: |
+          passed=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ruby.yml/runs?head_sha=$SHA&status=success&event=push&per_page=1" --jq '.total_count')
+          if [ "$passed" -lt 1 ]; then
+            echo "::error::no successful CI run for $SHA; push the commit to a branch and let CI pass first"
+            exit 1
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.src.outputs.sha }}
 
       - name: Log in to the Container registry
         uses: docker/login-action@v4
@@ -33,15 +83,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Branch builds: <branch> and sha-<short>. Releases (tag vX.Y.Z):
+      # X.Y.Z, X.Y, X (not for pre-releases) and latest for the newest stable.
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=sha
+            type=raw,value=${{ steps.src.outputs.branch }},enable=${{ steps.src.outputs.branch != '' }}
+            type=raw,value=sha-${{ steps.src.outputs.short_sha }}
+            type=semver,pattern={{version}},enable=${{ github.event_name == 'release' }}
+            type=semver,pattern={{major}}.{{minor}},enable=${{ github.event_name == 'release' }}
+            type=semver,pattern={{major}},enable=${{ github.event_name == 'release' }}
+          labels: |
+            org.opencontainers.image.revision=${{ steps.src.outputs.sha }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v7
