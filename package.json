@@ -150,7 +150,10 @@
   "browser": {
     "path": "path-browserify"
   },
-  "resolutions": {},
+  "resolutions": {
+    "prosemirror-model": "1.25.13",
+    "prosemirror-view": "1.43.0"
+  },
   "scripts": {
     "format:js": "npx eslint --silent --fix ./app/javascript",
     "format:ruby": "rubocop -A",

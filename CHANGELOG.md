@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-23 — Security updates
+
+- Update JWE to 1.1.1, ProseMirror View to 1.43.0, and Doorkeeper to
+  5.9.9 to fix CVE-2025-54887, GHSA-c8x8-7fp4-3x9w, and CVE-2026-115472.
+- Use ProseMirror Model 1.25.13 across the editors to meet the updated View's
+  dependency requirement.
+
 ## 2026-11-23 — fork-updates-r9
 
 - Remove the RuboCop backlog file and its inheritance settings after resolving

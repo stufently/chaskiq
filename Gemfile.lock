@@ -226,7 +226,7 @@ GEM
     diff-lcs (1.5.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (5.6.9)
+    doorkeeper (5.9.9)
       railties (>= 5)
     dotenv (3.2.0)
     dotenv-rails (3.2.0)
@@ -370,7 +370,8 @@ GEM
       railties (>= 6.0.0)
     json (2.21.2)
     json (2.21.2-java)
-    jwe (0.4.0)
+    jwe (1.1.1)
+      base64
     jwt (2.5.0)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -760,7 +761,7 @@ DEPENDENCIES
   deep_cloneable
   devise (>= 4.9.4)
   devise_invitable (~> 2.0, >= 2.0.9)
-  doorkeeper (~> 5.6.0)
+  doorkeeper (~> 5.9.1)
   dotenv-rails (>= 3.0.0)
   email_reply_trimmer
   emoji_data!
@@ -785,7 +786,7 @@ DEPENDENCIES
   jbuilder
   jsbundling-rails (>= 1.2.2)
   json (< 3)
-  jwe
+  jwe (~> 1.1.1)
   jwt
   kaminari (~> 1.2)
   kredis (~> 1.3)
