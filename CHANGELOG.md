@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-11-23 — Review fixes (release and deploy)
+
+- Publish GHCR and Docker Hub images only after CI passed for the commit
+  (`workflow_run` of CI for branches; releases and manual runs check for a
+  successful CI run). GitHub releases `vX.Y.Z` add `X.Y.Z`, `X.Y`, `X` and
+  `latest` tags on GHCR.
+- Heroku: move `app.json` from the retired heroku-20 stack to heroku-26, replace
+  the removed free dyno size with `basic`, and run `rails db:prepare` in a
+  `release` phase (it also replaces the postdeploy schema load and seed).
+- README: upgrade notes; migrations must run before the new image serves
+  traffic, since channel delivery needs the `delivery_index` unique index.
+
 ## 2026-11-23 — Security updates
 
 - Update JWE to 1.1.1, ProseMirror View to 1.43.0, and Doorkeeper to

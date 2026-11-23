@@ -146,6 +146,35 @@ but not pushed. On RuboCop offenses the full list is in `tmp/rubocop.txt`. Witho
 
 If you want to set up a Chaskiq for production use, see our [**Chaskiq Install Guide**](https://dev.chaskiq.io/production-configuration).
 
+### Upgrading
+
+Every upgrade must run the database migrations before the new code serves traffic or
+processes jobs. Channel delivery (WhatsApp, SMS and the other messenger APIs) depends on
+migration `20261119120000_add_delivery_index_to_channel_sources`: it adds the
+`conversation_part_channel_sources.delivery_index` column and the unique index
+`index_part_channel_sources_on_delivery_slot` that prevents duplicate sends. Without it,
+outgoing channel messages fail.
+
+- **Heroku:** the `release` process in `Procfile` runs `rails db:prepare` before each
+  release goes live, and a failed migration stops the release. On an empty database it
+  loads the schema and seeds instead.
+- **Docker** (`ghcr.io/stufently/chaskiq:<version>`): the image does not migrate on start.
+  Run the migrations once with the new image, then restart the web and worker containers:
+
+  ```bash
+  docker run --rm --env-file .env ghcr.io/stufently/chaskiq:<version> bundle exec rails db:migrate
+  # docker compose: docker compose run --rm <app service> bundle exec rails db:migrate
+  ```
+
+  The image does not migrate on every start because several web and Sidekiq containers
+  would start the same migration at once, and this one builds its index with
+  `CREATE INDEX CONCURRENTLY`, which can take long on a large table and would hold
+  containers past their health checks.
+
+Images are published only for commits that passed CI: `main`, `stage` and `master` builds
+are tagged with the branch and `sha-<commit>`, and a published GitHub release `vX.Y.Z`
+adds `X.Y.Z`, `X.Y`, `X` and `latest`.
+
 ## Requirements
 
 Chaskiq is built for the *next* 10 years of the Internet, so our requirements are high:
