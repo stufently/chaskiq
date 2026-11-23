@@ -33,14 +33,16 @@ export const camelizeKeys = (obj) => {
   return obj;
 };
 
-// Key of the conversation the UI asked for most recently. A response for any
-// other key is stale (the agent already switched away) and must be dropped.
-let requestedConversationKey = null;
+// Sequence number of the latest conversation request. Every getConversation
+// takes a new one and clearConversation bumps it, so only the response to the
+// most recent request is applied: a late response (another conversation, or
+// an older page of the same one from before a clear) is dropped.
+let conversationRequestSeq = 0;
 
 export function getConversation(options, cb) {
   return (dispatch, getState) => {
     setLoading(true);
-    requestedConversationKey = options.id;
+    const seq = ++conversationRequestSeq;
 
     const conversationMeta = getState().conversation.meta;
     const nextPage = conversationMeta ? conversationMeta.next_page || 1 : 1;
@@ -54,7 +56,7 @@ export function getConversation(options, cb) {
       },
       {
         success: (data) => {
-          if (options.id !== requestedConversationKey) return;
+          if (seq !== conversationRequestSeq) return;
           const conversation = data.app.conversation;
 
           const newConversation = Object.assign(
@@ -119,7 +121,7 @@ export function updateConversationTagList(options, cb) {
 
 export function clearConversation(cb) {
   return (dispatch, _getState) => {
-    requestedConversationKey = null;
+    conversationRequestSeq++;
     dispatch(dispatchGetConversations({}));
     if (cb) cb();
   };

@@ -35,6 +35,8 @@
 - Token refresh: a request whose 401 arrives after the session was signed
   out is no longer replayed with an empty token, and a replay that still gets
   401 signs out instead of only showing a toast.
+- Agent inbox: an older page of the same conversation that arrives after the
+  conversation was reloaded is no longer appended to the fresh messages.
 
 ## 2026-11-23 — Review fixes (release and deploy)
 
