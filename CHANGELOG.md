@@ -25,6 +25,9 @@
   are skipped instead of raising and retrying forever.
 - The websocket rejects agents whose access token is revoked, expired or
   unknown (unauthorized close instead of an error).
+- EventsChannel streams and authorizes the app named in the subscription
+  (falling back to the connection's app), so switching apps in the dashboard
+  no longer keeps streaming the first app's events.
 
 ## 2026-11-23 — Review fixes (frontend)
 
