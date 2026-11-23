@@ -13,6 +13,10 @@ RSpec.describe "mergeContact mutation", type: :request do
   end
   let(:contact) { project.add_user(email: "known@example.com") }
 
+  # Some specs leave ActiveJob inline; the visitor has no email, so an inline
+  # chat notification for the opening message would fail before the merge.
+  before { ActiveJob::Base.queue_adapter = :test }
+
   let(:mutation) do
     <<~GRAPHQL
       mutation MergeContact($appKey: String!, $from: String!, $to: String!) {
