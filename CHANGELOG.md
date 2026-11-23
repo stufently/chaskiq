@@ -32,6 +32,9 @@
 - Contact profile "Compose a new message": a second send while one is in
   flight is ignored, and the text is cleared only after the conversation was
   started (kept for a retry on failure).
+- Token refresh: a request whose 401 arrives after the session was signed
+  out is no longer replayed with an empty token, and a replay that still gets
+  401 signs out instead of only showing a toast.
 
 ## 2026-11-23 — Review fixes (release and deploy)
 
