@@ -2,6 +2,12 @@
 
 module Types
   class AppType < Types::PublicAppType
+    include AppTypeConversationResolvers
+    include AppTypeHelpCenterResolvers
+    include AppTypeIntegrationResolvers
+    include AppTypeReportResolvers
+    include AppTypeDirectoryResolvers
+
     field :state, String, null: true
     field :timezone, String, null: true
     field :config_fields, Types::JsonType, null: true
@@ -107,21 +113,7 @@ module Types
     end
 
     field :available_roles, Types::JsonType, null: true
-    def available_roles
-      PermissionsService.list
-    end
-
     field :current_app_role, Types::JsonType, null: true
-    def current_app_role
-      current_user
-      role = object.roles.find_by(agent_id: current_user.id)
-      {
-        name: role.role,
-        owner: object.owner_id == current_user.id,
-        definition: PermissionsService.list[role.role]
-      }
-    end
-
     def tag_list
       authorize! object, to: :show?, with: AppPolicy
       object.tag_list || []
@@ -140,37 +132,12 @@ module Types
       Event::EVENT_CONSTANTS
     end
 
-    def editor_app_packages
-      authorize! object, to: :show?, with: AppPolicy
-      object.app_packages.tagged_with("editor")
-            .joins(:app_package_integrations)
-            .where.not(app_package_integrations: { id: nil }).uniq
-    end
-
     field :agent_app_package, Types::AppPackageType, null: true do
       argument :id, String, required: true, default_value: ""
     end
 
-    def agent_app_package(id:)
-      # object.app_package_integrations.find(id)
-      # object.app_packages.find_by(name: id)
-      current_user.app_packages.find(id)
-    end
-
     field :app_packages_capabilities, [Types::AppPackageIntegrationType], null: true do
       argument :kind, String, required: true, default_value: ""
-    end
-
-    def app_packages_capabilities(kind:)
-      raise "not in type" unless %w[home conversations conversation_part bots inbox fixed_sidebar conversations_initiator].include?(kind)
-
-      authorize! object, to: :show?, with: AppPolicy
-
-      object.app_package_integrations
-            .joins(:app_package)
-            .where(
-              app_package_id: object.app_packages.tagged_with(kind, on: "capabilities")
-            ).order("app_packages.name desc")
     end
 
     def gather_social_data
@@ -183,38 +150,7 @@ module Types
       ActiveModel::Type::Boolean.new.cast(object.register_visits)
     end
 
-    def app_packages
-      object.plan.allow_feature!("Integrations")
-      authorize! object, to: :can_manage_app_packages?, with: AppPolicy
-
-      integrations = object.app_package_integrations.map(&:app_package_id)
-
-      app_packages = AppPackage.union_scope(
-        AppPackage.enabled.where(agent_id: nil),
-        AppPackage.published.enabled,
-        AppPackage.enabled.where(agent_id: current_user.id)
-      )
-
-      app_packages = app_packages.where.not("id in(?)", integrations) if integrations.any?
-
-      app_packages.order(:id).distinct
-    end
-
-    def agent_app_packages
-      # authorize! object, to: :manage?, with: AppPolicy
-      authorize! object, to: :can_manage_app_packages?, with: AppPolicy
-      current_user.app_packages
-    end
-
     field :app_package_integrations, [Types::AppPackageIntegrationType], null: true
-
-    def app_package_integrations
-      object.plan.allow_feature!("Integrations")
-      # authorize! object, to: :manage?, with: AppPolicy
-      authorize! object, to: :can_manage_app_packages?, with: AppPolicy
-
-      object.app_package_integrations
-    end
 
     field :encryption_key, String, null: true
 
@@ -244,93 +180,8 @@ module Types
       argument :id, String, required: false
     end
 
-    def conversations(per:, page:, filter:, sort:, agent_id: nil, tag: nil, term: nil, channel_id: nil)
-      object.blocked?
-      object.plan.allow_feature!("Conversations")
-      # authorize! object, to: :show?, with: AppPolicy
-      authorize! object, to: :can_read_conversations?, with: AppPolicy
-
-      @collection = object.conversations
-                          .left_joins(:messages)
-                          .where.not(conversation_parts: { id: nil })
-                          .distinct
-
-      @collection = @collection.where(state: filter) if filter.present?
-
-      if channel_id.present?
-        @collection = @collection
-                      .joins(:conversation_channels)
-                      .where("conversation_channels.provider =?", channel_id)
-      end
-
-      @collection = filter_by_agent(agent_id) if agent_id.present?
-      @collection = @collection.page(page).per(per).fast_page
-      sort_conversations(sort)
-      @collection = @collection.tagged_with(tag) if tag.present?
-      if term
-        query_fields = %w[
-          main_participant_full_name main_participant_name main_participant_email main_participant_postal
-          main_participant_phone messages_messageable_of_ConversationPartContent_type_text_content
-        ]
-        query_term = :"#{query_fields.join('_or_')}_i_cont_any"
-        @collection = @collection.ransack(
-          query_term => term
-        ).result
-      end
-
-      @collection.includes(assignee: { avatar_attachment: :blob }, latest_message: { authorable: { avatar_attachment: :blob } })
-    end
-
-    def conversations_counts
-      conversations = object.conversations
-                            .left_joins(:messages)
-                            .where.not(conversation_parts: { id: nil })
-                            .distinct
-
-      result = conversations.group("assignee_id").count.dup
-      result.merge({
-                     all: conversations.size
-                   })
-    end
-
-    def conversations_tag_counts
-      object.conversations.tag_counts.map do |o|
-        { tag: o.name, count: o.taggings_count }
-      end
-    end
-
-    def conversations_channels_counts
-      object.conversation_channels.group("provider").count
-    end
-
-    def conversation(id:)
-      # authorize! object, to: :show?, with: AppPolicy
-      authorize! object, to: :can_read_conversations?, with: AppPolicy
-
-      conversation = object.conversations.find_by(key: id)
-
-      conversation.presence&.log_async(action: "conversation_viewed",
-                                       user: current_user,
-                                       ip: context[:request].remote_ip)
-
-      conversation
-    end
-
     field :app_user, Types::AppUserType, null: true do
       argument :id, String, required: false
-    end
-
-    def app_user(id:)
-      # authorize! object, to: :show?, with: AppPolicy
-      authorize! object, to: :can_read_users?, with: AppPolicy
-
-      app_user = object.app_users.find(id)
-      app_user.log_async(
-        action: "profile_viewed",
-        user: current_user,
-        ip: context[:request].remote_ip
-      )
-      app_user
     end
 
     field :campaigns, Types::PaginatedCampaignType, null: true do
@@ -361,59 +212,18 @@ module Types
 
     field :agents, [Types::AgentType], null: false
 
-    def agents
-      authorize! object, to: :show?, with: AppPolicy
-      object.agents.with_attached_avatar.where(invitation_token: nil)
-    end
-
     field :role_agents, [Types::RoleType], null: false
 
-    def role_agents
-      # authorize! object, to: :show?, with: AppPolicy
-      authorize! object, to: :can_read_team?, with: AppPolicy
-      object.roles
-    end
-
     field :not_confirmed_agents, [Types::AgentType], null: false
-
-    def not_confirmed_agents
-      # authorize! object, to: :show?, with: AppPolicy
-      authorize! object, to: :can_read_team?, with: AppPolicy
-
-      object.agents.invitation_not_accepted
-    end
 
     field :agent, Types::AgentType, null: false do
       argument :id, String, required: true
     end
 
-    def agent(id:)
-      authorize! object, to: :show?, with: AppPolicy
-      object.agents.find(id)
-    end
-
     field :segments, [Types::SegmentType], null: true
-
-    def segments
-      # object.plan.allow_feature!('Segments')
-      # authorize! object, to: :show?, with: AppPolicy
-      # authorize! object, to: :can_read_segments?, with: AppPolicy
-
-      Segment.union_scope(
-        object.segments.all, Segment.where(app_id: nil)
-      ).order(:id)
-    end
 
     field :segment, Types::SegmentType, null: true do
       argument :id, String, required: true
-    end
-
-    def segment(id:)
-      # authorize! object, to: :show?, with: AppPolicy
-      authorize! object, to: :can_read_segments?, with: AppPolicy
-
-      s = Segment.where("app_id is null ").where(id: id).first
-      s.presence || object.segments.find(id)
     end
 
     field :assignment_rules, [Types::AssignmentRuleType], null: true
@@ -462,76 +272,20 @@ module Types
       argument :search, String, required: false, default_value: nil
     end
 
-    def articles(page:, per:, lang:, mode:, search:)
-      object.plan.allow_feature!("Articles")
-      # authorize! object, to: :show?, with: AppPolicy
-      authorize! object, to: :can_read_help_center?, with: AppPolicy
-
-      I18n.locale = lang
-      case mode
-      when "all"
-        articles = object.articles
-      when "published"
-        articles = object.articles.published
-      when "draft"
-        articles = object.articles.draft
-      end
-
-      articles = object.articles.search(search) if search.present?
-
-      articles.page(page).per(per)
-    end
-
     field :articles_uncategorized, Types::PaginatedArticlesType, null: true do
       argument :page, Integer, required: true
       argument :per, Integer, required: false, default_value: 20
       argument :lang, String, required: false, default_value: I18n.default_locale
     end
 
-    def articles_uncategorized(page:, per:, lang:)
-      # object.plan.allow_feature!('Articles')
-      I18n.locale = lang
-      authorize! object, to: :can_read_help_center?, with: AppPolicy
-      object.articles.without_collection.page(page).per(per)
-    end
-
     field :article_settings, Types::ArticleSettingsType, null: true
-    def article_settings
-      authorize! object, to: :can_read_help_center?, with: AppPolicy
-      # object.plan.allow_feature!('Articles')
-      object.article_settings.presence || object.build_article_settings
-    end
-
     field :article, Types::ArticleType, null: true do
       argument :id, String, required: true
       argument :lang, String, required: false, default_value: I18n.default_locale.to_s
     end
 
-    def article(id:, lang:)
-      object.plan.allow_feature!("Articles")
-      I18n.locale = lang
-      authorize! object, to: :can_read_help_center?, with: AppPolicy
-      # authorize! object, to: :show?, with: AppPolicy
-      object.articles.friendly.find(id)
-    end
-
     field :contact_search, [Types::AppUserType], null: true do
       argument :term, String, required: true, default_value: ""
-    end
-
-    def contact_search(term:)
-      if Chaskiq::Config.get("SEARCHKICK_ENABLED") == "true" && object.searchkick_enabled?
-        AppUser.search(
-          term,
-          fields: %i[name last_name first_name email phone],
-          where: { app_id: object.id }
-        )
-      else
-        query_term = :last_name_or_first_name_or_name_or_email_or_phone_i_cont_any
-        @collection = object.app_users.limit(10).ransack(
-          query_term => term
-        ).result
-      end
     end
 
     field :contact_search_by_profile, Types::ExternalProfileType, null: true do
@@ -539,44 +293,17 @@ module Types
       argument :profile_id, String, required: true, default_value: ""
     end
 
-    def contact_search_by_profile(provider:, profile_id:)
-      authorize! object, to: :can_manage_users?, with: AppPolicy
-      object.external_profiles.find_by(provider: provider, profile_id: profile_id)
-    end
-
     field :agent_search, [Types::AgentType], null: true do
       argument :term, String, required: true, default_value: ""
-    end
-
-    def agent_search(term:)
-      query_term = :last_name_or_first_name_or_name_or_email_i_cont_any
-      @collection = object.agents.humans.limit(10).ransack(
-        query_term => term
-      ).result
     end
 
     field :collections, [Types::CollectionType], null: true do
       argument :lang, String, required: false, default_value: I18n.default_locale.to_s
     end
 
-    def collections(lang:)
-      object.plan.allow_feature!("Articles")
-      I18n.locale = lang.to_sym
-      # authorize! object, to: :show?, with: AppPolicy
-      authorize! object, to: :can_read_help_center?, with: AppPolicy
-      object.article_collections.order(:position)
-    end
-
     field :collection, Types::CollectionType, null: true do
       argument :id, String, required: true
       argument :lang, String, required: false, default_value: I18n.default_locale.to_s
-    end
-
-    def collection(id:, lang:)
-      authorize! object, to: :can_read_help_center?, with: AppPolicy
-      # authorize! object, to: :show?, with: AppPolicy
-      I18n.locale = lang.to_sym
-      object.article_collections.friendly.find(id)
     end
 
     field :bot_tasks, Types::PaginatedBotTasksType, null: false do
@@ -615,44 +342,6 @@ module Types
       object.bot_tasks.find(id)
     end
 
-    def dashboard(range:, kind:, package: nil)
-      # authorize! object, to: :show?, with: AppPolicy
-      authorize! object, to: :can_read_reports?, with: AppPolicy
-
-      if package.present?
-        return AppPackageDashboard.new(
-          app: object,
-          range: range,
-          package: package
-        ).report_for(kind)
-      end
-
-      whitelist = %w[
-        visits
-        browser_name
-        browser
-        lead_os
-        user_os
-        user_country
-        first_response_time
-        incoming_messages
-        outgoing_messages
-        opened_conversations
-        solved_conversations
-        resolution_avg
-        app_package
-        app_packages
-        app_packages_list
-      ]
-      raise "no dashboard available at this address" unless whitelist.include?(kind)
-
-      Dashboard.new(
-        app: object,
-        range: range,
-        package: package
-      ).send(kind)
-    end
-
     field :dashboard, Types::JsonType, null: true do
       argument :range, Types::AnyType, required: true
       argument :kind,  String, required: true
@@ -663,23 +352,8 @@ module Types
       argument :package, String, required: false
     end
 
-    def app_packages_dashboard
-      AppPackageDashboard.app_packages_list(object)
-    end
-
     field :app_package_dashboard, Types::JsonType, null: true do
       argument :package, String, required: false
-    end
-
-    def app_package_dashboard(package:)
-      authorize! object, to: :can_read_reports?, with: AppPolicy
-
-      integration = AppPackageDashboard.app_package(object, package)
-      {
-        name: integration.app_package.name,
-        icon: integration.app_package.icon,
-        paths: integration.message_api_klass.try(:report_kinds) || []
-      }
     end
 
     # OAUTH
@@ -713,32 +387,6 @@ module Types
     field :lead_editor_settings, AnyType, null: true
 
     private
-
-    def filter_by_agent(agent_id)
-      return @collection.where(assignee_id: nil) if agent_id == "0"
-
-      @collection.where(assignee_id: agent_id)
-    end
-
-    def sort_conversations(sort)
-      return if sort.blank?
-
-      s = case sort
-          when "updated" then "updated_at desc"
-          when "newest" then "created_at desc"
-          when "oldest" then "updated_at asc"
-          when "priority_first" then "priority asc, updated_at desc"
-          else
-            "id desc"
-          end
-
-      if sort != "unfiltered" # && agent_id.blank?
-        @collection = @collection.where
-                                 .not(latest_user_visible_comment_at: nil)
-      end
-
-      @collection = @collection.order(s)
-    end
 
     def handle_bot_tasks_filters(filters, collection)
       return collection if filters["users"].blank?
