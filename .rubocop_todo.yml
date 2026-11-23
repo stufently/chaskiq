@@ -19,7 +19,6 @@ Metrics/AbcSize:
     - 'app/mailers/chat_notifier_mailer.rb'
     - 'app/models/app_package_integration.rb'
     - 'app/models/plugin.rb'
-    - 'app/models/segment.rb'
     - 'app/services/action_trigger.rb'
     - 'app/services/action_trigger_factory.rb'
 
@@ -39,7 +38,6 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/mailers/chat_notifier_mailer.rb'
-    - 'app/models/segment.rb'
     - 'app/services/action_trigger_factory.rb'
     - 'app/services/plugin_schema_validator.rb'
 
@@ -48,7 +46,6 @@ Metrics/MethodLength:
   Exclude:
     - 'app/graphql/mutations/conversations/start_conversation.rb'
     - 'app/mailers/chat_notifier_mailer.rb'
-    - 'app/models/segment.rb'
     - 'app/services/action_trigger_factory.rb'
 
 # Configuration parameters: Max, CountKeywordArgs, MaxOptionalParameters.

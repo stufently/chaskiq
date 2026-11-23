@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-23 — fork-updates-r10p2
+
+- Pinned the full Elasticsearch request body in `spec/models/segment_es_r10p2_spec.rb`
+  (28 examples): app_id filter, page/per_page passthrough, must/must_not/should/filter
+  grouping, unknown-attribute and match-type skipping, all standard and nested custom-field
+  comparison branches, nested is_null/is_not_null, empty predicates, array order, regex
+  strings, and Rails.logger call. Refactored `es_search` and `nested_preds_group` into
+  smaller private helpers (`es_search_attrs`, `standard_comparison_fragment`,
+  `nested_comparison_fragment`, `es_query_body`); removed dead code. Removed the three
+  remaining Segment exclusions (AbcSize, CyclomaticComplexity, MethodLength).
+
 ## 2026-11-23 — fork-updates-r10v
 
 - Move app agent and administrator methods into a dedicated concern.
