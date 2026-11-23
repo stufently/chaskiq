@@ -28,7 +28,6 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Exclude:
     - 'app/models/concerns/globalize_accessors.rb'
-    - 'app/models/segment.rb'
     - 'app/services/action_trigger_factory.rb'
 
 # Configuration parameters: CountComments, Max, CountAsOne.
@@ -61,5 +60,4 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/mailers/chat_notifier_mailer.rb'
-    - 'app/models/segment.rb'
     - 'app/services/action_trigger_factory.rb'
