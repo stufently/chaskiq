@@ -1,7 +1,12 @@
 name: Push Docker Image
 
+# Same gating as docker-image-ghcr.yml: branch images only after the CI
+# workflow (ruby.yml) passed for the commit; releases and manual runs check
+# for a successful CI run of the same commit first.
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches:
       - master
       - main
@@ -12,8 +17,16 @@ on:
 
 jobs:
   build:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
 
     steps:
       # Docker Hub credentials are repository secrets; a fork without them skips
@@ -32,14 +45,46 @@ jobs:
             echo "::notice::skipping Docker Hub push: secrets not set"
           fi
 
-      - uses: actions/checkout@v7
-        if: steps.creds.outputs.present == 'true'
-
-      - name: Get Short SHA
+      # In a workflow_run event github.sha and github.ref point at the default
+      # branch head, not at the tested commit, so the source is resolved here.
+      - name: Resolve source commit
         if: steps.creds.outputs.present == 'true'
         id: vars
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+          RUN_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
         run: |
-          echo "short_sha=$(git rev-parse --short=7 "$GITHUB_SHA")" >> "$GITHUB_OUTPUT"
+          if [ "$EVENT_NAME" = workflow_run ]; then
+            sha="$RUN_SHA"; branch="$RUN_BRANCH"
+          else
+            sha="$GITHUB_SHA"; branch=""
+            if [ "$REF_TYPE" = branch ]; then branch="$REF_NAME"; fi
+          fi
+          {
+            echo "sha=$sha"
+            echo "short_sha=${sha:0:7}"
+            echo "branch=$branch"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Require a successful CI run for the commit
+        if: steps.creds.outputs.present == 'true' && github.event_name != 'workflow_run'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.vars.outputs.sha }}
+        run: |
+          passed=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ruby.yml/runs?head_sha=$SHA&status=success&event=push&per_page=1" --jq '.total_count')
+          if [ "$passed" -lt 1 ]; then
+            echo "::error::no successful CI run for $SHA; push the commit to a branch and let CI pass first"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v7
+        if: steps.creds.outputs.present == 'true'
+        with:
+          ref: ${{ steps.vars.outputs.sha }}
 
       - name: Login into Registry
         if: steps.creds.outputs.present == 'true'
@@ -61,7 +106,7 @@ jobs:
                .
 
       - name: Tag and Push Docker image
-        if: steps.creds.outputs.present == 'true' && github.event_name == 'push'
+        if: steps.creds.outputs.present == 'true' && github.event_name == 'workflow_run'
         run: |
           docker tag "$GITHUB_REPOSITORY" "$GITHUB_REPOSITORY:$SHORT_SHA"
           docker push "$GITHUB_REPOSITORY:$SHORT_SHA"
@@ -70,7 +115,7 @@ jobs:
           SHORT_SHA: ${{ steps.vars.outputs.short_sha }}
 
       - name: Tag LATEST and Push Docker image
-        if: steps.creds.outputs.present == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: steps.creds.outputs.present == 'true' && github.event_name == 'workflow_run' && steps.vars.outputs.branch == 'main'
         run: |
           docker tag "$GITHUB_REPOSITORY" "$GITHUB_REPOSITORY:latest"
           docker push "$GITHUB_REPOSITORY:latest"
