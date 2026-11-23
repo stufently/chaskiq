@@ -19,6 +19,10 @@
 - A campaign stuck in "delivering" for over an hour (its MailSenderJob was
   lost) can be launched again; a fresh "delivering" or a "sent" campaign is
   still never relaunched.
+- SES "send" notifications never record a campaign send (SesSenderJob does),
+  so an event processed before that job commits cannot add a duplicate.
+- SES notifications without original headers, or missing a Chaskiq header,
+  are skipped instead of raising and retrying forever.
 
 ## 2026-11-23 — Review fixes (frontend)
 

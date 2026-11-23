@@ -3,55 +3,50 @@
 class SnsReceiverJob < ApplicationJob
   queue_as :default
 
-  # Receive hook
+  # Receive hook. SES may be configured without original headers, so every
+  # header lookup is nil-safe and a notification without the Chaskiq headers
+  # is skipped instead of raising (and retrying forever).
   def perform(track_type, m, referrer)
-    part = m["mail"]["headers"].find do |o|
-      o["name"] == "X-CHASKIQ-PART-ID"
-    end
-
-    campaign = m["mail"]["headers"].find do |o|
-      o["name"] == "X-CHASKIQ-CAMPAIGN-ID"
-    end
+    part_id = header_value(m, "X-CHASKIQ-PART-ID")
+    campaign_id = header_value(m, "X-CHASKIQ-CAMPAIGN-ID")
 
     # handle conversation and exit
-    handle_chat_message(track_type, m, part["value"]) if part.present?
+    handle_chat_message(track_type, m, part_id) if part_id.present?
 
     # handle campaign
-    handle_campaign_message(track_type, m, referrer) if campaign.present?
+    handle_campaign_message(track_type, m, referrer) if campaign_id.present?
 
     unsubscribe_user(track_type, m)
   end
 
   def handle_campaign_message(track_type, m, _referrer)
+    # SesSenderJob records the send in the transaction that delivers the
+    # message; this event can arrive before that commits, so recording it here
+    # would duplicate the send.
+    return if track_type == "send"
+
     data = m[track_type]
-    # message_id = parsed_message_id(m)
-
-    campaign_id = m["mail"]["headers"].find do |o|
-      o["name"] == "X-CHASKIQ-CAMPAIGN-ID"
-    end["value"]
-
-    user_id = m["mail"]["headers"].find do |o|
-      o["name"] == "X-CHASKIQ-CAMPAIGN-TO"
-    end["value"]
+    campaign_id = header_value(m, "X-CHASKIQ-CAMPAIGN-ID")
+    user_id = header_value(m, "X-CHASKIQ-CAMPAIGN-TO")
+    return if campaign_id.blank? || user_id.blank?
 
     campaign = Campaign.find_by(id: campaign_id)
     app_user = AppUser.find_by(id: user_id)
 
     return if campaign.blank? || app_user.blank?
-    # SesSenderJob already recorded the send when it delivered the message
-    return if track_type == "send" && campaign.delivered_to?(app_user)
 
     app_user.send(:"track_#{track_type}",
-                  host: data["ipAddress"],
+                  host: data&.dig("ipAddress"),
                   trackable: campaign,
-                  # message_id: message_id,
                   data: data)
   end
 
   def handle_chat_message(track_type, m, part_id)
     return unless track_type == "open"
 
-    recipient = m["mail"]["headers"].find { |o| o["name"] == "Return-Path" }["value"]
+    recipient = header_value(m, "Return-Path")
+    return if recipient.blank?
+
     recipient_parts = URLcrypt.decode(recipient.split("@").first.split("+").last)
     _, conversation_id = recipient_parts.split("+")
 
@@ -72,7 +67,7 @@ class SnsReceiverJob < ApplicationJob
       get_app_user_from_email(m, "complaint", "complainedRecipients")
       true
     when "bounce"
-      return unless m["bounce"]["bounceType"] == "Permanent"
+      return unless m.dig("bounce", "bounceType") == "Permanent"
 
       get_app_user_from_email(m, "bounce", "bouncedRecipients")
     end
@@ -111,9 +106,7 @@ class SnsReceiverJob < ApplicationJob
   end
 
   def parsed_message_id(m)
-    m["mail"]["headers"].find do |o|
-      o["name"] == "Message-ID"
-    end["value"].split("@").first.gsub("<", "")
+    header_value(m, "Message-ID")&.split("@")&.first&.delete("<")
   end
 
   def get_email_from_notification(m)
