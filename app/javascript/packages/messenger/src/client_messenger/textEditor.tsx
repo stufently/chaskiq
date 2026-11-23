@@ -251,24 +251,35 @@ export default class UnicornEditor extends Component<EditorProps, EditorState> {
     });
   };
 
+  sending = false;
+
+  // The typed text stays in the box until the server confirms the message;
+  // on failure it is kept so the visitor can retry. Submits while a send is
+  // in flight are ignored so the same text is not posted twice.
   handleSubmit = (e) => {
     e.preventDefault();
 
-    if (this.input.value === '') return;
+    if (this.input.value === '' || this.sending) return;
 
+    const text = this.input.value;
     const opts = {
-      html_content: this.input.value,
-      ...this.convertToSerializedContent(this.input.value),
+      html_content: text,
+      ...this.convertToSerializedContent(text),
     };
 
+    this.sending = true;
     this.props.insertComment(opts, {
       before: () => {
         this.props.beforeSubmit && this.props.beforeSubmit(opts);
-        this.input.value = '';
       },
       sent: () => {
+        this.sending = false;
         this.props.onSent && this.props.onSent(opts);
-        this.input.value = '';
+        // keep anything typed after pressing send
+        if (this.input && this.input.value === text) this.input.value = '';
+      },
+      error: () => {
+        this.sending = false;
       },
     });
   };
@@ -303,7 +314,6 @@ export default class UnicornEditor extends Component<EditorProps, EditorState> {
         this.props.insertComment(opts, {
           before: () => {
             this.props.beforeSubmit && this.props.beforeSubmit(opts);
-            this.input.value = '';
           },
           sent: () => {
             this.props.onSent && this.props.onSent(opts);
@@ -330,7 +340,6 @@ export default class UnicornEditor extends Component<EditorProps, EditorState> {
     this.props.insertComment(opts, {
       before: () => {
         this.props.beforeSubmit && this.props.beforeSubmit(opts);
-        this.input.value = '';
       },
       sent: () => {
         this.props.onSent && this.props.onSent(opts);

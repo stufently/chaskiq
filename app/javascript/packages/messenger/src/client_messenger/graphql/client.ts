@@ -37,7 +37,7 @@ class GraphqlClient {
       })
       .catch((req, error) => {
         console.log(req, error);
-        switch (req.response.status) {
+        switch (req.response?.status) {
           case 500:
             // store.dispatch(errorMessage("server error ocurred"))
             break;

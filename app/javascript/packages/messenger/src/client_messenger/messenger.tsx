@@ -683,13 +683,17 @@ class Messenger extends Component<MessengerProps, MessengerState> {
       this.state.conversation.key &&
       this.state.conversation.key != 'volatile'
     ) {
-      this.createComment(comment, callbacks.sent);
+      this.createComment(comment, callbacks.sent, callbacks.error);
     } else {
-      this.createCommentOnNewConversation(comment, callbacks.sent);
+      this.createCommentOnNewConversation(
+        comment,
+        callbacks.sent,
+        callbacks.error
+      );
     }
   };
 
-  createComment = (comment, cb) => {
+  createComment = (comment, cb, onError = null) => {
     const id = this.state.conversation.key;
 
     const message = {
@@ -720,7 +724,12 @@ class Messenger extends Component<MessengerProps, MessengerState> {
 
           cb(data);
         },
-        error: () => {},
+        error: () => {
+          onError && onError();
+        },
+        fatal: () => {
+          onError && onError();
+        },
       }
     );
   };
@@ -748,7 +757,7 @@ class Messenger extends Component<MessengerProps, MessengerState> {
     );
   };
 
-  createCommentOnNewConversation = (comment, cb) => {
+  createCommentOnNewConversation = (comment, cb, onError = null) => {
     let message = {
       html: comment.html_content,
       serialized: comment.serialized_content,
@@ -786,6 +795,10 @@ class Messenger extends Component<MessengerProps, MessengerState> {
         },
         error: (error) => {
           console.log(error);
+          onError && onError();
+        },
+        fatal: () => {
+          onError && onError();
         },
       }
     );

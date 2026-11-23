@@ -118,6 +118,7 @@ export function eventsSubscriber(app, { ctx }) {
           break;
         case 'conversations:update_state':
           ctx.handleConversationState(data.conversation);
+          break;
         case 'conversations:typing':
           ctx.handleTypingNotification(data.conversation_typing);
           break;

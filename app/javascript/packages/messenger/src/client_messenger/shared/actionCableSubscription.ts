@@ -55,6 +55,7 @@ export function eventsSubscriber(app, { ctx }) {
             break;
           case 'conversations:update_state':
             ctx.handleConversationState(toCamelCase(data.data));
+            break;
           case 'conversations:typing':
             ctx.handleTypingNotification(toCamelCase(data.data));
             break;

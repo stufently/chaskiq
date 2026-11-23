@@ -95,7 +95,7 @@ const SubmitButton = function (props: SubmitButtonType) {
 };
 
 type ChatEditorProps = {
-  submitData: (val: any) => void;
+  submitData: (val: any, onDone?: (ok: boolean) => void) => void;
   insertAppBlockComment: (data: any, cb: any) => void;
   loading?: boolean;
   sendMode: 'enter' | '';
@@ -268,10 +268,14 @@ export default class ChatEditor extends Component<
 
   handleSubmit = () => {
     const { html, serialized } = this.state;
-    this.props.submitData({ html, serialized: JSON.stringify(serialized) });
-    // this.editorRef.editor.commands.clearContent(true)
-    //@ts-ignore
-    this.editorRef?.commands?.clearContent(true);
+    // Clear the draft only once the server confirmed the message.
+    this.props.submitData(
+      { html, serialized: JSON.stringify(serialized) },
+      (ok) => {
+        //@ts-ignore
+        if (ok) this.editorRef?.commands?.clearContent(true);
+      }
+    );
     return true;
   };
 
@@ -503,7 +507,6 @@ export default class ChatEditor extends Component<
                   //!e.nativeEvent.shiftKey
                 ) {
                   this.handleSubmit();
-                  e.currentTarget.editor.commands.clearContent(true);
                   return true;
                 }
               }}

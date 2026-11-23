@@ -123,7 +123,9 @@ export function successAuthentication(accessToken, refreshToken) {
   }; // uid, client, accessToken, expiry }
 }
 
-export function refreshToken(auth) {
+// cb(true) after a successful refresh lets the caller replay the request that
+// failed with 401; cb(false) means the session is gone and we signed out.
+export function refreshToken(auth, cb?: (ok: boolean) => void) {
   //@ts-ignore
   const client_id = document.querySelector(
     'meta[name="chaskiq-client-id"]'
@@ -144,10 +146,12 @@ export function refreshToken(auth) {
         const accessToken = res.data.access_token;
         const refreshToken = res.data.refresh_token;
         dispatch(successAuthentication(accessToken, refreshToken));
-        window.location.href = '/';
+        if (cb) cb(true);
+        else window.location.href = '/';
       })
       .catch(() => {
         dispatch(expireAuthentication());
+        if (cb) cb(false);
       });
   };
 }
