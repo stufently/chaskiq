@@ -16,6 +16,9 @@
   recipients that have one, and the SES "send" event does not add a second.
 - mergeContact finds the app by key and passes the destination contact
   record, so the mutation works.
+- A campaign stuck in "delivering" for over an hour (its MailSenderJob was
+  lost) can be launched again; a fresh "delivering" or a "sent" campaign is
+  still never relaunched.
 
 ## 2026-11-23 — Review fixes (frontend)
 

@@ -58,6 +58,35 @@ RSpec.describe Campaign, type: :model do
       expect(campaign.reload.state).to eq("sent")
     end
 
+    it "relaunches a campaign stuck in delivering after its job was lost" do
+      campaign.update_columns(state: "delivering", updated_at: 2.hours.ago)
+
+      campaign.send_newsletter
+
+      expect(mail_sender_jobs).to eq(1)
+      expect(campaign.reload.state).to eq("delivering")
+      expect(campaign.updated_at).to be > 1.minute.ago
+    end
+
+    it "does not relaunch a campaign that is still delivering" do
+      campaign.update_columns(state: "delivering", updated_at: 10.minutes.ago)
+
+      campaign.send_newsletter
+
+      expect(mail_sender_jobs).to eq(0)
+    end
+
+    it "enqueues once when two copies relaunch a stuck campaign" do
+      campaign.update_columns(state: "delivering", updated_at: 2.hours.ago)
+      first = described_class.find(campaign.id)
+      second = described_class.find(campaign.id)
+
+      first.send_newsletter
+      second.send_newsletter
+
+      expect(mail_sender_jobs).to eq(1)
+    end
+
     it "puts the state back when the mailing cannot be enqueued" do
       campaign.update_column(:state, "enabled")
       allow(MailSenderJob).to receive(:perform_later).and_raise(RuntimeError, "redis down")
@@ -67,6 +96,19 @@ RSpec.describe Campaign, type: :model do
 
       allow(MailSenderJob).to receive(:perform_later).and_call_original
       campaign.send_newsletter
+
+      expect(mail_sender_jobs).to eq(1)
+    end
+
+    it "keeps a stuck campaign relaunchable when the relaunch cannot be enqueued" do
+      campaign.update_columns(state: "delivering", updated_at: 2.hours.ago)
+      stale = described_class.find(campaign.id)
+      allow(MailSenderJob).to receive(:perform_later).and_raise(RuntimeError, "redis down")
+
+      expect { stale.send_newsletter }.to raise_error(RuntimeError, "redis down")
+
+      allow(MailSenderJob).to receive(:perform_later).and_call_original
+      described_class.find(campaign.id).send_newsletter
 
       expect(mail_sender_jobs).to eq(1)
     end
