@@ -84,12 +84,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Branch builds: <branch> and sha-<short>. Releases (tag vX.Y.Z):
-      # X.Y.Z, X.Y, X (not for pre-releases) and latest for the newest stable.
+      # X.Y.Z, X.Y, X (not for pre-releases).
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          # no automatic latest: a patch release of an older line must not
+          # move it (GHCR had no latest tag before either)
+          flavor: |
+            latest=false
           tags: |
             type=raw,value=${{ steps.src.outputs.branch }},enable=${{ steps.src.outputs.branch != '' }}
             type=raw,value=sha-${{ steps.src.outputs.short_sha }}

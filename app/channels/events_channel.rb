@@ -2,7 +2,8 @@
 
 class EventsChannel < ApplicationCable::Channel
   # The stream carries metadata of every conversation of the app (internal
-  # notes included), so only agents of that app may subscribe.
+  # notes included), so only agents of that app who may read its
+  # conversations can subscribe.
   def subscribed
     return reject unless app_agent?
 
@@ -44,6 +45,11 @@ class EventsChannel < ApplicationCable::Channel
   def app_agent?
     return false unless app.present? && current_user.is_a?(Agent)
 
-    app.owner_id == current_user.id || app.roles.exists?(agent_id: current_user.id)
+    return true if app.owner_id == current_user.id
+    return false unless app.roles.exists?(agent_id: current_user.id)
+
+    # Same permission the GraphQL conversation resolvers require: a role
+    # without conversation access (e.g. admin_only) must not get the stream.
+    AppPolicy.new(app, user: current_user).apply(:can_read_conversations?)
   end
 end

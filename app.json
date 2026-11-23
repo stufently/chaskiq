@@ -17,6 +17,10 @@
   "success_url": "/",
   "stack": "heroku-26",
   "env": {
+    "BUNDLE_BUILD__SCOUT_APM": {
+      "description": "heroku-26 ships GCC 15 (C23 by default); scout_apm 5.3.5's C extension only builds as C17. Same flag as CI; drop once scout_apm is upgraded.",
+      "value": "--with-cflags=-std=gnu17"
+    },
     "ADMIN_EMAIL": {
       "description": "An admin email to be generated on db:seed task",
       "value": ""

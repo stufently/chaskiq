@@ -272,8 +272,9 @@ export default class ChatEditor extends Component<
     this.props.submitData(
       { html, serialized: JSON.stringify(serialized) },
       (ok) => {
+        // keep a new draft the agent started while the send was in flight
         //@ts-ignore
-        if (ok) this.editorRef?.commands?.clearContent(true);
+        if (ok && this.state.html === html) this.editorRef?.commands?.clearContent(true);
       }
     );
     return true;

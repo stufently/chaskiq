@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe EventsChannel, type: :channel do
   let(:app) { FactoryBot.create(:app) }
   let(:other_app) { FactoryBot.create(:app) }
-  let(:agent) { app.add_agent({ email: "member@example.com" }).agent }
+  let(:agent) { app.add_agent({ email: "member@example.com" }, role_attrs: { role: "agent" }).agent }
   let(:outsider) { other_app.add_agent({ email: "outsider@example.com" }).agent }
 
   it "streams the project events to an agent of the app" do
@@ -25,6 +25,16 @@ RSpec.describe EventsChannel, type: :channel do
     subscribe
 
     expect(subscription).to be_confirmed
+  end
+
+  it "rejects an agent of the app whose role cannot read conversations" do
+    admin_only = app.add_agent({ email: "billing@example.com" }, role_attrs: { role: "admin_only" }).agent
+    stub_connection(current_user: admin_only, app: app)
+
+    subscribe
+
+    expect(subscription).to be_rejected
+    expect(subscription.streams).to be_empty
   end
 
   it "rejects an agent who belongs to another app" do

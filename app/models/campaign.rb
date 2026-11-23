@@ -77,7 +77,10 @@ class Campaign < Message
   # Launches the mailing once. The state switch is a single conditional UPDATE,
   # so a repeated or concurrent launch of a campaign that is already being
   # delivered or was sent finds no row to update and enqueues nothing.
+  # If the job cannot be enqueued (e.g. Redis is down) the state is put back,
+  # so the campaign can be launched again instead of hanging in "delivering".
   def send_newsletter
+    previous = state
     launched = self.class.where(id: id)
                    .where("state IS NULL OR state NOT IN (?)", LAUNCHED_STATES)
                    .update_all(state: "delivering", updated_at: Time.current)
@@ -85,7 +88,14 @@ class Campaign < Message
 
     self[:state] = "delivering"
     clear_attribute_changes([:state])
-    MailSenderJob.perform_later(self)
+    begin
+      MailSenderJob.perform_later(self)
+    rescue StandardError
+      self.class.where(id: id, state: "delivering").update_all(state: previous)
+      self[:state] = previous
+      clear_attribute_changes([:state])
+      raise
+    end
   end
 
   def delivered_to?(app_user)

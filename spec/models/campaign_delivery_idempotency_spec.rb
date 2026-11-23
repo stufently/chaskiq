@@ -58,6 +58,19 @@ RSpec.describe Campaign, type: :model do
       expect(campaign.reload.state).to eq("sent")
     end
 
+    it "puts the state back when the mailing cannot be enqueued" do
+      campaign.update_column(:state, "enabled")
+      allow(MailSenderJob).to receive(:perform_later).and_raise(RuntimeError, "redis down")
+
+      expect { campaign.send_newsletter }.to raise_error(RuntimeError, "redis down")
+      expect(campaign.reload.state).to eq("enabled")
+
+      allow(MailSenderJob).to receive(:perform_later).and_call_original
+      campaign.send_newsletter
+
+      expect(mail_sender_jobs).to eq(1)
+    end
+
     it "launches a campaign that has not been sent yet" do
       expect(campaign.send_newsletter).to be_truthy
 

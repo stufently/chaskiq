@@ -2,14 +2,16 @@
 
 ## 2026-11-23 — Review fixes (backend)
 
-- EventsChannel now rejects subscriptions from anyone who is not an agent
-  (role or owner) of the connection's app.
+- EventsChannel now rejects subscriptions from anyone who is not the owner or
+  an agent of the connection's app whose role may read conversations (an
+  `admin_only` role is rejected, as in the GraphQL conversation resolvers).
 - SES complaint and permanent bounce notifications unsubscribe the address
   only in the app that sent the campaign or conversation email; notifications
   without a Chaskiq header unsubscribe nobody, and already unsubscribed
   contacts no longer abort processing.
 - Launching a campaign that is already delivering or sent is a no-op (one
-  conditional UPDATE). Each recipient is mailed at most once: SesSenderJob
+  conditional UPDATE); if the job cannot be enqueued the state is restored so
+  the campaign can be launched again. Each recipient is mailed at most once: SesSenderJob
   records a "send" metric under an advisory lock, MailSenderJob retries skip
   recipients that have one, and the SES "send" event does not add a second.
 - mergeContact finds the app by key and passes the destination contact
@@ -32,8 +34,8 @@
 
 - Publish GHCR and Docker Hub images only after CI passed for the commit
   (`workflow_run` of CI for branches; releases and manual runs check for a
-  successful CI run). GitHub releases `vX.Y.Z` add `X.Y.Z`, `X.Y`, `X` and
-  `latest` tags on GHCR.
+  successful CI run). GitHub releases `vX.Y.Z` add `X.Y.Z`, `X.Y` and `X`
+  tags on GHCR.
 - Heroku: move `app.json` from the retired heroku-20 stack to heroku-26, replace
   the removed free dyno size with `basic`, and run `rails db:prepare` in a
   `release` phase (it also replaces the postdeploy schema load and seed).

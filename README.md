@@ -173,7 +173,7 @@ outgoing channel messages fail.
 
 Images are published only for commits that passed CI: `main`, `stage` and `master` builds
 are tagged with the branch and `sha-<commit>`, and a published GitHub release `vX.Y.Z`
-adds `X.Y.Z`, `X.Y`, `X` and `latest`.
+adds `X.Y.Z`, `X.Y` and `X`.
 
 ## Requirements
 
