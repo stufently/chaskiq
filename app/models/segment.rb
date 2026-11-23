@@ -265,9 +265,71 @@ class Segment < ApplicationRecord
     joined.distinct
   end
 
-  public
+  def es_search_attrs
+    %w[
+      id type name first_name last_name email lang tags phone
+      last_visited_at referrer state ip city region country lat lng
+      postal web_sessions timezone browser browser_version os os_version
+      browser_language
+    ]
+  end
 
-  ### ELASTIC SEARCH IMPLEMENTATION ###
+  def standard_comparison_fragment(pred)
+    attr = pred["attribute"].to_s
+    case pred["comparison"]
+    when "in"
+      terms_fragment(:filter, attr, pred["value"])
+    when "eq", "not_eq"
+      term_fragment(pred["comparison"] == "eq" ? :must : :must_not, attr, pred["value"])
+    when "contains", "not_contains"
+      clause = pred["comparison"] == "contains" ? :must : :must_not
+      match_fragment(clause, "#{attr}.word_start", pred["value"])
+    when "is_null", "is_not_null"
+      clause = pred["comparison"] == "is_null" ? :must : :must_not
+      exists_fragment(clause, attr, pred["value"])
+    when "contains_ends"
+      filter_regex_fragment(:filter, attr, ".*#{pred['value']}")
+    when "contains_start"
+      match_fragment(:filter, "#{attr}.word_start", pred["value"])
+    end
+  end
+
+  def nested_comparison_fragment(pred)
+    case pred["comparison"]
+    when "eq"
+      term_fragment(:must, "custom_attributes.value", pred["value"])
+    when "not_eq"
+      term_fragment(:must_not, "custom_attributes.value", pred["value"])
+    when "contains"
+      filter_regex_fragment(:filter, "custom_attributes.value", ".*#{pred['value']}.*")
+    when "not_contains"
+      filter_regex_fragment(:must_not, "custom_attributes.value", ".*#{pred['value']}.*")
+    when "is_null"
+      exists_fragment(:must, "custom_attributes.value", pred["value"])
+    when "is_not_null"
+      exists_fragment(:must_not, "custom_attributes.value", pred["value"])
+    when "contains_ends"
+      filter_regex_fragment(:filter, "custom_attributes.value", ".*#{pred['value']}")
+    when "contains_start"
+      filter_regex_fragment(:filter, "custom_attributes.value", "#{pred['value']}.*")
+    end
+  end
+
+  def es_query_body(q_predicates, nested_preds)
+    {
+      track_total_hits: true,
+      query: {
+        bool: {
+          must: (clause_group(q_predicates, :must) << nested_preds_group(:c, nested_preds)).compact.flatten,
+          must_not: clause_group(q_predicates, :must_not),
+          should: clause_group(q_predicates, :should),
+          filter: clause_group(q_predicates, :filter)
+        }
+      }
+    }
+  end
+
+  public
 
   def term_fragment(clause, attribute, value)
     {
@@ -340,45 +402,10 @@ class Segment < ApplicationRecord
   def nested_preds_group(_clause, attributes)
     return attributes if attributes.blank?
 
-    attributes.map do |o|
-      [{
-        term: {
-          "custom_attributes.name": { value: o["attribute"] }
-        }
-      },
-       {
-         term: {
-           "custom_attributes.value": { value: o["value"] }
-         }
-       }]
-    end.flatten
+    q_predicates = attributes.map { |pred| nested_comparison_fragment(pred) }
+                             &.flatten&.compact || []
 
-    q_predicates = attributes.map do |pred|
-      case pred["comparison"]
-      when "in"
-      # terms_fragment(:must, pred["attribute"], pred["value"])
-      when "eq"
-        term_fragment(:must, "custom_attributes.value", pred["value"])
-      when "not_eq"
-        term_fragment(:must_not, "custom_attributes.value", pred["value"])
-      when "contains"
-        filter_regex_fragment(:filter, "custom_attributes.value", ".*#{pred['value']}.*")
-      # match_fragment(:must, "custom_attributes.value", pred["value"])
-      when "not_contains"
-        filter_regex_fragment(:must_not, "custom_attributes.value", ".*#{pred['value']}.*")
-      # match_fragment(:must_not, "custom_attributes.value", pred["value"])
-      when "is_null"
-        exists_fragment(:must, "custom_attributes.value", pred["value"])
-      when "is_not_null"
-        exists_fragment(:must_not, "custom_attributes.value", pred["value"])
-      when "contains_ends"
-        filter_regex_fragment(:filter, "custom_attributes.value", ".*#{pred['value']}")
-      when "contains_start"
-        filter_regex_fragment(:filter, "custom_attributes.value", "#{pred['value']}.*")
-      end
-    end&.flatten&.compact || []
-
-    fields = attributes.map  do |o|
+    fields = attributes.map do |o|
       {
         term: { "custom_attributes.name" => o["attribute"] }
       }
@@ -400,92 +427,21 @@ class Segment < ApplicationRecord
   end
 
   def es_search(page = nil, per = nil)
-    search_attrs = %w[
-      id
-      type
-      name
-      first_name
-      last_name
-      email
-      lang
-      tags
-      phone
-      last_visited_at
-      referrer
-      state
-      ip
-      city
-      region
-      country
-      lat
-      lng
-      postal
-      web_sessions
-      timezone
-      browser
-      browser_version
-      os
-      os_version
-      browser_language
-    ]
+    search_attrs = es_search_attrs
     custom_fields = app.custom_fields || []
-
-    preds = predicates.filter { |o| o["type"] != "match" and search_attrs.include?(o["attribute"]) }
+    preds = predicates.filter do |o|
+      o["type"] != "match" && search_attrs.include?(o["attribute"])
+    end
     nested_preds = predicates.filter do |o|
       custom_fields.pluck("name").include?(o["attribute"])
     end
 
-    q_predicates = preds.map do |pred|
-      case pred["comparison"]
-      when "in"
-        terms_fragment(:filter, pred["attribute"], pred["value"])
-      when "eq"
-        term_fragment(:must, pred["attribute"].to_s, pred["value"])
-      # match_fragment(:must, "#{pred["attribute"]}.analyzed", pred["value"])
-      when "not_eq"
-        term_fragment(:must_not, pred["attribute"].to_s, pred["value"])
-      when "contains"
-        match_fragment(:must, "#{pred['attribute']}.word_start", pred["value"])
-      # filter_fragment(:filter, "#{pred["attribute"]}", "#{pred["value"]}*")
-      when "not_contains"
-        match_fragment(:must_not, "#{pred['attribute']}.word_start", pred["value"])
-      when "is_null"
-        exists_fragment(:must, pred["attribute"], pred["value"])
-      when "is_not_null"
-        exists_fragment(:must_not, pred["attribute"], pred["value"])
-      when "contains_ends"
-        filter_regex_fragment(:filter, pred["attribute"].to_s, ".*#{pred['value']}")
-      when "contains_start"
-        match_fragment(:filter, "#{pred['attribute']}.word_start", pred["value"])
-        # filter_regex_fragment(:filter, "#{pred["attribute"]}", ".#{pred["value"]}*")
-      end
-    end&.flatten&.compact || []
+    q_predicates = preds.map { |pred| standard_comparison_fragment(pred) }
+                        &.flatten&.compact || []
+    q_predicates << { clause: :filter, fragment: { term: { app_id: { value: app_id } } } }
 
-    q_predicates << {
-      clause: :filter,
-      fragment: {
-        term: { app_id: { value: app_id } }
-      }
-    }
-
-    query = {
-      track_total_hits: true,
-      query: {
-        bool: {
-          must: (clause_group(q_predicates, :must) << nested_preds_group(:c, nested_preds)).compact.flatten,
-          must_not: clause_group(q_predicates, :must_not),
-          should: clause_group(q_predicates, :should),
-          filter: clause_group(q_predicates, :filter)
-        }
-      }
-    }
-
+    query = es_query_body(q_predicates, nested_preds)
     Rails.logger.info(query)
-
     AppUser.search(body: query, page: page, per_page: per)
-
-    # AppUser.search("*", where: { type: ["AppUser", "Lead"] })
-
-    # AppUser.search("*", where: { name: { ilike: "%migue%" } })
   end
 end
