@@ -38,6 +38,8 @@ class SnsReceiverJob < ApplicationJob
     app_user = AppUser.find_by(id: user_id)
 
     return if campaign.blank? || app_user.blank?
+    # SesSenderJob already recorded the send when it delivered the message
+    return if track_type == "send" && campaign.delivered_to?(app_user)
 
     app_user.send(:"track_#{track_type}",
                   host: data["ipAddress"],
@@ -76,10 +78,36 @@ class SnsReceiverJob < ApplicationJob
     end
   end
 
+  # Unsubscribes the recipients only inside the app that sent the message: the
+  # same address can be a contact of other apps that never mailed it. A
+  # notification without a Chaskiq campaign or conversation header names no
+  # app, so nobody is unsubscribed. Contacts that cannot be unsubscribed
+  # (already unsubscribed) are skipped, so a repeated notification is a no-op.
   def get_app_user_from_email(message, message_type, type_kind)
-    email = message.dig(message_type, type_kind).pluck("emailAddress")
-    users = AppUser.where(email: email) if email.present?
-    users.map(&:unsubscribe!)
+    emails = Array(message.dig(message_type, type_kind)).pluck("emailAddress").compact
+    return if emails.empty?
+
+    app = app_for_notification(message)
+    if app.blank?
+      Rails.logger.warn("SnsReceiverJob: #{message_type} for an unknown app, nobody unsubscribed")
+      return
+    end
+
+    app.app_users.where(email: emails).find_each do |user|
+      user.unsubscribe! if user.may_unsubscribe?
+    end
+  end
+
+  def app_for_notification(message)
+    campaign_id = header_value(message, "X-CHASKIQ-CAMPAIGN-ID")
+    return Campaign.find_by(id: campaign_id)&.app if campaign_id.present?
+
+    part_id = header_value(message, "X-CHASKIQ-PART-ID")
+    ConversationPart.find_by(id: part_id)&.conversation&.app if part_id.present?
+  end
+
+  def header_value(message, name)
+    Array(message.dig("mail", "headers")).find { |o| o["name"] == name }&.dig("value")
   end
 
   def parsed_message_id(m)

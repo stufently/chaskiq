@@ -16,8 +16,11 @@ RSpec.describe SnsReceiverJob do
   end
 
   def bounce_notification(bounce_type)
+    campaign = FactoryBot.create(:campaign, app: app)
     {
-      "mail" => { "headers" => [] },
+      "mail" => {
+        "headers" => [{ "name" => "X-CHASKIQ-CAMPAIGN-ID", "value" => campaign.id.to_s }, recipient_header]
+      },
       "bounce" => {
         "bounceType" => bounce_type,
         "bouncedRecipients" => [{ "emailAddress" => user.email }]

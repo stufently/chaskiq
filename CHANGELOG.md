@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-11-23 — Review fixes (backend)
+
+- EventsChannel now rejects subscriptions from anyone who is not an agent
+  (role or owner) of the connection's app.
+- SES complaint and permanent bounce notifications unsubscribe the address
+  only in the app that sent the campaign or conversation email; notifications
+  without a Chaskiq header unsubscribe nobody, and already unsubscribed
+  contacts no longer abort processing.
+- Launching a campaign that is already delivering or sent is a no-op (one
+  conditional UPDATE). Each recipient is mailed at most once: SesSenderJob
+  records a "send" metric under an advisory lock, MailSenderJob retries skip
+  recipients that have one, and the SES "send" event does not add a second.
+- mergeContact finds the app by key and passes the destination contact
+  record, so the mutation works.
+
 ## 2026-11-23 — Security updates
 
 - Update JWE to 1.1.1, ProseMirror View to 1.43.0, and Doorkeeper to

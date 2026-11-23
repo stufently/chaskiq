@@ -72,10 +72,24 @@ class Campaign < Message
 
   def subscriber_status_for(subscriber); end
 
+  LAUNCHED_STATES = %w[delivering sent].freeze
+
+  # Launches the mailing once. The state switch is a single conditional UPDATE,
+  # so a repeated or concurrent launch of a campaign that is already being
+  # delivered or was sent finds no row to update and enqueues nothing.
   def send_newsletter
-    self.state = "delivering"
-    save
+    launched = self.class.where(id: id)
+                   .where("state IS NULL OR state NOT IN (?)", LAUNCHED_STATES)
+                   .update_all(state: "delivering", updated_at: Time.current)
+    return if launched.zero?
+
+    self[:state] = "delivering"
+    clear_attribute_changes([:state])
     MailSenderJob.perform_later(self)
+  end
+
+  def delivered_to?(app_user)
+    metrics.exists?(action: "send", app_user_id: app_user.id)
   end
 
   def test_newsletter
