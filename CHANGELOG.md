@@ -29,6 +29,9 @@
   request instead of redirecting to the home page.
 - Widget: a conversation state update no longer falls through into the
   typing handler, which could leave the typing indicator stuck.
+- Contact profile "Compose a new message": a second send while one is in
+  flight is ignored, and the text is cleared only after the conversation was
+  started (kept for a retry on failure).
 
 ## 2026-11-23 — Review fixes (release and deploy)
 
