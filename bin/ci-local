@@ -110,8 +110,7 @@ in_ruby() {
 
 run_rubocop() {
   log "rubocop"
-  # Same contract as rubocop-analysis.yml: any offense fails; the old backlog is
-  # in .rubocop_todo.yml.
+  # Same contract as rubocop-analysis.yml: any offense fails.
   in_ruby "$TEST_IMAGE" bundle install --quiet || { echo "bundle install failed" >&2; return 1; }
   # CI lints a fresh checkout plus the gems in vendor/bundle: drop other
   # untracked files from RuboCop's target list (its own excludes are already

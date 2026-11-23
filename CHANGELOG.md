@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-23 — fork-updates-r9
+
+- Remove the RuboCop backlog file and its inheritance settings after resolving
+  the remaining exclusions. The local and GitHub checks use the main RuboCop
+  configuration directly.
+
 ## 2026-11-23 — fork-updates-r10r
 
 - Split GraphQL execution, package iframe handling, and inbound email processing into

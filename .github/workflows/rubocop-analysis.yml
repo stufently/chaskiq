@@ -33,8 +33,7 @@ jobs:
         with:
           bundler-cache: true
 
-      # Any offense fails the job; the existing backlog is listed per file in
-      # .rubocop_todo.yml (shrink it, do not grow it).
+      # Any offense fails the job.
       - name: Rubocop run
         run: |
           rc=0

@@ -1,9 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
-inherit_mode:
-  merge:
-    - Exclude
-
 plugins:
   - rubocop-rails
 
@@ -121,9 +115,8 @@ Lint/UnusedMethodArgument:
 Naming/MemoizedInstanceVariableName:
   Exclude:
     - 'app/controllers/api_controller.rb'
-# R8 (same plan and decisions): metric limits at the level common in Rails projects, chosen from the
-# distribution measured in the plan. Methods and classes above them are outliers: they stay listed in
-# .rubocop_todo.yml and get refactor milestones with tests (docs/specs/fork-updates-r8a.md).
+# R8 selected these metric limits from the Rails project's measured distribution
+# (docs/specs/fork-updates-rubocop-plan.md).
 # R10cfg (docs/specs/fork-updates-r10-programme.md, decision K1 2026-11-22): a multi-line array, hash
 # or heredoc literal counts as one line in MethodLength, ClassLength and BlockLength. Those literals
 # are declarative data (plugin definition_info, messenger presenter schemas, provider fixtures);
