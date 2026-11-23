@@ -19,15 +19,12 @@ Metrics/AbcSize:
     - 'app/mailers/chat_notifier_mailer.rb'
     - 'app/models/app_package_integration.rb'
     - 'app/models/plugin.rb'
-    - 'app/services/action_trigger.rb'
-    - 'app/services/action_trigger_factory.rb'
 
 # Configuration parameters: CountComments, Max, CountAsOne, AllowedMethods, AllowedPatterns.
 # AllowedMethods: refine
 Metrics/BlockLength:
   Exclude:
     - 'app/models/concerns/globalize_accessors.rb'
-    - 'app/services/action_trigger_factory.rb'
 
 # Configuration parameters: CountComments, Max, CountAsOne.
 Metrics/ClassLength:
@@ -38,7 +35,6 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/mailers/chat_notifier_mailer.rb'
-    - 'app/services/action_trigger_factory.rb'
     - 'app/services/plugin_schema_validator.rb'
 
 # Configuration parameters: CountComments, Max, CountAsOne, AllowedMethods, AllowedPatterns.
@@ -46,7 +42,6 @@ Metrics/MethodLength:
   Exclude:
     - 'app/graphql/mutations/conversations/start_conversation.rb'
     - 'app/mailers/chat_notifier_mailer.rb'
-    - 'app/services/action_trigger_factory.rb'
 
 # Configuration parameters: Max, CountKeywordArgs, MaxOptionalParameters.
 Metrics/ParameterLists:
@@ -57,4 +52,3 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/mailers/chat_notifier_mailer.rb'
-    - 'app/services/action_trigger_factory.rb'

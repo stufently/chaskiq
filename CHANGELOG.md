@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-23 — fork-updates-r10q
+
+- Split bot scenario templates and step dispatch into smaller methods while preserving
+  path order, fallbacks, reply handling, and follow-up actions. Remove six RuboCop
+  exclusions for the action trigger services.
+
 ## 2026-11-23 — fork-updates-r10p2
 
 - Pinned the full Elasticsearch request body in `spec/models/segment_es_r10p2_spec.rb`
