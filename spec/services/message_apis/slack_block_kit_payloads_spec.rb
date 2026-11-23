@@ -88,10 +88,12 @@ RSpec.describe MessageApis::Slack::Api, "Block Kit payloads" do
   def stub_http(spec, requests)
     stub_request(:any, /.*/).to_return do |request|
       verb = request.method.to_s.upcase
-      uri = request.uri.omit(:port)
-      requests << { "method" => verb, "uri" => uri.to_s, "authorization" => request.headers["Authorization"],
+      uri = request.uri
+      expect([uri.scheme, uri.port]).to eq(["https", 443])
+      recorded = uri.omit(:port)
+      requests << { "method" => verb, "uri" => recorded.to_s, "authorization" => request.headers["Authorization"],
                     "content_type" => request.headers["Content-Type"], "body" => request.body }
-      reply = spec.fetch("replies", {}).fetch("#{verb} #{uri.omit(:query)}", {})
+      reply = spec.fetch("replies", {}).fetch("#{verb} #{recorded.omit(:query)}", {})
       { status: reply.fetch("status", 200), body: reply.fetch("body", "{}") }
     end
   end

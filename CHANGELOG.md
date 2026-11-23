@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-23 — Slack Block Kit test hardening
+
+- Payloads spec validates exact scheme/host/port in stub_http; new edge-cases
+  spec covers direct_upload exceptions, replied blocks without an author, and
+  lookupByEmail responses missing a user id. No production behaviour changed.
+
 ## 2026-11-23 — Review fixes (backend)
 
 - EventsChannel now rejects subscriptions from anyone who is not the owner or
