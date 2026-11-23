@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-23 — fork-updates-r10s
+
+- Split conversation creation and notification email delivery into smaller methods.
+  Preserve bot reply attribution and the original email headers, templates, and skip
+  conditions. Remove the six RuboCop exclusions for both implementations.
+
 ## 2026-11-23 — fork-updates-r10q
 
 - Split bot scenario templates and step dispatch into smaller methods while preserving
