@@ -25,31 +25,31 @@ class Plugin < ApplicationRecord
 
     if plugin_data.present? && plugin_data.is_a?(Array)
       plugin_folder_path = Rails.root.join("app", "services", "message_apis", plugin_name.underscore)
-
-      # Create the plugin folder if it doesn't exist
       FileUtils.mkdir_p(plugin_folder_path)
-
-      plugin_data.each do |d|
-        # Save the plugin file to the folder
-        file_path = plugin_folder_path.join(d["file"].to_s)
-        File.open(file_path, "w") do |file|
-          file.write(d["content"])
-          Rails.logger.info "✅ [#{plugin_name}] Plugin file '#{d['file']}' saved to folder '#{plugin_folder_path}'."
-        end
-
-        # Load the plugin file using Zeitwerk
-        Rails.autoloaders.main.push_dir(plugin_folder_path)
-        Rails.autoloaders.main.require_dependency(file_path.to_s)
-        # Rails.logger.info("⚓ autoloaded #{plugin_folder_path}")
-        # Rails.logger.info("⚓ autoloaded #{file_path}")
-      end
-
+      write_plugin_files(plugin_folder_path, plugin_data, plugin_name)
       Rails.logger.debug { "✅ Installed #{plugin_name} to filesystem" }
-
     else
       Rails.logger.error "🔴 Invalid plugin data format. Expected 'file' and 'content' keys."
     end
   end
+
+  def self.write_plugin_files(plugin_folder_path, plugin_data, plugin_name)
+    plugin_data.each do |d|
+      file_path = plugin_folder_path.join(d["file"].to_s)
+      File.open(file_path, "w") do |file|
+        file.write(d["content"])
+        Rails.logger.info "✅ [#{plugin_name}] Plugin file '#{d['file']}' saved to folder '#{plugin_folder_path}'."
+      end
+      load_plugin_file(plugin_folder_path, file_path)
+    end
+  end
+
+  def self.load_plugin_file(plugin_folder_path, file_path)
+    Rails.autoloaders.main.push_dir(plugin_folder_path)
+    Rails.autoloaders.main.require_dependency(file_path.to_s)
+  end
+
+  private_class_method :write_plugin_files, :load_plugin_file
 
   # will read the plugin files and store plugins locally on AppPackage / Plugin
   def self.restore_plugins_from_fs

@@ -3,8 +3,8 @@
 module GlobalizeAccessors
   extend ActiveSupport::Concern
 
-  included do
-    def self.globalize_accessors(options = {})
+  module ClassMethods
+    def globalize_accessors(options = {})
       options.reverse_merge!(
         locales: I18n.available_locales,
         attributes: translated_attribute_names
@@ -22,16 +22,16 @@ module GlobalizeAccessors
       include InstanceMethods
     end
 
-    def self.localized_attr_name_for(attr_name, locale)
+    def localized_attr_name_for(attr_name, locale)
       "#{attr_name}_#{locale.to_s.underscore}"
     end
 
-    def self.define_accessors(attr_name, locale)
+    def define_accessors(attr_name, locale)
       define_getter(attr_name, locale)
       define_setter(attr_name, locale)
     end
 
-    def self.define_getter(attr_name, locale)
+    def define_getter(attr_name, locale)
       define_method localized_attr_name_for(attr_name, locale) do
         if globalize.stash.contains?(locale, attr_name)
           globalize.send(:fetch_stash, locale, attr_name)
@@ -41,7 +41,7 @@ module GlobalizeAccessors
       end
     end
 
-    def self.define_setter(attr_name, locale)
+    def define_setter(attr_name, locale)
       localized_attr_name = localized_attr_name_for(attr_name, locale)
 
       define_method :delete_translation_if_all_blank do |locale|
@@ -67,7 +67,7 @@ module GlobalizeAccessors
       globalize_attribute_names << localized_attr_name.to_sym
     end
 
-    def self.each_attribute_and_locale(options)
+    def each_attribute_and_locale(options)
       options[:attributes].each do |attr_name|
         options[:locales].each do |locale|
           yield attr_name, locale

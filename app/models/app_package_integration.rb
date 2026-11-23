@@ -199,39 +199,43 @@ class AppPackageIntegration < ApplicationRecord
 
   # used in display
   def call_hook(params)
-    # @presenter.submit_hook(params)
-    params.merge!({ package: self }) if external_package?
-
-    params[:ctx][:package] = self unless external_package?
-
+    prepare_hook_params(params)
     response = presenter_hook_response(params, presenter)&.with_indifferent_access
-
     validate_schema!(response[:definitions])
-
-    if response["kind"] == "initialize"
-      params[:ctx][:field] = nil
-      params[:ctx][:values] = response["results"]
-      response = presenter.initialize_hook(**params)
-      response.merge!(kind: "initialize")
-    end
-
+    response = handle_initialize_response(params, response)
     return response if response[:results].blank?
 
-    if (message_key = params.dig(:ctx, :message_key)) && message_key.present?
-      # TODO: maybe refactor this logic, move it to another place
-      message = params.dig(:ctx, :package).app.conversation_parts.find_by(
-        key: message_key
-      )
-
-      params[:ctx][:values]
-      m = message.message
-      blocks = m.blocks.merge("schema" => response[:definitions])
-      m.blocks = blocks
-      m.save_replied(response[:results])
-    end
-
+    process_message_response(params, response)
     response
   end
+
+  def prepare_hook_params(params)
+    params.merge!({ package: self }) if external_package?
+    params[:ctx][:package] = self unless external_package?
+  end
+
+  def handle_initialize_response(params, response)
+    return response unless response["kind"] == "initialize"
+
+    params[:ctx][:field] = nil
+    params[:ctx][:values] = response["results"]
+    result = presenter.initialize_hook(**params)
+    result.merge!(kind: "initialize")
+    result
+  end
+
+  def process_message_response(params, response)
+    message_key = params.dig(:ctx, :message_key)
+    return if message_key.blank?
+
+    conversation_part = params.dig(:ctx, :package).app.conversation_parts.find_by(key: message_key)
+    params[:ctx][:values]
+    message_block = conversation_part.message
+    message_block.blocks = message_block.blocks.merge("schema" => response[:definitions])
+    message_block.save_replied(response[:results])
+  end
+
+  private :prepare_hook_params, :handle_initialize_response, :process_message_response
 
   def validate_schema!(definitions)
     package_schema = PluginSchemaValidator.new(definitions)

@@ -12,31 +12,6 @@ class PluginSchemaValidator
   end
 end
 
-class BaseSchema
-  attr_accessor :model
-
-  def initialize(params)
-    self.model = case params[:type]
-                 when "text" then TextSchema.new(params)
-                 when "button" then ButtonSchema.new(params)
-                 when "image" then ImageSchema.new(params)
-                 when "data-table" then DataTableSchema.new(params)
-                 when "spacer" then SpacerSchema.new(params)
-                 when "hidden" then HiddenSchema.new(params)
-                 when "separator" then DividerSchema.new(params)
-                 when "input" then InputSchema.new(params)
-                 when "textarea" then TextAreaSchema.new(params)
-                 when "list" then ListSchema.new(params)
-                 when "single-select" then SingleSelectSchema.new(params)
-                 when "checkbox" then CheckboxSchema.new(params)
-                 when "dropdown" then DropdownSchema.new(params)
-                 when "frame" then FrameSchema.new(params)
-                 end
-  end
-
-  delegate :valid?, to: :model
-end
-
 class HiddenSchema
   include ActiveModel::Validations
 
@@ -397,5 +372,39 @@ class FrameSchema
   def initialize(params)
     self.type = params[:type]
     self.url = params[:url]
+  end
+end
+
+class BaseSchema
+  SCHEMA_TYPES = {
+    "text" => TextSchema,
+    "button" => ButtonSchema,
+    "image" => ImageSchema,
+    "data-table" => DataTableSchema,
+    "spacer" => SpacerSchema,
+    "hidden" => HiddenSchema,
+    "separator" => DividerSchema,
+    "input" => InputSchema,
+    "textarea" => TextAreaSchema,
+    "list" => ListSchema,
+    "single-select" => SingleSelectSchema,
+    "checkbox" => CheckboxSchema,
+    "dropdown" => DropdownSchema,
+    "frame" => FrameSchema
+  }.freeze
+  private_constant :SCHEMA_TYPES
+
+  attr_accessor :model
+
+  def initialize(params)
+    self.model = build_model(params)
+  end
+
+  delegate :valid?, to: :model
+
+  private
+
+  def build_model(params)
+    SCHEMA_TYPES[params[:type]]&.new(params)
   end
 end
