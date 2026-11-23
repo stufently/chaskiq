@@ -56,10 +56,7 @@ Lint/MissingSuper:
   Enabled: false
 Rails/SkipsModelValidations:
   Enabled: false
-# R8 (same plan and decisions): Max is the length of app/models/concerns/user_handler.rb, the only
-# module above the default 100 lines; it gets its own refactor milestone, after which Max goes down.
 Metrics/ModuleLength:
-  Max: 123
   Exclude:
     - app/services/message_apis/helpers.rb
 Rails/InverseOf:
