@@ -41,6 +41,14 @@
   request instead of redirecting to the home page.
 - Widget: a conversation state update no longer falls through into the
   typing handler, which could leave the typing indicator stuck.
+- Contact profile "Compose a new message": a second send while one is in
+  flight is ignored, and the text is cleared only after the conversation was
+  started (kept for a retry on failure).
+- Token refresh: a request whose 401 arrives after the session was signed
+  out is no longer replayed with an empty token, and a replay that still gets
+  401 signs out instead of only showing a toast.
+- Agent inbox: an older page of the same conversation that arrives after the
+  conversation was reloaded is no longer appended to the fresh messages.
 
 ## 2026-11-23 — Review fixes (release and deploy)
 
@@ -48,6 +56,9 @@
   (`workflow_run` of CI for branches; releases and manual runs check for a
   successful CI run). GitHub releases `vX.Y.Z` add `X.Y.Z`, `X.Y` and `X`
   tags on GHCR.
+- Releases and manual image runs wait (up to 75 minutes) for a queued or
+  running CI run of the commit instead of failing at once; the GHCR branch
+  tag replaces characters Docker does not allow with `-`.
 - Heroku: move `app.json` from the retired heroku-20 stack to heroku-26, replace
   the removed free dyno size with `basic`, and run `rails db:prepare` in a
   `release` phase (it also replaces the postdeploy schema load and seed).

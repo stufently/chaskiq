@@ -6,16 +6,18 @@ import { setErrorCode } from '../actions/error_status_code';
 import { lockPage } from '../actions/upgradePages';
 import { doSignout } from '@chaskiq/store/src/actions/auth';
 
-import { refreshToken } from '../actions/auth';
+import { refreshToken, expireAuthentication } from '../actions/auth';
 
 // One token refresh shared by every request that hit a 401 at the same time,
 // so a burst of expired requests does not spend the refresh token twice.
 let pendingRefresh: Promise<boolean> | null = null;
 
 function refreshAuth(auth): Promise<boolean> {
-  // Another request already got a fresh token since this one was sent.
-  if (store.getState().auth.accessToken !== auth.accessToken) {
-    return Promise.resolve(true);
+  // The token changed since this request was sent: another request already
+  // refreshed it (replay), or its refresh failed and signed out (null: give up).
+  const current = store.getState().auth.accessToken;
+  if (current !== auth.accessToken) {
+    return Promise.resolve(!!current);
   }
   if (!pendingRefresh) {
     pendingRefresh = new Promise<boolean>((resolve) => {
@@ -102,6 +104,8 @@ const graphql = (query, variables, callbacks, retried = false) => {
             if (!retried) return refreshAndRetry();
             //@ts-ignore
             store.dispatch(errorMessage('session expired'));
+            // still 401 with a fresh token: the session is gone
+            store.dispatch(expireAuthentication());
             break;
           default:
             break;
@@ -134,6 +138,8 @@ const graphql = (query, variables, callbacks, retried = false) => {
         case 401:
           //@ts-ignore
           store.dispatch(errorMessage('session expired'));
+          // still 401 with a fresh token: the session is gone
+          store.dispatch(expireAuthentication());
           break;
         default:
           break;

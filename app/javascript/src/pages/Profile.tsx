@@ -148,7 +148,16 @@ class ProfilePage extends Component<ProfilePageProps, ProfilePageState> {
     );
   };
 
-  handleSubmit = ({ html, serialized, text }) => {
+  // Set while a start-conversation request is in flight, so a double click
+  // on send does not start two conversations with the same text.
+  submitting = false;
+
+  // onDone(ok) tells the editor whether to clear the draft (ok) or keep it
+  // for a retry (failure).
+  handleSubmit = ({ html, serialized, text }, onDone?: (ok: boolean) => void) => {
+    if (this.submitting) return;
+    this.submitting = true;
+    let ok = false;
     graphql(
       START_CONVERSATION,
       {
@@ -158,11 +167,16 @@ class ProfilePage extends Component<ProfilePageProps, ProfilePageState> {
       },
       {
         success: (data) => {
+          ok = true;
           const { conversation } = data.startConversation;
           const url = `/apps/${this.props.app.key}/conversations/${conversation.key}`;
           this.props.history.push(url);
         },
-        errors: (_error) => {},
+        error: (_error) => {},
+        always: () => {
+          this.submitting = false;
+          if (onDone) onDone(ok);
+        },
       }
     );
   };
@@ -659,4 +673,5 @@ function mapStateToProps(state) {
 
 // export default ShowAppContainer
 
+export { ProfilePage };
 export default withRouter(connect(mapStateToProps)(ProfilePage));
