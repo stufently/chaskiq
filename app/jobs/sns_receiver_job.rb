@@ -106,7 +106,7 @@ class SnsReceiverJob < ApplicationJob
   end
 
   def parsed_message_id(m)
-    header_value(m, "Message-ID")&.split("@")&.first&.delete("<")
+    header_value(m, "Message-ID").to_s.split("@").first&.delete("<")
   end
 
   def get_email_from_notification(m)
