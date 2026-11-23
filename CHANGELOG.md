@@ -50,6 +50,9 @@
 - Agent inbox: an older page of the same conversation that arrives after the
   conversation was reloaded is no longer appended to the fresh messages.
 
+- The dashboard websocket now reconnects with the current access token after
+  a token refresh (the server refuses revoked and expired tokens).
+
 ## 2026-11-23 — Review fixes (release and deploy)
 
 - Publish GHCR and Docker Hub images only after CI passed for the commit

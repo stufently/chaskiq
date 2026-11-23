@@ -11,18 +11,28 @@ import {
   dispatchUpdateConversationData,
 } from '@chaskiq/store/src/actions/conversation';
 
-export function createSubscription(match, accessToken) {
+function cableUrl(appId, accessToken) {
   const chaskiq_cable_url = document.querySelector(
     'meta[name="chaskiq-ws"]'
     //@ts-ignore
   ).content;
+  return `${chaskiq_cable_url}?app=${appId}&token=${accessToken}`;
+}
 
+export function createSubscription(match, accessToken) {
   return {
     events: null,
-    cable: actioncable.createConsumer(
-      `${chaskiq_cable_url}?app=${match.params.appId}&token=${accessToken}`
-    ),
+    cable: actioncable.createConsumer(cableUrl(match.params.appId, accessToken)),
   };
+}
+
+// The server refuses expired tokens, and the consumer reads its url on every
+// (re)connect, so keep the url on the current token after a refresh.
+export function updateCableToken(cableApp, appId, accessToken) {
+  if (!cableApp?.cable || !accessToken) return;
+  cableApp.cable.url = actioncable.createWebSocketURL(
+    cableUrl(appId, accessToken)
+  );
 }
 
 export function destroySubscription(cableApp) {

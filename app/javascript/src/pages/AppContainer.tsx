@@ -49,6 +49,7 @@ import PackageSlider from '../pages/conversations/packageSlider';
 
 import {
   createSubscription,
+  updateCableToken,
   destroySubscription,
   eventsSubscriber,
   sendPush,
@@ -79,6 +80,10 @@ function AppContainer({
   current_section,
 }) {
   const CableApp = React.useRef(createSubscription(match, accessToken));
+
+  React.useEffect(() => {
+    updateCableToken(CableApp.current, match.params.appId, accessToken);
+  }, [accessToken, match.params.appId]);
 
   const [_subscribed, setSubscribed] = React.useState(null);
   const [reconnectTs, setReconnectTs] = React.useState(0);
