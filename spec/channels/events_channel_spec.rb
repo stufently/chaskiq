@@ -63,6 +63,37 @@ RSpec.describe EventsChannel, type: :channel do
     expect(subscription).to be_rejected
   end
 
+  # The dashboard keeps one cable connection (opened with the first app's key)
+  # and resubscribes with the new app key when the agent switches apps.
+  it "streams the app named in the subscription, not the connection's app" do
+    both = other_app.add_agent({ email: "both@example.com" }, role_attrs: { role: "agent" }).agent
+    app.add_agent({ email: "both@example.com" }, role_attrs: { role: "agent" })
+    stub_connection(current_user: both, app: app)
+
+    subscribe(app: other_app.key)
+
+    expect(subscription).to be_confirmed
+    expect(subscription).to have_stream_from("events:#{other_app.key}")
+    expect(subscription).not_to have_stream_from("events:#{app.key}")
+  end
+
+  it "rejects a subscription to an app the agent does not belong to" do
+    stub_connection(current_user: agent, app: app)
+
+    subscribe(app: other_app.key)
+
+    expect(subscription).to be_rejected
+    expect(subscription.streams).to be_empty
+  end
+
+  it "rejects a subscription to an unknown app" do
+    stub_connection(current_user: agent, app: app)
+
+    subscribe(app: "missing-key")
+
+    expect(subscription).to be_rejected
+  end
+
   it "rejects an agent when the connection has no app" do
     stub_connection(current_user: agent, app: nil)
 

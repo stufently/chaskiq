@@ -23,11 +23,13 @@ module ApplicationCable
       get_session_data
     end
 
+    # by_token also returns revoked and expired tokens, so only an accessible
+    # token identifies the agent.
     def find_verified_agent
-      user = Agent.find_by(id: access_token.resource_owner_id) if access_token
+      user = Agent.find_by(id: access_token.resource_owner_id) if access_token&.accessible?
       return user if user
 
-      raise "invalid user"
+      reject_unauthorized_connection
     end
 
     def access_token

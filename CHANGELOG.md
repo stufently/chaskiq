@@ -16,6 +16,18 @@
   recipients that have one, and the SES "send" event does not add a second.
 - mergeContact finds the app by key and passes the destination contact
   record, so the mutation works.
+- A campaign stuck in "delivering" for over an hour (its MailSenderJob was
+  lost) can be launched again; a fresh "delivering" or a "sent" campaign is
+  still never relaunched.
+- SES "send" notifications never record a campaign send (SesSenderJob does),
+  so an event processed before that job commits cannot add a duplicate.
+- SES notifications without original headers, or missing a Chaskiq header,
+  are skipped instead of raising and retrying forever.
+- The websocket rejects agents whose access token is revoked, expired or
+  unknown (unauthorized close instead of an error).
+- EventsChannel streams and authorizes the app named in the subscription
+  (falling back to the connection's app), so switching apps in the dashboard
+  no longer keeps streaming the first app's events.
 
 ## 2026-11-23 — Review fixes (frontend)
 

@@ -58,8 +58,8 @@ RSpec.describe SnsReceiverJob do
       ]
     end
 
-    it "raises NoMethodError when CAMPAIGN-TO header is missing" do
-      expect { described_class.new.perform("click", message, nil) }.to raise_error(NoMethodError)
+    it "ignores the event when CAMPAIGN-TO header is missing" do
+      expect { described_class.new.perform("click", message, nil) }.not_to(change(Metric, :count))
     end
   end
 end

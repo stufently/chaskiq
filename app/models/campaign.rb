@@ -72,18 +72,25 @@ class Campaign < Message
 
   def subscriber_status_for(subscriber); end
 
-  LAUNCHED_STATES = %w[delivering sent].freeze
+  # A "delivering" campaign whose state has not changed for this long lost its
+  # MailSenderJob (retries exhausted, queue flushed) and may be launched again.
+  # Relaunching is safe: MailSenderJob skips recipients with a "send" metric and
+  # SesSenderJob delivers at most once per campaign and recipient.
+  STALE_DELIVERY_AFTER = 1.hour
 
   # Launches the mailing once. The state switch is a single conditional UPDATE,
-  # so a repeated or concurrent launch of a campaign that is already being
-  # delivered or was sent finds no row to update and enqueues nothing.
+  # so a repeated or concurrent launch of a campaign that was sent or is being
+  # delivered (and not stale) finds no row to update and enqueues nothing.
   # If the job cannot be enqueued (e.g. Redis is down) the state is put back,
   # so the campaign can be launched again instead of hanging in "delivering".
   def send_newsletter
-    previous = state
+    previous_state = state
+    previous_updated_at = updated_at
+    launched_at = Time.current
     launched = self.class.where(id: id)
-                   .where("state IS NULL OR state NOT IN (?)", LAUNCHED_STATES)
-                   .update_all(state: "delivering", updated_at: Time.current)
+                   .where("state IS NULL OR (state <> 'sent' AND (state <> 'delivering' OR updated_at < ?))",
+                          launched_at - STALE_DELIVERY_AFTER)
+                   .update_all(state: "delivering", updated_at: launched_at)
     return if launched.zero?
 
     self[:state] = "delivering"
@@ -91,8 +98,9 @@ class Campaign < Message
     begin
       MailSenderJob.perform_later(self)
     rescue StandardError
-      self.class.where(id: id, state: "delivering").update_all(state: previous)
-      self[:state] = previous
+      self.class.where(id: id, state: "delivering", updated_at: launched_at)
+          .update_all(state: previous_state, updated_at: previous_updated_at)
+      self[:state] = previous_state
       clear_attribute_changes([:state])
       raise
     end
