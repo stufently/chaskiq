@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-11-23 — Review fixes (frontend)
+
+- Agent inbox: a late response for a conversation the agent already left no
+  longer replaces the open conversation, and replies or notes are refused
+  while the loaded conversation differs from the one in the URL.
+- Agent and widget editors keep the typed message until the server accepts
+  it; on failure the text stays for a retry, and a second send while one is
+  in flight is ignored.
+- An expired agent session now refreshes the token and replays the failed
+  request instead of redirecting to the home page.
+- Widget: a conversation state update no longer falls through into the
+  typing handler, which could leave the typing indicator stuck.
+
 ## 2026-11-23 — Security updates
 
 - Update JWE to 1.1.1, ProseMirror View to 1.43.0, and Doorkeeper to

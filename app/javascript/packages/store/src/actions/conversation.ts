@@ -33,9 +33,14 @@ export const camelizeKeys = (obj) => {
   return obj;
 };
 
+// Key of the conversation the UI asked for most recently. A response for any
+// other key is stale (the agent already switched away) and must be dropped.
+let requestedConversationKey = null;
+
 export function getConversation(options, cb) {
   return (dispatch, getState) => {
     setLoading(true);
+    requestedConversationKey = options.id;
 
     const conversationMeta = getState().conversation.meta;
     const nextPage = conversationMeta ? conversationMeta.next_page || 1 : 1;
@@ -49,6 +54,7 @@ export function getConversation(options, cb) {
       },
       {
         success: (data) => {
+          if (options.id !== requestedConversationKey) return;
           const conversation = data.app.conversation;
 
           const newConversation = Object.assign(
@@ -113,6 +119,7 @@ export function updateConversationTagList(options, cb) {
 
 export function clearConversation(cb) {
   return (dispatch, _getState) => {
+    requestedConversationKey = null;
     dispatch(dispatchGetConversations({}));
     if (cb) cb();
   };
@@ -140,8 +147,25 @@ export function typingNotifier(cb) {
   };
 }
 
-export function insertComment(comment, cb) {
+// True when the conversation loaded in the store is not the one the agent is
+// looking at (expectedKey comes from the URL). Sending would hit the wrong
+// conversation, so callers refuse instead.
+function conversationMismatch(getState, expectedKey) {
+  return (
+    expectedKey !== undefined && getState().conversation?.key !== expectedKey
+  );
+}
+
+// cb(ok, payload) is called exactly once: ok is true only when the server
+// accepted the message, so the editor can keep the draft on any failure.
+export function insertComment(comment, cb, expectedKey?: string) {
   return (dispatch, getState) => {
+    if (conversationMismatch(getState, expectedKey)) {
+      cb && cb(false, null);
+      return;
+    }
+    let ok = false;
+    let payload = null;
     graphql(
       INSERT_COMMMENT,
       {
@@ -151,21 +175,25 @@ export function insertComment(comment, cb) {
       },
       {
         success: (data) => {
-          // console.log(data)
+          ok = true;
+          payload = data;
           dispatch(appendMessage(data.insertComment.message));
-          cb && cb(data);
         },
         error: (error) => {
           console.log(error);
-          cb && cb(error);
+          payload = error;
+        },
+        always: () => {
+          cb && cb(ok, payload);
         },
       }
     );
   };
 }
 
-export function insertAppBlockComment(comment, cb) {
+export function insertAppBlockComment(comment, cb, expectedKey?: string) {
   return (dispatch, getState) => {
+    if (conversationMismatch(getState, expectedKey)) return;
     const blocks = {
       type: 'app_package',
       app_package: comment.provider.name,
@@ -195,8 +223,15 @@ export function insertAppBlockComment(comment, cb) {
   };
 }
 
-export function insertNote(comment, cb) {
+// Same contract as insertComment: cb(ok, payload), called once.
+export function insertNote(comment, cb, expectedKey?: string) {
   return (dispatch, getState) => {
+    if (conversationMismatch(getState, expectedKey)) {
+      cb && cb(false, null);
+      return;
+    }
+    let ok = false;
+    let payload = null;
     graphql(
       INSERT_NOTE,
       {
@@ -206,12 +241,15 @@ export function insertNote(comment, cb) {
       },
       {
         success: (data) => {
-          console.log(data);
-          cb && cb(data);
+          ok = true;
+          payload = data;
         },
         error: (error) => {
           console.log(error);
-          cb && cb(error);
+          payload = error;
+        },
+        always: () => {
+          cb && cb(ok, payload);
         },
       }
     );

@@ -257,17 +257,33 @@ function Conversation({
     );
   }
 
+  // The store may still hold a previous conversation while the one in the
+  // URL loads; replying then would reach the wrong recipient, so refuse.
+  const refuseIfNotShown = (cb) => {
+    if (conversation.key === matchId) return false;
+    dispatch(errorMessage('conversation is still loading, try again'));
+    cb && cb(false);
+    return true;
+  };
+
+  // cb(ok): the editor clears its draft only when ok is true.
   const insertCommentDispatch = (comment, cb) => {
     if (isNew) return startConversation(comment, cb);
+    if (refuseIfNotShown(cb)) return;
 
     dispatch(
-      insertComment(comment, () => {
-        cb && cb();
-      })
+      insertComment(
+        comment,
+        (ok) => {
+          cb && cb(ok);
+        },
+        matchId
+      )
     );
   };
 
   const startConversation = (comment, cb) => {
+    let ok = false;
     const { html, serialized } = comment;
     graphql(
       START_CONVERSATION,
@@ -280,35 +296,44 @@ function Conversation({
       },
       {
         success: (data) => {
+          ok = true;
           const { conversation } = data.startConversation;
           const url = `/apps/${app.key}/conversations/${conversation.key}`;
           history.push(url);
-          cb && cb(data);
         },
-        errors: (error) => {
+        error: () => {
           dispatch(errorMessage('error sending message'));
-          cb && cb(error);
         },
-        fail: (req) => {
-          cb && cb(req);
+        always: () => {
+          cb && cb(ok);
         },
       }
     );
   };
 
   const insertNoteDispatch = (comment, cb) => {
+    if (refuseIfNotShown(cb)) return;
     dispatch(
-      insertNote(comment, () => {
-        cb && cb();
-      })
+      insertNote(
+        comment,
+        (ok) => {
+          cb && cb(ok);
+        },
+        matchId
+      )
     );
   };
 
   const insertAppBlockCommentDispatch = (data, cb) => {
+    if (refuseIfNotShown(null)) return;
     dispatch(
-      insertAppBlockComment(data, () => {
-        cb && cb();
-      })
+      insertAppBlockComment(
+        data,
+        () => {
+          cb && cb();
+        },
+        matchId
+      )
     );
   };
 

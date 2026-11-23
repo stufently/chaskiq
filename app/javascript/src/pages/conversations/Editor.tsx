@@ -84,17 +84,23 @@ export default class ConversationEditor extends Component<
   fallbackEditor = false;
   delayTimer = null;
 
-  submitData = (formats, options) => {
-    // DANTE does not provide a way to update contentState from outside ?
-    // hide and show editor hack
+  // onDone(ok) tells the editor whether the server accepted the message, so
+  // it clears the draft only on success. While a send is in flight further
+  // submits are ignored: the draft stays visible and must not go out twice.
+  submitData = (formats, options, onDone?: (ok: boolean) => void) => {
+    if (this.state.loading) return;
     this.setState(
       {
         loading: true,
       },
       () => {
+        const done = (ok) => {
+          this.enable();
+          onDone && onDone(!!ok);
+        };
         options.note
-          ? this.props.insertNote(formats, this.enable)
-          : this.props.insertComment(formats, this.enable);
+          ? this.props.insertNote(formats, done)
+          : this.props.insertComment(formats, done);
       }
     );
   };
@@ -131,7 +137,9 @@ export default class ConversationEditor extends Component<
           {/*!this.state.loading ? // not sure why we hide the text editor when loading. */}
           <NewEditor
             insertAppBlockComment={this.props.insertAppBlockComment}
-            submitData={(formats) => this.submitData(formats, opts)}
+            submitData={(formats, onDone) =>
+              this.submitData(formats, opts, onDone)
+            }
             saveContentCallback={(content) => this.handleTyping(content)}
             sendMode={this.state.sendMode}
             {...this.props}

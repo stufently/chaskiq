@@ -8,8 +8,40 @@ import { doSignout } from '@chaskiq/store/src/actions/auth';
 
 import { refreshToken } from '../actions/auth';
 
-const graphql = (query, variables, callbacks) => {
+// One token refresh shared by every request that hit a 401 at the same time,
+// so a burst of expired requests does not spend the refresh token twice.
+let pendingRefresh: Promise<boolean> | null = null;
+
+function refreshAuth(auth): Promise<boolean> {
+  // Another request already got a fresh token since this one was sent.
+  if (store.getState().auth.accessToken !== auth.accessToken) {
+    return Promise.resolve(true);
+  }
+  if (!pendingRefresh) {
+    pendingRefresh = new Promise<boolean>((resolve) => {
+      //@ts-ignore
+      store.dispatch(refreshToken(auth, resolve));
+    }).then((ok) => {
+      pendingRefresh = null;
+      return ok;
+    });
+  }
+  return pendingRefresh;
+}
+
+const graphql = (query, variables, callbacks, retried = false) => {
   const { auth, current_user } = store.getState();
+
+  // On an expired session refresh the token and replay this request once,
+  // instead of losing it (and whatever the user just typed) to a page reload.
+  let retrying = false;
+  const refreshAndRetry = () => {
+    retrying = true;
+    refreshAuth(auth).then((ok) => {
+      if (ok) graphql(query, variables, callbacks, true);
+      else if (callbacks.always) callbacks.always();
+    });
+  };
 
   const locale =
     current_user.lang || (window.I18n && window.I18n.defaultLocale) || 'en';
@@ -67,13 +99,9 @@ const graphql = (query, variables, callbacks) => {
             // store.dispatch(errorMessage('server error ocurred'))
             break;
           case 401:
-            // history.push("/")
+            if (!retried) return refreshAndRetry();
             //@ts-ignore
             store.dispatch(errorMessage('session expired'));
-            //@ts-ignore
-            store.dispatch(refreshToken(auth));
-            // store.dispatch(expireAuthentication())
-            // refreshToken(auth)
             break;
           default:
             break;
@@ -87,11 +115,12 @@ const graphql = (query, variables, callbacks) => {
       callbacks.success ? callbacks.success(data, res) : null;
     })
     .catch((req) => {
+      if (req.response?.status === 401 && !retried) return refreshAndRetry();
       callbacks.fail ? callbacks.fail(req) : null;
       // throw r
       // const res = r.response
       // console.log("error on grapqhl client", req, error)
-      switch (req.response.status) {
+      switch (req.response?.status) {
         case 500:
           //@ts-ignore
           store.dispatch(errorMessage('server error ocurred'));
@@ -103,13 +132,8 @@ const graphql = (query, variables, callbacks) => {
           // store.dispatch(errorMessage('server error ocurred'))
           break;
         case 401:
-          // history.push("/")
           //@ts-ignore
           store.dispatch(errorMessage('session expired'));
-          //@ts-ignore
-          store.dispatch(refreshToken(auth));
-          // store.dispatch(expireAuthentication())
-          // refreshToken(auth)
           break;
         default:
           break;
@@ -118,6 +142,7 @@ const graphql = (query, variables, callbacks) => {
       callbacks.fatal ? callbacks.fatal('error fatale') : null;
     })
     .then((r) => {
+      if (retrying) return;
       callbacks.always ? callbacks.always() : null;
     });
 };
