@@ -23,6 +23,8 @@
   so an event processed before that job commits cannot add a duplicate.
 - SES notifications without original headers, or missing a Chaskiq header,
   are skipped instead of raising and retrying forever.
+- The websocket rejects agents whose access token is revoked, expired or
+  unknown (unauthorized close instead of an error).
 
 ## 2026-11-23 — Review fixes (frontend)
 
