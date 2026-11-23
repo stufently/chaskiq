@@ -79,25 +79,12 @@ module Api
       end
       alias is_notification_message? notification_message?
 
-      # TODO: add some tests mdfk!
       def process_email_notification(message)
-        json_message = JSON.parse(message)
-        json_message["receipt"]
-        json_message["mail"]["headers"].map { |o| { o["name"] => o["value"] } }
-        json_message["receipt"]["action"]
-        action = json_message["receipt"]["action"]
-
-        mail_body = read_mail_file(action)
-        mail = Mail.read_from_string(mail_body)
+        json_message, mail = read_email_notification(message)
         mail.from
         mail.to
-        recipients = mail.recipients # ["messages+aaa@hermessenger.com"] de aqui sale el app y el mensaje!
-
-        mail.part # will convert plain into multipart
-        # EmailReplyParser.parse_reply(mail.text_part.body.to_s)
-        # message = EmailReplyParser.parse_reply(mail.text_part.body.to_s).gsub("\n", "<br/>").force_encoding(Encoding::UTF_8)
-        text_body = mail&.text_part&.body
-        body = text_body&.to_s&.force_encoding(Encoding::UTF_8)
+        recipients = mail.recipients
+        body = multipart_email_body(mail)
 
         return if body.blank?
         return if recipients.empty?
@@ -107,7 +94,6 @@ module Api
 
         _, conversation, from = handle_conversation_part(mail, json_message)
 
-        # for now just skip the message
         return if from.blank?
 
         message = process_attachments(mail, message)
@@ -118,6 +104,23 @@ module Api
           nil
         end
 
+        add_email_message(conversation, from, serialized_content, text, message, mail)
+      end
+
+      def read_email_notification(message)
+        json_message = JSON.parse(message)
+        json_message["mail"]["headers"].map { |header| { header["name"] => header["value"] } }
+        mail_body = read_mail_file(json_message["receipt"]["action"])
+        [json_message, Mail.read_from_string(mail_body)]
+      end
+
+      def multipart_email_body(mail)
+        mail.part
+        text_body = mail&.text_part&.body
+        text_body&.to_s&.force_encoding(Encoding::UTF_8)
+      end
+
+      def add_email_message(conversation, from, serialized_content, text, message, mail)
         opts = {
           from: from,
           message: {

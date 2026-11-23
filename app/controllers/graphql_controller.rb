@@ -9,39 +9,7 @@ class GraphqlController < ApplicationController
   before_action :set_locale
 
   def execute
-    variables = ensure_hash(params[:variables])
-    query = params[:query]
-    operation_name = params[:operationName]
-
-    scout_transaction_name = "GraphQL/" + (operation_name || "unknown")
-    ScoutApm::Transaction.rename(scout_transaction_name)
-
-    context = {
-      # Query context goes here, for example:
-      current_user: current_user,
-      request: request,
-      doorkeeper_authorize: -> { api_authorize! },
-      enabled_subscriptions: enabled_subscriptions?
-    }
-
-    result = ChaskiqSchema.execute(query,
-                                   variables: variables,
-                                   context: context,
-                                   operation_name: operation_name)
-
-    render json: result
-    # rescue => e
-    #  raise e unless Rails.env.development?
-    #  handle_error_message e
-    # end
-
-    # rescue CanCan::AccessDenied => e
-    #  render json: {
-    #    errors: [{
-    #              message: e.message,
-    #              data: {}
-    #            }]
-    #  }, status: 200
+    render json: execute_request
   rescue OauthExeption
     render json: {
       error: {
@@ -83,6 +51,35 @@ class GraphqlController < ApplicationController
   end
 
   private
+
+  def execute_request
+    variables = ensure_hash(params[:variables])
+    query = params[:query]
+    operation_name = params[:operationName]
+
+    rename_scout_transaction(operation_name)
+
+    ChaskiqSchema.execute(
+      query,
+      variables: variables,
+      context: build_context,
+      operation_name: operation_name
+    )
+  end
+
+  def build_context
+    {
+      current_user: current_user,
+      request: request,
+      doorkeeper_authorize: -> { api_authorize! },
+      enabled_subscriptions: enabled_subscriptions?
+    }
+  end
+
+  def rename_scout_transaction(operation_name)
+    scout_transaction_name = "GraphQL/" + (operation_name || "unknown")
+    ScoutApm::Transaction.rename(scout_transaction_name)
+  end
 
   def api_authorize!
     # AUTH0

@@ -14,26 +14,14 @@ module Api
       query = params[:query]
       operation_name = params[:operationName]
 
-      scout_transaction_name = "GraphQLAPI" + (operation_name || "unknown")
-      ScoutApm::Transaction.rename(scout_transaction_name)
+      rename_scout_transaction(operation_name)
 
-      context = {
-        # Query context goes here, for example:
-        user_data: user_data,
-        app: @app,
-        from_api: true,
-        set_locale: -> { set_locale },
-        auth: -> { auth },
-        get_app_user: -> { get_app_user },
-        current_user: get_app_user,
-        request: request
-      }
-
-      result = ChaskiqSchema.execute(query,
-                                     variables: variables,
-                                     context: context,
-                                     operation_name: operation_name)
-      # max_depth: 5
+      result = ChaskiqSchema.execute(
+        query,
+        variables: variables,
+        context: build_context,
+        operation_name: operation_name
+      )
 
       render json: result
     rescue ActiveRecord::RecordNotFound
@@ -47,21 +35,35 @@ module Api
       e.record.errors.full_messages.join("\n")
       json_error e.record
     rescue OriginValidator::NonAcceptedOrigin => e
-      # GraphQL::ExecutionError.new e.message
       render json: {
         errors: [{
           message: e.message,
           data: {}
         }]
       }, status: :unprocessable_content
-      # GraphQL::ExecutionError.new "Validation failed: #{error_messages}."
     rescue StandardError => e
-      # GraphQL::ExecutionError.new e.message
-      # raise e unless Rails.env.development?
       handle_error_message e
     end
 
     private
+
+    def build_context
+      {
+        user_data: user_data,
+        app: @app,
+        from_api: true,
+        set_locale: -> { set_locale },
+        auth: -> { auth },
+        get_app_user: -> { get_app_user },
+        current_user: get_app_user,
+        request: request
+      }
+    end
+
+    def rename_scout_transaction(operation_name)
+      scout_transaction_name = "GraphQLAPI" + (operation_name || "unknown")
+      ScoutApm::Transaction.rename(scout_transaction_name)
+    end
 
     def auth
       valid_origin?

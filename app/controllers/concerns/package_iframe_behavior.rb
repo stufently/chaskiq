@@ -2,57 +2,14 @@
 
 module PackageIframeBehavior
   extend ActiveSupport::Concern
+  include PackageIframeHelpers
 
   def package_iframe
-    if params[:token]
-      data = CHASKIQ_FRAME_VERIFIER.verify(params[:token])
-      # in case an user_token is provided
-      if params[:user_token].present?
-        data.merge!({
-                      current_user: CHASKIQ_FRAME_VERIFIER.verify(params[:user_token])
-                    })
-      end
-
-      @app = App.find_by(key: data[:app_id])
-
-      pkg = AppPackageIntegration.find(data[:package_id])
-      html = pkg.presenter.sheet_view(data)
-    elsif params[:data].present?
-      data = JSON.parse(params[:data])
-      @app = App.find_by(key: data["data"]["app_id"])
-      url_base = data["data"]["field"]["action"]["url"]
-      url = handle_url_data(url_base)
-      # TODO: unify this with the API auth
-      app_user, = handle_user_data(data)
-
-      app_user.as_json(methods: %i[
-                         email
-                         name
-                         display_name
-                         avatar_url
-                         first_name
-                         last_name
-                       ])
-
-      if url_base.match(%r{^/package_iframe_internal/})
-
-        package = @app.app_package_integrations
-                      .joins(:app_package)
-                      .find_by("app_packages.name": data["data"]["id"])
-
-        presenter = package.presenter
-        data.merge!({ "data" => data["data"].merge("package" => package, "user" => app_user) })
-
-        data["data"].merge!({
-                              "app_key" => data["data"]["app_id"],
-                              "user" => app_user
-                            })
-
-        html = presenter.sheet_view(data["data"]&.with_indifferent_access)
-      else
-        html = iframe_package_request(url, data, app_user)
-      end
-    end
+    html = if params[:token]
+             handle_token_iframe
+           elsif params[:data].present?
+             handle_data_iframe
+           end
 
     # rubocop:disable Rails/OutputSafety
     response.headers.delete "X-Frame-Options"
@@ -96,39 +53,41 @@ module PackageIframeBehavior
     # rubocop:enable Rails/OutputSafety
   end
 
-  def handle_user_data(data)
-    user_data = @app.decrypt(data["data"]["enc_data"])
+  private
 
-    if user_data.present? && user_data[:email].present?
-      @app.app_users.users.find_by(email: user_data[:email])
-    elsif data.dig("data", "enc_data", "identifier_key") && @app.compare_user_identifier(data["data"]["enc_data"])
-      @app.app_users.users.find_by(email: data.dig("data", "enc_data", "email"))
-    elsif data.dig("data", "session_id").present?
-      @app.app_users.find_by(
-        session_id: data.dig("data", "session_id")
-      )
-    else
-      @app.app_users.find_by(
-        session_id: cookies[cookie_namespace]
-      )
-    end
-  rescue StandardError
-    @app.app_users.find_by(
-      session_id: cookies[cookie_namespace]
-    )
+  def handle_token_iframe
+    data = CHASKIQ_FRAME_VERIFIER.verify(params[:token])
+    data.merge!(current_user: CHASKIQ_FRAME_VERIFIER.verify(params[:user_token])) if params[:user_token].present?
+
+    @app = App.find_by(key: data[:app_id])
+    AppPackageIntegration.find(data[:package_id]).presenter.sheet_view(data)
   end
 
-  def handle_url_data(url_base)
+  def handle_data_iframe
+    data = JSON.parse(params[:data])
+    @app = App.find_by(key: data["data"]["app_id"])
+    url_base = data["data"]["field"]["action"]["url"]
+    url = handle_url_data(url_base)
+    # TODO: unify this with the API auth
+    app_user, = handle_user_data(data)
+
+    app_user.as_json(methods: %i[email name display_name avatar_url first_name last_name])
+
     if url_base.match(%r{^/package_iframe_internal/})
-      "#{Chaskiq::Config.get('HOST')}#{url_base}"
+      render_internal_package(data, app_user)
     else
-      url_base
+      iframe_package_request(url, data, app_user)
     end
   end
 
-  def iframe_package_request(url, data, app_user)
-    resp = Faraday.post(url, data.merge!(user: app_user).to_json,
-                        "Content-Type" => "application/json")
-    resp.body
+  def render_internal_package(data, app_user)
+    package = @app.app_package_integrations
+                  .joins(:app_package)
+                  .find_by("app_packages.name": data["data"]["id"])
+
+    presenter = package.presenter
+    data.merge!({ "data" => data["data"].merge("package" => package, "user" => app_user) })
+    data["data"].merge!("app_key" => data["data"]["app_id"], "user" => app_user)
+    presenter.sheet_view(data["data"]&.with_indifferent_access)
   end
 end
