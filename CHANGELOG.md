@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-23 — fork-updates-r10t
+
+- Split AppType resolvers by domain while keeping GraphQL field declarations and
+  arguments in their original order. Extract conversation filtering and search
+  helpers and remove the three AppType RuboCop exclusions.
+
 ## 2026-11-23 — fork-updates-r10u
 
 - Refactored four RuboCop outliers: `AppPackageIntegration#call_hook` and
